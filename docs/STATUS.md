@@ -90,3 +90,5 @@ Initial baseline is published to `main` under the owner’s explicit authorizati
 | 2026-10-12 | Claude Code | Validated Codex's v4 changes incl. live run `results-tuned-v4.json` (complete, matches v2). Confirmed num_ctx reload claim (~3.8 s). Findings in VALIDATION.md: refusal-check false negative (medium), residency doesn't gate status, duplicate flags accepted, Node 24 set without owner sign-off. No code changed. |
 
 | 2026-10-13 | Codex | Issue #1 created before edits. Adopted development handbook/ADR 0003 and issue-first AGENTS; installed three pinned MIT skill references with provenance/hashes; created phase milestones/epics #2–#10 and benchmark task #11; added templates, README/CONTRIBUTING and Phase 0 CI/docs checks. Existing baseline published in `1ebefaa`; GitHub CI passed. Final handoff publication evidence is recorded in #1. Phase 0 model gate stays open. |
+
+| 2026-10-13 | Codex | Issue #12 created before CI bootstrap cleanup. Verified current checkout/setup-node/pnpm setup release commits declare Node 24; pinned Ubuntu 24.04. Prior main CI passed; fresh cleanup-run evidence is recorded in #12. No application phase advancement. |

@@ -14,6 +14,7 @@ Repository: https://github.com/agthumoe/solid-lamp. Task tracking uses issues/ph
 | 6 — Background/WhatsApp | [#8](https://github.com/agthumoe/solid-lamp/issues/8) | Phase 5 |
 | 7 — Domain agents | [#9](https://github.com/agthumoe/solid-lamp/issues/9) | Phase 6; one agent spec/task at a time |
 | 8 — Operational hardening | [#10](https://github.com/agthumoe/solid-lamp/issues/10) | Phase 7 |
+| CI bootstrap refresh | [#12](https://github.com/agthumoe/solid-lamp/issues/12) | Official Node 24 action revisions and Ubuntu 24.04 pinned; CI evidence in issue |
 | Remaining benchmark acceptance/CLI findings | [#11](https://github.com/agthumoe/solid-lamp/issues/11) | Ready; semantic refusal vs format, required residency gate, duplicate CLI flags |
 
 Each phase has its own GitHub milestone. Split an epic into bounded implementation tasks before starting its phase; each child needs acceptance and tests. These tasks are plans, not claims that the application features are implemented. Changing task status or resolving owner decisions must also update the local handoff.

@@ -10,7 +10,7 @@ Lifecycle: `status:ready` → `status:in-progress` → `status:blocked` when dep
 
 ## Branches, commits and PRs
 
-Use `type/<issue>-short-name`, e.g. `docs/1-development-standards`. Future work uses PRs against main with `Refs #N` or `Closes #N` as appropriate. Small coherent commits explain behavior; include the issue number. No force-push/rebase of shared history without authorization. This initial empty-repo publication is an explicitly owner-authorized main-branch bootstrap; subsequent changes follow the PR workflow.
+Use `type/<issue>-short-name`, e.g. `docs/1-development-standards`. Future work uses PRs against main with `Refs #N` or `Closes #N` as appropriate. Small coherent commits explain behavior; include the issue number. No force-push/rebase of shared history without authorization. This initial empty-repo publication and its CI bootstrap cleanup (#1/#12) are the explicitly owner-authorized main-branch bootstrap; subsequent changes follow the PR workflow.
 
 Before commit, inspect staged files for accidental secrets, raw source vault data, credentials and generated output. Keep `.env*`, sessions, dumps, credentials and private debug artifacts ignored. Existing hardware/benchmark documentation is intentional project material, not a place for secrets. Third-party vendored skill licenses/provenance must be present.
 
