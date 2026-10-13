@@ -27,3 +27,5 @@ Phase 1: extend the existing required quality commands to the application and ad
 Acceptance passes; spec/ADR/contracts are current; relevant regression/integration checks pass; manual checks and skipped checks are named; secrets/private artifacts are excluded; docs/STATUS/PLAN and issue progress match; PR/commit/push verified. For a phase, full available phase checks and owner go-ahead remain required. A migration/restore/external side effect needs its concrete approval and recovery evidence.
 
 Use issue comments for decisions, progress, blockers and evidence. Do not include private notes/logs. Daily handoff names issue numbers, what changed, what was verified and the next dependent action.
+
+Main branch protection enforces the GitHub Actions `compliance` check against an up-to-date base, requires a PR and resolved conversations, applies to administrators, and blocks force pushes/deletion. Single-user review count is zero; manual review evidence remains required. See compliance applicability for the distinction between automated gates and semantic review.

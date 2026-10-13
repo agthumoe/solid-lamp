@@ -12,7 +12,7 @@
 
 ## Now
 
-- Compliance task #13: strict TS (unchecked indexing/exact optionals), typed lint/hooks, formatting, Zod config/HTTP/fixtures, safe structured diagnostic logs, source/size gates and unified CI are implemented. `pnpm check` is the current gate; future application rules remain explicitly not applicable until modules exist.
+- Compliance task #13: strict TS (unchecked indexing/exact optionals), typed lint/hooks, formatting, Zod config/HTTP/fixtures, safe structured diagnostic logs, source/size gates and unified CI are implemented. `pnpm check` passes all gates including 19 regression groups; future application rules remain explicitly not applicable until modules exist.
 - Benchmark #11 findings fixed in v5: duplicate flags rejected, semantic/format refusal split, required residency failures gate exit/status. Historical artifacts preserved.
 
 - ✅ Initial publication pushed: bootstrap commit `1ebefaa7877b62a710fafe28a7720931bf5e7dd9`; [GitHub CI](https://github.com/agthumoe/solid-lamp/actions/runs/38350697723) passed. Delivery and final commit evidence are recorded in [#1](https://github.com/agthumoe/solid-lamp/issues/1).
@@ -34,7 +34,7 @@
 
 ## Next (in order)
 
-1. Verify/merge the compliance branch/PR for [#13](https://github.com/agthumoe/solid-lamp/issues/13) after required CI passes. The PR evidence records final commands and applicability; no service/model changes were made.
+1. Compliance delivery is [PR #14](https://github.com/agthumoe/solid-lamp/pull/14) for #13; branch and PR CI passed. Main now requires the GitHub Actions `compliance` check, an up-to-date PR and resolved conversations, including administrators. Final merge evidence is in #13. The PR evidence records final commands and applicability; no service/model changes were made.
 2. Owner confirms final model roles in [#2](https://github.com/agthumoe/solid-lamp/issues/2). Align shared-model contexts using measured reload behavior; a fresh v5 run uses a new label when the host is idle.
 3. After Phase 0 acceptance and owner's go-ahead, split/start [Phase 1 #3](https://github.com/agthumoe/solid-lamp/issues/3) with application-specific config/logging/DB/API/LLM enforcement. Existing strict tooling is already in place.
 4. Follow `docs/TRACKING.md`. Create/select a task before edits and use issue-linked branches/PRs.
@@ -96,4 +96,4 @@ Initial baseline is published to `main` under the owner’s explicit authorizati
 
 | 2026-10-13 | Codex | Issue #12 created before CI bootstrap cleanup. Verified current checkout/setup-node/pnpm setup release commits declare Node 24; pinned Ubuntu 24.04. Prior main CI passed; fresh cleanup-run evidence is recorded in #12. No application phase advancement. |
 
-| 2026-10-13 | Codex | #13 opened before edits; compliance branch implements strict typing/lint/format, Zod boundaries, safe logs and negative policy tests; closes #11 benchmark gaps. Updated unified CI and applicability evidence. Application modules/owner model gates remain pending; branch/PR/required-check evidence recorded in #13. |
+| 2026-10-13 | Codex | #13 opened before edits; compliance branch implements strict typing/lint/format, Zod boundaries, safe logs and negative policy tests; closes #11 benchmark gaps. Updated unified CI and applicability evidence. Application modules/owner model gates remain pending; PR #14/required-check evidence recorded in #13; main protection verified (strict compliance check, PR, admin enforcement, no force-push/delete). |
