@@ -1,0 +1,9 @@
+# PROPOSED — not applied. Copy to C:\Users\agthu\.wslconfig after owner approval,
+# then run `wsl --shutdown` from PowerShell. Host has 31.8 GB RAM.
+[wsl2]
+memory=24GB          # was default ~50% (15 GiB visible); leaves ~8 GB for Windows
+swap=8GB
+vmIdleTimeout=-1     # never shut the VM down when idle (always-on AI server)
+
+[general]
+instanceIdleTimeout=-1

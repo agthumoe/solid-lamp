@@ -1,0 +1,24 @@
+name: Bug report
+description: Report a reproducible failure using synthetic or redacted data.
+title: '[Bug] '
+labels: ['type:bug', 'status:ready']
+body:
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Safe reproduction and expected/actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Commit, versions and safe request/run IDs
+      description: Do not paste credentials, private prompts, notes, email or bank data.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Fix acceptance and regression test
+    validations:
+      required: true

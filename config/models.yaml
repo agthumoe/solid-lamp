@@ -1,0 +1,46 @@
+# Role → model mapping. Code refers to roles only, never to model tags.
+# Status: Phase 0 draft. Final choices are confirmed against docs/HARDWARE.md.
+
+ollama:
+  base_url: http://localhost:11434
+  openai_base_url: http://localhost:11434/v1
+
+roles:
+  chat:
+    model: qwen3.5:9b
+    num_ctx: 16384
+    think: false          # thinking is opt-in per request (latency on a 3060)
+    residency: resident
+    temperature: 0.6
+  router:
+    model: qwen3.5:4b
+    num_ctx: 4096
+    think: false
+    residency: on_demand
+    temperature: 0.1
+  coder:
+    model: qwen2.5-coder:14b
+    num_ctx: 16384
+    think: false
+    residency: swap       # evicts chat while running
+    temperature: 0.2
+  embed:
+    model: qwen3-embedding:0.6b
+    dimensions: 1024
+    num_ctx: 8192
+    residency: resident
+    # Prefix applied to queries only, never to documents.
+    query_prefix: "Instruct: Given a question, retrieve passages from personal notes and code that answer it\nQuery: "
+  vision:
+    model: qwen3.5:9b     # shared with chat
+    num_ctx: 8192
+    residency: shared
+  # deep: disabled until WSL RAM >= 24 GB and a benchmark proves it acceptable.
+  # deep:
+  #   model: qwen3.6:35b-a3b
+  #   num_ctx: 16384
+  #   residency: batch_only
+
+fallbacks:
+  chat: [qwen3:8b, gemma4:12b]
+  embed: [nomic-embed-text]   # 768-dim; explicit versioned rebuild/promotion only (ADR 0002), never query-time failover

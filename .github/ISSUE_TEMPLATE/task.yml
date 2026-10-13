@@ -1,0 +1,30 @@
+name: Development task
+description: Plan implementation with scope, phase and acceptance before edits.
+title: '[Task] '
+labels: ['type:task', 'status:ready']
+body:
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Problem and intended outcome
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope, non-goals, phase and dependencies
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Observable behavior and checks; include spec/ADR links when available.
+    validations:
+      required: true
+  - type: textarea
+    id: validation
+    attributes:
+      label: Validation, risks and recovery
+    validations:
+      required: true

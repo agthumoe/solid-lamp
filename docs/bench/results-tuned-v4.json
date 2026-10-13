@@ -1,0 +1,587 @@
+{
+  "harnessVersion": 4,
+  "startedAt": "2026-10-13T04:48:07.665Z",
+  "finishedAt": "2026-10-13T04:58:06.070Z",
+  "status": "complete",
+  "args": [
+    "--label",
+    "tuned-v4"
+  ],
+  "config": {
+    "ollama": {
+      "base_url": "http://localhost:11434",
+      "openai_base_url": "http://localhost:11434/v1"
+    },
+    "roles": {
+      "chat": {
+        "model": "qwen3.5:9b",
+        "num_ctx": 16384,
+        "think": false,
+        "residency": "resident",
+        "temperature": 0.6
+      },
+      "router": {
+        "model": "qwen3.5:4b",
+        "num_ctx": 4096,
+        "think": false,
+        "residency": "on_demand",
+        "temperature": 0.1
+      },
+      "coder": {
+        "model": "qwen2.5-coder:14b",
+        "num_ctx": 16384,
+        "think": false,
+        "residency": "swap",
+        "temperature": 0.2
+      },
+      "embed": {
+        "model": "qwen3-embedding:0.6b",
+        "dimensions": 1024,
+        "num_ctx": 8192,
+        "residency": "resident",
+        "query_prefix": "Instruct: Given a question, retrieve passages from personal notes and code that answer it\nQuery: "
+      },
+      "vision": {
+        "model": "qwen3.5:9b",
+        "num_ctx": 8192,
+        "residency": "shared"
+      }
+    },
+    "fallbacks": {
+      "chat": [
+        "qwen3:8b",
+        "gemma4:12b"
+      ],
+      "embed": [
+        "nomic-embed-text"
+      ]
+    }
+  },
+  "env": {
+    "ollamaVersion": "0.32.4",
+    "serviceEnv": [
+      "OLLAMA_HOST=127.0.0.1:11434",
+      "OLLAMA_FLASH_ATTENTION=1",
+      "OLLAMA_KV_CACHE_TYPE=q8_0",
+      "OLLAMA_MAX_LOADED_MODELS=2",
+      "OLLAMA_NUM_PARALLEL=1",
+      "OLLAMA_KEEP_ALIVE=30m"
+    ],
+    "gpu": "NVIDIA GeForce RTX 3060, 591.86, 12288 MiB",
+    "idleGpuUsedMiB": 1158
+  },
+  "embeds": [
+    {
+      "model": "qwen3-embedding:0.6b",
+      "dims": 1024,
+      "docsPerSec": 50,
+      "recallAt1": 1,
+      "recallAt3": 1,
+      "vram": [
+        {
+          "name": "qwen3-embedding:0.6b",
+          "sizeGB": 2.25,
+          "vramGB": 2.25,
+          "gpuPct": 100,
+          "ctx": 8192
+        }
+      ]
+    },
+    {
+      "model": "nomic-embed-text",
+      "dims": 768,
+      "docsPerSec": 168,
+      "recallAt1": 1,
+      "recallAt3": 1,
+      "vram": [
+        {
+          "name": "nomic-embed-text:latest",
+          "sizeGB": 0.3,
+          "vramGB": 0.3,
+          "gpuPct": 100,
+          "ctx": 2048
+        }
+      ]
+    }
+  ],
+  "gens": [
+    {
+      "label": "chat",
+      "required": true,
+      "role": "chat",
+      "model": "qwen3.5:9b",
+      "num_ctx": 16384,
+      "think": false,
+      "capabilities": [
+        "completion",
+        "vision",
+        "tools",
+        "thinking"
+      ],
+      "throughput": {
+        "coldLoadMs": 6699,
+        "loadDurationMs": 6481,
+        "decodeTps": 50.7,
+        "ttftMs": 337,
+        "longPromptTokens": 7044,
+        "prefillTps": 1674,
+        "longTtftMs": 4499,
+        "longDecodeTps": 49.3,
+        "ps": [
+          {
+            "name": "qwen3.5:9b",
+            "sizeGB": 5.46,
+            "vramGB": 5.46,
+            "gpuPct": 100,
+            "ctx": 16384
+          }
+        ],
+        "psAfterLong": [
+          {
+            "name": "qwen3.5:9b",
+            "sizeGB": 5.46,
+            "vramGB": 5.46,
+            "gpuPct": 100,
+            "ctx": 16384
+          }
+        ]
+      },
+      "tools": {
+        "supported": true,
+        "n": 20,
+        "callCases": 18,
+        "native": 18,
+        "recoveredFromText": 0,
+        "abstainedCorrectly": "2/2",
+        "schemaInvalid": 0,
+        "extraCalls": 0,
+        "wrong": 0,
+        "successPct": 100,
+        "nativeCallPct": 100,
+        "medianLatencyMs": 1600,
+        "failures": []
+      },
+      "rag": {
+        "correct": "9/9",
+        "cited": "9/9",
+        "saidIDontKnow": "0/1",
+        "score": 0.9,
+        "failures": [
+          {
+            "q": "What is my car's license plate number?",
+            "answer": "I don't know"
+          }
+        ]
+      }
+    },
+    {
+      "label": "router",
+      "required": true,
+      "role": "router",
+      "model": "qwen3.5:4b",
+      "num_ctx": 4096,
+      "think": false,
+      "capabilities": [
+        "completion",
+        "vision",
+        "tools",
+        "thinking"
+      ],
+      "throughput": {
+        "coldLoadMs": 5324,
+        "loadDurationMs": 5190,
+        "decodeTps": 77.8,
+        "ttftMs": 301,
+        "longPromptTokens": 1866,
+        "prefillTps": 2315,
+        "longTtftMs": 1065,
+        "longDecodeTps": 74.4,
+        "ps": [
+          {
+            "name": "qwen3.5:4b",
+            "sizeGB": 2.86,
+            "vramGB": 2.86,
+            "gpuPct": 100,
+            "ctx": 4096
+          }
+        ],
+        "psAfterLong": [
+          {
+            "name": "qwen3.5:4b",
+            "sizeGB": 2.86,
+            "vramGB": 2.86,
+            "gpuPct": 100,
+            "ctx": 4096
+          }
+        ]
+      },
+      "tools": {
+        "supported": true,
+        "n": 20,
+        "callCases": 18,
+        "native": 18,
+        "recoveredFromText": 0,
+        "abstainedCorrectly": "2/2",
+        "schemaInvalid": 0,
+        "extraCalls": 0,
+        "wrong": 0,
+        "successPct": 100,
+        "nativeCallPct": 100,
+        "medianLatencyMs": 1001,
+        "failures": []
+      },
+      "rag": {
+        "correct": "9/9",
+        "cited": "9/9",
+        "saidIDontKnow": "1/1",
+        "score": 1,
+        "failures": []
+      }
+    },
+    {
+      "label": "coder",
+      "required": true,
+      "role": "coder",
+      "model": "qwen2.5-coder:14b",
+      "num_ctx": 16384,
+      "think": false,
+      "capabilities": [
+        "completion",
+        "tools",
+        "insert"
+      ],
+      "throughput": {
+        "coldLoadMs": 8089,
+        "loadDurationMs": 7939,
+        "decodeTps": 33.1,
+        "ttftMs": 203,
+        "longPromptTokens": 6866,
+        "prefillTps": 941,
+        "longTtftMs": 7458,
+        "longDecodeTps": 27.1,
+        "ps": [
+          {
+            "name": "qwen2.5-coder:14b",
+            "sizeGB": 9.68,
+            "vramGB": 9.68,
+            "gpuPct": 100,
+            "ctx": 16384
+          }
+        ],
+        "psAfterLong": [
+          {
+            "name": "qwen2.5-coder:14b",
+            "sizeGB": 9.68,
+            "vramGB": 9.68,
+            "gpuPct": 100,
+            "ctx": 16384
+          }
+        ]
+      },
+      "tools": {
+        "supported": true,
+        "n": 20,
+        "callCases": 18,
+        "native": 0,
+        "recoveredFromText": 17,
+        "abstainedCorrectly": "0/2",
+        "schemaInvalid": 1,
+        "extraCalls": 0,
+        "wrong": 3,
+        "successPct": 85,
+        "nativeCallPct": 0,
+        "medianLatencyMs": 1260,
+        "failures": [
+          {
+            "prompt": "How much did I blow on dining out this month?",
+            "got": "finance_query({\"category\":\"dining\"})",
+            "why": "schema: args.month: missing"
+          },
+          {
+            "prompt": "What is 17 times 23?",
+            "got": "brain_search({\"query\":\"What is 17 times 23?\"})",
+            "why": "called a tool when none was needed"
+          },
+          {
+            "prompt": "Say good morning in Japanese.",
+            "got": "notify_me({\"message\":\"Good morning! Have a wonderful day!\",\"urgent\":false})",
+            "why": "called a tool when none was needed"
+          }
+        ]
+      },
+      "rag": {
+        "correct": "9/9",
+        "cited": "9/9",
+        "saidIDontKnow": "1/1",
+        "score": 1,
+        "failures": []
+      }
+    },
+    {
+      "label": "chat+think",
+      "required": true,
+      "role": "chat",
+      "model": "qwen3.5:9b",
+      "num_ctx": 16384,
+      "think": true,
+      "capabilities": [
+        "completion",
+        "vision",
+        "tools",
+        "thinking"
+      ],
+      "tools": {
+        "supported": true,
+        "n": 20,
+        "callCases": 18,
+        "native": 18,
+        "recoveredFromText": 0,
+        "abstainedCorrectly": "2/2",
+        "schemaInvalid": 0,
+        "extraCalls": 0,
+        "wrong": 0,
+        "successPct": 100,
+        "nativeCallPct": 100,
+        "medianLatencyMs": 3350,
+        "failures": []
+      },
+      "rag": {
+        "correct": "9/9",
+        "cited": "9/9",
+        "saidIDontKnow": "0/1",
+        "score": 0.9,
+        "failures": [
+          {
+            "q": "What is my car's license plate number?",
+            "answer": "I don't know"
+          }
+        ]
+      }
+    },
+    {
+      "label": "chat-fallback",
+      "required": false,
+      "role": "chat",
+      "model": "qwen3:8b",
+      "num_ctx": 16384,
+      "think": false,
+      "capabilities": [
+        "completion",
+        "tools",
+        "thinking"
+      ],
+      "throughput": {
+        "coldLoadMs": 4442,
+        "loadDurationMs": 4191,
+        "decodeTps": 57.4,
+        "ttftMs": 164,
+        "longPromptTokens": 6853,
+        "prefillTps": 1845,
+        "longTtftMs": 3873,
+        "longDecodeTps": 46.1,
+        "ps": [
+          {
+            "name": "qwen3:8b",
+            "sizeGB": 5.95,
+            "vramGB": 5.95,
+            "gpuPct": 100,
+            "ctx": 16384
+          }
+        ],
+        "psAfterLong": [
+          {
+            "name": "qwen3:8b",
+            "sizeGB": 5.95,
+            "vramGB": 5.95,
+            "gpuPct": 100,
+            "ctx": 16384
+          }
+        ]
+      },
+      "tools": {
+        "supported": true,
+        "n": 20,
+        "callCases": 18,
+        "native": 18,
+        "recoveredFromText": 0,
+        "abstainedCorrectly": "2/2",
+        "schemaInvalid": 0,
+        "extraCalls": 0,
+        "wrong": 0,
+        "successPct": 100,
+        "nativeCallPct": 100,
+        "medianLatencyMs": 665,
+        "failures": []
+      },
+      "rag": {
+        "correct": "9/9",
+        "cited": "9/9",
+        "saidIDontKnow": "1/1",
+        "score": 1,
+        "failures": []
+      }
+    },
+    {
+      "label": "chat-fallback",
+      "required": false,
+      "role": "chat",
+      "model": "gemma4:12b",
+      "num_ctx": 16384,
+      "think": false,
+      "capabilities": [
+        "completion",
+        "vision",
+        "audio",
+        "tools",
+        "thinking"
+      ],
+      "throughput": {
+        "coldLoadMs": 8665,
+        "loadDurationMs": 8311,
+        "decodeTps": 49.3,
+        "ttftMs": 408,
+        "longPromptTokens": 7151,
+        "prefillTps": 1142,
+        "longTtftMs": 6628,
+        "longDecodeTps": 42.1,
+        "ps": [
+          {
+            "name": "gemma4:12b",
+            "sizeGB": 0.97,
+            "vramGB": 0.97,
+            "gpuPct": 100,
+            "ctx": 16384
+          }
+        ],
+        "psAfterLong": [
+          {
+            "name": "gemma4:12b",
+            "sizeGB": 0.97,
+            "vramGB": 0.97,
+            "gpuPct": 100,
+            "ctx": 16384
+          }
+        ]
+      },
+      "tools": {
+        "supported": true,
+        "n": 20,
+        "callCases": 18,
+        "native": 18,
+        "recoveredFromText": 0,
+        "abstainedCorrectly": "2/2",
+        "schemaInvalid": 0,
+        "extraCalls": 0,
+        "wrong": 0,
+        "successPct": 100,
+        "nativeCallPct": 100,
+        "medianLatencyMs": 1346,
+        "failures": []
+      },
+      "rag": {
+        "correct": "9/9",
+        "cited": "9/9",
+        "saidIDontKnow": "1/1",
+        "score": 1,
+        "failures": []
+      }
+    }
+  ],
+  "coResidency": [
+    {
+      "kind": "residency",
+      "requested": [
+        "qwen3.5:9b@16384",
+        "qwen3-embedding:0.6b@8192"
+      ],
+      "loaded": [
+        {
+          "name": "qwen3-embedding:0.6b",
+          "sizeGB": 2.25,
+          "vramGB": 2.25,
+          "gpuPct": 100,
+          "ctx": 8192
+        },
+        {
+          "name": "qwen3.5:9b",
+          "sizeGB": 5.46,
+          "vramGB": 5.46,
+          "gpuPct": 100,
+          "ctx": 16384
+        }
+      ],
+      "missing": [],
+      "wrongCtx": [],
+      "partialGpu": [],
+      "pass": true,
+      "acceptanceRequired": true,
+      "totalVramGB": 7.71,
+      "nvidiaSmiUsedMiB": 10127
+    },
+    {
+      "kind": "residency",
+      "requested": [
+        "qwen2.5-coder:14b@16384",
+        "qwen3-embedding:0.6b@8192"
+      ],
+      "loaded": [
+        {
+          "name": "qwen3-embedding:0.6b",
+          "sizeGB": 2.25,
+          "vramGB": 2.25,
+          "gpuPct": 100,
+          "ctx": 8192
+        },
+        {
+          "name": "qwen2.5-coder:14b",
+          "sizeGB": 9.68,
+          "vramGB": 9.68,
+          "gpuPct": 100,
+          "ctx": 16384
+        }
+      ],
+      "missing": [],
+      "wrongCtx": [],
+      "partialGpu": [],
+      "pass": true,
+      "acceptanceRequired": true,
+      "totalVramGB": 11.93,
+      "nvidiaSmiUsedMiB": 11964
+    },
+    {
+      "kind": "eviction",
+      "requested": [
+        "qwen3.5:9b@16384",
+        "qwen3-embedding:0.6b@8192",
+        "qwen3.5:4b@4096"
+      ],
+      "loaded": [
+        {
+          "name": "qwen3-embedding:0.6b",
+          "sizeGB": 2.25,
+          "vramGB": 2.25,
+          "gpuPct": 100,
+          "ctx": 8192
+        },
+        {
+          "name": "qwen3.5:4b",
+          "sizeGB": 2.86,
+          "vramGB": 2.86,
+          "gpuPct": 100,
+          "ctx": 4096
+        }
+      ],
+      "missing": [
+        "qwen3.5:9b"
+      ],
+      "wrongCtx": [],
+      "partialGpu": [],
+      "pass": false,
+      "acceptanceRequired": false,
+      "totalVramGB": 5.11,
+      "nvidiaSmiUsedMiB": 6905
+    }
+  ],
+  "skipped": [],
+  "missingRequired": []
+}

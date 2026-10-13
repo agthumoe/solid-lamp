@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Development handbook
+    url: https://github.com/agthumoe/solid-lamp/blob/main/docs/development/README.md
+    about: Read architecture, state, migrations, AI and delivery standards.
