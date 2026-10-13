@@ -30,6 +30,7 @@ GitHub tasks/milestones: [TRACKING.md](TRACKING.md). Standards: [development han
 - [x] Development handbook/ADR 0003 and issue-first AGENTS adopted; `CLAUDE.md` imports canonical instructions
 - [x] Project-local React/composition/Postgres skills pinned with license/provenance/hash checks
 - [x] GitHub phase milestones/epics, issue/PR templates, baseline docs/tests CI
+- [x] Owner-authorized baseline publication pushed; GitHub CI green ([#1](https://github.com/agthumoe/solid-lamp/issues/1))
 - [ ] Enforce handbook: strict TS, hooks/import rules, formatting, API schemas, DB history/parity, redaction tests; extend baseline CI
 - [x] Decide embedding storage strategy: versioned fixed-dimension tables and atomic promotion → ADR 0002, `specs/embedding-storage.md`
 - [ ] Implement ADR 0002 schema in the first migrations

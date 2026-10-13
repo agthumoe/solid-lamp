@@ -4,7 +4,7 @@ Repository: https://github.com/agthumoe/solid-lamp. Task tracking uses issues/ph
 
 | Phase / work | GitHub task | Status / dependency |
 |---|---|---|
-| Handbook, project skills and initial publication | [#1](https://github.com/agthumoe/solid-lamp/issues/1) | Implemented; publication and check evidence recorded in the issue |
+| Handbook, project skills and initial publication | [#1](https://github.com/agthumoe/solid-lamp/issues/1) | Delivered; pushed baseline and green CI, final evidence in the issue |
 | 0 — Models and acceptance | [#2](https://github.com/agthumoe/solid-lamp/issues/2) | Owner model decision and benchmark follow-up |
 | 1 — Scaffold/foundations | [#3](https://github.com/agthumoe/solid-lamp/issues/3) | Blocked by Phase 0/go-ahead |
 | 2 — Brain/recovery | [#4](https://github.com/agthumoe/solid-lamp/issues/4) | Phase 1 |

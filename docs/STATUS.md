@@ -12,6 +12,7 @@
 
 ## Now
 
+- ✅ Initial publication pushed: bootstrap commit `1ebefaa7877b62a710fafe28a7720931bf5e7dd9`; [GitHub CI](https://github.com/agthumoe/solid-lamp/actions/runs/38350697723) passed. Delivery and final commit evidence are recorded in [#1](https://github.com/agthumoe/solid-lamp/issues/1).
 - ✅ Development handbook and ADR 0003 adopted: AI/API/DB/SOLID/frontend/hooks/Query+Zustand/12-factor/logging/debugging; issue-first workflow is canonical in AGENTS.
 - ✅ Three pinned project-local skills installed and read; provenance/licenses/hash inventory are committed project artifacts. Available to Codex from the next turn; other agents use the AGENTS catalog.
 - ✅ GitHub task #1 preceded this session’s file edits. Nine phase milestones/epics (#2–#10) and benchmark follow-up #11 exist → `docs/TRACKING.md`.
@@ -63,7 +64,7 @@ Development standards: `docs/development/`, `CONTRIBUTING.md`, ADR 0003; trackin
 | `infra/windows/wslconfig.proposed` | Proposed `.wslconfig` (**not applied**) |
 | `package.json` | Root; `bench:models`, `test:bench`, Node 24 engine, dep `yaml@2.8.4`; Makefile mirrors commands. Full scaffold comes in Phase 1. |
 
-Initial baseline publication to `main` is explicitly authorized by the owner and tracked in #1. Check GitHub/issue evidence for the resulting commit and push verification; future work uses issue-linked branches/PRs.
+Initial baseline is published to `main` under the owner’s explicit authorization (#1), and its CI passed. See #1 for publication/final commit evidence; future work uses issue-linked branches/PRs.
 
 ## Gotchas learned
 
@@ -88,4 +89,4 @@ Initial baseline publication to `main` is explicitly authorized by the owner and
 | 2026-10-12 | Codex | Fixed both validation gaps in harness v4. Required skipped targets yield incomplete/exit 1 and suppress residency probes; optional failures persist. Validated all embedding batches and robust cosine inputs. Added five regression groups: 12/12 tests plus syntax checks pass. Historical benchmark artifacts preserved; no live inference or phase advancement. |
 | 2026-10-12 | Claude Code | Validated Codex's v4 changes incl. live run `results-tuned-v4.json` (complete, matches v2). Confirmed num_ctx reload claim (~3.8 s). Findings in VALIDATION.md: refusal-check false negative (medium), residency doesn't gate status, duplicate flags accepted, Node 24 set without owner sign-off. No code changed. |
 
-| 2026-10-13 | Codex | Issue #1 created before edits. Adopted development handbook/ADR 0003 and issue-first AGENTS; installed three pinned MIT skill references with provenance/hashes; created phase milestones/epics #2–#10 and benchmark task #11; added templates, README/CONTRIBUTING and Phase 0 CI/docs checks. Existing baseline included in owner-authorized publication; final GitHub evidence records commit/push. Phase 0 model gate stays open. |
+| 2026-10-13 | Codex | Issue #1 created before edits. Adopted development handbook/ADR 0003 and issue-first AGENTS; installed three pinned MIT skill references with provenance/hashes; created phase milestones/epics #2–#10 and benchmark task #11; added templates, README/CONTRIBUTING and Phase 0 CI/docs checks. Existing baseline published in `1ebefaa`; GitHub CI passed. Final handoff publication evidence is recorded in #1. Phase 0 model gate stays open. |
