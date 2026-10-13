@@ -21,13 +21,13 @@ Only create layers a feature actually needs. A simple read query can use a small
 
 ## SOLID in TypeScript
 
-| Principle | Required practice | Smell to reject |
-|---|---|---|
-| Single responsibility | Split validation, domain transition, persistence and rendering into their natural boundaries | Controller that queries SQL, calls Ollama and formats JSX |
-| Open/closed | Add an adapter/strategy behind an existing narrow port when a real provider variation exists | Switch on provider throughout the app |
-| Liskov substitution | Adapters/fakes honor failure, cancellation and side-effect contracts | Fake that ignores expiry or succeeds where production rejects |
-| Interface segregation | Use-case-specific ports, such as `loadPendingApproval` and `decideOnce` | Huge repository exposing unrelated tables |
-| Dependency inversion | Pass ports/config through constructors or function arguments at composition roots | Domain importing a globally constructed DB or HTTP client |
+| Principle             | Required practice                                                                            | Smell to reject                                               |
+| --------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| Single responsibility | Split validation, domain transition, persistence and rendering into their natural boundaries | Controller that queries SQL, calls Ollama and formats JSX     |
+| Open/closed           | Add an adapter/strategy behind an existing narrow port when a real provider variation exists | Switch on provider throughout the app                         |
+| Liskov substitution   | Adapters/fakes honor failure, cancellation and side-effect contracts                         | Fake that ignores expiry or succeeds where production rejects |
+| Interface segregation | Use-case-specific ports, such as `loadPendingApproval` and `decideOnce`                      | Huge repository exposing unrelated tables                     |
+| Dependency inversion  | Pass ports/config through constructors or function arguments at composition roots            | Domain importing a globally constructed DB or HTTP client     |
 
 Default patterns: functional core/imperative shell, ports/adapters, composition, strategy for role/provider selection, explicit state machines for approvals/jobs, transactional outbox for reliable DB→queue notifications. Use a repository only to express domain access/atomic operations; avoid generic CRUD base repositories. Use factories for scoped resources, not hidden global service locators. Model failure with typed errors or discriminated results; do not catch-and-return-success.
 

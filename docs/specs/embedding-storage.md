@@ -13,6 +13,7 @@ Rebuild: create a building version, embed all eligible chunks in bounded batches
 Approval: switching the active model/index through a write API follows the approval queue. Background ingestion into app-owned tables follows configured ingestion policy; it never edits the source vault.
 
 Acceptance tests (Phase 1 schema / Phase 2 behavior):
+
 - Store 1024 and 768 vectors in their own tables; reject wrong dimensions and nonfinite values.
 - Same-dimension model versions never appear in one vector result set.
 - Interrupted/failed rebuild leaves active searches unchanged and resumes without duplicate rows.

@@ -4,20 +4,20 @@
 
 Aetherion is a single-machine local-first system. Apply the [Twelve-Factor App](https://12factor.net/) as operational discipline; source vaults, model files, database volumes and durable checkpoints are deliberate persistent backing resources.
 
-| Factor | Aetherion rule |
-|---|---|
-| Codebase | One Git repo, issue-linked branches/commits, reproducible releases |
-| Dependencies | Exact versions + lockfile; pin model digests and reviewed skill revisions |
-| Config | Validated nonsecret YAML plus environment secret/deployment overrides; fail fast; commit only examples |
-| Backing services | DB/Redis/Ollama accessed through configurable private endpoints and scoped adapters |
-| Build/release/run | Build artifacts separately; release includes commit/config/migration versions; run immutable artifact |
-| Processes | Process memory is disposable; threads/jobs/approvals/checkpoints live in Postgres/Redis |
-| Port binding | Each service declares its port; bind loopback/Tailscale explicitly; no wildcard exposure |
-| Concurrency | Separate API/worker/channel processes; bound queues; one GPU request through LlmGate |
-| Disposability | Handle SIGTERM: stop intake, close SSE, drain/cancel bounded work, close clients; recover durable jobs |
-| Dev/prod parity | Same Node/package versions and DB migrations; synthetic development data; private service config |
-| Logs | Structured stdout/stderr events; external rotation/retention; audit records are separate durable evidence |
-| Admin processes | Doctor, migrations, ingest, backup and restore are explicit one-off commands with config/version context |
+| Factor            | Aetherion rule                                                                                            |
+| ----------------- | --------------------------------------------------------------------------------------------------------- |
+| Codebase          | One Git repo, issue-linked branches/commits, reproducible releases                                        |
+| Dependencies      | Exact versions + lockfile; pin model digests and reviewed skill revisions                                 |
+| Config            | Validated nonsecret YAML plus environment secret/deployment overrides; fail fast; commit only examples    |
+| Backing services  | DB/Redis/Ollama accessed through configurable private endpoints and scoped adapters                       |
+| Build/release/run | Build artifacts separately; release includes commit/config/migration versions; run immutable artifact     |
+| Processes         | Process memory is disposable; threads/jobs/approvals/checkpoints live in Postgres/Redis                   |
+| Port binding      | Each service declares its port; bind loopback/Tailscale explicitly; no wildcard exposure                  |
+| Concurrency       | Separate API/worker/channel processes; bound queues; one GPU request through LlmGate                      |
+| Disposability     | Handle SIGTERM: stop intake, close SSE, drain/cancel bounded work, close clients; recover durable jobs    |
+| Dev/prod parity   | Same Node/package versions and DB migrations; synthetic development data; private service config          |
+| Logs              | Structured stdout/stderr events; external rotation/retention; audit records are separate durable evidence |
+| Admin processes   | Doctor, migrations, ingest, backup and restore are explicit one-off commands with config/version context  |
 
 Validate config once at startup. Precedence is documented: explicit CLI for diagnostics → allowed environment overrides → checked-in nonsecret defaults. Reject unknown config/invalid private addresses. No credentials in `NEXT_PUBLIC_*`, browser bundles, URLs, CLI arguments or logs. `.env.example` documents variable names and safe placeholder values. Do not add runtime dependencies on cloud telemetry.
 

@@ -18,9 +18,9 @@ PR description: problem/result, issue/spec/ADR, relevant validation, migration/r
 
 ## Checks now and later
 
-Phase 0: `pnpm test:bench`, TypeScript syntax checks, `pnpm docs:check`, Makefile mirrors and the documentation CI workflow. Tests use stubbed inference and synthetic data. Live Ollama/GPU measurements are explicitly local and separately recorded.
+Current repository: `pnpm check` runs lint, strict typecheck, benchmark/compliance tests, docs/skill checks, source policies and formatting. Tests use stubbed inference and synthetic data. Live Ollama/GPU measurements are explicitly local and separately recorded.
 
-Phase 1: add and require `pnpm lint`, `pnpm typecheck`, `pnpm test`, plus architecture import checks and DB migration/schema parity checks. Phase 4 adds frontend component size/lint and Playwright/accessibility checks. Pin CI actions to reviewed full commits; use minimum permissions. Do not run untrusted PR code on a persistent GPU/home self-hosted runner. Public-hosted CI may test synthetic code without model calls; local-only inference remains a runtime constraint.
+Phase 1: extend the existing required quality commands to the application and add DB migration/schema parity checks. Phase 4 adds frontend component size/lint and Playwright/accessibility checks. Pin CI actions to reviewed full commits; use minimum permissions. Do not run untrusted PR code on a persistent GPU/home self-hosted runner. Public-hosted CI may test synthetic code without model calls; local-only inference remains a runtime constraint.
 
 ## Definition of done
 

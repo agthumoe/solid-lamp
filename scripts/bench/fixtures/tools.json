@@ -10,7 +10,11 @@
           "type": "object",
           "properties": {
             "query": { "type": "string", "description": "Natural-language search query" },
-            "tags": { "type": "array", "items": { "type": "string" }, "description": "Optional tag filter, without #" },
+            "tags": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Optional tag filter, without #"
+            },
             "k": { "type": "integer", "description": "Number of results, default 5" }
           },
           "required": ["query"]
@@ -57,7 +61,10 @@
         "parameters": {
           "type": "object",
           "properties": {
-            "category": { "type": "string", "description": "Spending category, e.g. groceries, dining, transport" },
+            "category": {
+              "type": "string",
+              "description": "Spending category, e.g. groceries, dining, transport"
+            },
             "month": { "type": "string", "description": "Month as YYYY-MM" }
           },
           "required": ["month"]
@@ -112,24 +119,90 @@
     }
   ],
   "cases": [
-    { "prompt": "What did I write about sourdough hydration?", "expect": { "name": "brain_search", "args": { "query": "sourdough" } } },
-    { "prompt": "Find my notes tagged #rust about lifetimes.", "expect": { "name": "brain_search", "args": { "query": "lifetime", "tags": "rust" } } },
-    { "prompt": "Search my brain for anything about Postgres vacuum tuning, top 3 only.", "expect": { "name": "brain_search", "args": { "query": "vacuum", "k": 3 } } },
-    { "prompt": "Show me my open tasks.", "expect": { "name": "tasks_list", "args": { "status": "open" } } },
-    { "prompt": "Which tasks have I already completed?", "expect": { "name": "tasks_list", "args": { "status": "done" } } },
-    { "prompt": "List open tasks in the Aurora project due before 2026-10-20.", "expect": { "name": "tasks_list", "args": { "status": "open", "project": "aurora", "due_before": "2026-10-20" } } },
-    { "prompt": "Add a task to renew my passport, due 2026-11-01.", "expect": { "name": "tasks_propose_create", "args": { "title": "passport", "due": "2026-11-01" } } },
-    { "prompt": "Remind me to call the dentist — make it a task for the Health project.", "expect": { "name": "tasks_propose_create", "args": { "title": "dentist", "project": "health" } } },
-    { "prompt": "Create a task: review PR #42 in solid-lamp.", "expect": { "name": "tasks_propose_create", "args": { "title": "42" } } },
-    { "prompt": "How much did I spend on groceries in September 2026?", "expect": { "name": "finance_query", "args": { "category": "groceries", "month": "2026-09" } } },
-    { "prompt": "What was my total spending in 2026-08?", "expect": { "name": "finance_query", "args": { "month": "2026-08" } } },
-    { "prompt": "How much did I blow on dining out this month?", "expect": { "name": "finance_query", "args": { "category": "dining", "month": "2026-10" } } },
-    { "prompt": "Any unread emails?", "expect": { "name": "email_list", "args": { "unread_only": true } } },
-    { "prompt": "Show me the last 5 emails from GitHub.", "expect": { "name": "email_list", "args": { "from": "github", "limit": 5 } } },
-    { "prompt": "Open README.md in the solid-lamp repo.", "expect": { "name": "repos_read_file", "args": { "repo": "solid-lamp", "path": "README.md" } } },
-    { "prompt": "Read packages/llm/src/gate.ts from the aetherion-os repo.", "expect": { "name": "repos_read_file", "args": { "repo": "aetherion-os", "path": "packages/llm/src/gate.ts" } } },
-    { "prompt": "Ping my phone saying the backup finished.", "expect": { "name": "notify_me", "args": { "message": "backup" } } },
-    { "prompt": "Send me an urgent WhatsApp: server disk is 95% full.", "expect": { "name": "notify_me", "args": { "message": "disk", "urgent": true } } },
+    {
+      "prompt": "What did I write about sourdough hydration?",
+      "expect": { "name": "brain_search", "args": { "query": "sourdough" } }
+    },
+    {
+      "prompt": "Find my notes tagged #rust about lifetimes.",
+      "expect": { "name": "brain_search", "args": { "query": "lifetime", "tags": "rust" } }
+    },
+    {
+      "prompt": "Search my brain for anything about Postgres vacuum tuning, top 3 only.",
+      "expect": { "name": "brain_search", "args": { "query": "vacuum", "k": 3 } }
+    },
+    {
+      "prompt": "Show me my open tasks.",
+      "expect": { "name": "tasks_list", "args": { "status": "open" } }
+    },
+    {
+      "prompt": "Which tasks have I already completed?",
+      "expect": { "name": "tasks_list", "args": { "status": "done" } }
+    },
+    {
+      "prompt": "List open tasks in the Aurora project due before 2026-10-20.",
+      "expect": {
+        "name": "tasks_list",
+        "args": { "status": "open", "project": "aurora", "due_before": "2026-10-20" }
+      }
+    },
+    {
+      "prompt": "Add a task to renew my passport, due 2026-11-01.",
+      "expect": {
+        "name": "tasks_propose_create",
+        "args": { "title": "passport", "due": "2026-11-01" }
+      }
+    },
+    {
+      "prompt": "Remind me to call the dentist — make it a task for the Health project.",
+      "expect": {
+        "name": "tasks_propose_create",
+        "args": { "title": "dentist", "project": "health" }
+      }
+    },
+    {
+      "prompt": "Create a task: review PR #42 in solid-lamp.",
+      "expect": { "name": "tasks_propose_create", "args": { "title": "42" } }
+    },
+    {
+      "prompt": "How much did I spend on groceries in September 2026?",
+      "expect": { "name": "finance_query", "args": { "category": "groceries", "month": "2026-09" } }
+    },
+    {
+      "prompt": "What was my total spending in 2026-08?",
+      "expect": { "name": "finance_query", "args": { "month": "2026-08" } }
+    },
+    {
+      "prompt": "How much did I blow on dining out this month?",
+      "expect": { "name": "finance_query", "args": { "category": "dining", "month": "2026-10" } }
+    },
+    {
+      "prompt": "Any unread emails?",
+      "expect": { "name": "email_list", "args": { "unread_only": true } }
+    },
+    {
+      "prompt": "Show me the last 5 emails from GitHub.",
+      "expect": { "name": "email_list", "args": { "from": "github", "limit": 5 } }
+    },
+    {
+      "prompt": "Open README.md in the solid-lamp repo.",
+      "expect": { "name": "repos_read_file", "args": { "repo": "solid-lamp", "path": "README.md" } }
+    },
+    {
+      "prompt": "Read packages/llm/src/gate.ts from the aetherion-os repo.",
+      "expect": {
+        "name": "repos_read_file",
+        "args": { "repo": "aetherion-os", "path": "packages/llm/src/gate.ts" }
+      }
+    },
+    {
+      "prompt": "Ping my phone saying the backup finished.",
+      "expect": { "name": "notify_me", "args": { "message": "backup" } }
+    },
+    {
+      "prompt": "Send me an urgent WhatsApp: server disk is 95% full.",
+      "expect": { "name": "notify_me", "args": { "message": "disk", "urgent": true } }
+    },
     { "prompt": "What is 17 times 23?", "expect": null },
     { "prompt": "Say good morning in Japanese.", "expect": null }
   ]

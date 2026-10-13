@@ -12,13 +12,13 @@ Status: **development governance adopted (2026-10-13)**; application enforcement
 
 **Before ending a session**, update `docs/STATUS.md` (Now / Next / Blocked / Session log) and tick boxes in `docs/PLAN.md`. Another agent must be able to continue from those files alone.
 
-| File | Holds | Update when |
-|---|---|---|
-| `docs/STATUS.md` | Current state, next actions, blockers, gotchas, session log | Every session / meaningful step |
-| `docs/PLAN.md` | Phase checklists, decisions log | Task done or decision made |
-| `docs/HARDWARE.md` | Host audit, benchmark results | Hardware/config change, new benchmark |
-| `docs/adr/NNNN-*.md` | One architecture decision each | Any non-trivial choice |
-| `docs/specs/<name>.md` | Feature/agent spec | Before building it |
+| File                   | Holds                                                       | Update when                           |
+| ---------------------- | ----------------------------------------------------------- | ------------------------------------- |
+| `docs/STATUS.md`       | Current state, next actions, blockers, gotchas, session log | Every session / meaningful step       |
+| `docs/PLAN.md`         | Phase checklists, decisions log                             | Task done or decision made            |
+| `docs/HARDWARE.md`     | Host audit, benchmark results                               | Hardware/config change, new benchmark |
+| `docs/adr/NNNN-*.md`   | One architecture decision each                              | Any non-trivial choice                |
+| `docs/specs/<name>.md` | Feature/agent spec                                          | Before building it                    |
 
 ## What this is
 
@@ -48,21 +48,23 @@ supabase/      migrations     infra/  compose, systemd, ollama, windows docs    
 
 ## Commands
 
-| Task | Command | Available from |
-|---|---|---|
-| Install | `pnpm install` | Phase 0 |
-| Benchmark models | `pnpm bench:models` (flags: `--only chat,router`, `--no-fallbacks`, `--no-think`, `--label x`) | Phase 0 |
-| Benchmark regression tests | `pnpm test:bench` | Phase 0 |
-| Documentation/skill integrity | `pnpm docs:check` | Phase 0 |
-| Dev / test / lint / typecheck | `pnpm dev`, `pnpm test`, `pnpm lint`, `pnpm typecheck` | Phase 1 |
-| Doctor | `pnpm doctor` | Phase 1 |
-| Brain | `pnpm brain:ingest [--source]`, `pnpm brain:query "..."`, `pnpm brain:stats` | Phase 2 |
+| Task                          | Command                                                                                        | Available from |
+| ----------------------------- | ---------------------------------------------------------------------------------------------- | -------------- |
+| Install                       | `pnpm install`                                                                                 | Phase 0        |
+| Benchmark models              | `pnpm bench:models` (flags: `--only chat,router`, `--no-fallbacks`, `--no-think`, `--label x`) | Phase 0        |
+| Benchmark regression tests    | `pnpm test:bench`                                                                              | Phase 0        |
+| Documentation/skill integrity | `pnpm docs:check`                                                                              | Phase 0        |
+| Full current quality gates    | `pnpm check` (lint/typecheck/test/docs/compliance/format)                                      | Now            |
+| Dev                           | `pnpm dev`                                                                                     | Phase 1        |
+| Doctor                        | `pnpm doctor`                                                                                  | Phase 1        |
+| Brain                         | `pnpm brain:ingest [--source]`, `pnpm brain:query "..."`, `pnpm brain:stats`                   | Phase 2        |
 
 Every current root script is mirrored in the `Makefile`; future scaffold scripts must be mirrored too.
 
 ## Conventions
 
 **Do**
+
 - Refer to models by **role** (`chat`, `router`, `coder`, `embed`, `vision`), resolved through `config/models.yaml`. Never hard-code a model tag.
 - Route every generation call through `LlmGate` (interactive priority over background).
 - Set `num_ctx` per request from the role config.
@@ -72,6 +74,7 @@ Every current root script is mirrored in the `Makefile`; future scaffold scripts
 - Write `docs/specs/<name>.md` before building a feature or agent; write an ADR (`docs/adr/NNNN-title.md`) for every non-trivial choice.
 
 **Don't**
+
 - Don't call cloud model APIs from runtime code.
 - Don't write to the Obsidian vault except `AI-Inbox/`, and only after approval.
 - Don't add tool-specific config (hooks, rules files) that another agent couldn't follow; put instructions here.
@@ -83,7 +86,6 @@ Every current root script is mirrored in the `Makefile`; future scaffold scripts
 1. Work in phases (`docs/PLAN.md`). At the end of each phase run `pnpm lint && pnpm typecheck && pnpm test`, update `docs/PLAN.md` (checkboxes + decisions log) and `docs/STATUS.md`, summarize, and **stop for the owner's go-ahead**.
 2. When something is unclear, check §17 "Open decisions" in `docs/BUILD_PROMPT.md`, use the default, and log it in `docs/PLAN.md`.
 
-
 ## Development standards and project skills
 
 Use [the handbook](docs/development/README.md) as the review contract: modular features and explicit dependency direction; narrow SOLID ports; Fastify/zod API contracts; Drizzle queries with a single Supabase SQL migration ledger; small single-responsibility React components; TanStack Query server state and Zustand shared ephemeral client state; deliberate hooks; local-first twelve-factor operations; structured redacted Pino logs.
@@ -92,10 +94,10 @@ React component functions target ≤100 nonblank lines, >150 triggers extraction
 
 Project skill catalog (read SKILL.md when relevant, then only the needed references):
 
-| Skill | Entry point | Apply when |
-|---|---|---|
-| vercel-react-best-practices | [.agents/skills/react-best-practices/SKILL.md](.agents/skills/react-best-practices/SKILL.md) | React/Next fetching, render and performance work |
-| vercel-composition-patterns | [.agents/skills/composition-patterns/SKILL.md](.agents/skills/composition-patterns/SKILL.md) | Components, variants and composition design |
+| Skill                            | Entry point                                                                                                          | Apply when                                                |
+| -------------------------------- | -------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
+| vercel-react-best-practices      | [.agents/skills/react-best-practices/SKILL.md](.agents/skills/react-best-practices/SKILL.md)                         | React/Next fetching, render and performance work          |
+| vercel-composition-patterns      | [.agents/skills/composition-patterns/SKILL.md](.agents/skills/composition-patterns/SKILL.md)                         | Components, variants and composition design               |
 | supabase-postgres-best-practices | [.agents/skills/supabase-postgres-best-practices/SKILL.md](.agents/skills/supabase-postgres-best-practices/SKILL.md) | DB schema, migrations, queries, vector search and locking |
 
 These are cross-agent Markdown references, not agent-specific hooks. Upstream advice cannot override local-only inference, private networking, approval policy, TanStack Query choice or the issue scope. Preserve pinned files/licenses; update through a GitHub issue and refresh the skill lock. See [skills provenance](docs/development/skills.md).

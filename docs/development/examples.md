@@ -11,25 +11,26 @@ export const approvalKeys = {
   pending: () => [...approvalKeys.all, 'pending'] as const,
 };
 
-export const pendingApprovalsOptions = () => queryOptions({
-  queryKey: approvalKeys.pending(),
-  queryFn: ({ signal }) => api.get('/api/v1/approvals?status=pending', {
-    signal,
-    schema: pendingApprovalsResponseSchema,
-  }),
-  staleTime: 5_000,
-  retry: (count, error) => count < 2 && isTransientReadError(error),
-});
+export const pendingApprovalsOptions = () =>
+  queryOptions({
+    queryKey: approvalKeys.pending(),
+    queryFn: ({ signal }) =>
+      api.get('/api/v1/approvals?status=pending', {
+        signal,
+        schema: pendingApprovalsResponseSchema,
+      }),
+    staleTime: 5_000,
+    retry: (count, error) => count < 2 && isTransientReadError(error),
+  });
 
 // features/approvals/hooks/use-decide-approval.ts
 export function useDecideApproval() {
   const client = useQueryClient();
   return useMutation({
-    mutationFn: (command: DecideApprovalCommand) => api.post(
-      `/api/v1/approvals/${command.id}/decision`,
-      command,
-      { schema: approvalDecisionResponseSchema },
-    ),
+    mutationFn: (command: DecideApprovalCommand) =>
+      api.post(`/api/v1/approvals/${command.id}/decision`, command, {
+        schema: approvalDecisionResponseSchema,
+      }),
     retry: false,
     onSuccess: async () => {
       await client.invalidateQueries({ queryKey: approvalKeys.all });
@@ -53,22 +54,24 @@ export function PendingApprovals() {
 
 ```tsx
 // Client-only preference store; for SSR use a scoped factory/provider.
-export const createConsoleStore = () => createStore<ConsoleState>()((set) => ({
-  panel: 'runs',
-  setPanel: (panel) => set({ panel }),
-}));
+export const createConsoleStore = () =>
+  createStore<ConsoleState>()((set) => ({
+    panel: 'runs',
+    setPanel: (panel) => set({ panel }),
+  }));
 
 export function SearchBox({ onSearch }: { onSearch: (query: string) => void }) {
   const [draft, setDraft] = useState('');
   const canSubmit = draft.trim().length > 0;
   return (
-    <form onSubmit={(event) => {
-      event.preventDefault();
-      if (canSubmit) onSearch(draft.trim());
-    }}>
+    <form
+      onSubmit={(event) => {
+        event.preventDefault();
+        if (canSubmit) onSearch(draft.trim());
+      }}
+    >
       <label htmlFor="brain-query">Search brain</label>
-      <input id="brain-query" value={draft}
-        onChange={(event) => setDraft(event.target.value)} />
+      <input id="brain-query" value={draft} onChange={(event) => setDraft(event.target.value)} />
       <button disabled={!canSubmit}>Search</button>
     </form>
   );
@@ -83,12 +86,12 @@ The submitted query goes to the URL and Query key; the draft stays local. A pref
 // Only after profiling a costly transform:
 const rows = useMemo(() => buildGraphRows(nodes, filter), [nodes, filter]);
 // Useful when passed to a measured memoized child:
-const toggle = useCallback(() => setExpanded(value => !value), []);
+const toggle = useCallback(() => setExpanded((value) => !value), []);
 
 // A focused hook for an actual external subscription:
 useEffect(() => {
   const stream = connectRunEvents(runId, {
-    onEvent: event => reconcileRunEvent(queryClient, event),
+    onEvent: (event) => reconcileRunEvent(queryClient, event),
     onGap: () => void queryClient.invalidateQueries({ queryKey: runKeys.detail(runId) }),
   });
   return () => stream.close();

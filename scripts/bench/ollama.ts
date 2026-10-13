@@ -1,19 +1,23 @@
 // Minimal Ollama native-API client for the benchmark harness.
 // The production client lives in packages/llm (Phase 1); this file stays dependency-free.
 
-export interface PsModel {
-  name: string;
-  size: number;
-  size_vram: number;
-  context_length?: number;
-  expires_at?: string;
-}
-
-export interface ChatMessage {
-  role: 'system' | 'user' | 'assistant' | 'tool';
-  content: string;
-  tool_calls?: { function: { name: string; arguments: Record<string, unknown> } }[];
-}
+import { requiredAt } from '../lib/required-at.ts';
+import { z } from 'zod';
+import type { messageSchema } from './schemas.ts';
+import {
+  privateUrlSchema,
+  psSchema,
+  chatFinalSchema,
+  streamMessageSchema,
+  versionSchema,
+  showSchema,
+  toolCallSchema,
+  type JsonSchema,
+} from './schemas.ts';
+export type { JsonSchema } from './schemas.ts';
+export type PsModel = z.infer<typeof psSchema>['models'][number];
+export type ChatMessage = z.infer<typeof messageSchema>;
+export type ChatFinal = z.infer<typeof chatFinalSchema>;
 
 export interface ChatRequest {
   model: string;
@@ -22,16 +26,6 @@ export interface ChatRequest {
   think?: boolean;
   options?: Record<string, unknown>;
   keep_alive?: string | number;
-}
-
-export interface ChatFinal {
-  message: ChatMessage & { thinking?: string };
-  total_duration: number;
-  load_duration: number;
-  prompt_eval_count: number;
-  prompt_eval_duration: number;
-  eval_count: number;
-  eval_duration: number;
 }
 
 export interface StreamResult {
@@ -46,11 +40,11 @@ export class Ollama {
   readonly timeoutMs: number;
 
   constructor(baseUrl: string, timeoutMs = REQUEST_TIMEOUT_MS) {
-    this.baseUrl = baseUrl;
+    this.baseUrl = privateUrlSchema.parse(baseUrl);
     this.timeoutMs = timeoutMs;
   }
 
-  private async post<T>(path: string, body: unknown): Promise<T> {
+  private async post(path: string, body: unknown): Promise<unknown> {
     const res = await fetch(`${this.baseUrl}${path}`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
@@ -58,27 +52,33 @@ export class Ollama {
       signal: AbortSignal.timeout(this.timeoutMs),
     });
     if (!res.ok) throw new Error(`${path} ${res.status}: ${await res.text()}`);
-    return (await res.json()) as T;
+    return res.json();
   }
 
   async version(): Promise<string> {
-    const res = await fetch(`${this.baseUrl}/api/version`, { signal: AbortSignal.timeout(this.timeoutMs) });
+    const res = await fetch(`${this.baseUrl}/api/version`, {
+      signal: AbortSignal.timeout(this.timeoutMs),
+    });
     if (!res.ok) throw new Error(`/api/version ${res.status}: ${await res.text()}`);
-    return ((await res.json()) as { version: string }).version;
+    return versionSchema.parse(await res.json()).version;
   }
 
   async ps(): Promise<PsModel[]> {
-    const res = await fetch(`${this.baseUrl}/api/ps`, { signal: AbortSignal.timeout(this.timeoutMs) });
+    const res = await fetch(`${this.baseUrl}/api/ps`, {
+      signal: AbortSignal.timeout(this.timeoutMs),
+    });
     if (!res.ok) throw new Error(`/api/ps ${res.status}: ${await res.text()}`);
-    return ((await res.json()) as { models: PsModel[] }).models;
+    return psSchema.parse(await res.json()).models;
   }
 
-  async show(model: string): Promise<{ capabilities?: string[]; details?: Record<string, unknown> }> {
-    return this.post('/api/show', { model });
+  async show(model: string): Promise<z.infer<typeof showSchema>> {
+    return showSchema.parse(await this.post('/api/show', { model }));
   }
 
   async unload(model: string): Promise<void> {
-    await this.post('/api/generate', { model, keep_alive: 0 });
+    z.object({ done: z.literal(true) }).parse(
+      await this.post('/api/generate', { model, keep_alive: 0 }),
+    );
   }
 
   async unloadAll(): Promise<void> {
@@ -88,11 +88,13 @@ export class Ollama {
       if ((await this.ps()).length === 0) return;
       await sleep(200);
     }
-    throw new Error(`unloadAll: models still loaded after 20s: ${(await this.ps()).map((m) => m.name).join(', ')}`);
+    throw new Error(
+      `unloadAll: models still loaded after 20s: ${(await this.ps()).map((m) => m.name).join(', ')}`,
+    );
   }
 
   async chat(req: ChatRequest): Promise<ChatFinal> {
-    return this.post('/api/chat', { ...req, stream: false });
+    return chatFinalSchema.parse(await this.post('/api/chat', { ...req, stream: false }));
   }
 
   async chatStream(req: ChatRequest): Promise<StreamResult> {
@@ -112,15 +114,16 @@ export class Ollama {
     let final: ChatFinal | undefined;
     const consume = (line: string) => {
       if (!line.trim()) return;
-      const msg = JSON.parse(line) as ChatFinal & { done: boolean; error?: string };
+      const raw: unknown = JSON.parse(line);
+      const msg = streamMessageSchema.parse(raw);
       if (msg.error) throw new Error(msg.error);
       const piece = (msg.message?.content ?? '') + (msg.message?.thinking ?? '');
       if (ttftMs < 0 && piece.length > 0) ttftMs = performance.now() - start;
       content += msg.message?.content ?? '';
-      if (msg.done) final = msg;
+      if (msg.done) final = chatFinalSchema.parse(raw);
     };
     for await (const chunk of res.body) {
-      buf += decoder.decode(chunk as Uint8Array, { stream: true });
+      buf += decoder.decode(chunk, { stream: true });
       let nl: number;
       while ((nl = buf.indexOf('\n')) >= 0) {
         const line = buf.slice(0, nl).trim();
@@ -133,8 +136,13 @@ export class Ollama {
     return { final, content, ttftMs, wallMs: performance.now() - start };
   }
 
-  async embed(model: string, input: string[], options?: Record<string, unknown>, expectedDimensions?: number): Promise<number[][]> {
-    const response = await this.post<unknown>('/api/embed', { model, input, options });
+  async embed(
+    model: string,
+    input: string[],
+    options?: Record<string, unknown>,
+    expectedDimensions?: number,
+  ): Promise<number[][]> {
+    const response = await this.post('/api/embed', { model, input, options });
     if (!isRecord(response)) throw new Error('/api/embed: expected response object');
     return validateEmbeddings(response.embeddings, input.length, expectedDimensions);
   }
@@ -145,60 +153,100 @@ const REQUEST_TIMEOUT_MS = 300_000;
 
 export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-export interface JsonSchema {
-  type?: string;
-  properties?: Record<string, JsonSchema>;
-  required?: string[];
-  enum?: unknown[];
-  items?: JsonSchema;
+function argumentValidator(schema: JsonSchema): z.ZodType {
+  let validator: z.ZodType;
+  switch (schema.type) {
+    case 'object': {
+      const properties = schema.properties ?? {};
+      const fields = Object.fromEntries(
+        Object.entries(properties).map(([key, value]) => [
+          key,
+          (schema.required ?? []).includes(key)
+            ? argumentValidator(value)
+            : argumentValidator(value).optional(),
+        ]),
+      );
+      validator = z.strictObject(fields).superRefine((value, context) => {
+        for (const key of schema.required ?? [])
+          if (!Object.hasOwn(value, key))
+            context.addIssue({ code: 'custom', message: 'missing own property', path: [key] });
+      });
+      break;
+    }
+    case 'array':
+      validator = z.array(schema.items ? argumentValidator(schema.items) : z.unknown());
+      break;
+    case 'integer':
+      validator = z.number().int();
+      break;
+    case 'number':
+      validator = z.number().finite();
+      break;
+    case 'string':
+      validator = z.string();
+      break;
+    case 'boolean':
+      validator = z.boolean();
+      break;
+    case undefined:
+      validator = z.unknown();
+      break;
+    default:
+      throw new Error('unsupported argument schema');
+  }
+  return schema.enum
+    ? validator.refine(
+        (value) => schema.enum?.some((item) => JSON.stringify(item) === JSON.stringify(value)),
+        'not in enum',
+      )
+    : validator;
 }
 
-/**
- * Minimal JSON-schema check for tool arguments (types, required, enum, no unknown keys).
- * Returns a list of problems; empty means valid. Production uses zod in packages/llm.
- */
 export function validateArgs(schema: JsonSchema, value: unknown, path = 'args'): string[] {
-  const errs: string[] = [];
-  const t = schema.type;
-  if (t === 'object') {
-    if (typeof value !== 'object' || value === null || Array.isArray(value)) return [`${path}: expected object`];
-    const obj = value as Record<string, unknown>;
-    for (const k of schema.required ?? []) if (!Object.hasOwn(obj, k)) errs.push(`${path}.${k}: missing`);
-    for (const [k, v] of Object.entries(obj)) {
-      const sub = schema.properties && Object.hasOwn(schema.properties, k) ? schema.properties[k] : undefined;
-      if (!sub) errs.push(`${path}.${k}: unknown key`);
-      else errs.push(...validateArgs(sub, v, `${path}.${k}`));
-    }
-  } else if (t === 'array') {
-    if (!Array.isArray(value)) return [`${path}: expected array`];
-    if (schema.items) value.forEach((v, i) => errs.push(...validateArgs(schema.items!, v, `${path}[${i}]`)));
-  } else if (t === 'integer') {
-    if (!Number.isInteger(value)) errs.push(`${path}: expected integer`);
-  } else if (t === 'number') {
-    if (typeof value !== 'number' || !Number.isFinite(value)) errs.push(`${path}: expected number`);
-  } else if (t === 'string' || t === 'boolean') {
-    if (typeof value !== t) errs.push(`${path}: expected ${t}`);
+  if (
+    schema.type === 'object' &&
+    (typeof value !== 'object' || value === null || Array.isArray(value))
+  )
+    return [`${path}: expected object`];
+  if (schema.type === 'object' && typeof value === 'object' && value !== null) {
+    const missing = (schema.required ?? []).filter((key) => !Object.hasOwn(value, key));
+    if (missing.length) return missing.map((key) => `${path}.${key}: missing`);
   }
-  if (schema.enum && !schema.enum.includes(value)) errs.push(`${path}: not in enum`);
-  return errs;
+  const result = argumentValidator(schema).safeParse(value);
+  return result.success
+    ? []
+    : result.error.issues.map(
+        (issue) => `${path}.${issue.path.map(String).join('.')}: ${issue.message}`,
+      );
 }
 
 function vectorNorm(vector: unknown, dimensions: number, path: string): number {
-  if (!Array.isArray(vector) || vector.length !== dimensions) throw new Error(`${path}: expected ${dimensions} dimensions`);
+  if (!Array.isArray(vector) || vector.length !== dimensions)
+    throw new Error(`${path}: expected ${dimensions} dimensions`);
   let norm = 0;
   for (const component of vector) {
-    if (typeof component !== 'number' || !Number.isFinite(component)) throw new Error(`${path}: expected finite numeric components`);
+    if (typeof component !== 'number' || !Number.isFinite(component))
+      throw new Error(`${path}: expected finite numeric components`);
     norm = Math.hypot(norm, component);
   }
-  if (!Number.isFinite(norm) || norm === 0) throw new Error(`${path}: expected finite nonzero norm`);
+  if (!Number.isFinite(norm) || norm === 0)
+    throw new Error(`${path}: expected finite nonzero norm`);
   return norm;
 }
 
-export function validateEmbeddings(value: unknown, expectedCount: number, expectedDimensions?: number): number[][] {
-  if (!Array.isArray(value) || value.length !== expectedCount) throw new Error(`/api/embed: expected ${expectedCount} vectors`);
+export function validateEmbeddings(
+  value: unknown,
+  expectedCount: number,
+  expectedDimensions?: number,
+): number[][] {
+  if (!Array.isArray(value) || value.length !== expectedCount)
+    throw new Error(`/api/embed: expected ${expectedCount} vectors`);
   const dimensions = expectedDimensions ?? (Array.isArray(value[0]) ? value[0].length : undefined);
-  if (!Number.isInteger(dimensions) || dimensions! <= 0) throw new Error('/api/embed: expected positive dimensions');
-  value.forEach((vector, index) => vectorNorm(vector, dimensions!, `/api/embed vector ${index}`));
+  if (!Number.isInteger(dimensions) || (dimensions ?? 0) <= 0)
+    throw new Error('/api/embed: expected positive dimensions');
+  value.forEach((vector, index) =>
+    vectorNorm(vector, dimensions ?? 0, `/api/embed vector ${index}`),
+  );
   return value as number[][];
 }
 
@@ -208,12 +256,15 @@ export function cosine(a: number[], b: number[]): number {
   const nb = vectorNorm(b, a.length, 'cosine right');
   // Normalize before multiplication to avoid underflow/overflow for finite extreme components.
   let dot = 0;
-  for (let index = 0; index < a.length; index++) dot += (a[index] / na) * (b[index] / nb);
+  for (let index = 0; index < a.length; index++)
+    dot += (requiredAt(a, index) / na) * (requiredAt(b, index) / nb);
   return Math.max(-1, Math.min(1, dot));
 }
 
 /** Recover only explicit calls occupying the entire response. Never execute recovered calls. */
-export function parseTextToolCalls(text: string): { name: string; arguments: Record<string, unknown> }[] {
+export function parseTextToolCalls(
+  text: string,
+): { name: string; arguments: Record<string, unknown> }[] {
   const trimmed = text.trim();
   const candidates: string[] = [];
   if (trimmed.startsWith('{')) candidates.push(trimmed);
@@ -222,8 +273,10 @@ export function parseTextToolCalls(text: string): { name: string; arguments: Rec
     let end = 0;
     for (const match of trimmed.matchAll(pattern)) {
       if (trimmed.slice(end, match.index).trim()) return [];
-      candidates.push(match[1] ?? match[2]);
-      end = match.index! + match[0].length;
+      const candidate = match[1] ?? match[2];
+      if (!candidate) return [];
+      candidates.push(candidate);
+      end = match.index + match[0].length;
     }
     if (trimmed.slice(end).trim()) return [];
   }
@@ -232,12 +285,13 @@ export function parseTextToolCalls(text: string): { name: string; arguments: Rec
     try {
       const obj: unknown = JSON.parse(candidate);
       if (!isRecord(obj) || typeof obj.name !== 'string' || !obj.name.trim()) return [];
-      if (Object.keys(obj).some((key) => !['name', 'arguments', 'parameters'].includes(key))) return [];
+      if (Object.keys(obj).some((key) => !['name', 'arguments', 'parameters'].includes(key)))
+        return [];
       if (Object.hasOwn(obj, 'arguments') && Object.hasOwn(obj, 'parameters')) return [];
       const raw = Object.hasOwn(obj, 'arguments') ? obj.arguments : obj.parameters;
       const args: unknown = typeof raw === 'string' ? JSON.parse(raw) : raw;
       if (!isRecord(args)) return [];
-      out.push({ name: obj.name, arguments: args });
+      out.push(toolCallSchema.parse({ name: obj.name, arguments: args }));
     } catch {
       return [];
     }
@@ -246,6 +300,10 @@ export function parseTextToolCalls(text: string): { name: string; arguments: Rec
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value) &&
-    Object.getPrototypeOf(value) === Object.prototype;
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    !Array.isArray(value) &&
+    Object.getPrototypeOf(value) === Object.prototype
+  );
 }
