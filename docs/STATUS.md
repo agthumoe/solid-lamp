@@ -97,3 +97,5 @@ Initial baseline is published to `main` under the owner’s explicit authorizati
 | 2026-10-13 | Codex | Issue #12 created before CI bootstrap cleanup. Verified current checkout/setup-node/pnpm setup release commits declare Node 24; pinned Ubuntu 24.04. Prior main CI passed; fresh cleanup-run evidence is recorded in #12. No application phase advancement. |
 
 | 2026-10-13 | Codex | #13 opened before edits; compliance branch implements strict typing/lint/format, Zod boundaries, safe logs and negative policy tests; closes #11 benchmark gaps. Updated unified CI and applicability evidence. Application modules/owner model gates remain pending; PR #14/required-check evidence recorded in #13; main protection verified (strict compliance check, PR, admin enforcement, no force-push/delete). |
+
+| 2026-10-13 | Codex | #15 opened before recording US/Texas specialist research. Finance agent is planned only; no specialist roles installed. Shortlisted Saul legal and conditional Fin-R1 finance comparison; CPA-Qwen is experimental and tax uses current-source retrieval/deterministic rules. Licenses/evals/hardware and personal-vs-business scope remain adoption gates. |
