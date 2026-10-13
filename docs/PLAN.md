@@ -91,6 +91,8 @@ GitHub tasks/milestones: [TRACKING.md](TRACKING.md). Standards: [development han
 
 ## Phase 7: Domain agents (spec-first, one at a time)
 
+Specialist research: [US/Texas shortlist](specs/domain-model-research.md), [#15](https://github.com/agthumoe/solid-lamp/issues/15). Tax/legal/accounting agents are proposals; evaluate scope/licenses/quality before adding them.
+
 - [ ] Coding-quality comparison on real repo tasks before changing coder model
 - [ ] `coder` (repo ingestion + read tools)
 - [ ] `planner` + tasks
