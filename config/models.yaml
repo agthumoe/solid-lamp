@@ -9,7 +9,7 @@ roles:
   chat:
     model: qwen3.5:9b
     num_ctx: 16384
-    think: false          # thinking is opt-in per request (latency on a 3060)
+    think: false # thinking is opt-in per request (latency on a 3060)
     residency: resident
     temperature: 0.6
   router:
@@ -22,7 +22,7 @@ roles:
     model: qwen2.5-coder:14b
     num_ctx: 16384
     think: false
-    residency: swap       # evicts chat while running
+    residency: swap # evicts chat while running
     temperature: 0.2
   embed:
     model: qwen3-embedding:0.6b
@@ -32,7 +32,7 @@ roles:
     # Prefix applied to queries only, never to documents.
     query_prefix: "Instruct: Given a question, retrieve passages from personal notes and code that answer it\nQuery: "
   vision:
-    model: qwen3.5:9b     # shared with chat
+    model: qwen3.5:9b # shared with chat
     num_ctx: 8192
     residency: shared
   # deep: disabled until WSL RAM >= 24 GB and a benchmark proves it acceptable.
@@ -43,4 +43,12 @@ roles:
 
 fallbacks:
   chat: [qwen3:8b, gemma4:12b]
-  embed: [nomic-embed-text]   # 768-dim; explicit versioned rebuild/promotion only (ADR 0002), never query-time failover
+  embed: [nomic-embed-text] # 768-dim; explicit versioned rebuild/promotion only (ADR 0002), never query-time failover
+
+# Explicit embedding fallback contract; never query-time failover.
+fallback_embedding_options:
+  nomic-embed-text:
+    dimensions: 768
+    num_ctx: 2048
+    query_prefix: 'search_query: '
+    document_prefix: 'search_document: '

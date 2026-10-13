@@ -1,0 +1,7 @@
+node_modules/
+.agents/
+docs/bench/
+docs/development/skills-lock.json
+pnpm-lock.yaml
+aetherion-os-build-prompt.md
+docs/BUILD_PROMPT.md

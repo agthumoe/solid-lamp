@@ -1,7 +1,7 @@
-name: Phase 0 checks
+name: Handbook compliance
 on:
   push:
-    branches: [main]
+    branches: [main, 'chore/**']
   pull_request:
 permissions:
   contents: read
@@ -9,7 +9,7 @@ concurrency:
   group: checks-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
-  baseline:
+  compliance:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
@@ -20,12 +20,4 @@ jobs:
           node-version: '24'
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm test:bench
-      - run: pnpm docs:check
-      - name: Native TypeScript syntax
-        run: |
-          node --check scripts/bench/models.ts
-          node --check scripts/bench/ollama.ts
-          node --check scripts/bench/integrity.ts
-          node --check scripts/bench/integrity.test.ts
-          node --check scripts/check-docs.ts
+      - run: pnpm check

@@ -4,16 +4,17 @@ Status: adopted standards, 2026-10-13. Delivery task: [#1](https://github.com/ag
 
 Read AGENTS → STATUS → PLAN → this index → the relevant guide before editing. Every change needs a GitHub issue with scope and acceptance criteria. Record architecture changes in an ADR and feature behavior in a spec before implementation.
 
-| Guide | Covers | Enforcement begins |
-|---|---|---|
-| [Architecture and API](architecture-api.md) | SOLID, dependency direction, patterns, TypeScript, contracts | Phase 1 |
-| [Frontend and state](frontend-state.md) | Small components, React hooks, Query, Zustand, SSR | Phase 4; foundation planned in Phase 1 |
-| [Database and migrations](database.md) | Drizzle, SQL history, locks, versions, restore | Phases 1–2 |
-| [AI engineering](ai.md) | Local inference, tools, approvals, evaluation | Phases 1–3 |
-| [Operations](operations.md) | 12 factors, logs, debugging, runbooks | Phase 1 baseline; Phase 8 automation |
-| [Delivery](delivery.md) | GitHub tasks, branches, reviews, CI, definition of done | Now |
-| [Examples](examples.md) | Query/mutation, components, selectors, safe SSE lifecycle | Reference now; typecheck when frontend dependencies exist |
-| [Skills and references](skills.md) | Pinned open-source skills, applicability, updates | Now |
+| Guide                                       | Covers                                                       | Enforcement begins                                        |
+| ------------------------------------------- | ------------------------------------------------------------ | --------------------------------------------------------- |
+| [Architecture and API](architecture-api.md) | SOLID, dependency direction, patterns, TypeScript, contracts | Phase 1                                                   |
+| [Frontend and state](frontend-state.md)     | Small components, React hooks, Query, Zustand, SSR           | Phase 4; foundation planned in Phase 1                    |
+| [Database and migrations](database.md)      | Drizzle, SQL history, locks, versions, restore               | Phases 1–2                                                |
+| [AI engineering](ai.md)                     | Local inference, tools, approvals, evaluation                | Phases 1–3                                                |
+| [Operations](operations.md)                 | 12 factors, logs, debugging, runbooks                        | Phase 1 baseline; Phase 8 automation                      |
+| [Delivery](delivery.md)                     | GitHub tasks, branches, reviews, CI, definition of done      | Now                                                       |
+| [Examples](examples.md)                     | Query/mutation, components, selectors, safe SSE lifecycle    | Reference now; typecheck when frontend dependencies exist |
+| [Compliance evidence](compliance.md)        | Implemented gates, evidence and future applicability         | Now                                                       |
+| [Skills and references](skills.md)          | Pinned open-source skills, applicability, updates            | Now                                                       |
 
 ## Non-negotiable review rules
 
@@ -28,6 +29,6 @@ Read AGENTS → STATUS → PLAN → this index → the relevant guide before edi
 
 ## Enforcement roadmap
 
-Phase 1 adds strict TypeScript (including unchecked-index and exact-optional review), ESLint hooks/dependency/import-boundary rules, formatting, Vitest, config schemas, Drizzle schema-drift tests, migration tests, Pino redaction tests, and API contract tests. Choose and pin exact compatible dependency versions then; this handbook does not install future runtime libraries.
+Strict TypeScript, typed ESLint/hooks, formatting, config/HTTP schemas, safe diagnostic logging, and source-boundary/size gates are now enforced by `pnpm check`. Phase 1 extends them to the application and adds Vitest, DB schema-drift/migration tests and API contract tests. Choose and pin exact compatible dependency versions then; this handbook does not install future runtime libraries.
 
 Phase 2 adds vector-version/search, path-boundary, incremental-ingestion and restore tests. Phase 3 adds graph/tool/approval/restart/SSE tests. Phase 4 adds component accessibility, Query/Zustand ownership review, hook linting, component size checks and Playwright. Phase 8 automates operational recovery and retention. Issue exceptions need an owner, reason, and follow-up date; do not permanently suppress checks to bypass a failing design.

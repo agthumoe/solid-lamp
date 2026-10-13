@@ -12,10 +12,9 @@ Node 24 and the pinned pnpm version in package.json are required. Current checks
 
 ```bash
 pnpm install --frozen-lockfile
-pnpm test:bench
-pnpm docs:check
+pnpm check
 ```
 
-For live local benchmarks, ensure no other inference run is active and use a fresh label: `pnpm bench:models --label tuned-next`. See [HARDWARE](docs/HARDWARE.md) for results/caveats. Full lint/typecheck/application tests are added in Phase 1.
+For live local benchmarks, ensure no other inference run is active and use a fresh label: `pnpm bench:models --label tuned-next`. See [HARDWARE](docs/HARDWARE.md) for results/caveats. Strict lint/typecheck and compliance gates run now; application-specific integration tests are added with their modules.
 
 [Requirements](docs/BUILD_PROMPT.md) · [Architecture decisions](docs/adr/0003-development-architecture.md) · [Project skills](docs/development/skills.md) · [Issues](https://github.com/agthumoe/solid-lamp/issues)

@@ -12,14 +12,14 @@ Accessibility is part of behavior: semantic HTML, explicit form labels, keyboard
 
 ## State ownership
 
-| State | Owner | Examples |
-|---|---|---|
-| Remote authoritative state | TanStack Query | Runs, approvals, search results, source health |
-| Shareable navigation | URL/search params | Search query, filters, selected run |
-| Isolated interaction | useState / useReducer | Draft input, a local disclosure, related form transitions |
-| Shared ephemeral client state | Zustand | Console panel preference, command palette, ephemeral selection |
-| Mutable value without rendering | useRef | Stream handle, timer, DOM node |
-| Derived value | Render/pure helper; memo only when justified | Filtered options, selected row, totals |
+| State                           | Owner                                        | Examples                                                       |
+| ------------------------------- | -------------------------------------------- | -------------------------------------------------------------- |
+| Remote authoritative state      | TanStack Query                               | Runs, approvals, search results, source health                 |
+| Shareable navigation            | URL/search params                            | Search query, filters, selected run                            |
+| Isolated interaction            | useState / useReducer                        | Draft input, a local disclosure, related form transitions      |
+| Shared ephemeral client state   | Zustand                                      | Console panel preference, command palette, ephemeral selection |
+| Mutable value without rendering | useRef                                       | Stream handle, timer, DOM node                                 |
+| Derived value                   | Render/pure helper; memo only when justified | Filtered options, selected row, totals                         |
 
 Do not copy fetched entities into Zustand. Store selected IDs, then derive the selected entity from Query. Do not persist credentials, prompts, note content, approvals or server entities in browser storage. Persist only allowlisted nonsensitive preferences with schema version/migration/reset.
 
@@ -37,14 +37,14 @@ Small feature-scoped stores; actions express intent and updates are immutable. S
 
 ## Hooks rules
 
-| Hook | Appropriate use | Prohibited shortcut |
-|---|---|---|
-| useState | Minimal independent local state; functional updates when using previous value; lazy initializer for expensive initial computation | Mirroring props, Query results or derived values |
-| useReducer | Multiple related transitions with explicit invariants | Giant reducer owning every feature |
-| useMemo | Measured costly pure transform or identity needed by a memoized boundary; complete dependencies | Every small expression; side effects; correctness relying on permanent cache |
-| useCallback | Stable handler identity required by memoized children/subscription APIs; complete deps or functional updates | Wrapping all handlers or hiding stale closures with empty deps |
-| useEffect | Synchronize with an external system; symmetrical cleanup; exhaustive deps; Strict Mode safe | Fetching ordinary API data, derived-state updates, event-triggered mutations |
-| useRef | DOM/subscription/timer identity or transient mutable data | Hiding render-relevant state outside React |
+| Hook        | Appropriate use                                                                                                                   | Prohibited shortcut                                                          |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| useState    | Minimal independent local state; functional updates when using previous value; lazy initializer for expensive initial computation | Mirroring props, Query results or derived values                             |
+| useReducer  | Multiple related transitions with explicit invariants                                                                             | Giant reducer owning every feature                                           |
+| useMemo     | Measured costly pure transform or identity needed by a memoized boundary; complete dependencies                                   | Every small expression; side effects; correctness relying on permanent cache |
+| useCallback | Stable handler identity required by memoized children/subscription APIs; complete deps or functional updates                      | Wrapping all handlers or hiding stale closures with empty deps               |
+| useEffect   | Synchronize with an external system; symmetrical cleanup; exhaustive deps; Strict Mode safe                                       | Fetching ordinary API data, derived-state updates, event-triggered mutations |
+| useRef      | DOM/subscription/timer identity or transient mutable data                                                                         | Hiding render-relevant state outside React                                   |
 
 Hooks execute unconditionally at the top level. Treat exhaustive-deps failures as design feedback. For a new props scope, use a keyed component or explicit state transition rather than reset effects. Memoization is a performance decision with before/after evidence, never a correctness requirement.
 

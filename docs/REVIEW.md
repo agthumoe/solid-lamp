@@ -21,7 +21,6 @@ Scope: Phase 0 source, baseline artifact, configuration, and phase plan. No live
 
 Architecture recommendation: retain the current local-first structure. Prefer fewer model switches on this GPU; using chat for coder is a candidate, not yet a measured coding-quality conclusion. Move baseline security and restore verification earlier without adding new domain agents or services.
 
-
 ## Resolution — 2026-10-12
 
 Findings 1–4 are addressed in the harness: strict allowlisted schema scoring, separate abstentions, whole-response text repair with object arguments, unrounded residency validation, atomic stage artifacts, explicit error/interruption status, protected labels, and timeouts/status checks on every HTTP path. `pnpm test:bench` passes seven regression groups, including stubbed full-harness success/failure runs. Syntax and CLI rejection checks pass. No live inference was started by this fix session because a v2 benchmark is recorded as active; new measurements require a fresh v3 label when idle. Existing artifacts retain their original scoring semantics.

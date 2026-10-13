@@ -1,27 +1,93 @@
 {
   "_comment": "Synthetic notes for Phase 0 model benchmarks only. Replaced by a real eval set over the vault in Phase 2.",
   "notes": [
-    { "path": "Cooking/Sourdough.md", "text": "# Sourdough\n## Formula\nI settled on 75% hydration with 2% salt and 20% levain. Higher hydration made the crumb too gummy with my flour.\n## Schedule\nFeed the starter at 9pm, mix at 8am, bulk ferment about 5 hours at 24C, shape, then cold retard overnight." },
-    { "path": "Learning/Rust Plan.md", "text": "# Rust learning plan\n#rust #learning\n## Goal\nShip a small CLI by end of Q4. Chapters 1-10 of the Book first.\n## Lifetimes\nThe thing that finally clicked: a lifetime annotation does not change how long anything lives, it only describes relationships so the borrow checker can verify them." },
-    { "path": "Infra/Home Server.md", "text": "# Home server\nThe AETHERION box runs WSL2 with an RTX 3060. Ollama listens on port 11434. Backups go to the external drive labelled VAULT-B every night at 02:30 using restic." },
-    { "path": "Books/Deep Work.md", "text": "# Deep Work — Cal Newport\n## Takeaways\nSchedule every minute of the workday. Shutdown ritual: say 'schedule shutdown, complete' out loud. Aim for four hours of deep work per day as the practical ceiling." },
-    { "path": "Projects/Aurora/2026-10-05 Sync.md", "text": "# Aurora sync 2026-10-05\nAttendees: Mia, Tom. Decision: migrate the ingestion service from Kafka to Redis Streams to cut ops cost. Tom owns the migration; deadline 2026-10-30. Risk: consumer group semantics differ." },
-    { "path": "Finance/Budget 2026.md", "text": "# Budget 2026\nMonthly targets: groceries $600, dining $250, transport $180. Emergency fund goal is six months of expenses, currently at four. Max out the Roth IRA by April." },
-    { "path": "Health/Running.md", "text": "# Running\nTraining for the Chicago half marathon. Long run on Sundays, building from 10 km to 18 km. Easy pace target 6:15/km; tempo 5:20/km. Left knee flares up above 40 km per week." },
-    { "path": "Learning/Japanese Log.md", "text": "# Japanese study log\nUsing Anki with the Kaishi 1.5k deck, 20 new cards a day. Weak point is listening. Next milestone: pass JLPT N4 in December 2026." },
-    { "path": "Infra/Postgres Notes.md", "text": "# Postgres notes\n## Vacuum\nFor the big events table set autovacuum_vacuum_scale_factor to 0.02 instead of the default 0.2, otherwise bloat builds up for days.\n## pgvector\nHNSW with m=16 and ef_construction=64 was a good default; raise ef_search to 100 for better recall." },
-    { "path": "Personal/Gift Ideas.md", "text": "# Gift ideas\nMom: a pour-over coffee set (she liked the Hario V60 at the cafe). Dad: noise-cancelling headphones for flights. Sister: a pottery class voucher." }
+    {
+      "path": "Cooking/Sourdough.md",
+      "text": "# Sourdough\n## Formula\nI settled on 75% hydration with 2% salt and 20% levain. Higher hydration made the crumb too gummy with my flour.\n## Schedule\nFeed the starter at 9pm, mix at 8am, bulk ferment about 5 hours at 24C, shape, then cold retard overnight."
+    },
+    {
+      "path": "Learning/Rust Plan.md",
+      "text": "# Rust learning plan\n#rust #learning\n## Goal\nShip a small CLI by end of Q4. Chapters 1-10 of the Book first.\n## Lifetimes\nThe thing that finally clicked: a lifetime annotation does not change how long anything lives, it only describes relationships so the borrow checker can verify them."
+    },
+    {
+      "path": "Infra/Home Server.md",
+      "text": "# Home server\nThe AETHERION box runs WSL2 with an RTX 3060. Ollama listens on port 11434. Backups go to the external drive labelled VAULT-B every night at 02:30 using restic."
+    },
+    {
+      "path": "Books/Deep Work.md",
+      "text": "# Deep Work — Cal Newport\n## Takeaways\nSchedule every minute of the workday. Shutdown ritual: say 'schedule shutdown, complete' out loud. Aim for four hours of deep work per day as the practical ceiling."
+    },
+    {
+      "path": "Projects/Aurora/2026-10-05 Sync.md",
+      "text": "# Aurora sync 2026-10-05\nAttendees: Mia, Tom. Decision: migrate the ingestion service from Kafka to Redis Streams to cut ops cost. Tom owns the migration; deadline 2026-10-30. Risk: consumer group semantics differ."
+    },
+    {
+      "path": "Finance/Budget 2026.md",
+      "text": "# Budget 2026\nMonthly targets: groceries $600, dining $250, transport $180. Emergency fund goal is six months of expenses, currently at four. Max out the Roth IRA by April."
+    },
+    {
+      "path": "Health/Running.md",
+      "text": "# Running\nTraining for the Chicago half marathon. Long run on Sundays, building from 10 km to 18 km. Easy pace target 6:15/km; tempo 5:20/km. Left knee flares up above 40 km per week."
+    },
+    {
+      "path": "Learning/Japanese Log.md",
+      "text": "# Japanese study log\nUsing Anki with the Kaishi 1.5k deck, 20 new cards a day. Weak point is listening. Next milestone: pass JLPT N4 in December 2026."
+    },
+    {
+      "path": "Infra/Postgres Notes.md",
+      "text": "# Postgres notes\n## Vacuum\nFor the big events table set autovacuum_vacuum_scale_factor to 0.02 instead of the default 0.2, otherwise bloat builds up for days.\n## pgvector\nHNSW with m=16 and ef_construction=64 was a good default; raise ef_search to 100 for better recall."
+    },
+    {
+      "path": "Personal/Gift Ideas.md",
+      "text": "# Gift ideas\nMom: a pour-over coffee set (she liked the Hario V60 at the cafe). Dad: noise-cancelling headphones for flights. Sister: a pottery class voucher."
+    }
   ],
   "questions": [
-    { "q": "What hydration percentage do I use for my sourdough?", "source": "Cooking/Sourdough.md", "keywords": ["75"] },
-    { "q": "What finally made Rust lifetimes click for me?", "source": "Learning/Rust Plan.md", "keywords": ["relationship"] },
-    { "q": "When do my nightly backups run and where do they go?", "source": "Infra/Home Server.md", "keywords": ["02:30", "VAULT-B"] },
-    { "q": "What did we decide about Kafka in the Aurora project, and who owns it?", "source": "Projects/Aurora/2026-10-05 Sync.md", "keywords": ["Redis", "Tom"] },
-    { "q": "What's my monthly dining budget?", "source": "Finance/Budget 2026.md", "keywords": ["250"] },
-    { "q": "What weekly mileage makes my knee hurt?", "source": "Health/Running.md", "keywords": ["40"] },
-    { "q": "Which JLPT level am I aiming for and when?", "source": "Learning/Japanese Log.md", "keywords": ["N4", "December"] },
-    { "q": "What autovacuum scale factor did I set for the events table?", "source": "Infra/Postgres Notes.md", "keywords": ["0.02"] },
-    { "q": "What gift did I plan for my mom?", "source": "Personal/Gift Ideas.md", "keywords": ["coffee"] },
+    {
+      "q": "What hydration percentage do I use for my sourdough?",
+      "source": "Cooking/Sourdough.md",
+      "keywords": ["75"]
+    },
+    {
+      "q": "What finally made Rust lifetimes click for me?",
+      "source": "Learning/Rust Plan.md",
+      "keywords": ["relationship"]
+    },
+    {
+      "q": "When do my nightly backups run and where do they go?",
+      "source": "Infra/Home Server.md",
+      "keywords": ["02:30", "VAULT-B"]
+    },
+    {
+      "q": "What did we decide about Kafka in the Aurora project, and who owns it?",
+      "source": "Projects/Aurora/2026-10-05 Sync.md",
+      "keywords": ["Redis", "Tom"]
+    },
+    {
+      "q": "What's my monthly dining budget?",
+      "source": "Finance/Budget 2026.md",
+      "keywords": ["250"]
+    },
+    {
+      "q": "What weekly mileage makes my knee hurt?",
+      "source": "Health/Running.md",
+      "keywords": ["40"]
+    },
+    {
+      "q": "Which JLPT level am I aiming for and when?",
+      "source": "Learning/Japanese Log.md",
+      "keywords": ["N4", "December"]
+    },
+    {
+      "q": "What autovacuum scale factor did I set for the events table?",
+      "source": "Infra/Postgres Notes.md",
+      "keywords": ["0.02"]
+    },
+    {
+      "q": "What gift did I plan for my mom?",
+      "source": "Personal/Gift Ideas.md",
+      "keywords": ["coffee"]
+    },
     { "q": "What is my car's license plate number?", "source": null, "keywords": [] }
   ]
 }
