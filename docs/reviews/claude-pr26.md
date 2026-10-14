@@ -1,8 +1,8 @@
 # Review of Claude PR #26
 
-Date: 2026-10-14. Tracking: [#27](https://github.com/agthumoe/solid-lamp/issues/27). Reviewed [PR #26](https://github.com/agthumoe/solid-lamp/pull/26), head `b7cfea376c52e6deaaeab74bea423a715848b93e`. No Claude-owned files were changed; PR remains unmerged. Recommendation: correct the findings before integration or using the fixtures for model acceptance.
+Date: 2026-10-14. Tracking: [#27](https://github.com/agthumoe/solid-lamp/issues/27). Reviewed [PR #26](https://github.com/agthumoe/solid-lamp/pull/26), head `b7cfea376c52e6deaaeab74bea423a715848b93e`. No Claude-owned files were changed; PR remains unmerged. Original recommendation: correct the findings before integration or model acceptance. **Re-review at `e7e1f602d5f3f3e458b63fbb900ab2004501411d`: all three findings below are resolved; ready for coordinated design integration, not model adoption.**
 
-## Findings
+## Original findings (resolved by re-review)
 
 ### P2 — Legal golden answers assume missing prerequisites
 
@@ -27,3 +27,15 @@ Date: 2026-10-14. Tracking: [#27](https://github.com/agthumoe/solid-lamp/issues/
 ## Follow-up
 
 Claude can correct its owned fixtures/protocol under #20. Keep the fixes in that branch and rerun structural/check gates. Domain integrity validation remains a separately tracked integration task; routing integrity PR #25 does not validate domain answers. After fixes, review the exact new head and integrate #26/#23/#25 with required checks, then update canonical adoption blockers/next tasks. No specialist is enabled by this review.
+
+## Re-review, 2026-10-14
+
+Reviewed head `e7e1f602d5f3f3e458b63fbb900ab2004501411d` and Claude's reply on PR #28. No Claude-owned files changed in this review.
+
+1. Legal prerequisites: LEG-A-001/002/008/009/027 now supply the forwarding address; LEG-A-040 also supplies no rent owed and an elapsed deadline. Independently calculated 2026-08-03 + 30 days = 2026-09-02, before its 2026-10-01 as-of date. LEG-X-004/013 address the condition too. Finding resolved.
+2. Source-only grounding: prompt v2 passes the same trusted domain policy to all arms, distinguishes policy behavior from factual grounding, and supplies synthetic emergency-fund and insider-information education sources to FIN-X-006/013. Optional claims are explicitly non-required; source additions cover the reviewed factual claims. Finding resolved.
+3. Hardware: generator-only quality measurements are diagnostic only. Eligibility explicitly requires a separate measured generator+active-embedding profile with context/allocation/headroom/swap evidence, or a separately reviewed unload policy. It preserves active vector identity. Finding resolved.
+
+Independently rechecked schema v2 and identical policy across both files per domain, 180 unique cases, source/citation references, 82 calculation cases, 32 exactly balanced journal-entry cases, 28 required abstentions and the corrected deadline. `pnpm check` rerun passes 19 current regression groups and all repo gates. Required PR compliance CI passed on this exact reviewed head (run 38517508950). No new blocking issue found in the changed revision.
+
+Verdict: ready for coordinated design integration after its required checks; no merge performed. Remaining adoption gates are unchanged: Fin-R1 licensing, immutable local artifacts/templates, actual local quality/GPU evaluation and qualified domain review. This re-review is not a professional legal/accounting validation or approval to enable any candidate.
