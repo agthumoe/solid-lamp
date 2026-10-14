@@ -1,0 +1,1532 @@
+{
+  "schema_version": 1,
+  "task": "#20",
+  "agent": "legal-us-tx",
+  "domain": "legal",
+  "file_kind": "answerable",
+  "notice": "All sources are SYNTHETIC and fictional. They are not real law, filings, prices or accounting standards and must not be used as authority. Expected answers are grounded only in these sources.",
+  "sources": [
+    {
+      "synthetic": true,
+      "retrieved_at": "2026-09-30T15:00:00Z",
+      "effective_to": null,
+      "status_flags": ["synthetic"],
+      "source_id": "SYN-TX-RTC-4",
+      "title": "[SYNTHETIC] Texas Residential Tenancy Code, Chapter 4 (Security Deposits), current version",
+      "authority": "Synthetic Texas Legislature",
+      "jurisdiction": "US-TX",
+      "document_date": "2021-06-14",
+      "effective_from": "2021-09-01",
+      "version": "as amended 2021; current through synthetic 2025 session",
+      "text": "§ 4.01 Definitions. (a) \"Security deposit\" means any advance or deposit of money intended primarily to secure performance under a residential lease. (b) A pet fee that the lease states is nonrefundable is not a security deposit.\n§ 4.02 Refund. (a) A landlord shall refund a security deposit to the tenant on or before the 30th day after the date the tenant surrenders the premises. (b) The landlord may deduct damages and charges for which the tenant is legally liable under the lease, but may not deduct for normal wear and tear.\n§ 4.03 Itemization. (a) If the landlord retains any part of a security deposit, the landlord shall give the tenant a written description and itemized list of all deductions. (b) The landlord is not required to give the list if the tenant owes rent when the tenant surrenders possession and there is no controversy concerning the amount of rent owed.\n§ 4.04 Forwarding address. A landlord is not obligated to return a security deposit or give a written description of damages and charges until the tenant gives the landlord a written statement of the tenant's forwarding address for the purpose of refunding the deposit.\n§ 4.05 Bad faith. A landlord who in bad faith retains a security deposit is liable for an amount equal to the sum of $100, three times the portion of the deposit wrongfully withheld, and the tenant's reasonable attorney's fees in a suit to recover the deposit.\n§ 4.06 Presumption. A landlord who fails either to return a security deposit or to provide a written description and itemization of deductions on or before the 30th day after the date the tenant surrenders possession is presumed to have acted in bad faith."
+    },
+    {
+      "synthetic": true,
+      "retrieved_at": "2026-09-30T15:00:00Z",
+      "effective_to": null,
+      "status_flags": ["synthetic", "enacted"],
+      "source_id": "SYN-TX-HB9001",
+      "title": "[SYNTHETIC] H.B. 9001, enrolled, amending Residential Tenancy Code § 4.02(a)",
+      "authority": "Synthetic Texas Legislature",
+      "jurisdiction": "US-TX",
+      "document_date": "2025-06-10",
+      "effective_from": "2026-01-01",
+      "version": "enrolled session law",
+      "text": "Section 1. Section 4.02(a), Residential Tenancy Code, is amended to read: \"(a) A landlord shall refund a security deposit to the tenant on or before the 21st day after the date the tenant surrenders the premises.\"\nSection 2. The change in law made by this Act applies only to a lease entered into on or after the effective date of this Act. A lease entered into before the effective date of this Act is governed by the law in effect on the date the lease was entered into, and that law is continued in effect for that purpose.\nSection 3. This Act takes effect January 1, 2026."
+    },
+    {
+      "synthetic": true,
+      "retrieved_at": "2026-09-30T15:00:00Z",
+      "effective_to": "2021-08-31",
+      "status_flags": ["synthetic", "superseded"],
+      "source_id": "SYN-TX-RTC-4-1995",
+      "title": "[SYNTHETIC] Texas Residential Tenancy Code § 4.02, prior version (superseded)",
+      "authority": "Synthetic Texas Legislature",
+      "jurisdiction": "US-TX",
+      "document_date": "1995-05-20",
+      "effective_from": "1995-09-01",
+      "version": "1995 version",
+      "text": "§ 4.02 Refund (1995 version). (a) A landlord shall refund a security deposit to the tenant on or before the 45th day after the date the tenant surrenders the premises.\nHistorical note: This version applies to a surrender of premises occurring before September 1, 2021."
+    },
+    {
+      "synthetic": true,
+      "retrieved_at": "2026-09-30T15:00:00Z",
+      "effective_to": null,
+      "status_flags": ["synthetic"],
+      "source_id": "SYN-TX-CRC-16",
+      "title": "[SYNTHETIC] Texas Civil Remedies Code, Chapter 16 (Limitations)",
+      "authority": "Synthetic Texas Legislature",
+      "jurisdiction": "US-TX",
+      "document_date": "2019-06-01",
+      "effective_from": "2019-09-01",
+      "version": "current",
+      "text": "§ 16.003 Two-year period. A person must bring suit for trespass for injury to the estate or to the property of another, conversion of personal property, taking or detaining the personal property of another, or personal injury not later than two years after the day the cause of action accrues.\n§ 16.004 Four-year period. A person must bring suit on a debt or for breach of a written contract not later than four years after the day the cause of action accrues.\n§ 16.070 Last day. For purposes of this chapter, the last day of a period of years is the date in the final year that corresponds to the day on which the cause of action accrued.\n§ 16.072 Weekend or holiday. If the last day of a limitations period under this chapter falls on a Saturday, Sunday, or legal holiday, the period is extended to include the next day that the county offices are open for business."
+    },
+    {
+      "synthetic": true,
+      "retrieved_at": "2026-09-30T15:00:00Z",
+      "effective_to": "2026-12-31",
+      "status_flags": ["synthetic"],
+      "source_id": "SYN-TX-HOLIDAYS-2026",
+      "title": "[SYNTHETIC] County legal holidays (county offices closed), calendar year 2026",
+      "authority": "Synthetic County Commissioners Court",
+      "jurisdiction": "US-TX",
+      "document_date": "2025-12-01",
+      "effective_from": "2026-01-01",
+      "version": "2026 schedule",
+      "text": "County offices are closed on Saturdays, Sundays and on these legal holidays in 2026: 2026-01-01, 2026-01-19, 2026-05-25, 2026-07-03, 2026-09-07, 2026-11-11, 2026-11-26, 2026-11-27, 2026-12-25."
+    },
+    {
+      "synthetic": true,
+      "retrieved_at": "2026-09-30T15:00:00Z",
+      "effective_to": null,
+      "status_flags": ["synthetic"],
+      "source_id": "SYN-TX-RULES-CIV",
+      "title": "[SYNTHETIC] Texas Rules of Civil Procedure, Rules 4 and 99 (excerpt)",
+      "authority": "Synthetic Supreme Court of Texas",
+      "jurisdiction": "US-TX",
+      "document_date": "2020-12-31",
+      "effective_from": "2021-01-01",
+      "version": "as amended by order effective 2021-01-01",
+      "text": "Rule 4. Computation of time. In computing any period of time prescribed by these rules, the day of the act, event, or default after which the period begins to run is not included. The last day of the period is included, unless it is a Saturday, Sunday or legal holiday, in which event the period runs until the end of the next day which is not a Saturday, Sunday or legal holiday.\nRule 99(b). The defendant shall file a written answer on or before 10:00 a.m. on the Monday next after the expiration of twenty days after the date of service of the citation."
+    },
+    {
+      "synthetic": true,
+      "retrieved_at": "2026-09-30T15:00:00Z",
+      "effective_to": null,
+      "status_flags": ["synthetic"],
+      "source_id": "SYN-TX-RULES-JUSTICE",
+      "title": "[SYNTHETIC] Texas Rules of Civil Procedure, Rule 500.3 (justice court cases)",
+      "authority": "Synthetic Supreme Court of Texas",
+      "jurisdiction": "US-TX",
+      "document_date": "2020-08-31",
+      "effective_from": "2020-09-01",
+      "version": "current",
+      "text": "Rule 500.3(a). A small claims case is a lawsuit brought for the recovery of money damages, civil penalties, personal property, or other relief allowed by law. The claim can be for no more than $20,000, excluding statutory interest and court costs but including attorney fees, if any."
+    },
+    {
+      "synthetic": true,
+      "retrieved_at": "2026-09-30T15:00:00Z",
+      "effective_to": null,
+      "status_flags": ["synthetic"],
+      "source_id": "SYN-US-CDCA-805",
+      "title": "[SYNTHETIC] Federal Consumer Debt Collection Act § 805(a)(1)",
+      "authority": "Synthetic U.S. Congress",
+      "jurisdiction": "US-federal",
+      "document_date": "1977-09-20",
+      "effective_from": "1978-03-20",
+      "version": "current",
+      "text": "§ 805(a)(1). Without the prior consent of the consumer given directly to the debt collector, a debt collector may not communicate with a consumer in connection with the collection of any debt at any unusual time or place. In the absence of knowledge of circumstances to the contrary, a debt collector shall assume that the convenient time for communicating with a consumer is after 8 o'clock antemeridian and before 9 o'clock postmeridian, local time at the consumer's location."
+    },
+    {
+      "synthetic": true,
+      "retrieved_at": "2026-09-30T15:00:00Z",
+      "effective_to": null,
+      "status_flags": ["synthetic"],
+      "source_id": "SYN-TX-FIN-392",
+      "title": "[SYNTHETIC] Texas Finance Code § 392.101 (third-party debt collector bond)",
+      "authority": "Synthetic Texas Legislature",
+      "jurisdiction": "US-TX",
+      "document_date": "2019-06-01",
+      "effective_from": "2019-09-01",
+      "version": "current",
+      "text": "§ 392.101(a). A third-party debt collector may not engage in debt collection unless the third-party debt collector has obtained a surety bond issued by a surety company authorized to do business in this state. A copy of the bond must be filed with the secretary of state. (b) The bond must be in the amount of $10,000."
+    },
+    {
+      "synthetic": true,
+      "retrieved_at": "2026-09-30T15:00:00Z",
+      "effective_to": null,
+      "status_flags": ["synthetic"],
+      "source_id": "SYN-TX-POA-209",
+      "title": "[SYNTHETIC] Texas Residential Property Owners Protection Act § 209.006",
+      "authority": "Synthetic Texas Legislature",
+      "jurisdiction": "US-TX",
+      "document_date": "2021-06-01",
+      "effective_from": "2021-09-01",
+      "version": "current",
+      "text": "§ 209.006(a). Before a property owners' association may levy a fine against an owner, the association must give written notice to the owner by certified mail. (b) The notice must describe the violation, state the amount of any proposed fine, and inform the owner that the owner may request a hearing on or before the 30th day after the date the notice was mailed. (c) Except as provided by Subsection (d), the notice must also inform the owner that the owner may cure the violation within a reasonable period and avoid the fine. (d) The notice is not required to provide an opportunity to cure if the owner was given notice and a reasonable opportunity to cure a similar violation within the preceding six months."
+    },
+    {
+      "synthetic": true,
+      "retrieved_at": "2026-09-30T15:00:00Z",
+      "effective_to": null,
+      "status_flags": ["synthetic", "published", "subsequent-history-unverified"],
+      "source_id": "SYN-TX-OP-DOE",
+      "title": "[SYNTHETIC] Doe v. Example Properties, LLC, Synthetic Tex. App. (Fourteenth District, Houston), 2022, published",
+      "authority": "Synthetic Fourteenth Court of Appeals",
+      "jurisdiction": "US-TX",
+      "document_date": "2022-04-12",
+      "effective_from": "2022-04-12",
+      "version": "published opinion; subsequent history not verified",
+      "text": "Holding: Where the residential lease expressly permits the parties to give notices by electronic mail, a tenant's e-mail to the landlord stating the tenant's forwarding address is a \"written statement\" under Residential Tenancy Code § 4.04. We express no opinion on communications the lease does not authorize."
+    },
+    {
+      "synthetic": true,
+      "retrieved_at": "2026-09-30T15:00:00Z",
+      "effective_to": null,
+      "status_flags": ["synthetic", "published", "subsequent-history-unverified"],
+      "source_id": "SYN-TX-OP-ROE",
+      "title": "[SYNTHETIC] Roe v. Sample Realty, Inc., Synthetic Tex. App. (Fifth District, Dallas), 2023, published",
+      "authority": "Synthetic Fifth Court of Appeals",
+      "jurisdiction": "US-TX",
+      "document_date": "2023-08-30",
+      "effective_from": "2023-08-30",
+      "version": "published opinion; subsequent history not verified",
+      "text": "Holding: Where the lease is silent on electronic notice, a text message giving a forwarding address is not a \"written statement\" under Residential Tenancy Code § 4.04. We distinguish Doe v. Example Properties because that lease expressly authorized e-mail notice. The Supreme Court of Texas has not addressed the question."
+    }
+  ],
+  "cases": [
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-001",
+      "category": "effective-date",
+      "source_ids": ["SYN-TX-RTC-4", "SYN-TX-HB9001"],
+      "question": "A lease was signed on 2025-03-01 and the tenant surrendered the premises on 2026-05-04. By what date must the landlord refund the security deposit?",
+      "expected": {
+        "calculation": {
+          "description": "30th day after surrender",
+          "inputs": {
+            "surrender": "2026-05-04",
+            "days": 30
+          },
+          "formula": "surrender + 30 days",
+          "result": "2026-06-03",
+          "unit": "date",
+          "rounding": "n/a"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": ["apply the 21-day amended period to a pre-2026 lease"],
+        "claims": [
+          "The lease predates H.B. 9001's 2026-01-01 effective date, so the 30-day rule in § 4.02(a) as it read before the amendment applies.",
+          "The refund is due on or before 2026-06-03."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-TX-RTC-4",
+            "locator": "§ 4.02(a)"
+          },
+          {
+            "source_id": "SYN-TX-HB9001",
+            "locator": "Sections 2 and 3"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-DATE", "LEGAL-AUTH", "LEGAL-JURIS"],
+      "tags": ["amendment-applicability"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-002",
+      "category": "effective-date",
+      "source_ids": ["SYN-TX-RTC-4", "SYN-TX-HB9001"],
+      "question": "A lease was signed on 2026-02-15 and the tenant surrendered the premises on 2026-08-20. By what date must the landlord refund the deposit?",
+      "expected": {
+        "calculation": {
+          "description": "21st day after surrender",
+          "inputs": {
+            "surrender": "2026-08-20",
+            "days": 21
+          },
+          "formula": "surrender + 21 days",
+          "result": "2026-09-10",
+          "unit": "date",
+          "rounding": "n/a"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": ["apply the pre-amendment 30-day period"],
+        "claims": [
+          "The lease was entered into after H.B. 9001 took effect, so the amended 21-day period applies.",
+          "The refund is due on or before 2026-09-10."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-TX-HB9001",
+            "locator": "Sections 1–3"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-DATE", "LEGAL-AUTH", "LEGAL-JURIS"],
+      "tags": ["amendment-applicability"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-003",
+      "category": "statute-reading",
+      "source_ids": ["SYN-TX-RTC-4"],
+      "question": "What kind of damage can a landlord never deduct from a security deposit?",
+      "expected": {
+        "calculation": null,
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": ["A landlord may not deduct for normal wear and tear."],
+        "citations": [
+          {
+            "source_id": "SYN-TX-RTC-4",
+            "locator": "§ 4.02(b)"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "LEGAL-AUTH"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-004",
+      "category": "statute-reading",
+      "source_ids": ["SYN-TX-RTC-4"],
+      "question": "My lease says the $300 pet fee is nonrefundable. Is that fee part of my security deposit?",
+      "expected": {
+        "calculation": null,
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": ["No. A pet fee the lease states is nonrefundable is not a security deposit."],
+        "citations": [
+          {
+            "source_id": "SYN-TX-RTC-4",
+            "locator": "§ 4.01(b)"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "LEGAL-AUTH"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-005",
+      "category": "statute-reading",
+      "source_ids": ["SYN-TX-RTC-4"],
+      "question": "At move-out the tenant owed rent, and both sides agree on the amount. Must the landlord send an itemized list of deductions?",
+      "expected": {
+        "calculation": null,
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": [
+          "No. The itemization is not required when the tenant owes rent at surrender and there is no controversy about the amount owed."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-TX-RTC-4",
+            "locator": "§ 4.03(b)"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "LEGAL-AUTH"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-006",
+      "category": "statute-reading",
+      "source_ids": ["SYN-TX-RTC-4"],
+      "question": "The tenant never gave the landlord a forwarding address. Is the landlord obligated to return the deposit yet?",
+      "expected": {
+        "calculation": null,
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": [
+          "No. The landlord is not obligated to return the deposit or describe deductions until the tenant gives a written statement of a forwarding address."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-TX-RTC-4",
+            "locator": "§ 4.04"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "LEGAL-AUTH"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-007",
+      "category": "statute-calculation",
+      "source_ids": ["SYN-TX-RTC-4"],
+      "question": "If a court finds the landlord withheld $1,200 of a deposit in bad faith, what is the statutory liability before attorney's fees?",
+      "expected": {
+        "calculation": {
+          "description": "Bad-faith statutory amount",
+          "inputs": {
+            "wrongfully_withheld": "1200.00"
+          },
+          "formula": "100 + 3 × wrongfully_withheld",
+          "result": "3700.00",
+          "unit": "USD",
+          "rounding": "exact"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": [
+          "Liability is $100 plus three times the amount wrongfully withheld, plus reasonable attorney's fees.",
+          "Before attorney's fees the amount is $3,700.00."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-TX-RTC-4",
+            "locator": "§ 4.05"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-CALC", "LEGAL-AUTH"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-008",
+      "category": "statute-reading",
+      "source_ids": ["SYN-TX-RTC-4"],
+      "question": "What happens if a landlord neither returns the deposit nor itemizes deductions within 30 days of surrender?",
+      "expected": {
+        "calculation": null,
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": ["The landlord is presumed to have acted in bad faith."],
+        "citations": [
+          {
+            "source_id": "SYN-TX-RTC-4",
+            "locator": "§ 4.06"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "LEGAL-AUTH"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-009",
+      "category": "version-history",
+      "source_ids": ["SYN-TX-RTC-4-1995", "SYN-TX-RTC-4"],
+      "question": "A tenant surrendered the premises on 2021-07-16. Which version of the refund deadline governed, and what was the last day to refund?",
+      "expected": {
+        "calculation": {
+          "description": "45th day after surrender",
+          "inputs": {
+            "surrender": "2021-07-16",
+            "days": 45
+          },
+          "formula": "surrender + 45 days",
+          "result": "2021-08-30",
+          "unit": "date",
+          "rounding": "n/a"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": ["apply the current 30-day text to a 2021 surrender"],
+        "claims": [
+          "The 1995 version governs because it applies to surrenders before 2021-09-01.",
+          "It allowed 45 days, so the last day was 2021-08-30."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-TX-RTC-4-1995",
+            "locator": "§ 4.02(a) and historical note"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-DATE", "LEGAL-AUTH"],
+      "tags": ["superseded-version"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-010",
+      "category": "deadline-computation",
+      "source_ids": ["SYN-TX-CRC-16", "SYN-TX-HOLIDAYS-2026"],
+      "question": "A conversion-of-personal-property claim accrued on 2024-03-15. What is the last day to file suit?",
+      "expected": {
+        "calculation": {
+          "description": "Two-year period with weekend extension",
+          "inputs": {
+            "accrued": "2024-03-15",
+            "years": 2
+          },
+          "formula": "same calendar day + 2 years, rolled to next open day",
+          "result": "2026-03-16",
+          "unit": "date",
+          "rounding": "n/a"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": [
+          "Conversion has a two-year limitations period.",
+          "The anniversary date 2026-03-15 is a Sunday, so the period extends to 2026-03-16, the next day county offices are open."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-TX-CRC-16",
+            "locator": "§§ 16.003, 16.070, 16.072"
+          },
+          {
+            "source_id": "SYN-TX-HOLIDAYS-2026",
+            "locator": "schedule"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-DATE", "LEGAL-AUTH"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-011",
+      "category": "deadline-computation",
+      "source_ids": ["SYN-TX-CRC-16", "SYN-TX-HOLIDAYS-2026"],
+      "question": "A claim for breach of a written contract accrued on 2022-11-24. What is the last day to sue?",
+      "expected": {
+        "calculation": {
+          "description": "Four-year period",
+          "inputs": {
+            "accrued": "2022-11-24",
+            "years": 4
+          },
+          "formula": "same calendar day + 4 years, rolled to next open day",
+          "result": "2026-11-24",
+          "unit": "date",
+          "rounding": "n/a"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": ["extend the deadline for Thanksgiving, which falls two days later"],
+        "claims": [
+          "Breach of a written contract has a four-year period.",
+          "The last day is 2026-11-24, a Tuesday, which is not a listed holiday."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-TX-CRC-16",
+            "locator": "§§ 16.004, 16.070"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-DATE", "LEGAL-AUTH"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-012",
+      "category": "deadline-computation",
+      "source_ids": ["SYN-TX-RULES-CIV"],
+      "question": "A defendant was served with citation on 2026-09-04. When is the written answer due?",
+      "expected": {
+        "calculation": {
+          "description": "Monday next after expiration of 20 days",
+          "inputs": {
+            "served": "2026-09-04"
+          },
+          "formula": "first Monday strictly after (served + 20 days)",
+          "result": "2026-09-28",
+          "unit": "date",
+          "rounding": "n/a"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": [
+          "Twenty days after service is 2026-09-24 (a Thursday).",
+          "The answer is due by 10:00 a.m. on Monday 2026-09-28."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-TX-RULES-CIV",
+            "locator": "Rule 99(b)"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-DATE", "LEGAL-AUTH"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-013",
+      "category": "deadline-computation",
+      "source_ids": ["SYN-TX-RULES-CIV", "SYN-TX-HOLIDAYS-2026"],
+      "question": "Under Rule 4, a 5-day period begins to run after an event on 2026-12-21. What is the last day of the period?",
+      "expected": {
+        "calculation": {
+          "description": "Rule 4 period",
+          "inputs": {
+            "event": "2026-12-21",
+            "days": 5
+          },
+          "formula": "event + 5, roll past weekend/holiday",
+          "result": "2026-12-28",
+          "unit": "date",
+          "rounding": "n/a"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": [
+          "Day five is 2026-12-26, a Saturday.",
+          "The period runs to 2026-12-28, the next day that is not a weekend or legal holiday."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-TX-RULES-CIV",
+            "locator": "Rule 4"
+          },
+          {
+            "source_id": "SYN-TX-HOLIDAYS-2026",
+            "locator": "schedule"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-DATE"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-014",
+      "category": "deadline-computation",
+      "source_ids": ["SYN-TX-RULES-CIV", "SYN-TX-HOLIDAYS-2026"],
+      "question": "Under Rule 4, a 10-day period begins after an event on 2026-11-16. What is the last day?",
+      "expected": {
+        "calculation": {
+          "description": "Rule 4 period across consecutive holidays and a weekend",
+          "inputs": {
+            "event": "2026-11-16",
+            "days": 10
+          },
+          "formula": "event + 10, roll past weekend/holiday",
+          "result": "2026-11-30",
+          "unit": "date",
+          "rounding": "n/a"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": [
+          "Day ten, 2026-11-26, is a listed holiday; 2026-11-27 is also a listed holiday, followed by a weekend.",
+          "The period runs to Monday 2026-11-30."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-TX-RULES-CIV",
+            "locator": "Rule 4"
+          },
+          {
+            "source_id": "SYN-TX-HOLIDAYS-2026",
+            "locator": "schedule"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-DATE"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-015",
+      "category": "statute-calculation",
+      "source_ids": ["SYN-TX-RULES-JUSTICE"],
+      "question": "Can a small claims case seek $18,500 in damages plus $2,000 in attorney fees?",
+      "expected": {
+        "calculation": {
+          "description": "Amount counted toward limit",
+          "inputs": {
+            "damages": "18500.00",
+            "attorney_fees": "2000.00",
+            "limit": "20000.00"
+          },
+          "formula": "damages + attorney_fees vs limit",
+          "result": "20500.00",
+          "unit": "USD",
+          "rounding": "exact"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": [
+          "No. Attorney fees count toward the $20,000 limit; $18,500 + $2,000 = $20,500, which exceeds it."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-TX-RULES-JUSTICE",
+            "locator": "Rule 500.3(a)"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-CALC", "LEGAL-AUTH"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-016",
+      "category": "statute-calculation",
+      "source_ids": ["SYN-TX-RULES-JUSTICE"],
+      "question": "A claim is for $19,000 in damages plus $600 in court costs. Is it within the small claims limit?",
+      "expected": {
+        "calculation": {
+          "description": "Amount counted toward limit",
+          "inputs": {
+            "damages": "19000.00",
+            "court_costs": "600.00",
+            "limit": "20000.00"
+          },
+          "formula": "damages (costs excluded) vs limit",
+          "result": "19000.00",
+          "unit": "USD",
+          "rounding": "exact"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": ["Yes. Court costs are excluded from the limit, so only $19,000 counts."],
+        "citations": [
+          {
+            "source_id": "SYN-TX-RULES-JUSTICE",
+            "locator": "Rule 500.3(a)"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-CALC", "LEGAL-AUTH"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-017",
+      "category": "federal-source",
+      "source_ids": ["SYN-US-CDCA-805"],
+      "question": "A debt collector called a consumer at 9:30 p.m. local time without the consumer's consent. Does the provided federal source treat that as a presumptively inconvenient time?",
+      "expected": {
+        "calculation": null,
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": [
+          "Yes. Absent knowledge to the contrary, the convenient time is after 8 a.m. and before 9 p.m. local time; 9:30 p.m. falls outside it.",
+          "Prior consent given directly to the collector would change the analysis."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-US-CDCA-805",
+            "locator": "§ 805(a)(1)"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "LEGAL-AUTH", "LEGAL-JURIS"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-018",
+      "category": "statute-reading",
+      "source_ids": ["SYN-TX-FIN-392"],
+      "question": "What bond must a third-party debt collector have in Texas under the provided source, and where is it filed?",
+      "expected": {
+        "calculation": null,
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": [
+          "A $10,000 surety bond from a surety authorized in Texas.",
+          "A copy is filed with the secretary of state."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-TX-FIN-392",
+            "locator": "§ 392.101(a)–(b)"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "LEGAL-AUTH"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-019",
+      "category": "statute-reading",
+      "source_ids": ["SYN-TX-POA-209"],
+      "question": "What must a property owners' association's notice contain before it can fine an owner for a first violation?",
+      "expected": {
+        "calculation": null,
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": [
+          "Written notice by certified mail.",
+          "A description of the violation and the amount of any proposed fine.",
+          "Notice that the owner may request a hearing on or before the 30th day after mailing.",
+          "Notice that the owner may cure within a reasonable period and avoid the fine."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-TX-POA-209",
+            "locator": "§ 209.006(a)–(c)"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "LEGAL-AUTH"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-020",
+      "category": "deadline-computation",
+      "source_ids": ["SYN-TX-POA-209"],
+      "question": "An association mailed a violation notice on 2026-07-13. What is the last day for the owner to request a hearing?",
+      "expected": {
+        "calculation": {
+          "description": "30th day after mailing",
+          "inputs": {
+            "mailed": "2026-07-13",
+            "days": 30
+          },
+          "formula": "mailed + 30 days",
+          "result": "2026-08-12",
+          "unit": "date",
+          "rounding": "n/a"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": ["The 30th day after mailing is 2026-08-12."],
+        "citations": [
+          {
+            "source_id": "SYN-TX-POA-209",
+            "locator": "§ 209.006(b)"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-DATE"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-021",
+      "category": "case-synthesis",
+      "source_ids": ["SYN-TX-RTC-4", "SYN-TX-OP-DOE", "SYN-TX-OP-ROE"],
+      "question": "My lease allows notices by e-mail. Does e-mailing my forwarding address count as the \"written statement\" in § 4.04?",
+      "expected": {
+        "calculation": null,
+        "abstention": {
+          "required": false
+        },
+        "must_not": ["describe Doe as Supreme Court of Texas precedent"],
+        "claims": [
+          "Doe (Fourteenth District, 2022) held that an e-mail counts where the lease expressly permits e-mail notice.",
+          "Roe (Fifth District, 2023) distinguished Doe and reached a different result only where the lease was silent.",
+          "These are intermediate appellate decisions; the Supreme Court of Texas has not addressed the question, and subsequent history was not verified."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-TX-OP-DOE",
+            "locator": "holding"
+          },
+          {
+            "source_id": "SYN-TX-OP-ROE",
+            "locator": "holding"
+          },
+          {
+            "source_id": "SYN-TX-RTC-4",
+            "locator": "§ 4.04"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "LEGAL-AUTH", "LEGAL-JURIS"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-022",
+      "category": "case-synthesis",
+      "source_ids": ["SYN-TX-OP-DOE", "SYN-TX-OP-ROE"],
+      "question": "My lease says nothing about electronic notice. I texted my forwarding address. Does that count under the provided cases?",
+      "expected": {
+        "calculation": null,
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": [
+          "Under Roe, a text message is not a \"written statement\" when the lease is silent on electronic notice.",
+          "Doe does not help because it relied on an express e-mail clause.",
+          "Whether another court would agree is unresolved in the sources."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-TX-OP-ROE",
+            "locator": "holding"
+          },
+          {
+            "source_id": "SYN-TX-OP-DOE",
+            "locator": "holding"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "LEGAL-AUTH", "LEGAL-JURIS"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-023",
+      "category": "source-metadata",
+      "source_ids": ["SYN-TX-OP-DOE"],
+      "question": "Which court decided Doe v. Example Properties, when, and is it a published opinion?",
+      "expected": {
+        "calculation": null,
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": [
+          "The Fourteenth Court of Appeals (Houston), on 2022-04-12.",
+          "It is published; its subsequent history has not been verified."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-TX-OP-DOE",
+            "locator": "caption/metadata"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "LEGAL-AUTH"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-024",
+      "category": "case-synthesis",
+      "source_ids": ["SYN-TX-OP-ROE"],
+      "question": "Summarize the holding of Roe and list what it leaves unresolved.",
+      "expected": {
+        "calculation": null,
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": [
+          "Holding: with a lease silent on electronic notice, a text message is not a § 4.04 written statement.",
+          "Unresolved: communications the lease authorizes electronically, such as texts under an express clause, and any Supreme Court of Texas ruling."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-TX-OP-ROE",
+            "locator": "holding"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "LEGAL-AUTH"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-025",
+      "category": "federal-state",
+      "source_ids": ["SYN-US-CDCA-805", "SYN-TX-FIN-392"],
+      "question": "Using only the provided sources, what call-time rule applies to debt collectors, and what additional Texas requirement applies to third-party collectors?",
+      "expected": {
+        "calculation": null,
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": [
+          "Federal source: no communication at unusual times; presumptively convenient after 8 a.m. and before 9 p.m. local time, absent consent.",
+          "Texas source: third-party debt collectors need a $10,000 surety bond filed with the secretary of state."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-US-CDCA-805",
+            "locator": "§ 805(a)(1)"
+          },
+          {
+            "source_id": "SYN-TX-FIN-392",
+            "locator": "§ 392.101"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "LEGAL-AUTH", "LEGAL-JURIS"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-026",
+      "category": "effective-date",
+      "source_ids": ["SYN-TX-HB9001"],
+      "question": "When does H.B. 9001 take effect, and which leases does it cover?",
+      "expected": {
+        "calculation": null,
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": [
+          "It takes effect 2026-01-01.",
+          "It applies only to leases entered into on or after that date; earlier leases keep the prior law."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-TX-HB9001",
+            "locator": "Sections 2–3"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-DATE", "LEGAL-AUTH"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-027",
+      "category": "effective-date",
+      "source_ids": ["SYN-TX-RTC-4", "SYN-TX-HB9001"],
+      "question": "A lease was signed on 2025-12-31 and the tenant surrendered on 2026-03-02. When is the refund due?",
+      "expected": {
+        "calculation": {
+          "description": "30th day after surrender",
+          "inputs": {
+            "surrender": "2026-03-02",
+            "days": 30
+          },
+          "formula": "surrender + 30 days",
+          "result": "2026-04-01",
+          "unit": "date",
+          "rounding": "n/a"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": [
+          "The lease was entered into one day before H.B. 9001 took effect, so the 30-day period applies.",
+          "The refund is due on or before 2026-04-01."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-TX-HB9001",
+            "locator": "Section 2"
+          },
+          {
+            "source_id": "SYN-TX-RTC-4",
+            "locator": "§ 4.02(a)"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-DATE", "LEGAL-AUTH", "LEGAL-JURIS"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-028",
+      "category": "statute-reading",
+      "source_ids": ["SYN-TX-HB9001", "SYN-TX-RTC-4"],
+      "question": "Did H.B. 9001 change the bad-faith penalty?",
+      "expected": {
+        "calculation": null,
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": ["No. H.B. 9001 amends only § 4.02(a), the refund period; § 4.05 is unchanged."],
+        "citations": [
+          {
+            "source_id": "SYN-TX-HB9001",
+            "locator": "Section 1"
+          },
+          {
+            "source_id": "SYN-TX-RTC-4",
+            "locator": "§ 4.05"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "LEGAL-AUTH"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-029",
+      "category": "statute-reading",
+      "source_ids": ["SYN-TX-RTC-4"],
+      "question": "The tenant owes rent at move-out but disputes the amount. Can the landlord skip the itemized list?",
+      "expected": {
+        "calculation": null,
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": [
+          "No. The exception applies only when there is no controversy about the rent owed; a dispute means the itemized list is still required."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-TX-RTC-4",
+            "locator": "§ 4.03"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "LEGAL-AUTH"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-030",
+      "category": "statute-calculation",
+      "source_ids": ["SYN-TX-RTC-4"],
+      "question": "For a $450 bad-faith withholding, what is the statutory amount before attorney's fees?",
+      "expected": {
+        "calculation": {
+          "description": "Bad-faith statutory amount",
+          "inputs": {
+            "wrongfully_withheld": "450.00"
+          },
+          "formula": "100 + 3 × wrongfully_withheld",
+          "result": "1450.00",
+          "unit": "USD",
+          "rounding": "exact"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": ["$100 plus three times $450 equals $1,450.00, plus reasonable attorney's fees."],
+        "citations": [
+          {
+            "source_id": "SYN-TX-RTC-4",
+            "locator": "§ 4.05"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-CALC"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-031",
+      "category": "deadline-computation",
+      "source_ids": ["SYN-TX-CRC-16", "SYN-TX-HOLIDAYS-2026"],
+      "question": "A personal injury claim accrued on 2024-07-04. What is the last day to sue?",
+      "expected": {
+        "calculation": {
+          "description": "Two-year period with weekend extension",
+          "inputs": {
+            "accrued": "2024-07-04",
+            "years": 2
+          },
+          "formula": "same calendar day + 2 years, rolled to next open day",
+          "result": "2026-07-06",
+          "unit": "date",
+          "rounding": "n/a"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": [
+          "Personal injury has a two-year period.",
+          "2026-07-04 is a Saturday; the next day county offices are open is Monday 2026-07-06.",
+          "The 2026-07-03 observed holiday precedes the deadline and does not affect it."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-TX-CRC-16",
+            "locator": "§§ 16.003, 16.070, 16.072"
+          },
+          {
+            "source_id": "SYN-TX-HOLIDAYS-2026",
+            "locator": "schedule"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-DATE"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-032",
+      "category": "statute-reading",
+      "source_ids": ["SYN-TX-CRC-16"],
+      "question": "What limitations period applies to a trespass claim for injury to another person's property?",
+      "expected": {
+        "calculation": null,
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": ["Two years after the day the cause of action accrues."],
+        "citations": [
+          {
+            "source_id": "SYN-TX-CRC-16",
+            "locator": "§ 16.003"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-033",
+      "category": "citation-precision",
+      "source_ids": ["SYN-TX-RTC-4"],
+      "question": "Quote the provision that bars deductions for normal wear and tear and give its exact locator.",
+      "expected": {
+        "calculation": null,
+        "abstention": {
+          "required": false
+        },
+        "must_not": ["cite § 4.02(a) or § 4.03 as the source of the wear-and-tear rule"],
+        "claims": ["§ 4.02(b): the landlord \"may not deduct for normal wear and tear.\""],
+        "citations": [
+          {
+            "source_id": "SYN-TX-RTC-4",
+            "locator": "§ 4.02(b)"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-034",
+      "category": "statute-reading",
+      "source_ids": ["SYN-TX-RULES-JUSTICE"],
+      "question": "Do attorney fees count toward the small claims dollar limit?",
+      "expected": {
+        "calculation": null,
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": [
+          "Yes. The limit excludes statutory interest and court costs but includes attorney fees."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-TX-RULES-JUSTICE",
+            "locator": "Rule 500.3(a)"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-035",
+      "category": "deadline-computation",
+      "source_ids": ["SYN-TX-RULES-CIV"],
+      "question": "A defendant was served on 2026-10-05. When is the answer due?",
+      "expected": {
+        "calculation": {
+          "description": "Monday next after expiration of 20 days",
+          "inputs": {
+            "served": "2026-10-05"
+          },
+          "formula": "first Monday strictly after (served + 20 days)",
+          "result": "2026-10-26",
+          "unit": "date",
+          "rounding": "n/a"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": [
+          "Twenty days after service is Sunday 2026-10-25.",
+          "The answer is due by 10:00 a.m. on Monday 2026-10-26."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-TX-RULES-CIV",
+            "locator": "Rule 99(b)"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-DATE"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-036",
+      "category": "deadline-computation",
+      "source_ids": ["SYN-TX-RULES-CIV", "SYN-TX-HOLIDAYS-2026"],
+      "question": "Under Rule 4, a 3-day period begins after an event on 2026-01-16. What is the last day?",
+      "expected": {
+        "calculation": {
+          "description": "Rule 4 period",
+          "inputs": {
+            "event": "2026-01-16",
+            "days": 3
+          },
+          "formula": "event + 3, roll past weekend/holiday",
+          "result": "2026-01-20",
+          "unit": "date",
+          "rounding": "n/a"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": ["Day three, 2026-01-19, is a listed holiday.", "The period runs to 2026-01-20."],
+        "citations": [
+          {
+            "source_id": "SYN-TX-RULES-CIV",
+            "locator": "Rule 4"
+          },
+          {
+            "source_id": "SYN-TX-HOLIDAYS-2026",
+            "locator": "schedule"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-DATE"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-037",
+      "category": "version-history",
+      "source_ids": ["SYN-TX-RTC-4", "SYN-TX-RTC-4-1995"],
+      "question": "Which provided text is current law for a surrender occurring today, and what is the status of the other?",
+      "expected": {
+        "calculation": null,
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": [
+          "Among the provided sources, SYN-TX-RTC-4 (effective 2021-09-01) is the current version.",
+          "The 1995 version is superseded and applied only to surrenders before 2021-09-01.",
+          "Later amendments not in the provided sources would need to be checked."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-TX-RTC-4",
+            "locator": "metadata"
+          },
+          {
+            "source_id": "SYN-TX-RTC-4-1995",
+            "locator": "historical note"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-DATE"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-038",
+      "category": "statute-reading",
+      "source_ids": ["SYN-TX-POA-209"],
+      "question": "The association fined an owner two months after a notice-and-cure for the same kind of violation. Must the new notice offer a chance to cure?",
+      "expected": {
+        "calculation": null,
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": [
+          "No. Subsection (d) removes the cure requirement when the owner had notice and a reasonable chance to cure a similar violation within the preceding six months.",
+          "Certified-mail notice describing the violation, the fine and the hearing right is still required."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-TX-POA-209",
+            "locator": "§ 209.006(a)–(d)"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "LEGAL-AUTH"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-039",
+      "category": "federal-source",
+      "source_ids": ["SYN-US-CDCA-805"],
+      "question": "Is a 7:30 a.m. collection call presumptively convenient under the provided federal source?",
+      "expected": {
+        "calculation": null,
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": [
+          "No. The presumptively convenient window begins after 8 a.m. local time, absent consent or contrary knowledge."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-US-CDCA-805",
+            "locator": "§ 805(a)(1)"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "legal-us-tx",
+      "domain": "legal",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "LEG-A-040",
+      "category": "statute-reading",
+      "source_ids": ["SYN-TX-RTC-4"],
+      "question": "The landlord refunded part of the deposit on day 20 but never gave any written itemization. Is bad faith presumed?",
+      "expected": {
+        "calculation": null,
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": [
+          "Yes. The presumption arises if the landlord fails either to return the deposit or to provide the written description and itemization within the period; the missing itemization triggers it."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-TX-RTC-4",
+            "locator": "§§ 4.03, 4.06"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "LEGAL-AUTH"],
+      "answerability": "answerable"
+    }
+  ]
+}

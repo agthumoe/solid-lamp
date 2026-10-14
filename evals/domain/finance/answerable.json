@@ -1,0 +1,1744 @@
+{
+  "schema_version": 1,
+  "task": "#20",
+  "agent": "finance",
+  "domain": "finance",
+  "file_kind": "answerable",
+  "notice": "All sources are SYNTHETIC and fictional. They are not real law, filings, prices or accounting standards and must not be used as authority. Expected answers are grounded only in these sources.",
+  "sources": [
+    {
+      "synthetic": true,
+      "retrieved_at": "2026-09-30T22:00:00Z",
+      "effective_to": "2024-12-31",
+      "jurisdiction": "US-federal",
+      "status_flags": ["synthetic", "superseded-in-part"],
+      "source_id": "SYN-SWC-10K-2024",
+      "title": "[SYNTHETIC] Synthetic Widget Corp Form 10-K, fiscal year 2024 (original)",
+      "authority": "Synthetic Widget Corp / SEC EDGAR (synthetic)",
+      "document_date": "2025-02-26",
+      "effective_from": "2024-01-01",
+      "version": "accession SYN-0001-25-000011",
+      "text": "Consolidated statements of income (USD thousands). FY2024: Revenue 110000; Cost of goods sold 68200; Gross profit 41800; SG&A 20000; R&D 7000; Operating income 14800; Interest expense 2200; Income before tax 12600; Income tax 2520; Net income 10080. FY2023: Revenue 98000; Net income 9000."
+    },
+    {
+      "synthetic": true,
+      "retrieved_at": "2026-09-30T22:00:00Z",
+      "effective_to": "2024-12-31",
+      "jurisdiction": "US-federal",
+      "status_flags": ["synthetic", "restatement"],
+      "source_id": "SYN-SWC-10KA-2024",
+      "title": "[SYNTHETIC] Synthetic Widget Corp Form 10-K/A (Amendment No. 1), fiscal year 2024",
+      "authority": "Synthetic Widget Corp / SEC EDGAR (synthetic)",
+      "document_date": "2025-05-20",
+      "effective_from": "2024-01-01",
+      "version": "accession SYN-0001-25-000045",
+      "text": "Restatement: revenue on certain bill-and-hold arrangements was recognized before control transferred. The FY2024 statement of income is restated (USD thousands). FY2024 as restated: Revenue 108000; Cost of goods sold 68200; Gross profit 39800; SG&A 20000; R&D 7000; Operating income 12800; Interest expense 2200; Income before tax 10600; Income tax 2120; Net income 8480. FY2023 amounts are not affected."
+    },
+    {
+      "synthetic": true,
+      "retrieved_at": "2026-09-30T22:00:00Z",
+      "effective_to": "2025-12-31",
+      "jurisdiction": "US-federal",
+      "status_flags": ["synthetic", "audited"],
+      "source_id": "SYN-SWC-10K-2025",
+      "title": "[SYNTHETIC] Synthetic Widget Corp Form 10-K, fiscal year 2025",
+      "authority": "Synthetic Widget Corp / SEC EDGAR (synthetic)",
+      "document_date": "2026-02-25",
+      "effective_from": "2025-01-01",
+      "version": "accession SYN-0001-26-000012",
+      "text": "All amounts USD thousands except per-share data. Fiscal year = calendar year.\nIncome statement. FY2025: Revenue 125000; Cost of goods sold 75000; Gross profit 50000; SG&A 22000; R&D 8000; Operating income 20000; Interest expense 2000; Income before tax 18000; Income tax 3600; Net income 14400. Diluted weighted-average shares 40000; diluted EPS $0.36. FY2024 (as restated): Revenue 108000; Cost of goods sold 68200; Gross profit 39800; SG&A 20000; R&D 7000; Operating income 12800; Interest expense 2200; Income before tax 10600; Income tax 2120; Net income 8480.\nBalance sheet at 2025-12-31: Cash 15000; Accounts receivable 20000; Inventory 25000; Other current assets 5000; Total current assets 65000; PP&E net 60000; Goodwill 15000; Total assets 140000; Accounts payable 18000; Accrued liabilities 7000; Current portion of long-term debt 5000; Total current liabilities 30000; Long-term debt 35000; Total liabilities 65000; Shareholders' equity 75000.\nBalance sheet at 2024-12-31 (as restated): Accounts receivable 18000; Inventory 22000; Total assets 128000; Shareholders' equity 66000.\nCash flow FY2025: Net cash from operating activities 24000; Capital expenditures 9000; Depreciation and amortization 7000; Dividends paid 4000; Share repurchases 2000."
+    },
+    {
+      "synthetic": true,
+      "retrieved_at": "2026-09-30T22:00:00Z",
+      "effective_to": "2026-06-30",
+      "jurisdiction": "US-federal",
+      "status_flags": ["synthetic"],
+      "source_id": "SYN-SWC-10Q-2026Q2",
+      "title": "[SYNTHETIC] Synthetic Widget Corp Form 10-Q, quarter ended 2026-06-30 (cover page excerpt)",
+      "authority": "Synthetic Widget Corp / SEC EDGAR (synthetic)",
+      "document_date": "2026-08-05",
+      "effective_from": "2026-04-01",
+      "version": "accession SYN-0001-26-000088",
+      "text": "Shares of common stock outstanding as of 2026-06-30: 39,500 thousand."
+    },
+    {
+      "synthetic": true,
+      "retrieved_at": "2026-09-30T22:00:00Z",
+      "effective_to": null,
+      "jurisdiction": "US-federal",
+      "status_flags": ["synthetic"],
+      "source_id": "SYN-SWC-DIV-2025",
+      "title": "[SYNTHETIC] Synthetic Widget Corp dividend announcement",
+      "authority": "Synthetic Widget Corp",
+      "document_date": "2025-11-20",
+      "effective_from": "2025-11-20",
+      "text": "The Board declared a cash dividend of $0.10 per share, payable 2025-12-15 to holders of record on 2025-12-01. This was the only dividend paid between 2025-01-01 and 2026-09-30."
+    },
+    {
+      "synthetic": true,
+      "retrieved_at": "2026-09-30T22:00:00Z",
+      "effective_to": null,
+      "jurisdiction": "US-federal",
+      "status_flags": ["synthetic"],
+      "source_id": "SYN-PRICE-SWC-20260930",
+      "title": "[SYNTHETIC] SWC closing price",
+      "authority": "Synthetic licensed market-data feed",
+      "document_date": "2026-09-30",
+      "effective_from": "2026-09-30",
+      "version": "close 2026-09-30 16:00 America/New_York",
+      "text": "SWC close on 2026-09-30: $7.20 per share."
+    },
+    {
+      "synthetic": true,
+      "retrieved_at": "2026-09-30T22:00:00Z",
+      "effective_to": null,
+      "jurisdiction": "US-federal",
+      "status_flags": ["synthetic"],
+      "source_id": "SYN-PRICE-SWC-20250102",
+      "title": "[SYNTHETIC] SWC closing price",
+      "authority": "Synthetic licensed market-data feed",
+      "document_date": "2025-01-02",
+      "effective_from": "2025-01-02",
+      "version": "close 2025-01-02 16:00 America/New_York",
+      "text": "SWC close on 2025-01-02: $5.00 per share."
+    },
+    {
+      "synthetic": true,
+      "retrieved_at": "2026-09-30T22:00:00Z",
+      "effective_to": "2025-12-31",
+      "jurisdiction": "US-federal",
+      "status_flags": ["synthetic", "non-GAAP"],
+      "source_id": "SYN-SWC-PR-ADJ",
+      "title": "[SYNTHETIC] Synthetic Widget Corp FY2025 earnings release, non-GAAP reconciliation",
+      "authority": "Synthetic Widget Corp",
+      "document_date": "2026-02-25",
+      "effective_from": "2025-01-01",
+      "text": "Adjusted EBITDA (non-GAAP; USD thousands): Net income 14400 + Interest expense 2000 + Income tax 3600 + Depreciation and amortization 7000 + Stock-based compensation 4000 + Restructuring charges 4000 = Adjusted EBITDA 35000. Adjusted EBITDA is not a measure defined by U.S. GAAP."
+    },
+    {
+      "synthetic": true,
+      "retrieved_at": "2026-09-30T22:00:00Z",
+      "effective_to": "2025-12-31",
+      "jurisdiction": "US-federal",
+      "status_flags": ["synthetic"],
+      "source_id": "SYN-SGI-10K-2025",
+      "title": "[SYNTHETIC] Synthetic Gadget Inc Form 10-K, fiscal year 2025",
+      "authority": "Synthetic Gadget Inc / SEC EDGAR (synthetic)",
+      "document_date": "2026-02-20",
+      "effective_from": "2025-01-01",
+      "version": "accession SYN-0002-26-000007",
+      "text": "All amounts in USD millions. FY2025: Revenue 310; Operating income 40; Interest expense 0; Net income 31. The company has no debt."
+    },
+    {
+      "synthetic": true,
+      "retrieved_at": "2026-09-30T22:00:00Z",
+      "effective_to": null,
+      "jurisdiction": "US-federal",
+      "status_flags": ["synthetic"],
+      "source_id": "SYN-BOND-QUOTE",
+      "title": "[SYNTHETIC] Bond quote: Synthetic Utility 5% 2034",
+      "authority": "Synthetic licensed market-data feed",
+      "document_date": "2026-09-30",
+      "effective_from": "2026-09-30",
+      "text": "Face value $1,000; annual coupon rate 5.00% paid once per year; price on 2026-09-30: $960.00."
+    },
+    {
+      "synthetic": true,
+      "retrieved_at": "2026-09-30T22:00:00Z",
+      "effective_to": null,
+      "jurisdiction": "n/a",
+      "status_flags": ["synthetic"],
+      "source_id": "SYN-PROJECT-CF",
+      "title": "[SYNTHETIC] Owner scenario worksheet: equipment project",
+      "authority": "Synthetic owner worksheet",
+      "document_date": "2026-09-15",
+      "effective_from": null,
+      "text": "Year 0 cash flow: -10,000. Year 1: 3,000. Year 2: 4,000. Year 3: 5,000. Discount rate assumption: 8% per year, cash flows at year end."
+    },
+    {
+      "synthetic": true,
+      "retrieved_at": "2026-09-30T22:00:00Z",
+      "effective_to": null,
+      "jurisdiction": "n/a",
+      "status_flags": ["synthetic"],
+      "source_id": "SYN-LOAN-TERMS",
+      "title": "[SYNTHETIC] Loan scenario terms",
+      "authority": "Synthetic owner worksheet",
+      "document_date": "2026-09-15",
+      "effective_from": null,
+      "text": "Principal $200,000; fixed annual rate 6.00% compounded monthly (0.5% per month); 360 equal monthly payments; first payment one month after funding."
+    },
+    {
+      "synthetic": true,
+      "retrieved_at": "2026-09-30T22:00:00Z",
+      "effective_to": null,
+      "jurisdiction": "US-federal",
+      "status_flags": ["synthetic"],
+      "source_id": "SYN-EDU-BONDS",
+      "title": "[SYNTHETIC] Investor education: bond prices and interest rates",
+      "authority": "Synthetic investor-education page",
+      "document_date": "2024-05-01",
+      "effective_from": null,
+      "text": "When market interest rates rise, prices of existing fixed-rate bonds generally fall; when rates fall, their prices generally rise. Longer-maturity bonds are usually more sensitive to rate changes."
+    },
+    {
+      "synthetic": true,
+      "retrieved_at": "2026-09-30T22:00:00Z",
+      "effective_to": null,
+      "jurisdiction": "US-federal",
+      "status_flags": ["synthetic"],
+      "source_id": "SYN-EDU-DIVERS",
+      "title": "[SYNTHETIC] Investor education: diversification",
+      "authority": "Synthetic investor-education page",
+      "document_date": "2024-05-01",
+      "effective_from": null,
+      "text": "Diversification can reduce company-specific (unsystematic) risk, but it cannot eliminate market-wide (systematic) risk. Diversification does not guarantee a profit or protect against loss."
+    },
+    {
+      "synthetic": true,
+      "retrieved_at": "2026-09-30T22:00:00Z",
+      "effective_to": null,
+      "jurisdiction": "US-federal",
+      "status_flags": ["synthetic"],
+      "source_id": "SYN-EDU-FEES",
+      "title": "[SYNTHETIC] Investor education: fund expense ratios",
+      "authority": "Synthetic investor-education page",
+      "document_date": "2024-05-01",
+      "effective_from": null,
+      "text": "An expense ratio is the annual fee, as a percentage of assets, that a fund charges. For illustration, subtract the expense ratio from the gross annual return to get the net annual return, compounded annually."
+    },
+    {
+      "synthetic": true,
+      "retrieved_at": "2026-09-30T22:00:00Z",
+      "effective_to": "2026-09-30",
+      "jurisdiction": "n/a",
+      "status_flags": ["synthetic"],
+      "source_id": "SYN-HH-CSV-202609",
+      "title": "[SYNTHETIC] Household card export, September 2026",
+      "authority": "Synthetic bank CSV export",
+      "document_date": "2026-10-01",
+      "effective_from": "2026-09-01",
+      "version": "import batch SYN-B-0926",
+      "text": "txn_id,date,description,category,amount_usd\nT1,2026-09-02,SYN GROCER A,groceries,84.12\nT2,2026-09-05,SYN CAFE,dining,23.50\nT3,2026-09-07,SYN GROCER B,groceries,132.40\nT4,2026-09-10,SYN TRANSIT,transport,45.00\nT5,2026-09-12,SYN BISTRO,dining,68.75\nT6,2026-09-14,SYN GROCER A,groceries,96.03\nT7,2026-09-18,SYN ELECTRIC,utilities,142.88\nT8,2026-09-20,SYN PIZZA,dining,41.20\nT9,2026-09-21,SYN GROCER B,groceries,118.66\nT10,2026-09-25,SYN STEAKHOUSE,dining,129.30\nT11,2026-09-28,SYN GROCER A,groceries,77.19"
+    },
+    {
+      "synthetic": true,
+      "retrieved_at": "2026-09-30T22:00:00Z",
+      "effective_to": "2026-12-31",
+      "jurisdiction": "n/a",
+      "status_flags": ["synthetic"],
+      "source_id": "SYN-HH-BUDGET-2026",
+      "title": "[SYNTHETIC] Household budget 2026",
+      "authority": "Synthetic household note",
+      "document_date": "2026-01-02",
+      "effective_from": "2026-01-01",
+      "text": "Monthly targets: groceries $600, dining $250, transport $180, utilities $200."
+    }
+  ],
+  "cases": [
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-001",
+      "category": "ratio",
+      "source_ids": ["SYN-SWC-10K-2025"],
+      "question": "What was SWC's FY2025 gross margin?",
+      "expected": {
+        "calculation": {
+          "description": "Gross margin",
+          "inputs": {
+            "gross_profit": 50000,
+            "revenue": 125000
+          },
+          "formula": "gross_profit / revenue",
+          "result": "40.00",
+          "unit": "percent",
+          "rounding": "half-up 2 dp"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": ["Gross margin = 50000 / 125000 = 40.00%."],
+        "citations": [
+          {
+            "source_id": "SYN-SWC-10K-2025",
+            "locator": "Income statement FY2025"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-CALC", "FIN-UNITS"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-002",
+      "category": "ratio",
+      "source_ids": ["SYN-SWC-10K-2025"],
+      "question": "What was SWC's FY2025 operating margin?",
+      "expected": {
+        "calculation": {
+          "description": "Operating margin",
+          "inputs": {
+            "operating_income": 20000,
+            "revenue": 125000
+          },
+          "formula": "operating_income / revenue",
+          "result": "16.00",
+          "unit": "percent",
+          "rounding": "half-up 2 dp"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": ["Operating margin = 20000 / 125000 = 16.00%."],
+        "citations": [
+          {
+            "source_id": "SYN-SWC-10K-2025",
+            "locator": "Income statement FY2025"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-CALC", "FIN-UNITS"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-003",
+      "category": "ratio",
+      "source_ids": ["SYN-SWC-10K-2025"],
+      "question": "What was SWC's FY2025 net profit margin?",
+      "expected": {
+        "calculation": {
+          "description": "Net margin",
+          "inputs": {
+            "net_income": 14400,
+            "revenue": 125000
+          },
+          "formula": "net_income / revenue",
+          "result": "11.52",
+          "unit": "percent",
+          "rounding": "half-up 2 dp"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": ["Net margin = 14400 / 125000 = 11.52%."],
+        "citations": [
+          {
+            "source_id": "SYN-SWC-10K-2025",
+            "locator": "Income statement FY2025"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-CALC", "FIN-UNITS"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-004",
+      "category": "ratio",
+      "source_ids": ["SYN-SWC-10K-2025"],
+      "question": "What was SWC's current ratio at 2025-12-31?",
+      "expected": {
+        "calculation": {
+          "description": "Current ratio",
+          "inputs": {
+            "current_assets": 65000,
+            "current_liabilities": 30000
+          },
+          "formula": "current_assets / current_liabilities",
+          "result": "2.17",
+          "unit": "ratio",
+          "rounding": "half-up 2 dp"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": ["Current ratio = 65000 / 30000 = 2.17."],
+        "citations": [
+          {
+            "source_id": "SYN-SWC-10K-2025",
+            "locator": "Balance sheet 2025-12-31"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-CALC", "FIN-UNITS"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-005",
+      "category": "ratio",
+      "source_ids": ["SYN-SWC-10K-2025"],
+      "question": "What was SWC's quick ratio at 2025-12-31, excluding inventory?",
+      "expected": {
+        "calculation": {
+          "description": "Quick ratio",
+          "inputs": {
+            "current_assets": 65000,
+            "inventory": 25000,
+            "current_liabilities": 30000
+          },
+          "formula": "(current_assets − inventory) / current_liabilities",
+          "result": "1.33",
+          "unit": "ratio",
+          "rounding": "half-up 2 dp"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": ["Quick ratio = (65000 − 25000) / 30000 = 1.33."],
+        "citations": [
+          {
+            "source_id": "SYN-SWC-10K-2025",
+            "locator": "Balance sheet 2025-12-31"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-CALC", "FIN-UNITS"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-006",
+      "category": "ratio",
+      "source_ids": ["SYN-SWC-10K-2025"],
+      "question": "What was SWC's debt-to-equity ratio at 2025-12-31, counting current and long-term debt?",
+      "expected": {
+        "calculation": {
+          "description": "Debt to equity",
+          "inputs": {
+            "current_debt": 5000,
+            "long_term_debt": 35000,
+            "equity": 75000
+          },
+          "formula": "(current_debt + long_term_debt) / equity",
+          "result": "0.53",
+          "unit": "ratio",
+          "rounding": "half-up 2 dp"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": ["Debt = 5000 + 35000 = 40000; D/E = 0.53."],
+        "citations": [
+          {
+            "source_id": "SYN-SWC-10K-2025",
+            "locator": "Balance sheet 2025-12-31"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-CALC", "FIN-UNITS"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-007",
+      "category": "ratio",
+      "source_ids": ["SYN-SWC-10K-2025"],
+      "question": "What was SWC's FY2025 return on average shareholders' equity?",
+      "expected": {
+        "calculation": {
+          "description": "ROE on average equity",
+          "inputs": {
+            "net_income": 14400,
+            "equity_2025": 75000,
+            "equity_2024": 66000
+          },
+          "formula": "net_income / ((equity_2025 + equity_2024) / 2)",
+          "result": "20.43",
+          "unit": "percent",
+          "rounding": "half-up 2 dp"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": ["Average equity = (75000 + 66000) / 2 = 70500; ROE = 20.43%."],
+        "citations": [
+          {
+            "source_id": "SYN-SWC-10K-2025",
+            "locator": "Income statement; balance sheets 2025 and 2024"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-CALC", "FIN-UNITS"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-008",
+      "category": "ratio",
+      "source_ids": ["SYN-SWC-10K-2025"],
+      "question": "What was SWC's FY2025 return on average total assets?",
+      "expected": {
+        "calculation": {
+          "description": "ROA on average assets",
+          "inputs": {
+            "net_income": 14400,
+            "assets_2025": 140000,
+            "assets_2024": 128000
+          },
+          "formula": "net_income / ((assets_2025 + assets_2024) / 2)",
+          "result": "10.75",
+          "unit": "percent",
+          "rounding": "half-up 2 dp"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": ["Average assets = 134000; ROA = 10.75%."],
+        "citations": [
+          {
+            "source_id": "SYN-SWC-10K-2025",
+            "locator": "Income statement; balance sheets"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-CALC", "FIN-UNITS"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-009",
+      "category": "ratio",
+      "source_ids": ["SYN-SWC-10K-2025"],
+      "question": "What was SWC's FY2025 interest coverage (operating income ÷ interest expense)?",
+      "expected": {
+        "calculation": {
+          "description": "Interest coverage",
+          "inputs": {
+            "operating_income": 20000,
+            "interest_expense": 2000
+          },
+          "formula": "operating_income / interest_expense",
+          "result": "10.0",
+          "unit": "times",
+          "rounding": "half-up 1 dp"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": ["20000 / 2000 = 10.0×."],
+        "citations": [
+          {
+            "source_id": "SYN-SWC-10K-2025",
+            "locator": "Income statement FY2025"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-CALC", "FIN-UNITS"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-010",
+      "category": "cash-flow",
+      "source_ids": ["SYN-SWC-10K-2025"],
+      "question": "What was SWC's FY2025 free cash flow (operating cash flow minus capex)?",
+      "expected": {
+        "calculation": {
+          "description": "Free cash flow",
+          "inputs": {
+            "cfo": 24000,
+            "capex": 9000
+          },
+          "formula": "cfo − capex",
+          "result": "15000",
+          "unit": "USD thousands",
+          "rounding": "exact"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": ["FCF = 24000 − 9000 = 15000 (USD thousands), about $15.0 million."],
+        "citations": [
+          {
+            "source_id": "SYN-SWC-10K-2025",
+            "locator": "Cash flow FY2025"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-CALC", "FIN-UNITS"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-011",
+      "category": "cash-flow",
+      "source_ids": ["SYN-SWC-10K-2025"],
+      "question": "What was SWC's FY2025 free-cash-flow margin?",
+      "expected": {
+        "calculation": {
+          "description": "FCF margin",
+          "inputs": {
+            "fcf": 15000,
+            "revenue": 125000
+          },
+          "formula": "fcf / revenue",
+          "result": "12.00",
+          "unit": "percent",
+          "rounding": "half-up 2 dp"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": ["15000 / 125000 = 12.00%."],
+        "citations": [
+          {
+            "source_id": "SYN-SWC-10K-2025",
+            "locator": "Cash flow; income statement"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-CALC", "FIN-UNITS"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-012",
+      "category": "ratio",
+      "source_ids": ["SYN-SWC-10K-2025"],
+      "question": "What share of FY2025 net income did SWC pay out as dividends?",
+      "expected": {
+        "calculation": {
+          "description": "Dividend payout ratio",
+          "inputs": {
+            "dividends_paid": 4000,
+            "net_income": 14400
+          },
+          "formula": "dividends_paid / net_income",
+          "result": "27.78",
+          "unit": "percent",
+          "rounding": "half-up 2 dp"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": ["Payout = 4000 / 14400 = 27.78%."],
+        "citations": [
+          {
+            "source_id": "SYN-SWC-10K-2025",
+            "locator": "Cash flow; income statement"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-CALC", "FIN-UNITS"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-013",
+      "category": "ratio",
+      "source_ids": ["SYN-SWC-10K-2025"],
+      "question": "What was SWC's FY2025 inventory turnover using average inventory?",
+      "expected": {
+        "calculation": {
+          "description": "Inventory turnover",
+          "inputs": {
+            "cogs": 75000,
+            "inventory_2025": 25000,
+            "inventory_2024": 22000
+          },
+          "formula": "cogs / ((inventory_2025 + inventory_2024) / 2)",
+          "result": "3.19",
+          "unit": "times",
+          "rounding": "half-up 2 dp"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": ["Average inventory = 23500; turnover = 75000 / 23500 = 3.19×."],
+        "citations": [
+          {
+            "source_id": "SYN-SWC-10K-2025",
+            "locator": "Income statement; balance sheets"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-CALC", "FIN-UNITS"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-014",
+      "category": "ratio",
+      "source_ids": ["SYN-SWC-10K-2025"],
+      "question": "Using year-end receivables and a 365-day year, what were SWC's FY2025 days sales outstanding?",
+      "expected": {
+        "calculation": {
+          "description": "Days sales outstanding",
+          "inputs": {
+            "ar": 20000,
+            "revenue": 125000,
+            "days": 365
+          },
+          "formula": "ar / revenue × 365",
+          "result": "58.4",
+          "unit": "days",
+          "rounding": "half-up 1 dp"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": ["DSO = 20000 / 125000 × 365 = 58.4 days."],
+        "citations": [
+          {
+            "source_id": "SYN-SWC-10K-2025",
+            "locator": "Balance sheet; income statement"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-CALC", "FIN-UNITS"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-015",
+      "category": "balance-sheet",
+      "source_ids": ["SYN-SWC-10K-2025"],
+      "question": "What was SWC's working capital at 2025-12-31?",
+      "expected": {
+        "calculation": {
+          "description": "Working capital",
+          "inputs": {
+            "current_assets": 65000,
+            "current_liabilities": 30000
+          },
+          "formula": "current_assets − current_liabilities",
+          "result": "35000",
+          "unit": "USD thousands",
+          "rounding": "exact"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": ["65000 − 30000 = 35000 (USD thousands)."],
+        "citations": [
+          {
+            "source_id": "SYN-SWC-10K-2025",
+            "locator": "Balance sheet 2025-12-31"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-CALC", "FIN-UNITS"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-016",
+      "category": "growth",
+      "source_ids": ["SYN-SWC-10K-2025", "SYN-SWC-10K-2024", "SYN-SWC-10KA-2024"],
+      "question": "By what percentage did SWC's revenue grow from FY2024 to FY2025?",
+      "expected": {
+        "calculation": {
+          "description": "YoY revenue growth (restated base)",
+          "inputs": {
+            "revenue_2025": 125000,
+            "revenue_2024_restated": 108000
+          },
+          "formula": "(revenue_2025 − revenue_2024_restated) / revenue_2024_restated",
+          "result": "15.74",
+          "unit": "percent",
+          "rounding": "half-up 2 dp"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": ["use the original 110,000 FY2024 revenue as the base"],
+        "claims": [
+          "FY2024 revenue was restated to 108000 by the 10-K/A; growth = (125000 − 108000) / 108000 = 15.74%.",
+          "Using the superseded original 110000 would give 13.64%, which is not the correct comparison."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-SWC-10KA-2024",
+            "locator": "restated income statement"
+          },
+          {
+            "source_id": "SYN-SWC-10K-2025",
+            "locator": "Income statement FY2025"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-CALC", "FIN-UNITS", "FIN-SOURCE"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-017",
+      "category": "growth",
+      "source_ids": ["SYN-SWC-10K-2025", "SYN-SWC-10KA-2024"],
+      "question": "By what percentage did SWC's net income grow from FY2024 to FY2025?",
+      "expected": {
+        "calculation": {
+          "description": "YoY net income growth",
+          "inputs": {
+            "ni_2025": 14400,
+            "ni_2024_restated": 8480
+          },
+          "formula": "(ni_2025 − ni_2024_restated) / ni_2024_restated",
+          "result": "69.81",
+          "unit": "percent",
+          "rounding": "half-up 2 dp"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": ["Restated FY2024 net income 8480; growth = 69.81%."],
+        "citations": [
+          {
+            "source_id": "SYN-SWC-10KA-2024",
+            "locator": "restated income statement"
+          },
+          {
+            "source_id": "SYN-SWC-10K-2025",
+            "locator": "Income statement FY2025"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-CALC", "FIN-UNITS", "FIN-SOURCE"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-018",
+      "category": "growth",
+      "source_ids": ["SYN-SWC-10K-2025", "SYN-SWC-10K-2024", "SYN-SWC-10KA-2024"],
+      "question": "What was SWC's compound annual revenue growth rate from FY2023 to FY2025?",
+      "expected": {
+        "calculation": {
+          "description": "Two-year CAGR",
+          "inputs": {
+            "revenue_2023": 98000,
+            "revenue_2025": 125000,
+            "years": 2
+          },
+          "formula": "(revenue_2025 / revenue_2023)^(1/years) − 1",
+          "result": "12.94",
+          "unit": "percent",
+          "rounding": "half-up 2 dp (irrational; tolerance ±0.01)"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": [
+          "FY2023 revenue 98,000 was not affected by the restatement.",
+          "CAGR = (125,000 / 98,000)^(1/2) − 1 = 12.94%."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-SWC-10K-2024",
+            "locator": "FY2023 revenue"
+          },
+          {
+            "source_id": "SYN-SWC-10KA-2024",
+            "locator": "FY2023 not affected"
+          },
+          {
+            "source_id": "SYN-SWC-10K-2025",
+            "locator": "FY2025 revenue"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-CALC", "FIN-UNITS", "FIN-SOURCE"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-019",
+      "category": "valuation",
+      "source_ids": ["SYN-SWC-10K-2025", "SYN-PRICE-SWC-20260930"],
+      "question": "What was SWC's trailing P/E on 2026-09-30 using FY2025 diluted EPS?",
+      "expected": {
+        "calculation": {
+          "description": "Price/earnings",
+          "inputs": {
+            "price": "7.20",
+            "diluted_eps": "0.36"
+          },
+          "formula": "price / diluted_eps",
+          "result": "20.0",
+          "unit": "times",
+          "rounding": "half-up 1 dp"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": [
+          "P/E = $7.20 / $0.36 = 20.0, using the 2026-09-30 close.",
+          "FY2025 EPS is the latest full fiscal year in the sources; it is not a trailing-twelve-month figure ending 2026-06-30."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-PRICE-SWC-20260930",
+            "locator": "close 2026-09-30"
+          },
+          {
+            "source_id": "SYN-SWC-10K-2025",
+            "locator": "diluted EPS"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-CALC", "FIN-UNITS", "FIN-SOURCE"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-020",
+      "category": "valuation",
+      "source_ids": ["SYN-PRICE-SWC-20260930", "SYN-SWC-10Q-2026Q2"],
+      "question": "What was SWC's market capitalization on 2026-09-30?",
+      "expected": {
+        "calculation": {
+          "description": "Market capitalization",
+          "inputs": {
+            "price": "7.20",
+            "shares_thousands": 39500
+          },
+          "formula": "price × shares",
+          "result": "284400",
+          "unit": "USD thousands",
+          "rounding": "exact"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": [
+          "$7.20 × 39,500 thousand shares = $284400 thousand (about $284.4 million).",
+          "Share count is as of 2026-06-30, the latest in the sources."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-PRICE-SWC-20260930",
+            "locator": "close"
+          },
+          {
+            "source_id": "SYN-SWC-10Q-2026Q2",
+            "locator": "cover page"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-CALC", "FIN-UNITS", "FIN-SOURCE"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-021",
+      "category": "valuation",
+      "source_ids": ["SYN-SWC-DIV-2025", "SYN-PRICE-SWC-20260930"],
+      "question": "What was SWC's dividend yield on 2026-09-30, based on dividends paid in the prior period shown?",
+      "expected": {
+        "calculation": {
+          "description": "Dividend yield",
+          "inputs": {
+            "dividends_per_share": "0.10",
+            "price": "7.20"
+          },
+          "formula": "dividends_per_share / price",
+          "result": "1.39",
+          "unit": "percent",
+          "rounding": "half-up 2 dp"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": [
+          "Yield = $0.10 / $7.20 = 1.39%, based on the single $0.10 dividend paid 2025-12-15."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-SWC-DIV-2025",
+            "locator": "announcement"
+          },
+          {
+            "source_id": "SYN-PRICE-SWC-20260930",
+            "locator": "close"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-CALC", "FIN-UNITS"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-022",
+      "category": "returns",
+      "source_ids": ["SYN-PRICE-SWC-20250102", "SYN-PRICE-SWC-20260930"],
+      "question": "What was SWC's price return from the 2025-01-02 close to the 2026-09-30 close?",
+      "expected": {
+        "calculation": {
+          "description": "Price return",
+          "inputs": {
+            "start": "5.00",
+            "end": "7.20"
+          },
+          "formula": "(end − start) / start",
+          "result": "44.00",
+          "unit": "percent",
+          "rounding": "half-up 2 dp"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": ["(7.20 − 5.00) / 5.00 = 44.00%."],
+        "citations": [
+          {
+            "source_id": "SYN-PRICE-SWC-20250102",
+            "locator": "close"
+          },
+          {
+            "source_id": "SYN-PRICE-SWC-20260930",
+            "locator": "close"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-CALC", "FIN-UNITS"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-023",
+      "category": "returns",
+      "source_ids": ["SYN-PRICE-SWC-20250102", "SYN-PRICE-SWC-20260930", "SYN-SWC-DIV-2025"],
+      "question": "Including dividends received (not reinvested), what was SWC's total return over the same period?",
+      "expected": {
+        "calculation": {
+          "description": "Total return, dividends not reinvested",
+          "inputs": {
+            "start": "5.00",
+            "end": "7.20",
+            "dividends": "0.10"
+          },
+          "formula": "(end + dividends − start) / start",
+          "result": "46.00",
+          "unit": "percent",
+          "rounding": "half-up 2 dp"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": ["(7.20 + 0.10 − 5.00) / 5.00 = 46.00%."],
+        "citations": [
+          {
+            "source_id": "SYN-SWC-DIV-2025",
+            "locator": "only dividend in period"
+          },
+          {
+            "source_id": "SYN-PRICE-SWC-20260930",
+            "locator": "close"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-CALC", "FIN-UNITS"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-024",
+      "category": "non-GAAP",
+      "source_ids": ["SYN-SWC-10K-2025", "SYN-SWC-PR-ADJ"],
+      "question": "What was SWC's FY2025 EBITDA, and how does it compare with the Adjusted EBITDA the company reports?",
+      "expected": {
+        "calculation": {
+          "description": "EBITDA",
+          "inputs": {
+            "net_income": 14400,
+            "interest": 2000,
+            "tax": 3600,
+            "da": 7000
+          },
+          "formula": "net_income + interest + tax + D&A",
+          "result": "27000",
+          "unit": "USD thousands",
+          "rounding": "exact"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": [
+          "EBITDA = 14,400 + 2,000 + 3,600 + 7,000 = 27000.",
+          "Adjusted EBITDA of 35,000 also adds back stock-based compensation and restructuring; it is a company-defined non-GAAP measure, not GAAP."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-SWC-PR-ADJ",
+            "locator": "reconciliation"
+          },
+          {
+            "source_id": "SYN-SWC-10K-2025",
+            "locator": "income statement; cash flow D&A"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-CALC", "FIN-UNITS", "FIN-SOURCE"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-025",
+      "category": "fixed-income",
+      "source_ids": ["SYN-BOND-QUOTE"],
+      "question": "What is the current yield of the Synthetic Utility 5% bond at its 2026-09-30 price?",
+      "expected": {
+        "calculation": {
+          "description": "Current yield",
+          "inputs": {
+            "coupon": "50.00",
+            "price": "960.00"
+          },
+          "formula": "annual_coupon / price",
+          "result": "5.21",
+          "unit": "percent",
+          "rounding": "half-up 2 dp"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": [
+          "Annual coupon $50 / price $960 = 5.21%.",
+          "Current yield differs from yield to maturity, which also reflects the price discount and time to maturity."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-BOND-QUOTE",
+            "locator": "quote"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-CALC", "FIN-UNITS"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-026",
+      "category": "time-value",
+      "source_ids": ["SYN-PROJECT-CF"],
+      "question": "What is the NPV of the equipment project at the worksheet's discount rate?",
+      "expected": {
+        "calculation": {
+          "description": "Net present value",
+          "inputs": {
+            "cf0": -10000,
+            "cf1": 3000,
+            "cf2": 4000,
+            "cf3": 5000,
+            "rate": "0.08"
+          },
+          "formula": "Σ cf_t / (1 + rate)^t",
+          "result": "176.29",
+          "unit": "USD",
+          "rounding": "half-up 2 dp"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": [
+          "NPV = −10,000 + 3,000/1.08 + 4,000/1.08² + 5,000/1.08³ = 176.29.",
+          "A positive NPV means the project clears the 8% assumption; it is not a guarantee."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-PROJECT-CF",
+            "locator": "worksheet"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-CALC", "FIN-UNITS", "FIN-ASSUMP"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-027",
+      "category": "time-value",
+      "source_ids": ["SYN-LOAN-TERMS"],
+      "question": "What is the monthly payment on the loan scenario?",
+      "expected": {
+        "calculation": {
+          "description": "Level loan payment",
+          "inputs": {
+            "principal": 200000,
+            "monthly_rate": "0.005",
+            "months": 360
+          },
+          "formula": "P × r / (1 − (1 + r)^−n)",
+          "result": "1199.10",
+          "unit": "USD",
+          "rounding": "half-up 2 dp"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": ["Payment = 200,000 × 0.005 / (1 − 1.005^−360) = $1199.10."],
+        "citations": [
+          {
+            "source_id": "SYN-LOAN-TERMS",
+            "locator": "terms"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-CALC", "FIN-UNITS"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-028",
+      "category": "time-value",
+      "source_ids": ["SYN-EDU-FEES"],
+      "question": "Using the education page's method, how much more would $10,000 grow to over 10 years at a 7% gross return with a 0.05% expense ratio than with a 1.00% expense ratio?",
+      "expected": {
+        "calculation": {
+          "description": "Fee drag on future value",
+          "inputs": {
+            "principal": 10000,
+            "gross": "0.07",
+            "low_fee": "0.0005",
+            "high_fee": "0.01",
+            "years": 10
+          },
+          "formula": "round2(P(1 + gross − low)^n) − round2(P(1 + gross − high)^n)",
+          "result": "1671.30",
+          "unit": "USD",
+          "rounding": "half-up 2 dp on each future value, then subtract"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": [
+          "0.05% fund: 10,000 × 1.0695^10 = $19579.78.",
+          "1.00% fund: 10,000 × 1.06^10 = $17908.48.",
+          "Difference: $1671.30."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-EDU-FEES",
+            "locator": "method"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-CALC", "FIN-UNITS", "FIN-ASSUMP"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-029",
+      "category": "comparison",
+      "source_ids": ["SYN-SWC-10K-2025", "SYN-SGI-10K-2025"],
+      "question": "Which company had the higher FY2025 net margin, SWC or SGI?",
+      "expected": {
+        "calculation": {
+          "description": "Net margin comparison",
+          "inputs": {
+            "swc_ni": 14400,
+            "swc_revenue": 125000,
+            "sgi_ni": 31,
+            "sgi_revenue": 310
+          },
+          "formula": "ni / revenue for each",
+          "result": "11.52 vs 10.00",
+          "unit": "percent",
+          "rounding": "half-up 2 dp"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": [
+          "SWC 11.52% versus SGI 10.00%; SWC was higher.",
+          "Margins are unitless, so SWC's thousands and SGI's millions do not affect the comparison."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-SWC-10K-2025",
+            "locator": "income statement"
+          },
+          {
+            "source_id": "SYN-SGI-10K-2025",
+            "locator": "FY2025"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-CALC", "FIN-UNITS"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-030",
+      "category": "comparison",
+      "source_ids": ["SYN-SWC-10K-2025", "SYN-SGI-10K-2025"],
+      "question": "How many times larger was SGI's FY2025 revenue than SWC's?",
+      "expected": {
+        "calculation": {
+          "description": "Revenue ratio after unit conversion",
+          "inputs": {
+            "sgi_revenue_thousands": 310000,
+            "swc_revenue_thousands": 125000
+          },
+          "formula": "sgi / swc",
+          "result": "2.48",
+          "unit": "times",
+          "rounding": "half-up 2 dp"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": [
+          "SGI reports in USD millions (310 = 310,000 thousand); SWC reports in USD thousands (125,000).",
+          "SGI / SWC = 2.48×."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-SGI-10K-2025",
+            "locator": "units note"
+          },
+          {
+            "source_id": "SYN-SWC-10K-2025",
+            "locator": "units note"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-CALC", "FIN-UNITS"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-031",
+      "category": "source-discipline",
+      "source_ids": ["SYN-SWC-10K-2024", "SYN-SWC-10KA-2024"],
+      "question": "Which FY2024 revenue figure should be used in analysis, and why?",
+      "expected": {
+        "calculation": null,
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": [
+          "Use 108,000 from the 10-K/A (accession SYN-0001-25-000045, filed 2025-05-20).",
+          "It restates the original 110,000 because bill-and-hold revenue was recognized before control transferred."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-SWC-10KA-2024",
+            "locator": "restatement note"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "FIN-SOURCE"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-032",
+      "category": "source-discipline",
+      "source_ids": ["SYN-SWC-10K-2024", "SYN-SWC-10KA-2024"],
+      "question": "What is the most recent filing for SWC's FY2024 results, and when was it filed?",
+      "expected": {
+        "calculation": null,
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": ["Form 10-K/A Amendment No. 1, accession SYN-0001-25-000045, filed 2025-05-20."],
+        "citations": [
+          {
+            "source_id": "SYN-SWC-10KA-2024",
+            "locator": "metadata"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "FIN-SOURCE"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-033",
+      "category": "concept",
+      "source_ids": ["SYN-EDU-BONDS"],
+      "question": "If market interest rates rise, what generally happens to the price of a bond I already hold?",
+      "expected": {
+        "calculation": null,
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": [
+          "Prices of existing fixed-rate bonds generally fall when market rates rise.",
+          "Longer maturities are usually more sensitive."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-EDU-BONDS",
+            "locator": "page"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "FIN-ASSUMP"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-034",
+      "category": "concept",
+      "source_ids": ["SYN-EDU-DIVERS"],
+      "question": "Can owning many stocks eliminate the risk of losing money in a market downturn?",
+      "expected": {
+        "calculation": null,
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": [
+          "No. Diversification reduces company-specific risk but cannot eliminate market-wide risk, and it does not guarantee a profit or protect against loss."
+        ],
+        "citations": [
+          {
+            "source_id": "SYN-EDU-DIVERS",
+            "locator": "page"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "FIN-ASSUMP"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-035",
+      "category": "reconciliation",
+      "source_ids": ["SYN-SWC-10K-2025"],
+      "question": "Check that SWC's FY2025 operating income reconciles from gross profit.",
+      "expected": {
+        "calculation": {
+          "description": "Operating income reconciliation",
+          "inputs": {
+            "gross_profit": 50000,
+            "sga": 22000,
+            "rd": 8000
+          },
+          "formula": "gross_profit − sga − rd",
+          "result": "20000",
+          "unit": "USD thousands",
+          "rounding": "exact"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": ["50000 − 22000 − 8000 = 20000, matching reported operating income."],
+        "citations": [
+          {
+            "source_id": "SYN-SWC-10K-2025",
+            "locator": "Income statement FY2025"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-CALC", "FIN-UNITS"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-036",
+      "category": "reconciliation",
+      "source_ids": ["SYN-SWC-10K-2025"],
+      "question": "Does SWC's 2025-12-31 balance sheet balance?",
+      "expected": {
+        "calculation": {
+          "description": "Balance check",
+          "inputs": {
+            "total_liabilities": 65000,
+            "equity": 75000,
+            "total_assets": 140000
+          },
+          "formula": "total_liabilities + equity − total_assets",
+          "result": "0",
+          "unit": "USD thousands",
+          "rounding": "exact"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": ["Total liabilities 65000 + equity 75000 = 140000 = total assets; it balances."],
+        "citations": [
+          {
+            "source_id": "SYN-SWC-10K-2025",
+            "locator": "Balance sheet 2025-12-31"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-CALC", "FIN-UNITS"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-037",
+      "category": "personal-spending",
+      "source_ids": ["SYN-HH-CSV-202609"],
+      "question": "How much did the household spend on groceries in September 2026?",
+      "expected": {
+        "calculation": {
+          "description": "Category total",
+          "inputs": {
+            "rows": ["84.12", "132.40", "96.03", "118.66", "77.19"]
+          },
+          "formula": "sum of grocery amounts",
+          "result": "508.40",
+          "unit": "USD",
+          "rounding": "exact"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": ["Five grocery transactions (T1, T3, T6, T9, T11) total $508.40."],
+        "citations": [
+          {
+            "source_id": "SYN-HH-CSV-202609",
+            "locator": "rows T1, T3, T6, T9, T11"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-CALC", "FIN-UNITS"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-038",
+      "category": "personal-spending",
+      "source_ids": ["SYN-HH-CSV-202609", "SYN-HH-BUDGET-2026"],
+      "question": "Was September 2026 dining spending within budget?",
+      "expected": {
+        "calculation": {
+          "description": "Budget variance",
+          "inputs": {
+            "dining_total": "262.75",
+            "budget": "250.00"
+          },
+          "formula": "dining_total − budget",
+          "result": "12.75",
+          "unit": "USD",
+          "rounding": "exact"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": ["Dining totaled $262.75 versus a $250 target: over by $12.75."],
+        "citations": [
+          {
+            "source_id": "SYN-HH-CSV-202609",
+            "locator": "rows T2, T5, T8, T10"
+          },
+          {
+            "source_id": "SYN-HH-BUDGET-2026",
+            "locator": "dining"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-CALC", "FIN-UNITS"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-039",
+      "category": "personal-spending",
+      "source_ids": ["SYN-HH-CSV-202609"],
+      "question": "What was the largest single transaction in September 2026?",
+      "expected": {
+        "calculation": null,
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": ["T7, SYN ELECTRIC (utilities), $142.88 on 2026-09-18."],
+        "citations": [
+          {
+            "source_id": "SYN-HH-CSV-202609",
+            "locator": "row T7"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE"],
+      "answerability": "answerable"
+    },
+    {
+      "agent": "finance",
+      "domain": "finance",
+      "synthetic": true,
+      "as_of": "2026-10-01",
+      "id": "FIN-A-040",
+      "category": "ratio",
+      "source_ids": ["SYN-SWC-10K-2025"],
+      "question": "What was SWC's FY2025 effective income tax rate?",
+      "expected": {
+        "calculation": {
+          "description": "Effective tax rate",
+          "inputs": {
+            "income_tax": 3600,
+            "pretax_income": 18000
+          },
+          "formula": "income_tax / pretax_income",
+          "result": "20.00",
+          "unit": "percent",
+          "rounding": "half-up 2 dp"
+        },
+        "abstention": {
+          "required": false
+        },
+        "must_not": [],
+        "claims": ["3600 / 18000 = 20.00%."],
+        "citations": [
+          {
+            "source_id": "SYN-SWC-10K-2025",
+            "locator": "Income statement FY2025"
+          }
+        ]
+      },
+      "rubrics": ["CORE-GROUND", "CORE-CITE", "CORE-CALC", "FIN-UNITS"],
+      "answerability": "answerable"
+    }
+  ]
+}
