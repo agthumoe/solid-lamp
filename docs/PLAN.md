@@ -33,6 +33,9 @@ GitHub tasks/milestones: [TRACKING.md](TRACKING.md). Standards: [development han
 - [x] Routing fixture integrity diagnostics and negative tests (#24, merged PR #25)
 - [x] Resolve Claude review findings #27 and re-review exact updated head e7e1f60; all three resolved (merged PR #28)
 - [x] Integrate both PRs (#26, #23, plus #25 and #28 merged 2026-10-14); shared plan/evaluation follow-ups are listed in STATUS Next and need their own tracked issues
+- [x] Combined-main audit and canonical model inventory/evidence/tracking reconciliation (#29)
+- [ ] Domain schema-v2 fixture diagnostics (#30)
+- [ ] Gated specialist artifact pinning and live comparisons (#31 under #15)
 - [x] ADR 0001: Ollama location (`docs/adr/0001-ollama-location.md`)
 
 ## Phase 1: Scaffold
