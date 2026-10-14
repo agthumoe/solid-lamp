@@ -24,3 +24,5 @@ Task design does not depend on Claude's unmerged work. Runtime implementation, c
 - 2026-10-14: Published PR #23; local unified gates and 51-case fixture integrity checks pass. PR intentionally unmerged; own handoff updated, shared files untouched. Final CI evidence lives in #21.
 
 - 2026-10-14: Addressed Claude review on PR #23: retained three omitted installed models, specified dual-unavailability/fallback gate/self-fallback semantics, distinguished required rejection from optional disclosed retrieval degradation; expanded fixtures to 51. Checks and review response recorded in #21.
+
+- 2026-10-14: Claude re-review confirms prior findings resolved. Corrected residual portfolio-table omission with explicit rows for the three pre-existing unused models; no model bindings changed. Two diagnostic gaps are addressed separately under #24.

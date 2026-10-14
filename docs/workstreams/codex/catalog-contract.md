@@ -35,19 +35,22 @@ Specialist activation needs: verified upstream license chain, artifact provenanc
 
 Stable IDs below are design identifiers only; local existing tags are preserved as facts from current config. Null specialist tags are deliberately unresolved.
 
-| ID                  | Existing tag / upstream candidate            | Intended roles                                            | Current design adoption status                                        |
-| ------------------- | -------------------------------------------- | --------------------------------------------------------- | --------------------------------------------------------------------- |
-| `qwen-general`      | `qwen3.5:9b`                                 | chat, vision, planned knowledge; possible scoped baseline | Existing mappings retained; knowledge/domain scope acceptance pending |
-| `qwen-router`       | `qwen3.5:4b`                                 | router                                                    | Existing mapping retained                                             |
-| `qwen-coder`        | `qwen2.5-coder:14b`                          | coder                                                     | Existing swap mapping retained                                        |
-| `qwen-embed`        | `qwen3-embedding:0.6b`                       | embed, 1024 dimensions                                    | Current vector version retained                                       |
-| `qwen-alternative`  | `qwen3:8b`                                   | chat alternative/comparison                               | Existing fallback retained                                            |
-| `gemma-alternative` | `gemma4:12b`                                 | chat alternative/comparison                               | Existing fallback retained; allocation reporting caveat retained      |
-| `nomic-embed`       | `nomic-embed-text`                           | versioned embedding rebuild, 768 dimensions               | Explicit rebuild/promotion only; never query fallback                 |
-| `qwen-deep`         | planned `qwen3.6:35b-a3b`                    | deep/batch                                                | Disabled; RAM approval and feasibility evidence still needed          |
-| `saul-legal`        | `Equall/Saul-7B-Instruct-v1`; local tag null | planned legal-research                                    | Candidate; not installed or accepted                                  |
-| `fin-r1`            | `SUFE-AIFLM-Lab/Fin-R1`; local tag null      | planned financial-analysis                                | Candidate; upstream licensing unresolved                              |
-| `cpa-qwen`          | `AudCor/cpa-qwen3-8b-v0`; local tag null     | planned accounting                                        | Candidate; accounting competence not established                      |
+| ID                      | Existing tag / upstream candidate            | Intended roles                                            | Current design adoption status                                        |
+| ----------------------- | -------------------------------------------- | --------------------------------------------------------- | --------------------------------------------------------------------- |
+| `qwen-general`          | `qwen3.5:9b`                                 | chat, vision, planned knowledge; possible scoped baseline | Existing mappings retained; knowledge/domain scope acceptance pending |
+| `qwen-router`           | `qwen3.5:4b`                                 | router                                                    | Existing mapping retained                                             |
+| `qwen-coder`            | `qwen2.5-coder:14b`                          | coder                                                     | Existing swap mapping retained                                        |
+| `qwen-embed`            | `qwen3-embedding:0.6b`                       | embed, 1024 dimensions                                    | Current vector version retained                                       |
+| `qwen-alternative`      | `qwen3:8b`                                   | chat alternative/comparison                               | Existing fallback retained                                            |
+| `gemma-alternative`     | `gemma4:12b`                                 | chat alternative/comparison                               | Existing fallback retained; allocation reporting caveat retained      |
+| `nomic-embed`           | `nomic-embed-text`                           | versioned embedding rebuild, 768 dimensions               | Explicit rebuild/promotion only; never query fallback                 |
+| `deepseek-existing-14b` | `deepseek-r1:14b`                            | Retained, currently unused                                | Pre-existing installed artifact; no binding added                     |
+| `deepseek-existing-7b`  | `deepseek-r1:7b`                             | Retained, currently unused                                | Pre-existing installed artifact; no binding added                     |
+| `qwen-existing-7b`      | `qwen2.5:7b`                                 | Retained, currently unused                                | Pre-existing installed artifact; no binding added                     |
+| `qwen-deep`             | planned `qwen3.6:35b-a3b`                    | deep/batch                                                | Disabled; RAM approval and feasibility evidence still needed          |
+| `saul-legal`            | `Equall/Saul-7B-Instruct-v1`; local tag null | planned legal-research                                    | Candidate; not installed or accepted                                  |
+| `fin-r1`                | `SUFE-AIFLM-Lab/Fin-R1`; local tag null      | planned financial-analysis                                | Candidate; upstream licensing unresolved                              |
+| `cpa-qwen`              | `AudCor/cpa-qwen3-8b-v0`; local tag null     | planned accounting                                        | Candidate; accounting competence not established                      |
 
 Do not copy fixture enabled states into production: every successful specialist fixture is explicitly hypothetical. All ten installed models (including the three pre-existing unused models in HARDWARE.md) plus the existing disabled deep proposal must survive migration, as must existing chat/embed fallbacks and their restrictions.
 
