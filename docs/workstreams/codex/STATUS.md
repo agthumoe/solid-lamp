@@ -1,6 +1,6 @@
 # Codex workbench status
 
-Task: [#21](https://github.com/agthumoe/solid-lamp/issues/21). Date: 2026-10-14. Branch: `docs/21-codex-routing-design`; worktree: `/tmp/aetherion-workbenches/codex`. Status: design and local validation complete; PR publication in progress.
+Task: [#21](https://github.com/agthumoe/solid-lamp/issues/21). Date: 2026-10-14. Branch: `docs/21-codex-routing-design`; worktree: `/tmp/aetherion-workbenches/codex`. Status: design delivered for integration in [PR #23](https://github.com/agthumoe/solid-lamp/pull/23); local validation passed. Required CI/publication evidence is recorded in #21.
 
 ## Now
 
@@ -10,7 +10,7 @@ Task: [#21](https://github.com/agthumoe/solid-lamp/issues/21). Date: 2026-10-14.
 
 ## Next
 
-Publish task PR and record evidence in #21; required GitHub CI must pass. Local `pnpm check` passed all gates (19 regression groups, 44 authored Markdown files before fixture README). Fixture integrity checked 42 unique cases, 43 coverage tags, fresh patch expansion and expected identity/fallback/no-write invariants; no policy/model execution. Leave PR integration and canonical handoff updates to the separately tracked integration workstream.
+Review/merge PR #23 under the separately tracked integration workflow after required CI passes and Claude work is ready. Local `pnpm check` passed all gates (19 regression groups, 44 authored Markdown files before fixture README). Fixture integrity checked 42 unique cases, 43 coverage tags, fresh patch expansion and expected identity/fallback/no-write invariants; no policy/model execution. Leave PR integration and canonical handoff updates to the separately tracked integration workstream.
 
 ## Blocked / deferred
 
@@ -20,3 +20,5 @@ Task design does not depend on Claude's unmerged work. Runtime implementation, c
 
 - 2026-10-13: Coordination bootstrap; worktree prepared, not started.
 - 2026-10-14: Owner requested execution; #21 marked in progress, isolated branch verified. Designed candidate/enabled separation, scope-specific evidence, bounded explicit fallback, global gate recovery and embedding-space isolation; authored 42 decision fixtures. Validation/publication evidence recorded in #21.
+
+- 2026-10-14: Published PR #23; local unified gates and 42-case fixture integrity checks pass. PR intentionally unmerged; own handoff updated, shared files untouched. Final CI evidence lives in #21.
