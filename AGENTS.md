@@ -86,6 +86,10 @@ Every current root script is mirrored in the `Makefile`; future scaffold scripts
 1. Work in phases (`docs/PLAN.md`). At the end of each phase run `pnpm lint && pnpm typecheck && pnpm test`, update `docs/PLAN.md` (checkboxes + decisions log) and `docs/STATUS.md`, summarize, and **stop for the owner's go-ahead**.
 2. When something is unclear, check §17 "Open decisions" in `docs/BUILD_PROMPT.md`, use the default, and log it in `docs/PLAN.md`.
 
+## Parallel workbench sessions
+
+When working under the owner-requested [Claude/Codex split](docs/workstreams/README.md), use the assigned isolated Git worktree and branch, and honor its file allowlist. Treat shared canonical files as read-only in workstream task branches. **The session update requirement is satisfied by updating your own `docs/workstreams/<agent>/STATUS.md` and `PLAN.md`**; the integration owner updates canonical STATUS/PLAN on a separate tracked integration branch. Read both canonical and own handoffs at session start. No task may overwrite the other agent's files or concurrently mutate shared host services. Follow the frozen boundary contract and exclusive GPU coordination rules.
+
 ## Development standards and project skills
 
 Use [the handbook](docs/development/README.md) as the review contract: modular features and explicit dependency direction; narrow SOLID ports; Fastify/zod API contracts; Drizzle queries with a single Supabase SQL migration ledger; small single-responsibility React components; TanStack Query server state and Zustand shared ephemeral client state; deliberate hooks; local-first twelve-factor operations; structured redacted Pino logs.
