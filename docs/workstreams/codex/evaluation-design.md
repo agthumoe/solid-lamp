@@ -1,6 +1,6 @@
 # Decision fixtures and review evidence
 
-Task [#21](https://github.com/agthumoe/solid-lamp/issues/21). Contracts: [catalog](catalog-contract.md), [routing](routing-contract.md), [scheduling](scheduling-contract.md). Dataset: [42 routing cases](../../../evals/routing/cases.json). Status: design and fixture validation only; no production policy, scheduler, LLM or GPU evaluation has run.
+Task [#21](https://github.com/agthumoe/solid-lamp/issues/21). Contracts: [catalog](catalog-contract.md), [routing](routing-contract.md), [scheduling](scheduling-contract.md). Dataset: [51 routing cases](../../../evals/routing/cases.json). Status: design and fixture validation only; no production policy, scheduler, LLM or GPU evaluation has run.
 
 ## Fixture format and interpretation
 
@@ -25,9 +25,11 @@ Expected `kind`, `reason`, selected agent/model (null for rejection/clarificatio
 
 Manual review checks decision precedence, null identities on no-dispatch paths, candidate evidence isolation and absence of write authority. All success cases assume accepted scope; no test treats a model-card license badge as a runtime permission grant. Unavailable retained alternatives are not silently substituted. Deleting a model is never an allowed expected result.
 
+Review follow-up R43–R51 covers initial dual unavailability, fallback license/revocation/artifact/capability/profile gates, self-fallback rejection and optional degraded retrieval. Disabled knowledge fallback is explicitly null. All ten installed models are retained.
+
 ## Validation now and later
 
-Now: parse JSON; check 42 unique IDs, required input/expected fields and enum values, expected identities matching retained catalog, no write permission, no fallback after output starts, one coverage tag minimum, fresh-patch semantics, and minimum 20-case requirement. Inspect the described oracle against the contract. Run repository `pnpm check` separately. Those steps validate fixture integrity and current repo quality, not implementation behavior.
+Now: parse JSON; check 51 unique IDs, required input/expected fields and enum values, expected identities matching retained catalog, no write permission, no fallback after output starts, one coverage tag minimum, fresh-patch semantics, and minimum 20-case requirement. Inspect the described oracle against the contract. Run repository `pnpm check` separately. Those steps validate fixture integrity and current repo quality, not implementation behavior.
 
 Phase 1 implementation: define strict Zod schema for runtime request/decision and evidence/config records; adapt this dataset to a parameterized policy-port test. Independently test properties rather than deriving expected values from the implementation. Record each observed decision alongside expected output; assert no unauthorized gate/tool dispatch. Fake-clock scheduler tests separately cover ordering/capacity/starvation, cancellation/teardown, observed loaded-profile transitions, restart and one global authority. No Ollama or cloud calls in public CI.
 

@@ -49,11 +49,11 @@ Stable IDs below are design identifiers only; local existing tags are preserved 
 | `fin-r1`            | `SUFE-AIFLM-Lab/Fin-R1`; local tag null      | planned financial-analysis                                | Candidate; upstream licensing unresolved                              |
 | `cpa-qwen`          | `AudCor/cpa-qwen3-8b-v0`; local tag null     | planned accounting                                        | Candidate; accounting competence not established                      |
 
-Do not copy fixture enabled states into production: every successful specialist fixture is explicitly hypothetical. All seven installed models plus the existing disabled deep proposal must survive migration, as must existing chat/embed fallbacks and their restrictions.
+Do not copy fixture enabled states into production: every successful specialist fixture is explicitly hypothetical. All ten installed models (including the three pre-existing unused models in HARDWARE.md) plus the existing disabled deep proposal must survive migration, as must existing chat/embed fallbacks and their restrictions.
 
 ## Role binding and activation
 
-A binding has role, enabled flag, primary modelId/profileId, accepted agent scopes, configured fallback modelId/profileId list, fallback-enabled flag, and revision. Existing roles remain chat/router/coder/embed/vision; planned roles are knowledge/legal-research/financial-analysis/accounting. Router proposes an allowed agent ID; it cannot select modelId/profileId or change options.
+A binding has role, enabled flag, primary modelId/profileId, accepted agent scopes, configured fallback modelId/profileId list, fallback-enabled flag, and revision. Disabled fallback uses a null target; enabled fallback must have a distinct resolvable target. Self-fallback is invalid config (`BINDING_INVALID`), never a second attempt. Existing roles remain chat/router/coder/embed/vision; planned roles are knowledge/legal-research/financial-analysis/accounting. Router proposes an allowed agent ID; it cannot select modelId/profileId or change options.
 
 A valid production binding requires enabled model state, matching capability, resolvable artifact/profile and scoped evidence. Loader rejects malformed/contradictory enabled bindings atomically, retaining the last known valid revision. Candidate or disabled specialist primaries belong only in non-active planning records. To serve a domain with Qwen before a specialist passes, bind accepted Qwen directly in a separately reviewed config change; do not enable an invalid specialist primary and rely on fallback to bypass adoption.
 

@@ -24,8 +24,8 @@
         "primary": "qwen-general",
         "profile": "synthetic-accepted-profile",
         "enabled": true,
-        "fallbackEnabled": true,
-        "fallback": "qwen-general"
+        "fallbackEnabled": false,
+        "fallback": null
       },
       "legal-us-tx": {
         "role": "legal-research",
@@ -944,6 +944,221 @@
         "writeAllowed": false
       },
       "coverage": ["unknown-proposal"]
+    },
+    {
+      "id": "R43",
+      "description": "Primary and fallback unavailable at initial preflight",
+      "inputPatch": {
+        "models": {
+          "fin-r1": {
+            "availability": "unavailable"
+          },
+          "qwen-general": {
+            "availability": "unavailable"
+          }
+        }
+      },
+      "expected": {
+        "kind": "reject",
+        "reason": "FALLBACK_EXHAUSTED",
+        "agent": null,
+        "modelId": null,
+        "attemptLimit": 2,
+        "writeAllowed": false
+      },
+      "coverage": ["review-follow-up", "Primary and fallback unavailable at initial preflight"]
+    },
+    {
+      "id": "R44",
+      "description": "Fallback license unresolved cannot bypass evidence",
+      "inputPatch": {
+        "models": {
+          "fin-r1": {
+            "availability": "unavailable"
+          },
+          "qwen-general": {
+            "license": "unresolved"
+          }
+        }
+      },
+      "expected": {
+        "kind": "reject",
+        "reason": "FALLBACK_NOT_ACCEPTED",
+        "agent": null,
+        "modelId": null,
+        "attemptLimit": 2,
+        "writeAllowed": false
+      },
+      "coverage": ["review-follow-up", "Fallback license unresolved cannot bypass evidence"]
+    },
+    {
+      "id": "R45",
+      "description": "Fallback revoked evidence cannot bypass safety",
+      "inputPatch": {
+        "models": {
+          "fin-r1": {
+            "availability": "unavailable"
+          },
+          "qwen-general": {
+            "evidenceRevoked": true
+          }
+        }
+      },
+      "expected": {
+        "kind": "reject",
+        "reason": "FALLBACK_NOT_ACCEPTED",
+        "agent": null,
+        "modelId": null,
+        "attemptLimit": 2,
+        "writeAllowed": false
+      },
+      "coverage": ["review-follow-up", "Fallback revoked evidence cannot bypass safety"]
+    },
+    {
+      "id": "R46",
+      "description": "Self-fallback binding is invalid before dispatch",
+      "inputPatch": {
+        "request": {
+          "ownerAgent": "knowledge"
+        },
+        "bindings": {
+          "knowledge": {
+            "fallbackEnabled": true,
+            "fallback": "qwen-general"
+          }
+        }
+      },
+      "expected": {
+        "kind": "reject",
+        "reason": "BINDING_INVALID",
+        "agent": null,
+        "modelId": null,
+        "attemptLimit": 2,
+        "writeAllowed": false
+      },
+      "coverage": ["review-follow-up", "Self-fallback binding is invalid before dispatch"]
+    },
+    {
+      "id": "R47",
+      "description": "Unresolved fallback artifact fails acceptance",
+      "inputPatch": {
+        "models": {
+          "fin-r1": {
+            "availability": "unavailable"
+          },
+          "qwen-general": {
+            "artifactResolved": false
+          }
+        }
+      },
+      "expected": {
+        "kind": "reject",
+        "reason": "FALLBACK_NOT_ACCEPTED",
+        "agent": null,
+        "modelId": null,
+        "attemptLimit": 2,
+        "writeAllowed": false
+      },
+      "coverage": ["review-follow-up", "Unresolved fallback artifact fails acceptance"]
+    },
+    {
+      "id": "R48",
+      "description": "Wrong fallback capability fails acceptance",
+      "inputPatch": {
+        "models": {
+          "fin-r1": {
+            "availability": "unavailable"
+          },
+          "qwen-general": {
+            "capability": "embedding"
+          }
+        }
+      },
+      "expected": {
+        "kind": "reject",
+        "reason": "FALLBACK_NOT_ACCEPTED",
+        "agent": null,
+        "modelId": null,
+        "attemptLimit": 2,
+        "writeAllowed": false
+      },
+      "coverage": ["review-follow-up", "Wrong fallback capability fails acceptance"]
+    },
+    {
+      "id": "R49",
+      "description": "Optional unavailable retrieval permits only disclosed status explanation",
+      "inputPatch": {
+        "request": {
+          "ownerAgent": "knowledge"
+        },
+        "retrieval": {
+          "required": false,
+          "embedAvailable": false
+        }
+      },
+      "expected": {
+        "kind": "route",
+        "reason": "PRIMARY_READY",
+        "agent": "knowledge",
+        "modelId": "qwen-general",
+        "attemptLimit": 2,
+        "writeAllowed": false,
+        "degradedRetrieval": true
+      },
+      "coverage": [
+        "review-follow-up",
+        "Optional unavailable retrieval permits only disclosed status explanation"
+      ]
+    },
+    {
+      "id": "R50",
+      "description": "Optional vector mismatch cannot fabricate a retrieved answer",
+      "inputPatch": {
+        "request": {
+          "ownerAgent": "knowledge"
+        },
+        "retrieval": {
+          "required": false,
+          "querySpace": "nomic-space-v1",
+          "queryDimensions": 768
+        }
+      },
+      "expected": {
+        "kind": "route",
+        "reason": "PRIMARY_READY",
+        "agent": "knowledge",
+        "modelId": "qwen-general",
+        "attemptLimit": 2,
+        "writeAllowed": false,
+        "degradedRetrieval": true
+      },
+      "coverage": [
+        "review-follow-up",
+        "Optional vector mismatch cannot fabricate a retrieved answer"
+      ]
+    },
+    {
+      "id": "R51",
+      "description": "Unaccepted fallback profile fails acceptance",
+      "inputPatch": {
+        "models": {
+          "fin-r1": {
+            "availability": "unavailable"
+          },
+          "qwen-general": {
+            "profileAccepted": false
+          }
+        }
+      },
+      "expected": {
+        "kind": "reject",
+        "reason": "FALLBACK_NOT_ACCEPTED",
+        "agent": null,
+        "modelId": null,
+        "attemptLimit": 2,
+        "writeAllowed": false
+      },
+      "coverage": ["review-follow-up", "Unaccepted fallback profile fails acceptance"]
     }
   ]
 }
