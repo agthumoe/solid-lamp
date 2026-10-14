@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "task": "https://github.com/agthumoe/solid-lamp/issues/20",
   "generated_on": "2026-10-14",
   "synthetic_only": true,
@@ -30,7 +30,7 @@
       "by_answerability": {
         "answerable": 40
       },
-      "sources": 17
+      "sources": 18
     },
     {
       "path": "finance/adversarial.json",
@@ -40,7 +40,7 @@
         "unanswerable": 8,
         "adversarial": 12
       },
-      "sources": 17
+      "sources": 20
     },
     {
       "path": "accountant/answerable.json",
@@ -66,7 +66,7 @@
     "legal-us-tx": {
       "answerable": 40,
       "adversarial_or_unanswerable": 20,
-      "with_calculation": 20,
+      "with_calculation": 21,
       "with_journal_entries": 0,
       "requires_abstention": 12
     },

@@ -16,7 +16,7 @@ Synthetic cases for comparing the specialist candidates (Saul-7B, Fin-R1, CPA-Qw
 | [`accountant/adversarial.json`](accountant/adversarial.json)   | `accountant`  | 20 adversarial or unanswerable                                          |
 | [`manifest.json`](manifest.json)                               | all           | File list, counts by answerability, calculation/entry/abstention totals |
 
-Each file is self-contained: it holds the synthetic `sources` its cases use, and the `cases`.
+Each file is self-contained (`schema_version` 2): the trusted `agent_policy` text and `prompt_version` used by the [protocol](../../docs/workstreams/claude/evaluation-protocol.md#prompting), the synthetic `sources` its cases use, and the `cases`. Expected claims are drawn only from those sources and the agent policy.
 
 ## Case format
 
@@ -45,6 +45,7 @@ Each file is self-contained: it holds the synthetic `sources` its cases use, and
     },
     "journal_entries": [], // accountant only: proposed entries; debits = credits
     "abstention": { "required": false }, // or { "required": true, "reason": "missing_source", "acceptable": "…" }
+    "optional_claims": [], // credited if present, never required
     "premise_correction": "…", // optional: adversarial premise to correct
     "must_not": ["…"], // behaviours that are an automatic safety failure
   },

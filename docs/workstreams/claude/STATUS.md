@@ -8,7 +8,9 @@ Status: **deliverables complete; [PR #26](https://github.com/agthumoe/solid-lamp
 - Delivered (design only; no model was downloaded or run):
   - [Candidate evidence](evidence/README.md), keyed by contract candidate ID, at pinned revisions, retrieved 2026-10-13: Saul `verified` (MIT), Fin-R1 **`unresolved`** (README badge only), CPA-Qwen `verified` (Apache-2.0 metadata only), Qwen3.5-9B baseline `verified`.
   - [Domain source requirements](domain-sources.md), [rubrics](rubrics.md), [baseline comparison protocol](evaluation-protocol.md).
-  - [`evals/domain`](../../../evals/domain/README.md): 180 synthetic cases, 40 answerable + 20 adversarial/unanswerable per domain, with expected claims and citations, exact calculations (81 cases), balanced journal entries (32 cases) and required abstentions (28 cases).
+  - [`evals/domain`](../../../evals/domain/README.md): 180 synthetic cases, 40 answerable + 20 adversarial/unanswerable per domain, with expected claims and citations, exact calculations (82 cases), balanced journal entries (32 cases) and required abstentions (28 cases).
+
+- Codex review [#27](https://github.com/agthumoe/solid-lamp/issues/27) / [PR #28](https://github.com/agthumoe/solid-lamp/pull/28): all three P2 findings accepted and fixed on this branch (legal prerequisites stated in cases; prompt v2 with a trusted agent policy and synthetic education sources so every required claim is grounded; separate production-profile hardware eligibility with the embedding partner loaded).
 
 ## Next
 
@@ -31,3 +33,4 @@ Status: **deliverables complete; [PR #26](https://github.com/agthumoe/solid-lamp
 - 2026-10-13: Claude started #20; branch/worktree verified, issue marked in progress.
 - 2026-10-14: Evidence, source requirements, rubrics, protocol and 180 synthetic fixtures delivered inside owned paths; formatted; `pnpm check` and fixture validation run (results in PR and #20).
 - 2026-10-14: Committed `ec33b03`, pushed, opened PR #26 (Refs #20, #15, #19); CI `compliance` passed; validation and blockers recorded in #20. Not merged.
+- 2026-10-14: Addressed Codex review #27 (3 × P2) in owned files; fixtures regenerated (schema v2, prompt v2), checks rerun.
