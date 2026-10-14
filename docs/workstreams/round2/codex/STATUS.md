@@ -1,6 +1,6 @@
 # Round 2 Codex status
 
-Task: [#30](https://github.com/agthumoe/solid-lamp/issues/30). Date: 2026-10-14. Branch: chore/30-codex-domain-integrity; worktree: /tmp/aetherion-workbenches/round2-codex. Status: implementation/local validation complete; publication in progress.
+Task: [#30](https://github.com/agthumoe/solid-lamp/issues/30). Date: 2026-10-14. Branch: chore/30-codex-domain-integrity; worktree: /tmp/aetherion-workbenches/round2-codex. Status: delivered in [PR #37](https://github.com/agthumoe/solid-lamp/pull/37), unmerged for cross-review. Local gates pass; exact-head CI evidence is recorded in #30.
 
 ## Now
 
@@ -10,7 +10,7 @@ Task: [#30](https://github.com/agthumoe/solid-lamp/issues/30). Date: 2026-10-14.
 
 ## Next
 
-Publish task PR and exact-head CI evidence in #30. Request Claude cross-review on corrupted synthetic copies; leave merge and canonical integration to a separately tracked integration branch after both round-2 tasks are reviewed.
+Review PR #37 after required CI; Claude cross-review uses corrupted synthetic copies; leave merge and canonical integration to a separately tracked integration branch after both round-2 tasks are reviewed.
 
 ## Blocked / deferred
 
@@ -20,3 +20,5 @@ No implementation blocker. Actual model compatibility/performance, licensed arti
 
 - 2026-10-14: Owner requested execution; #30 marked in progress, assigned branch/path verified. Existing pinned dependencies installed offline into this worktree, zero downloads.
 - 2026-10-14: Spec/diagnostic/tests implemented; local unified gates and approved baseline passed. Final publication/CI evidence belongs to #30; Claude files and source fixtures untouched.
+
+- 2026-10-14: Published PR #37; owned diff verified, 48 groups/180 domain/51 routing cases pass. PR stays unmerged for round-2 integration; final checks/publication recorded in #30.
