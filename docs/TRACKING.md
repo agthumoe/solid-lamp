@@ -41,3 +41,7 @@ Each phase has its own GitHub milestone. Split an epic into bounded implementati
 - [#30](https://github.com/agthumoe/solid-lamp/issues/30): domain schema-v2 fixture diagnostics; ready, no model run required.
 - [#31](https://github.com/agthumoe/solid-lamp/issues/31): artifact pinning and local comparison; gated by per-candidate provenance/license/scope and qualified review. #15 remains open.
 - Review #27/PR #28 is merged; all reviewed PRs #23/#25/#26/#28 are integrated. Historical task-local handoffs retain their delivery-time snapshots.
+
+## Active round 2
+
+[Assignments/ownership and Claude prompt](workstreams/round2/README.md), [boundary v1](workstreams/round2/CONTRACT.md). Setup #33; Codex #30 implements domain fixture diagnostics; Claude #34 prepares artifact readiness under #31. Both ready, own worktrees; root scripts belong to Codex only. Live #31 stays gated. Cross-review before separate tracked integration.

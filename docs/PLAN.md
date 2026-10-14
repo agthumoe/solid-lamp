@@ -5,7 +5,7 @@ Full requirements: [`BUILD_PROMPT.md`](BUILD_PROMPT.md).
 
 **Current phase:** 0 — Environment audit and models (in progress)
 
-Parallel work: [Claude/Codex workbench split](workstreams/README.md), Claude [#20](https://github.com/agthumoe/solid-lamp/issues/20), Codex [#21](https://github.com/agthumoe/solid-lamp/issues/21). Separate branches/worktrees and file ownership; current tasks cover design/evaluation preparation, not phase advancement.
+Active parallel work: [Round 2](workstreams/round2/README.md): Codex #30 domain diagnostics and Claude #34 artifact/evaluation readiness. Round 1 is merged. Separate branches/worktrees and ownership; actual #31 downloads/inference and phase advancement remain gated.
 
 GitHub tasks/milestones: [TRACKING.md](TRACKING.md). Standards: [development handbook](development/README.md). Create/select a task before project edits.
 
@@ -34,7 +34,9 @@ GitHub tasks/milestones: [TRACKING.md](TRACKING.md). Standards: [development han
 - [x] Resolve Claude review findings #27 and re-review exact updated head e7e1f60; all three resolved (merged PR #28)
 - [x] Integrate both PRs (#26, #23, plus #25 and #28 merged 2026-10-14); shared plan/evaluation follow-ups are listed in STATUS Next and need their own tracked issues
 - [x] Combined-main audit and canonical model inventory/evidence/tracking reconciliation (#29)
-- [ ] Domain schema-v2 fixture diagnostics (#30)
+- [x] Round-2 workbench plan and handoffs (#33)
+- [ ] Codex: domain schema-v2 fixture diagnostics (#30)
+- [ ] Claude: artifact/evaluation readiness dossier (#34 under #31)
 - [ ] Gated specialist artifact pinning and live comparisons (#31 under #15)
 - [x] ADR 0001: Ollama location (`docs/adr/0001-ollama-location.md`)
 
