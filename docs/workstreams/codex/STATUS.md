@@ -10,7 +10,7 @@ Task: [#21](https://github.com/agthumoe/solid-lamp/issues/21). Date: 2026-10-14.
 
 ## Next
 
-Review/merge PR #23 under the separately tracked integration workflow after required CI passes and Claude work is ready. Local `pnpm check` passed all gates (19 regression groups, 44 authored Markdown files before fixture README). Fixture integrity checked 51 unique cases, 43 coverage tags, fresh patch expansion and expected identity/fallback/no-write invariants; no policy/model execution. Leave PR integration and canonical handoff updates to the separately tracked integration workstream.
+Review/merge PR #23 under the separately tracked integration workflow after required CI passes and Claude work is ready. Local `pnpm check` passed all gates (19 regression groups, 44 authored Markdown files before fixture README). Fixture integrity checked 51 unique cases, 53 coverage tags, fresh patch expansion and expected identity/fallback/no-write invariants; no policy/model execution. Leave PR integration and canonical handoff updates to the separately tracked integration workstream.
 
 ## Blocked / deferred
 
