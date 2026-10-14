@@ -5,6 +5,8 @@ Full requirements: [`BUILD_PROMPT.md`](BUILD_PROMPT.md).
 
 **Current phase:** 0 — Environment audit and models (in progress)
 
+Parallel work: [Claude/Codex workbench split](workstreams/README.md), Claude [#20](https://github.com/agthumoe/solid-lamp/issues/20), Codex [#21](https://github.com/agthumoe/solid-lamp/issues/21). Separate branches/worktrees and file ownership; current tasks cover design/evaluation preparation, not phase advancement.
+
 GitHub tasks/milestones: [TRACKING.md](TRACKING.md). Standards: [development handbook](development/README.md). Create/select a task before project edits.
 
 ---
@@ -25,6 +27,10 @@ GitHub tasks/milestones: [TRACKING.md](TRACKING.md). Standards: [development han
 - [ ] Every resident model shows 100% GPU
 - [x] Owner confirms retained portfolio direction: keep all existing models; add evaluated legal/finance/accounting specialists and Qwen broad knowledge ([#17](https://github.com/agthumoe/solid-lamp/issues/17))
 - [ ] Final enabled model bindings/context/residency confirmed after candidate acceptance (#15); portfolio direction alone does not close Phase 0
+- [x] Split domain plan into isolated workstreams and per-agent handoffs (#19)
+- [ ] Claude #20: specialist provenance and domain evaluation design
+- [ ] Codex #21: retained catalog/routing/scheduling design and decision fixtures
+- [ ] Integrate both PRs and update shared plan/evaluation tasks under a separate tracked issue
 - [x] ADR 0001: Ollama location (`docs/adr/0001-ollama-location.md`)
 
 ## Phase 1: Scaffold

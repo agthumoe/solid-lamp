@@ -25,3 +25,10 @@ Each phase has its own GitHub milestone. Split an epic into bounded implementati
 - [#17](https://github.com/agthumoe/solid-lamp/issues/17): deliver [domain-agent plan](specs/domain-agent-plan.md) and ADR 0004; planning only.
 - [#15](https://github.com/agthumoe/solid-lamp/issues/15): license/provenance, local compatibility and comparative domain evaluation; remains open until evidence passes.
 - Foundation/source/orchestration implementation attaches to #3/#4/#5; domain-agent child tasks attach to #9 after preceding phase gates. All existing model artifacts/roles are retained; activation is separately gated.
+
+## Parallel workbenches
+
+- [#19](https://github.com/agthumoe/solid-lamp/issues/19): coordination/setup only; [ownership and Claude handoff](workstreams/README.md).
+- [#20](https://github.com/agthumoe/solid-lamp/issues/20): Claude specialist research/domain evaluation design; ready, user launches Claude.
+- [#21](https://github.com/agthumoe/solid-lamp/issues/21): Codex catalog/routing/scheduler design; ready, own worktree.
+- Runtime implementation/live evaluation remain separately tracked and phase-gated. Shared-file integration requires its own issue/branch.
