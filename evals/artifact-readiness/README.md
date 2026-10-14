@@ -6,24 +6,25 @@ Task [#34](https://github.com/agthumoe/solid-lamp/issues/34). Human-readable dos
 
 ## Record fields
 
-| Field              | Content                                                                                                                                                     |
-| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `candidate_id`     | Contract candidate ID                                                                                                                                       |
-| `role`             | Intended agent, planned role and evaluation profile                                                                                                         |
-| `upstream`         | Repository URL, pinned `revision`, `last_modified`, API sources, link to the round-1 evidence pin, declared parameter count and per-shard weight hashes     |
-| `license`          | `status` (`verified` \| `unresolved` \| `restricted`), the declaration and its sources, `accepted_chain`, unresolved restrictions                           |
-| `architecture`     | Layers, KV heads, head dimension, attention type, maximum positions (from the pinned `config.json`)                                                         |
-| `template`         | Template source and sha256 (computed here over the retrieved text), system-role support, default system prompt, thinking behaviour, prompt-v2 compatibility |
-| `artifact_options` | GGUF conversions or the Ollama registry artifact: revision, license label, declared base model, header metadata, quant-file hashes, identity evidence       |
-| `local_artifact`   | What exists locally; hashes stay `null` until verified on the host                                                                                          |
-| `token_budget`     | Prompt-v2 size statistics from the merged fixtures, estimated tokens, output cap, recommended `num_ctx`                                                     |
-| `gpu_estimate`     | Weight size and KV-cache estimate, with measured references; estimates only                                                                                 |
-| `readiness`        | `status`, `blockers`, and `future_tests` (quality and production-profile)                                                                                   |
+| Field              | Content                                                                                                                                                                       |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `candidate_id`     | Contract candidate ID                                                                                                                                                         |
+| `role`             | Intended agent, planned role and evaluation profile                                                                                                                           |
+| `upstream`         | Repository URL, pinned `revision`, `last_modified`, API sources, link to the round-1 evidence pin, declared parameter count and per-shard weight hashes                       |
+| `license`          | `status` (`verified` \| `unresolved` \| `restricted`), the declaration and its sources, `accepted_chain`, unresolved restrictions                                             |
+| `architecture`     | Layers, KV heads, head dimension, attention type, maximum positions (from the pinned `config.json`)                                                                           |
+| `template`         | Template source and sha256 (computed here over the retrieved text), system-role support, default system prompt, thinking behaviour, prompt-v2 compatibility                   |
+| `artifact_options` | GGUF conversions or the Ollama registry artifact: revision, license label, declared base model, header metadata, quant-file hashes, compatibility evidence, derivation status |
+| `local_artifact`   | What exists locally; hashes stay `null` until verified on the host                                                                                                            |
+| `token_budget`     | Prompt-v2 size statistics from the merged fixtures, estimated tokens, output cap, recommended `num_ctx`                                                                       |
+| `gpu_estimate`     | Weight size and KV-cache estimate, with measured references; estimates only                                                                                                   |
+| `readiness`        | `status`, `blockers`, and `future_tests` (quality and production-profile)                                                                                                     |
 
 ## Rules
 
 - Every hash has a `hash_origin` from the legend in the file. Hub and registry declarations are never marked `locally_verified`. No `local_artifact_verified` hash exists yet.
-- `converted_upstream_revision` stays `null`, because no converter recorded it; identity is argued in `identity_evidence` from commit dates, unchanged weight hashes, parameter counts and embedded-template hashes.
+- `converted_upstream_revision` stays `null`, because no converter recorded it. `compatibility_evidence` (dates, parameter counts, embedded-template hashes) shows compatibility only; every GGUF option carries `derivation.status: inferred_unverified` with its gate pending, until converter build evidence or a reproducible local conversion establishes derivation.
+- Token budgets are planning estimates (3 characters per token is not a guaranteed bound); `recommended_num_ctx` is an evaluation profile, not a model limit, and is confirmed only by rendered token counts and truncation checks.
 - Readiness statuses (`ready_for_acquisition_review`, `blocked_license`, `installed_baseline_pending_local_verification`) describe evidence for #31 planning. They are not enabled bindings, download approvals or adoption.
 
 ## Re-verification

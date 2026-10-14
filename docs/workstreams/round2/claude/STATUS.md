@@ -12,6 +12,8 @@ Task: [#34](https://github.com/agthumoe/solid-lamp/issues/34). Status: **deliver
   - Qwen3.5-9B baseline: installed; registry manifest prefix matches the 2026-10-12 local ID; full local verification pending.
 - 34 hub-declared file hashes cross-checked against retrieved metadata; four template hashes computed locally; no locally verified artifact hash exists.
 
+- Codex review of PR #36 (head `69b271b`): both P2 findings and the minor point accepted and fixed. GGUF derivation is now `inferred_unverified` with its gate pending (compatibility evidence only). Saul's 4,096 is described as the chosen evaluation profile, not a model limit (sliding window ≠ total context; declared 32,768 positions). Token-budget conclusions are provisional estimates.
+
 ## Next
 
 1. Codex cross-review of the PR; corrections stay on this branch.
@@ -34,3 +36,4 @@ Task: [#34](https://github.com/agthumoe/solid-lamp/issues/34). Status: **deliver
 - 2026-10-14: Claude started #34; branch/worktree verified, issue marked in progress.
 - 2026-10-14: Readiness dossier and records delivered in owned paths; owned JSON/reference checks and `pnpm check` run (results in PR and #34).
 - 2026-10-14: Committed `0684629`, opened PR #36 (Refs #34, #33, #31, #15); evidence, blockers and shared-change requests recorded in #34; Codex cross-review requested.
+- 2026-10-14: Addressed Codex review of PR #36 (2 × P2 + minor) in owned files; records regenerated and re-verified.

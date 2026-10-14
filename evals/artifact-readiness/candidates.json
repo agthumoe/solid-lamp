@@ -11,6 +11,10 @@
     "locally_computed_metadata_file": "SHA-256 computed in this task over a retrieved small metadata file (chat template text); the file, not the weights.",
     "local_artifact_verified": "SHA-256 computed locally over the downloaded artifact. None exist in this round."
   },
+  "derivation_status_legend": {
+    "inferred_unverified": "Compatibility signals only; the artifact is not shown to be converted from the pinned upstream weights.",
+    "verified": "Established by converter source-revision/build evidence or by a reproducible local conversion. None exist yet."
+  },
   "candidates": [
     {
       "candidate_id": "Equall/Saul-7B-Instruct-v1",
@@ -102,8 +106,9 @@
         "layers": 32,
         "kv_heads": 8,
         "head_dim": 128,
-        "attention": "full, sliding_window 4096",
-        "max_position_embeddings": 32768
+        "attention": "sliding-window attention (sliding_window 4096): an attention/cache mechanism, not a total sequence cap",
+        "max_position_embeddings": 32768,
+        "long_context_runtime_support": "unverified"
       },
       "generation_defaults": {
         "bos_token_id": 1,
@@ -135,7 +140,12 @@
           "license_label_note": "Third-party repository label; never substitutes for upstream permission.",
           "base_model_declared": "Equall/Saul-7B-Instruct-v1",
           "converted_upstream_revision": null,
-          "converted_upstream_revision_note": "Not recorded by the converter; see identity_evidence.",
+          "converted_upstream_revision_note": "Not recorded by the converter.",
+          "derivation": {
+            "status": "inferred_unverified",
+            "gate": "pending",
+            "note": "Conversion dates, parameter counts and embedded templates show compatibility, not derivation: they cannot rule out modified weights or another same-architecture checkpoint. A declared GGUF hash identifies the converter's bytes only. Resolve with converter source-revision/build evidence or a reproducible local conversion."
+          },
           "gguf_header_reported": {
             "origin": "hub_parsed_gguf_header",
             "architecture": "llama",
@@ -170,7 +180,7 @@
             }
           ],
           "recommended": true,
-          "identity_evidence": "Upstream had no commits after 2024-03-10 (the pinned revision); this conversion is dated 2024-12, so it can only derive from the pinned weights. Header parameter count equals upstream (7241732096). Embedded template sha256 equals upstream."
+          "compatibility_evidence": "Converted 2024-12, after the final upstream commit (2024-03-10, the pinned revision), so the date does not conflict with the pinned weights. Header parameter count equals upstream (7241732096); embedded template sha256 equals upstream. Derivation from the pinned weights is inferred, not verified."
         },
         {
           "kind": "local_conversion",
@@ -198,8 +208,10 @@
         "est_input_tokens_max": 1519,
         "output_cap_tokens": 1024,
         "est_total_tokens_max": 2543,
-        "model_attention_window": 4096,
-        "notes": "Fits num_ctx 4096 and Saul's 4096 sliding window with ~1.5k tokens spare.",
+        "estimate_method": "characters / 3 over the rendered prompt-v2 text; planning estimate, not a guaranteed bound",
+        "sliding_attention_window": 4096,
+        "notes": "Provisional: by estimate, input plus output fits the chosen 4096 evaluation profile. 4096 is the evaluation context profile, distinct from the 4096 sliding attention window and from the declared 32768 max positions; acceptance evidence is rendered token counts and truncation checks.",
+        "declared_max_position_embeddings": 32768,
         "recommended_num_ctx": 4096
       },
       "gpu_estimate": {
@@ -223,6 +235,7 @@
         "status": "ready_for_acquisition_review",
         "blockers": [
           "Owner acceptance of unaudited training-data terms and missing LICENSE text.",
+          "GGUF derivation from the pinned weights is inferred only: needs converter source-revision/build evidence or a reproducible local conversion.",
           "No locally verified artifact.",
           "No production-profile GPU evidence.",
           "No local quality results; qualified legal review pending."
@@ -350,7 +363,12 @@
           "license_label_note": "Third-party repository label; never substitutes for upstream permission.",
           "base_model_declared": "AudCor/cpa-qwen3-8b-v0",
           "converted_upstream_revision": null,
-          "converted_upstream_revision_note": "Not recorded by the converter; see identity_evidence.",
+          "converted_upstream_revision_note": "Not recorded by the converter.",
+          "derivation": {
+            "status": "inferred_unverified",
+            "gate": "pending",
+            "note": "Conversion dates, parameter counts and embedded templates show compatibility, not derivation: they cannot rule out modified weights or another same-architecture checkpoint. A declared GGUF hash identifies the converter's bytes only. Resolve with converter source-revision/build evidence or a reproducible local conversion."
+          },
           "gguf_header_reported": {
             "origin": "hub_parsed_gguf_header",
             "architecture": "qwen3",
@@ -385,7 +403,7 @@
             }
           ],
           "recommended": true,
-          "identity_evidence": "Only GGUF found. Converted 2026-01-19, after the final upstream commit (2026-01-18T03:24:13Z). Header parameter count equals upstream (8190735360). Embedded template sha256 equals upstream."
+          "compatibility_evidence": "Only GGUF found. Converted 2026-01-19, after the final upstream commit (2026-01-18T03:24:13Z). Header parameter count equals upstream (8190735360); embedded template sha256 equals upstream. Derivation from the pinned weights is inferred, not verified."
         },
         {
           "kind": "local_conversion",
@@ -413,8 +431,9 @@
         "est_input_tokens_max": 2025,
         "output_cap_tokens": 1024,
         "est_total_tokens_max": 3049,
-        "model_attention_window": null,
-        "notes": "Fits num_ctx 4096 only with thinking disabled; with thinking on, reasoning would consume the output cap.",
+        "estimate_method": "characters / 3 over the rendered prompt-v2 text; planning estimate, not a guaranteed bound",
+        "sliding_attention_window": null,
+        "notes": "Provisional: by estimate fits num_ctx 4096 only with thinking disabled; with thinking on, reasoning would consume the output cap. Confirm with tokenizer counts and truncation checks.",
         "recommended_num_ctx": 4096
       },
       "gpu_estimate": {
@@ -438,6 +457,7 @@
         "status": "ready_for_acquisition_review",
         "blockers": [
           "Owner acceptance of license chain (metadata-only declaration, untraced aggregate dataset).",
+          "GGUF derivation from the pinned weights is inferred only: needs converter source-revision/build evidence or a reproducible local conversion.",
           "No locally verified artifact; thinking-off behavior in Ollama unverified.",
           "No production-profile GPU evidence.",
           "No local quality results; qualified accounting review and personal vs business scope pending."
@@ -579,7 +599,12 @@
           "license_label_note": "Third-party repository label; never substitutes for upstream permission.",
           "base_model_declared": "SUFE-AIFLM-Lab/Fin-R1",
           "converted_upstream_revision": null,
-          "converted_upstream_revision_note": "Not recorded by the converter; see identity_evidence.",
+          "converted_upstream_revision_note": "Not recorded by the converter.",
+          "derivation": {
+            "status": "inferred_unverified",
+            "gate": "pending",
+            "note": "Conversion dates, parameter counts and embedded templates show compatibility, not derivation: they cannot rule out modified weights or another same-architecture checkpoint. A declared GGUF hash identifies the converter's bytes only. Resolve with converter source-revision/build evidence or a reproducible local conversion."
+          },
           "gguf_header_reported": {
             "origin": "hub_parsed_gguf_header",
             "architecture": "qwen2",
@@ -614,7 +639,7 @@
             }
           ],
           "recommended": true,
-          "identity_evidence": "Converted 2025-03-26, after the pinned revision. Weight/config/tokenizer_config hashes are identical across all upstream revisions since 2025-03-17, so any conversion since then derives from the pinned weights. Header parameter count equals upstream (7615616512). Embedded template sha256 equals upstream. License label absent (consistent with upstream)."
+          "compatibility_evidence": "Converted 2025-03-26. Upstream weight/config/tokenizer_config hashes are identical across all revisions since 2025-03-17, so the date does not conflict with the pinned weights. Header parameter count equals upstream (7615616512); embedded template sha256 equals upstream. License label absent (consistent with upstream). Derivation inferred, not verified."
         },
         {
           "kind": "gguf_third_party_conversion",
@@ -625,7 +650,12 @@
           "license_label_note": "Third-party repository label; never substitutes for upstream permission.",
           "base_model_declared": "SUFE-AIFLM-Lab/Fin-R1",
           "converted_upstream_revision": null,
-          "converted_upstream_revision_note": "Not recorded by the converter; see identity_evidence.",
+          "converted_upstream_revision_note": "Not recorded by the converter.",
+          "derivation": {
+            "status": "inferred_unverified",
+            "gate": "pending",
+            "note": "Conversion dates, parameter counts and embedded templates show compatibility, not derivation: they cannot rule out modified weights or another same-architecture checkpoint. A declared GGUF hash identifies the converter's bytes only. Resolve with converter source-revision/build evidence or a reproducible local conversion."
+          },
           "gguf_header_reported": {
             "origin": "hub_parsed_gguf_header",
             "architecture": "qwen2",
@@ -652,7 +682,7 @@
             }
           ],
           "recommended": false,
-          "identity_evidence": "Dated 2025-03-17, before the final upstream commit, but weight/config/tokenizer_config hashes did not change after 2025-03-17. Embedded template sha256 equals upstream."
+          "compatibility_evidence": "Dated 2025-03-17, before the final upstream commit; upstream weight/config/tokenizer_config hashes did not change after 2025-03-17, so the date does not conflict with the pinned weights. Embedded template sha256 equals upstream. Derivation inferred, not verified."
         },
         {
           "kind": "gguf_third_party_conversion",
@@ -663,7 +693,12 @@
           "license_label_note": "Third-party repository label; never substitutes for upstream permission.",
           "base_model_declared": null,
           "converted_upstream_revision": null,
-          "converted_upstream_revision_note": "Not recorded by the converter; see identity_evidence.",
+          "converted_upstream_revision_note": "Not recorded by the converter.",
+          "derivation": {
+            "status": "inferred_unverified",
+            "gate": "pending",
+            "note": "Conversion dates, parameter counts and embedded templates show compatibility, not derivation: they cannot rule out modified weights or another same-architecture checkpoint. A declared GGUF hash identifies the converter's bytes only. Resolve with converter source-revision/build evidence or a reproducible local conversion."
+          },
           "gguf_header_reported": {
             "origin": "hub_parsed_gguf_header",
             "architecture": "qwen2",
@@ -690,7 +725,7 @@
             }
           ],
           "recommended": false,
-          "identity_evidence": "No base_model declared; labels the conversion apache-2.0 without an upstream grant. Embedded template sha256 equals upstream."
+          "compatibility_evidence": "No base_model declared; labels the conversion apache-2.0 without an upstream grant. Embedded template sha256 equals upstream. Derivation inferred, not verified."
         }
       ],
       "local_artifact": {
@@ -712,8 +747,9 @@
         "est_input_tokens_max": 1331,
         "output_cap_tokens": 4096,
         "est_total_tokens_max": 5427,
-        "model_attention_window": null,
-        "notes": "Exceeds num_ctx 4096: the protocol's 4096 reasoning cap plus input does not fit. Use num_ctx 8192 (or cap output at num_ctx − input) and record truncation.",
+        "estimate_method": "characters / 3 over the rendered prompt-v2 text; planning estimate, not a guaranteed bound",
+        "sliding_attention_window": null,
+        "notes": "Exceeds num_ctx 4096 regardless of the token ratio: the protocol's 4096 reasoning cap alone fills the window before any input. Use num_ctx 8192 (or cap output at num_ctx − input) and record truncation.",
         "recommended_num_ctx": 8192
       },
       "gpu_estimate": {
@@ -738,6 +774,7 @@
         "blockers": [
           "Upstream license unresolved (badge only). Acquisition blocked unless the publisher adds a license or the owner records an explicit private-evaluation-only acceptance in #15.",
           "Protocol context budget must change to num_ctx 8192 (or output cap reduced) before any run.",
+          "GGUF derivation from the pinned weights is inferred only.",
           "No locally verified artifact; no GPU or quality evidence."
         ],
         "meaning": "Readiness evidence for #31 planning only; not an enabled binding, acquisition approval or adoption.",
@@ -899,7 +936,7 @@
             "top_p": 0.95
           },
           "recommended": true,
-          "identity_evidence": "This is the installed baseline. Manifest sha256 prefix 56671c2ab938 equals the local `ollama list` ID observed on 2026-10-12 (prefix match to an earlier observation, not a full local verification in this task)."
+          "compatibility_evidence": "This is the installed baseline. Manifest sha256 prefix 56671c2ab938 equals the local `ollama list` ID observed on 2026-10-12 (prefix match to an earlier observation, not a full local verification in this task)."
         },
         {
           "kind": "gguf_third_party_conversion",
@@ -910,7 +947,12 @@
           "license_label_note": "Third-party repository label; never substitutes for upstream permission.",
           "base_model_declared": "Qwen/Qwen3.5-9B",
           "converted_upstream_revision": null,
-          "converted_upstream_revision_note": "Not recorded by the converter; see identity_evidence.",
+          "converted_upstream_revision_note": "Not recorded by the converter.",
+          "derivation": {
+            "status": "inferred_unverified",
+            "gate": "pending",
+            "note": "Conversion dates, parameter counts and embedded templates show compatibility, not derivation: they cannot rule out modified weights or another same-architecture checkpoint. A declared GGUF hash identifies the converter's bytes only. Resolve with converter source-revision/build evidence or a reproducible local conversion."
+          },
           "gguf_header_reported": {
             "origin": "hub_parsed_gguf_header",
             "architecture": "qwen35",
@@ -937,7 +979,7 @@
             }
           ],
           "recommended": false,
-          "identity_evidence": "Reference only (baseline is the installed Ollama artifact). Embedded template sha256 equals upstream."
+          "compatibility_evidence": "Reference only (baseline is the installed Ollama artifact). Embedded template sha256 equals upstream."
         },
         {
           "kind": "gguf_third_party_conversion",
@@ -948,7 +990,12 @@
           "license_label_note": "Third-party repository label; never substitutes for upstream permission.",
           "base_model_declared": ["Qwen/Qwen3.5-9B"],
           "converted_upstream_revision": null,
-          "converted_upstream_revision_note": "Not recorded by the converter; see identity_evidence.",
+          "converted_upstream_revision_note": "Not recorded by the converter.",
+          "derivation": {
+            "status": "inferred_unverified",
+            "gate": "pending",
+            "note": "Conversion dates, parameter counts and embedded templates show compatibility, not derivation: they cannot rule out modified weights or another same-architecture checkpoint. A declared GGUF hash identifies the converter's bytes only. Resolve with converter source-revision/build evidence or a reproducible local conversion."
+          },
           "gguf_header_reported": {
             "origin": "hub_parsed_gguf_header",
             "architecture": "qwen35",
@@ -967,7 +1014,7 @@
             }
           ],
           "recommended": false,
-          "identity_evidence": "Reference only. Embedded template differs from upstream (modified by the converter)."
+          "compatibility_evidence": "Reference only. Embedded template differs from upstream (modified by the converter)."
         }
       ],
       "local_artifact": {
@@ -992,7 +1039,8 @@
             "est_input_tokens_max": 1519,
             "output_cap_tokens": 1024,
             "est_total_tokens_max": 2543,
-            "model_attention_window": null,
+            "estimate_method": "characters / 3 over the rendered prompt-v2 text; planning estimate, not a guaranteed bound",
+            "sliding_attention_window": null,
             "notes": "Baseline arm with thinking off."
           },
           {
@@ -1007,7 +1055,8 @@
             "est_input_tokens_max": 2025,
             "output_cap_tokens": 1024,
             "est_total_tokens_max": 3049,
-            "model_attention_window": null,
+            "estimate_method": "characters / 3 over the rendered prompt-v2 text; planning estimate, not a guaranteed bound",
+            "sliding_attention_window": null,
             "notes": "Baseline arm with thinking off."
           },
           {
@@ -1022,7 +1071,8 @@
             "est_input_tokens_max": 1331,
             "output_cap_tokens": 1024,
             "est_total_tokens_max": 2355,
-            "model_attention_window": null,
+            "estimate_method": "characters / 3 over the rendered prompt-v2 text; planning estimate, not a guaranteed bound",
+            "sliding_attention_window": null,
             "notes": "Baseline arm with thinking off."
           }
         ],
