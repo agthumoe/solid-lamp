@@ -29,7 +29,8 @@ GitHub tasks/milestones: [TRACKING.md](TRACKING.md). Standards: [development han
 - [ ] Final enabled model bindings/context/residency confirmed after candidate acceptance (#15); portfolio direction alone does not close Phase 0
 - [x] Split domain plan into isolated workstreams and per-agent handoffs (#19)
 - [ ] Claude #20: specialist provenance and domain evaluation design
-- [ ] Codex #21: retained catalog/routing/scheduling design and decision fixtures
+- [x] Codex #21: retained catalog/routing/scheduling design and decision fixtures delivered in PR #23 (integration pending)
+- [x] Routing fixture integrity diagnostics and negative tests (#24, stacked follow-up delivered; integration pending)
 - [ ] Integrate both PRs and update shared plan/evaluation tasks under a separate tracked issue
 - [x] ADR 0001: Ollama location (`docs/adr/0001-ollama-location.md`)
 
