@@ -1,6 +1,6 @@
 # Round 2 claude status
 
-Task: [#34](https://github.com/agthumoe/solid-lamp/issues/34). Status: **deliverables complete; PR open for cross-review** (not merged). Read [assignment](../README.md) and [boundary](../CONTRACT.md).
+Task: [#34](https://github.com/agthumoe/solid-lamp/issues/34). Status: **deliverables complete; [PR #36](https://github.com/agthumoe/solid-lamp/pull/36) open for cross-review** (not merged). Read [assignment](../README.md) and [boundary](../CONTRACT.md).
 
 ## Now
 
@@ -33,3 +33,4 @@ Task: [#34](https://github.com/agthumoe/solid-lamp/issues/34). Status: **deliver
 - 2026-10-14: Round 2 bootstrap, ready for assigned agent; not started.
 - 2026-10-14: Claude started #34; branch/worktree verified, issue marked in progress.
 - 2026-10-14: Readiness dossier and records delivered in owned paths; owned JSON/reference checks and `pnpm check` run (results in PR and #34).
+- 2026-10-14: Committed `0684629`, opened PR #36 (Refs #34, #33, #31, #15); evidence, blockers and shared-change requests recorded in #34; Codex cross-review requested.

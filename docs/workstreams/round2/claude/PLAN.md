@@ -6,5 +6,5 @@
 - [x] Mark issue in progress and write owned spec/dossier plan before implementation.
 - [x] Deliver assigned code/evidence and relevant negative/data-integrity checks.
 - [x] Run owned validation and pnpm check; inspect path ownership and sensitive data.
-- [ ] Update own STATUS/PLAN, commit/push assigned branch and open unmerged PR.
-- [ ] Record evidence/blockers and request cross-review; leave shared integration separate.
+- [x] Update own STATUS/PLAN, commit/push assigned branch and open unmerged PR ([#36](https://github.com/agthumoe/solid-lamp/pull/36)).
+- [x] Record evidence/blockers and request cross-review; leave shared integration separate (#34 comment).
