@@ -5,14 +5,16 @@
 > refresh _Now_, _Next_, _Blocked on owner_, and append one line to the _Session log_.
 > Long-lived facts go elsewhere: phase checklist → `PLAN.md`, hardware facts → `HARDWARE.md`, decisions → `adr/` + `PLAN.md` decisions log.
 
-**Last updated:** 2026-10-13 (Codex)
+**Last updated:** 2026-10-14 (Codex)
 **Phase:** 0 — Environment audit and models (in progress)
 
 ---
 
 ## Now
 
-- Owner requested two independent workbenches: Claude #20 owns specialist evidence/domain eval design; Codex #21 owns catalog/routing/scheduling design. [Coordination #19](https://github.com/agthumoe/solid-lamp/issues/19) and [handoff/setup](workstreams/README.md) define disjoint paths, separate branches/worktrees and per-agent STATUS/PLAN. Tasks are ready; no Claude session or task implementation has started.
+- Requested Claude review recorded in [review #27](reviews/claude-pr26.md): three P2 evaluation-design findings (missing legal prerequisites, source-only/expected-background mismatch, hardware test with embed unloaded). Review recommends corrections before acceptance/integration; no Claude files changed. Structural counts/journal sums and current checks pass.
+
+- Owner requested two independent workbenches: Claude #20 owns specialist evidence/domain eval design; Codex #21 owns catalog/routing/scheduling design. [Coordination #19](https://github.com/agthumoe/solid-lamp/issues/19) and [handoff/setup](workstreams/README.md) define disjoint paths, separate branches/worktrees and per-agent STATUS/PLAN. Claude design is published in PR #26; Codex design in PR #23 and diagnostic follow-up in stacked PR #25. All remain open for coordinated integration.
 
 - Owner approved retaining all existing models and adding legal research, financial analysis/investment research, accounting and Qwen3.5-9B knowledge workflows. [#17](https://github.com/agthumoe/solid-lamp/issues/17), [domain-agent plan](specs/domain-agent-plan.md) and ADR 0004 define routing, sequential GPU swaps, source grounding and acceptance. No runtime mapping/model install changed. Specialist evaluation #15 remains open; Fin-R1 upstream license is unresolved.
 
@@ -38,7 +40,7 @@
 
 ## Next (in order)
 
-1. Portfolio plan #17 is merged (PR #18). Deliver split setup #19, then run Claude #20 and Codex #21 in their assigned isolated worktrees. Update per-agent handoffs; shared updates belong to a later integration issue/PR. Evaluation #15 remains open; no specialist is enabled.
+1. Resolve review #27 findings on Claude PR #26 under #20, then re-review and integrate #26/#23 and retarget stacked #25 after #23 merges. Keep workbench ownership boundaries; #15 stays open and no specialist is enabled.
 2. Finish Phase 0 in [#2](https://github.com/agthumoe/solid-lamp/issues/2): final enabled role/context/residency evidence and owner acceptance. Portfolio direction is approved; phase advancement is not implied. Use a fresh v5 benchmark label on an idle host when needed.
 3. After owner's Phase 0 go-ahead, implement catalog/routing/LlmGate foundation in [#3](https://github.com/agthumoe/solid-lamp/issues/3); source/book grounding in #4; bounded delegation in #5; domain workflows in #9. See the domain-agent plan for acceptance/dependencies.
 4. Follow [TRACKING.md](TRACKING.md); create/select bounded implementation tasks before edits. Compliance PR #14 and research PR #16 are merged; required main checks remain enforced.
@@ -108,3 +110,5 @@ Initial baseline is published to `main` under the owner’s explicit authorizati
 | 2026-10-13 | Codex | #17 created before edits. Owner direction recorded: retain all existing models; evaluate Saul/Fin-R1/CPA-Qwen and keep Qwen3.5-9B knowledge. Added domain-agent spec/ADR 0004 with source grounding, decimal calculations, sequential LlmGate swaps, explicit fallback and measurable eval gates; aligned PLAN/TRACKING. No models installed, bindings changed or phase advanced; publication/check evidence belongs to #17. |
 
 | 2026-10-13 | Codex | #19 created before split edits; created ready Claude #20 and Codex #21 with disjoint file ownership and frozen boundary contract. Added per-agent handoffs, Git worktree setup and copy/paste Claude prompt; AGENTS routes parallel-session updates to owned handoffs. Canonical/shared files and host GPU require serialized integration/coordination. Publication/setup checks recorded in #19; neither workstream implementation started. |
+
+| 2026-10-14 | Codex | #27 created before review handoff edits. Reviewed Claude PR #26 head b7cfea3 without editing its owned files: verified 180 cases, source/citation IDs, 32 balanced entry cases, and current checks. Recorded three P2 evaluation-design findings; corrections/re-review required before integration. No inference/GPU/adoption/phase changes. |
