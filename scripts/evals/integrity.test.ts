@@ -16,7 +16,7 @@ function first() {
   return { value, entry };
 }
 await test('full synthetic suite validates without executing routing or inference', () => {
-  assert.equal(validateSuite(original).cases.length, 42);
+  assert.equal(validateSuite(original).cases.length, 51);
 });
 await test('versions, count, unknown fields, malformed types and duplicate IDs fail closed', () => {
   const base = suite();
@@ -64,6 +64,7 @@ await test('unauthorized writes and identities on no-dispatch results are reject
     }),
   );
   entry.expected.kind = 'reject';
+  entry.expected.reason = 'INVALID_REQUEST';
   assert.throws(() => validateSuite(value), /no-dispatch/);
 });
 await test('streamed, cancelled, expired, disabled and exhausted fallback expectations are invalid', () => {
@@ -113,4 +114,59 @@ await test('successful route identity must match the enabled binding', () => {
   const { value, entry } = first();
   entry.expected.modelId = 'qwen-general';
   assert.throws(() => validateSuite(value), /route identity/);
+});
+
+await test('unknown reasons and kind/reason mismatches are rejected', () => {
+  const { value, entry } = first();
+  assert.throws(() =>
+    validateSuite({
+      ...value,
+      cases: [
+        { ...entry, expected: { ...entry.expected, reason: 'PRIMARY_REDY' } },
+        ...value.cases.slice(1),
+      ],
+    }),
+  );
+  entry.expected.reason = 'FALLBACK_EXHAUSTED';
+  assert.throws(() => validateSuite(value), /incompatible/);
+});
+await test('sequential result must preserve the full requested plan plus synthesis', () => {
+  const value = suite();
+  const entry = value.cases.find((item) => item.expected.steps);
+  assert.ok(entry);
+  entry.expected.steps = ['finance', 'knowledge'];
+  assert.throws(() => validateSuite(value), /sequential/);
+});
+await test('partial output identity must describe the actual active attempt', () => {
+  const value = suite();
+  const entry = value.cases.find((item) => item.expected.kind === 'partial-failure');
+  assert.ok(entry);
+  entry.expected.modelId = 'qwen-general';
+  assert.throws(() => validateSuite(value), /active attempt/);
+  entry.inputPatch.request = { outputStarted: true, attempts: 2 };
+  assert.doesNotThrow(() => validateSuite(value));
+});
+await test('fallback expectation requires every scoped acceptance gate', () => {
+  for (const failure of [
+    { state: 'candidate' as const },
+    { license: 'unresolved' as const },
+    { evidenceRevoked: true },
+    { artifactResolved: false },
+    { profileAccepted: false },
+    { domainAccepted: false },
+    { capability: 'embedding' as const },
+  ]) {
+    const value = suite();
+    const entry = value.cases.find((item) => item.expected.kind === 'fallback');
+    assert.ok(entry);
+    entry.inputPatch.models = { ...entry.inputPatch.models, 'qwen-general': failure };
+    assert.throws(() => validateSuite(value), /accepted distinct/);
+  }
+});
+await test('degraded retrieval cannot hide failure of required evidence', () => {
+  const value = suite();
+  const entry = value.cases.find((item) => item.expected.degradedRetrieval);
+  assert.ok(entry);
+  entry.inputPatch.retrieval = { ...entry.inputPatch.retrieval, required: true };
+  assert.throws(() => validateSuite(value), /degraded/);
 });

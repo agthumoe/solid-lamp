@@ -1,4 +1,4 @@
-import { inputSchema, suiteSchema, type Input, type Suite } from './schema.ts';
+import { inputSchema, suiteSchema, reasonsByKind, type Input, type Suite } from './schema.ts';
 
 function object(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -30,12 +30,31 @@ function references(input: Input): void {
   }
   for (const binding of Object.values(input.bindings)) {
     if (!binding) continue;
-    if (!input.models[binding.primary] || !input.models[binding.fallback]) {
+    if (
+      !input.models[binding.primary] ||
+      (binding.fallback !== null && !input.models[binding.fallback])
+    ) {
       throw new Error('binding model reference missing');
     }
   }
 }
 function expectedResult(input: Input, expected: Suite['cases'][number]['expected']): void {
+  if (!reasonsByKind[expected.kind].includes(expected.reason)) {
+    throw new Error('reason is incompatible with expected kind');
+  }
+  if (expected.degradedRetrieval === true) {
+    const retrievalFailed =
+      !input.retrieval.embedAvailable ||
+      input.retrieval.activeSpace !== input.retrieval.querySpace ||
+      input.retrieval.activeDimensions !== input.retrieval.queryDimensions;
+    if (
+      input.retrieval.required ||
+      !retrievalFailed ||
+      !['route', 'fallback'].includes(expected.kind)
+    ) {
+      throw new Error('invalid degraded retrieval expectation');
+    }
+  }
   if (['reject', 'clarify'].includes(expected.kind)) {
     if (expected.agent !== null || expected.modelId !== null || expected.steps !== undefined) {
       throw new Error('no-dispatch result has execution identity');
@@ -67,12 +86,38 @@ function expectedResult(input: Input, expected: Suite['cases'][number]['expected
       expected.modelId !== binding.fallback
     )
       throw new Error('inconsistent fallback expectation');
+    const fallback = expected.modelId === null ? undefined : input.models[expected.modelId];
+    if (
+      !fallback ||
+      fallback.state !== 'enabled' ||
+      fallback.license !== 'verified' ||
+      fallback.evidenceRevoked ||
+      !fallback.artifactResolved ||
+      !fallback.profileAccepted ||
+      !fallback.domainAccepted ||
+      fallback.capability !== 'text' ||
+      binding.primary === binding.fallback
+    ) {
+      throw new Error('fallback expectation lacks accepted distinct model');
+    }
   }
-  if (expected.kind === 'partial-failure' && !input.request.outputStarted) {
-    throw new Error('partial failure requires started output');
+  if (expected.kind === 'partial-failure') {
+    if (!input.request.outputStarted) throw new Error('partial failure requires started output');
+    const binding = expected.agent === null ? undefined : input.bindings[expected.agent];
+    const attemptedModel = input.request.attempts === 2 ? binding?.fallback : binding?.primary;
+    if (
+      !binding ||
+      input.request.attempts < 1 ||
+      input.request.attempts > 2 ||
+      expected.modelId !== attemptedModel
+    ) {
+      throw new Error('partial failure identity does not match active attempt');
+    }
   }
   if (expected.steps !== undefined) {
     if (
+      input.request.plan === null ||
+      JSON.stringify(expected.steps) !== JSON.stringify([...input.request.plan, 'knowledge']) ||
       expected.kind !== 'route' ||
       expected.steps.length < 2 ||
       expected.steps.length > 4 ||
