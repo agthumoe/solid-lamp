@@ -1,19 +1,39 @@
 # Round 2 claude status
 
-Task: [#34](https://github.com/agthumoe/solid-lamp/issues/34). Status: ready, not started. Read [assignment](../README.md) and [boundary](../CONTRACT.md).
+Task: [#34](https://github.com/agthumoe/solid-lamp/issues/34). Status: **deliverables complete; [PR #36](https://github.com/agthumoe/solid-lamp/pull/36) open for cross-review** (not merged). Read [assignment](../README.md) and [boundary](../CONTRACT.md).
 
 ## Now
 
-Isolated branch/worktree prepared by #33; no task deliverable claimed.
+- Branch `docs/34-claude-artifact-readiness` in `/tmp/aetherion-workbenches/round2-claude` (base `aca98f7`).
+- Delivered [readiness dossier](readiness-dossier.md) and [`evals/artifact-readiness/candidates.json`](../../../../evals/artifact-readiness/candidates.json), retrieved 2026-10-14T06:13:52Z from public metadata:
+  - Saul: `ready_for_acquisition_review` (MIT declaration; chain pending).
+  - CPA-Qwen: `ready_for_acquisition_review` (Apache-2.0 metadata only; thinking must be disabled).
+  - Fin-R1: **`blocked_license`** (badge only; unchanged).
+  - Qwen3.5-9B baseline: installed; registry manifest prefix matches the 2026-10-12 local ID; full local verification pending.
+- 34 hub-declared file hashes cross-checked against retrieved metadata; four template hashes computed locally; no locally verified artifact hash exists.
+
+- Codex review of PR #36 (head `69b271b`): both P2 findings and the minor point accepted and fixed. GGUF derivation is now `inferred_unverified` with its gate pending (compatibility evidence only). Saul's 4,096 is described as the chosen evaluation profile, not a model limit (sliding window ≠ total context; declared 32,768 positions). Token-budget conclusions are provisional estimates.
 
 ## Next
 
-Verify branch/path, read canonical and own handoffs, mark task in progress when starting, then follow owned scope and acceptance. Update this file and PLAN each session.
+1. Codex cross-review of the PR; corrections stay on this branch.
+2. Integration owner: shared-change requests in #34 (protocol per-arm `num_ctx`/explicit sampling; evidence index link).
+3. #31 (gated): owner acceptance of license residuals, then pinned acquisition and production-profile measurement per the dossier recommendations.
 
 ## Blocked / deferred
 
-No blocker to initial CPU/metadata task. Actual specialist downloads/inference/adoption and Phase 1 remain outside this scope and behind existing gates.
+| Item                                                                        | Route                                    |
+| --------------------------------------------------------------------------- | ---------------------------------------- |
+| Fin-R1 license unresolved                                                   | Owner (publisher contact not authorized) |
+| Owner acceptance of Saul/CPA-Qwen license-chain residuals                   | Owner, recorded in #15/#31               |
+| Downloads, local hash verification, template rendering and GPU/quality runs | #31 with GPU lease                       |
+| Protocol `num_ctx` too small for Fin-R1 reasoning output (shared file)      | Integration owner                        |
+| Qualified domain review; personal vs business accounting scope              | Owner                                    |
 
 ## Session log
 
 - 2026-10-14: Round 2 bootstrap, ready for assigned agent; not started.
+- 2026-10-14: Claude started #34; branch/worktree verified, issue marked in progress.
+- 2026-10-14: Readiness dossier and records delivered in owned paths; owned JSON/reference checks and `pnpm check` run (results in PR and #34).
+- 2026-10-14: Committed `0684629`, opened PR #36 (Refs #34, #33, #31, #15); evidence, blockers and shared-change requests recorded in #34; Codex cross-review requested.
+- 2026-10-14: Addressed Codex review of PR #36 (2 × P2 + minor) in owned files; records regenerated and re-verified.
