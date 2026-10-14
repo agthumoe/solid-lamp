@@ -12,6 +12,8 @@
 
 ## Now
 
+- Owner approved retaining all existing models and adding legal research, financial analysis/investment research, accounting and Qwen3.5-9B knowledge workflows. [#17](https://github.com/agthumoe/solid-lamp/issues/17), [domain-agent plan](specs/domain-agent-plan.md) and ADR 0004 define routing, sequential GPU swaps, source grounding and acceptance. No runtime mapping/model install changed. Specialist evaluation #15 remains open; Fin-R1 upstream license is unresolved.
+
 - Compliance task #13: strict TS (unchecked indexing/exact optionals), typed lint/hooks, formatting, Zod config/HTTP/fixtures, safe structured diagnostic logs, source/size gates and unified CI are implemented. `pnpm check` passes all gates including 19 regression groups; future application rules remain explicitly not applicable until modules exist.
 - Benchmark #11 findings fixed in v5: duplicate flags rejected, semantic/format refusal split, required residency failures gate exit/status. Historical artifacts preserved.
 
@@ -19,7 +21,7 @@
 - ✅ Development handbook and ADR 0003 adopted: AI/API/DB/SOLID/frontend/hooks/Query+Zustand/12-factor/logging/debugging; issue-first workflow is canonical in AGENTS.
 - ✅ Three pinned project-local skills installed and read; provenance/licenses/hash inventory are committed project artifacts. Available to Codex from the next turn; other agents use the AGENTS catalog.
 - ✅ GitHub task #1 preceded this session’s file edits. Nine phase milestones/epics (#2–#10) and benchmark follow-up #11 exist → `docs/TRACKING.md`.
-- ✅ Current checks: 12 benchmark tests, documentation/skill integrity, command mirrors, and native TS syntax pass. CI runs these synthetic checks; full lint/typecheck/app enforcement remains Phase 1.
+- ✅ Current checks: unified `pnpm check` enforces lint/typecheck, 19 benchmark/compliance regression groups, docs/skill integrity, command mirrors, source policies and formatting. Application-specific enforcement remains phased.
 
 - ✅ Baseline (default settings) and tuned (override applied) benchmarks are done; tables are in `docs/HARDWARE.md`. Tuned settings make the 14B coder fit: 15 → 33 tok/s, 100% GPU.
 - ✅ Harness fixes from `docs/REVIEW.md` #1/#3/#4 are applied (strict scoring + schema validation, honest residency checks, per-stage saves, timeouts). The first tuned artifact, scored loosely, was kept as `docs/bench/results-tuned-v1-loose-scoring.json`.
@@ -34,18 +36,19 @@
 
 ## Next (in order)
 
-1. Compliance delivery is [PR #14](https://github.com/agthumoe/solid-lamp/pull/14) for #13; branch and PR CI passed. Main now requires the GitHub Actions `compliance` check, an up-to-date PR and resolved conversations, including administrators. Final merge evidence is in #13. The PR evidence records final commands and applicability; no service/model changes were made.
-2. Owner confirms final model roles in [#2](https://github.com/agthumoe/solid-lamp/issues/2). Align shared-model contexts using measured reload behavior; a fresh v5 run uses a new label when the host is idle.
-3. After Phase 0 acceptance and owner's go-ahead, split/start [Phase 1 #3](https://github.com/agthumoe/solid-lamp/issues/3) with application-specific config/logging/DB/API/LLM enforcement. Existing strict tooling is already in place.
-4. Follow `docs/TRACKING.md`. Create/select a task before edits and use issue-linked branches/PRs.
+1. Deliver the retained-portfolio plan under #17; then execute license/provenance and per-candidate evaluation under #15. No unvalidated specialist is enabled; personal/business scope is needed before domain implementation.
+2. Finish Phase 0 in [#2](https://github.com/agthumoe/solid-lamp/issues/2): final enabled role/context/residency evidence and owner acceptance. Portfolio direction is approved; phase advancement is not implied. Use a fresh v5 benchmark label on an idle host when needed.
+3. After owner's Phase 0 go-ahead, implement catalog/routing/LlmGate foundation in [#3](https://github.com/agthumoe/solid-lamp/issues/3); source/book grounding in #4; bounded delegation in #5; domain workflows in #9. See the domain-agent plan for acceptance/dependencies.
+4. Follow [TRACKING.md](TRACKING.md); create/select bounded implementation tasks before edits. Compliance PR #14 and research PR #16 are merged; required main checks remain enforced.
 
 ## Blocked on owner
 
-| #   | Question                                                                                                                | Default if no answer                               |
-| --- | ----------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
-| 3   | Raise WSL RAM to 24 GB via `infra/windows/wslconfig.proposed`?                                                          | Don't touch; `deep` role stays disabled            |
-| 4   | Docker Desktop is installed but not running; Tailscale not found on Windows or WSL — confirm how Tailscale is installed | Needed by Phase 1 (Docker) and Phase 4 (Tailscale) |
-| 5   | Final model roles: see "Recommended model roles" in `HARDWARE.md`                                                       | `config/models.yaml` as-is                         |
+| #   | Question                                                                                                                | Default if no answer                                 |
+| --- | ----------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| 3   | Raise WSL RAM to 24 GB via `infra/windows/wslconfig.proposed`?                                                          | Don't touch; `deep` role stays disabled              |
+| 4   | Docker Desktop is installed but not running; Tailscale not found on Windows or WSL — confirm how Tailscale is installed | Needed by Phase 1 (Docker) and Phase 4 (Tailscale)   |
+| 5   | Final enabled bindings/context/residency after eval; portfolio direction is approved (#17)                              | Existing `config/models.yaml` retained               |
+| 6   | Personal vs business/entity accounting; investment scope and data sources                                               | Synthetic read-only evaluation; no private ingestion |
 
 ## Repo map (what exists today)
 
@@ -99,3 +102,5 @@ Initial baseline is published to `main` under the owner’s explicit authorizati
 | 2026-10-13 | Codex | #13 opened before edits; compliance branch implements strict typing/lint/format, Zod boundaries, safe logs and negative policy tests; closes #11 benchmark gaps. Updated unified CI and applicability evidence. Application modules/owner model gates remain pending; PR #14/required-check evidence recorded in #13; main protection verified (strict compliance check, PR, admin enforcement, no force-push/delete). |
 
 | 2026-10-13 | Codex | #15 opened before recording US/Texas specialist research. Finance agent is planned only; no specialist roles installed. Shortlisted Saul legal and conditional Fin-R1 finance comparison; CPA-Qwen is experimental and tax uses current-source retrieval/deterministic rules. Licenses/evals/hardware and personal-vs-business scope remain adoption gates. |
+
+| 2026-10-13 | Codex | #17 created before edits. Owner direction recorded: retain all existing models; evaluate Saul/Fin-R1/CPA-Qwen and keep Qwen3.5-9B knowledge. Added domain-agent spec/ADR 0004 with source grounding, decimal calculations, sequential LlmGate swaps, explicit fallback and measurable eval gates; aligned PLAN/TRACKING. No models installed, bindings changed or phase advanced; publication/check evidence belongs to #17. |

@@ -1,0 +1,89 @@
+# Retained models and domain agents
+
+Status: owner-approved direction; implementation and specialist activation pending. Date: 2026-10-13. Planning task: [#17](https://github.com/agthumoe/solid-lamp/issues/17); specialist evaluation: [#15](https://github.com/agthumoe/solid-lamp/issues/15). Architecture: [ADR 0004](../adr/0004-domain-model-routing.md). Jurisdiction: United States, Texas.
+
+## Outcome and boundaries
+
+Retain every existing installed/planned model. Add legal research, financial analysis and investment research, accounting, and broad-knowledge capabilities. An agent owns a workflow, sources and tools; a model supplies inference. Several agents may share a model. Retention means preserving the artifact and its intended use, not keeping all models loaded or enabling an unvalidated candidate.
+
+This plan authorizes direction and documentation, not a claim of professional competence or completed runtime implementation. It neither removes models nor changes active mappings in `config/models.yaml`. No downloads, migrations, system settings or model deletions are part of this task. Personal/business accounting and investment scope must be confirmed before private-data ingestion or domain implementation. Tax remains a separate proposed workflow, not an implied capability of finance or accounting.
+
+## Complete model catalog
+
+| Model                                                                           | Intended use                                                                                 | Availability / activation                                                                  |
+| ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `qwen3.5:9b`                                                                    | Existing chat and vision; broad knowledge, book understanding, baseline for every specialist | Installed/benchmarked; existing configuration retained                                     |
+| `qwen3.5:4b`                                                                    | Existing router; concise intent classification                                               | Installed/benchmarked; existing configuration retained                                     |
+| `qwen2.5-coder:14b`                                                             | Existing coding role                                                                         | Installed/benchmarked; swap policy retained                                                |
+| `qwen3-embedding:0.6b`                                                          | Existing shared-brain embeddings, 1024 dimensions                                            | Installed/benchmarked; active vector version retained                                      |
+| `qwen3:8b`                                                                      | Existing alternative chat model                                                              | Installed/benchmarked; retained for explicit fallback/comparison                           |
+| `gemma4:12b`                                                                    | Existing alternative chat model                                                              | Installed/benchmarked; retained; cross-check VRAM reporting with `nvidia-smi`              |
+| `nomic-embed-text`                                                              | Existing alternative embedding model, 768 dimensions                                         | Installed; only explicit rebuild/promotion under ADR 0002                                  |
+| [Equall/Saul-7B-Instruct-v1](https://huggingface.co/Equall/Saul-7B-Instruct-v1) | Legal reading and research candidate                                                         | Not installed; MIT model-card declaration; provenance/license chain and local eval pending |
+| [SUFE-AIFLM-Lab/Fin-R1](https://huggingface.co/SUFE-AIFLM-Lab/Fin-R1)           | Financial statement and numerical reasoning candidate                                        | Not installed; upstream license unresolved; adoption blocked until verified                |
+| [AudCor/cpa-qwen3-8b-v0](https://huggingface.co/AudCor/cpa-qwen3-8b-v0)         | Accounting explanation/classification candidate                                              | Not installed; Apache-2.0 card declaration; experimental, competence unproven              |
+| `qwen3.6:35b-a3b`                                                               | Existing proposed deep/batch role                                                            | Still disabled; requires owner-approved RAM change and measured feasibility                |
+
+Specialist evidence and limitations: [research notes](domain-model-research.md). Published specialist scores do not establish better performance than the current general model on owner tasks. A model that fails acceptance stays retained as a candidate/comparison, with the failure recorded; it does not receive production requests. Preserve existing fallback mappings during implementation unless a separately tracked change is authorized.
+
+## Agent responsibilities
+
+| Agent                        | Preferred inference after acceptance                                             | Sources and read-only tools                                                                                                           | Output contract                                                                                                      |
+| ---------------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `knowledge`                  | Qwen3.5-9B via planned `knowledge` role                                          | Shared brain; authorized books, notes, repos; chapter/page retrieval                                                                  | Explanation with source passages, edition/location, and uncertainty                                                  |
+| `legal-us-tx`                | Accepted Saul via planned `legal-research` role; Qwen baseline                   | Texas statutes, relevant court rules/opinions, official federal sources; scoped case/document search                                  | Research memo separating quoted authority, inference and unresolved questions; jurisdiction/effective date citations |
+| `finance`                    | Accepted Fin-R1 via planned `financial-analysis` role; Qwen baseline             | CSV spending analysis retained; financial statements, SEC filings, explicitly enabled read-only market data; deterministic calculator | Assumptions, dated inputs, reconciled calculations, evidence and risks; no autonomous trades                         |
+| `accountant`                 | Accepted CPA-Qwen via planned `accounting` role; Qwen baseline                   | Read-only ledger/import preview, invoice/statement inspection; decimal arithmetic and reconciliation                                  | Proposed classifications/journal entries, evidence, debit-credit balance, unresolved discrepancies; no ledger writes |
+| `tax-us-tx` (later proposal) | Qwen with current-source retrieval until a specialist passes separate evaluation | Tax-year-specific IRS/Texas guidance and supported deterministic rules                                                                | Cited explanation/calculation within declared year/form scope; no autonomous filing                                  |
+
+Financial research includes explaining investment concepts, comparing reported fundamentals and examining scenarios. Current quotes, prices, corporate actions and filing dates come from source adapters, not model memory. Accounting scope begins with synthetic read-only cases; choose personal versus business/entity and applicable reporting basis before real workflows. Legal research does not silently become legal action. Side effects remain subject to the existing durable approval flow.
+
+## Routing and request lifecycle
+
+1. An explicit owner-selected agent takes precedence. Otherwise the router proposes an intent; deterministic policy validates that intent against allowed agents and enabled models. Ambiguous multi-domain requests ask for clarification or produce a bounded supervisor plan. Retrieved text cannot select an agent, model or tool.
+2. Resolve semantic role through validated configuration. Snapshot artifact digest, quantization/template, role/context/options, prompt/eval version, source revisions and request budget. Future configuration separates catalog status (`candidate`, `evaluating`, `enabled`, `disabled`) from role binding. Zod rejects missing/disabled bindings and arbitrary model tags.
+3. Retrieve scoped sources before analysis; calculate financial/ledger arithmetic in deterministic TypeScript decimal code. Models explain results and propose interpretations. Source metadata distinguishes document date, effective/tax year, fetched time, jurisdiction, edition/page and content hash. Show stale or missing input explicitly.
+4. Submit bounded inference through LlmGate. Validate structured output/citations/tool arguments; keep specialist calls bounded and read-only. The supervisor owns delegation; specialists cannot recursively select new agents or execute writes.
+5. If an enabled specialist is unavailable, policy may explicitly use the accepted Qwen baseline once, before any output is streamed, or report unavailable. Return the actual model, fallback reason and limitations to the run view. Never hide a fallback or retry a partially streamed answer as if it were the same run. Quality/license failures are not transient errors to retry.
+6. For multi-domain work, run independent analysis steps sequentially, carry typed summaries with citations, and let Qwen synthesize without upgrading uncertain claims. Limit to three specialist steps plus one synthesis by default; propagate cancellation/deadline, reject loops and record partial failures.
+
+Do not add proposed roles to active config until schema, scheduler and acceptance evidence exist. No query-time embedding fallback: dimensional changes require versioned rebuild/promotion per ADR 0002.
+
+## RTX 3060 scheduling and model retention
+
+Keep one active inference request globally. Normal residency remains chat plus embed where measured feasible; only one generation model is active at a time. Legal/finance/accounting/coder are on-demand swap roles: preserve files on disk, unload incompatible resident generators as needed, and restore chat only when the next request needs it. Background jobs cannot preload every retained model.
+
+Start specialist measurements with Q4_K_M and 4096 context, then compare Q5/context increases if free VRAM allows. These are evaluation settings, not asserted deployment guarantees. Measure with desktop VRAM included, embed coexistence, cold load and context-switch time, prefill/decode and queue latency. Cross-check Ollama allocation with `nvidia-smi`; enforce the intended GPU policy without silently accepting CPU offload. A failed memory check leaves the candidate inactive. Keep the deep role disabled under existing gates.
+
+Shared chat/vision/knowledge roles should use the same accepted model/context profile where task quality allows, reducing the already-observed context reload cost. Do not lower embedding context without the representative long-chunk comparison. Record per-role context decisions after measurement; no host settings change is implied. Extend [LlmGate](llm-gate.md) tests rather than creating a parallel scheduler.
+
+## Grounded book knowledge
+
+Do not claim a model has read a specific book without published training evidence. Index legally obtained EPUBs/PDFs as shared-brain sources, with chapter-aware chunks and edition/page or stable EPUB location citations. Record OCR/extraction quality; scanned books and equations may need reviewed extraction. Add parser fixtures before trusting real books. Provide cited excerpts within applicable limits rather than reproducing entire books. Updating the library is ingestion/retrieval, not retraining model weights.
+
+## Adoption gates and evidence
+
+Each candidate gets an immutable evaluation record under #15, with licensing/provenance references, digest/hash, chat template, quantization, supported Ollama version, context, hardware, synthetic fixture revision and raw local results. Unknown license or unverifiable artifact fails adoption. A community GGUF license label cannot substitute for upstream permission.
+
+Use at least 40 answerable and 20 deliberately unanswerable/adversarial synthetic cases per domain, plus 20 cross-domain routing cases. Compare identical sources/settings against Qwen3.5-9B; report task scores and failures separately from latency. No private records in public CI/issues. Suggested initial gates, to calibrate before running:
+
+- 100% exact deterministic arithmetic/reconciliation and ledger balance invariants; calculations are scored separately from model prose.
+- At least 90% reviewed substantive domain correctness, 95% citation support on cited claims, and 90% correct abstention on missing/stale/conflicting inputs. Review consequential legal/accounting examples with a qualified reviewer; automated text similarity cannot establish correctness.
+- Zero unauthorized tools/actions, cross-source access or injection-triggered execution in the suite; 100% schema-valid accepted outputs after bounded validation. These fixture results are evidence, not a universal security guarantee.
+- Measured local GPU/context compatibility, cancellation/recovery and enabled-role fallback behavior pass; publish cold/warm latency and VRAM rather than inventing a target without a baseline.
+- Demonstrated specialist benefit on the intended tasks, or a documented owner-accepted tradeoff, before setting a preferred binding. If Qwen performs better, retain the specialist for evaluated uses instead of forcing specialist routing.
+
+Test US/Texas jurisdiction/effective dates, financial units/currencies/periods, restated filings, stale prices, decimal rounding, duplicate imports, unbalanced entries, missing evidence and prompts embedded in source material. Deterministic fake-port tests run in CI; live Ollama/GPU evaluation is local and serialized. Acceptance requires an evidence review, not just a completed download.
+
+## Delivery order and GitHub progress
+
+| Stage                         | Tracking / dependencies                                                                                                   | Deliverable and completion evidence                                                                                                                  |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Plan now                      | #17                                                                                                                       | This spec, ADR, retained catalog, handoff and passing current checks; no phase advancement                                                           |
+| Candidate evaluation          | [#15](https://github.com/agthumoe/solid-lamp/issues/15), model gate [#2](https://github.com/agthumoe/solid-lamp/issues/2) | License/provenance first; then scoped installation/compatibility/evaluation tasks; separate evidence for each candidate                              |
+| Inference foundation, Phase 1 | [#3](https://github.com/agthumoe/solid-lamp/issues/3), owner Phase 0 acceptance                                           | Catalog/status schema, role resolution, bounded LlmGate scheduling, explicit fallback and diagnostic tests                                           |
+| Knowledge sources, Phase 2    | [#4](https://github.com/agthumoe/solid-lamp/issues/4), Phase 1                                                            | Book/official-source ingestion specs and child tasks, citation metadata, freshness, retrieval and restore tests                                      |
+| Agent boundary, Phase 3       | [#5](https://github.com/agthumoe/solid-lamp/issues/5), Phase 2                                                            | Supervisor route policy, scoped tool permissions, typed delegation, approvals and restart tests                                                      |
+| Domain delivery, Phase 7      | [#9](https://github.com/agthumoe/solid-lamp/issues/9), preceding phase gates and #15                                      | Spec/task per agent; deliver knowledge → legal research → finance including retained CSV workflow → accounting, one at a time; tax scoped separately |
+
+Before implementing each stage, create bounded child issues with dependencies and acceptance, then update the relevant phase epic. Planning is complete when its artifacts are reviewed/published; #15 remains open until actual evaluation is done. Phase 0 final settings/residency and owner's phase acceptance remain separate from approval of this portfolio direction.

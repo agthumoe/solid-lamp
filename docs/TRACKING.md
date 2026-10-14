@@ -19,3 +19,9 @@ Repository: https://github.com/agthumoe/solid-lamp. Task tracking uses issues/ph
 | Remaining benchmark acceptance/CLI findings      | [#11](https://github.com/agthumoe/solid-lamp/issues/11) | Fixed by #13; regression tests and required CI verify acceptance                                                      |
 
 Each phase has its own GitHub milestone. Split an epic into bounded implementation tasks before starting its phase; each child needs acceptance and tests. These tasks are plans, not claims that the application features are implemented. Changing task status or resolving owner decisions must also update the local handoff.
+
+## Retained portfolio and domain workflow tasks
+
+- [#17](https://github.com/agthumoe/solid-lamp/issues/17): deliver [domain-agent plan](specs/domain-agent-plan.md) and ADR 0004; planning only.
+- [#15](https://github.com/agthumoe/solid-lamp/issues/15): license/provenance, local compatibility and comparative domain evaluation; remains open until evidence passes.
+- Foundation/source/orchestration implementation attaches to #3/#4/#5; domain-agent child tasks attach to #9 after preceding phase gates. All existing model artifacts/roles are retained; activation is separately gated.

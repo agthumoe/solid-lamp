@@ -23,7 +23,8 @@ GitHub tasks/milestones: [TRACKING.md](TRACKING.md). Standards: [development han
 - [x] Address validation gaps: required skipped targets must fail acceptance; validate embedding response counts/dimensions/values/norms (`VALIDATION.md`)
 - [x] Resolve remaining benchmark findings ([#11](https://github.com/agthumoe/solid-lamp/issues/11)): semantic/format refusal metrics, required residency acceptance, duplicate CLI flags
 - [ ] Every resident model shows 100% GPU
-- [ ] Model roles confirmed with owner
+- [x] Owner confirms retained portfolio direction: keep all existing models; add evaluated legal/finance/accounting specialists and Qwen broad knowledge ([#17](https://github.com/agthumoe/solid-lamp/issues/17))
+- [ ] Final enabled model bindings/context/residency confirmed after candidate acceptance (#15); portfolio direction alone does not close Phase 0
 - [x] ADR 0001: Ollama location (`docs/adr/0001-ollama-location.md`)
 
 ## Phase 1: Scaffold
@@ -43,6 +44,7 @@ GitHub tasks/milestones: [TRACKING.md](TRACKING.md). Standards: [development han
 - [ ] `packages/shared` (config loader, zod schemas, pino logger)
 - [ ] `packages/db` (Drizzle schema)
 - [x] Spec `docs/specs/llm-gate.md`: queue limits, cancellation, interactive priority, starvation prevention, model/ctx switching, eviction behaviour
+- [ ] Retained model catalog/status schema, semantic domain-role bindings and disclosed fallback; no candidate enabled without evidence (ADR 0004)
 - [ ] `packages/llm` (role router, LlmGate, tool-call repair) + unit tests, including negative repair cases: JSON quoted in prose, scalar/invalid args, tools outside the allowlist (REVIEW #2)
 - [ ] `pnpm doctor`
 - [ ] `/health` endpoint reporting Ollama + DB
@@ -51,6 +53,7 @@ GitHub tasks/milestones: [TRACKING.md](TRACKING.md). Standards: [development han
 ## Phase 2: Brain
 
 - [ ] Spec `docs/specs/brain.md`
+- [ ] Spec/task for book extraction and dated official-source ingestion; edition/location/jurisdiction/freshness citations (domain-agent plan)
 - [ ] Obsidian ingestion (chokidar watch + full resync), frontmatter, wikilinks, tags, embeds
 - [ ] Heading-aware chunking, incremental by content hash, renames/deletes
 - [ ] Embeddings via `embed` role, `search_brain` hybrid + RRF, versioned rebuild/catch-up/promotion (ADR 0002)
@@ -65,6 +68,7 @@ GitHub tasks/milestones: [TRACKING.md](TRACKING.md). Standards: [development han
 ## Phase 3: Agent core
 
 - [ ] Specs for supervisor, `concierge`, `librarian`
+- [ ] Deterministic allowed-agent routing and bounded typed specialist delegation; owner selection wins, retrieved content cannot route
 - [ ] Persona loader (`config/agents/*`), `PostgresSaver`
 - [ ] Approval / `interrupt()` flow with a fake side-effect tool
 - [ ] Fastify API with SSE; API/MCP access checks (auth, bind address) before any remote exposure (REVIEW #6)
@@ -91,13 +95,16 @@ GitHub tasks/milestones: [TRACKING.md](TRACKING.md). Standards: [development han
 
 ## Phase 7: Domain agents (spec-first, one at a time)
 
-Specialist research: [US/Texas shortlist](specs/domain-model-research.md), [#15](https://github.com/agthumoe/solid-lamp/issues/15). Tax/legal/accounting agents are proposals; evaluate scope/licenses/quality before adding them.
+Owner-approved portfolio and delivery sequence: [domain-agent plan](specs/domain-agent-plan.md), [ADR 0004](adr/0004-domain-model-routing.md), [#17](https://github.com/agthumoe/solid-lamp/issues/17). Retain every model. Specialist evaluation remains [#15](https://github.com/agthumoe/solid-lamp/issues/15); workflows and activation remain unimplemented. Tax stays a separately scoped proposal.
 
 - [ ] Coding-quality comparison on real repo tasks before changing coder model
 - [ ] `coder` (repo ingestion + read tools)
 - [ ] `planner` + tasks
 - [ ] `inbox` (Gmail read-only)
-- [ ] `finance` (CSV)
+- [ ] `knowledge` (Qwen3.5-9B + cited book/brain retrieval)
+- [ ] `legal-us-tx` (scoped legal research; accepted Saul or disclosed Qwen baseline)
+- [ ] `finance` (retain CSV spending; add statements/investment research; accepted Fin-R1 or disclosed Qwen baseline)
+- [ ] `accountant` (read-only reconciliation and reviewed entry proposals; accepted CPA-Qwen or disclosed Qwen baseline)
 - [ ] `coach`
 - Acceptance target: Each agent's spec acceptance criteria and eval set pass
 
@@ -122,3 +129,5 @@ Specialist research: [US/Texas shortlist](specs/domain-model-research.md), [#15]
 Review fixes (2026-10-12): see `REVIEW.md`. Embedding storage and earlier security/restore gates are specified and adopted in this plan; their implementation stays in the relevant phases. Model roles and Phase 0 completion remain unconfirmed.
 
 Validation follow-up (2026-10-12): both reproduced gaps fixed in harness v4; 12 regression groups and syntax checks pass → `VALIDATION.md`. Fresh hardware evidence remains separate from these stubbed checks.
+
+Decision (2026-10-13, #17): retain every existing installed/planned model and add evaluated domain specialists; Qwen3.5-9B owns broad knowledge/synthesis. [ADR 0004](adr/0004-domain-model-routing.md) and [domain-agent plan](specs/domain-agent-plan.md) define activation gates, source grounding and sequential GPU swaps. Owner approved direction; final enabled settings and Phase 0 acceptance remain pending.
