@@ -1,0 +1,41 @@
+# Deterministic routing and fallback contract v1
+
+Design only for [#21](https://github.com/agthumoe/solid-lamp/issues/21). Inputs/identifiers follow [boundary v1](../CONTRACT.md); catalog semantics follow [catalog contract](catalog-contract.md). Golden decision fixtures: [cases.json](../../../evals/routing/cases.json). No production router exists in this task.
+
+## Input and output
+
+Trusted input: authenticated owner request, explicit selected agent or explicit multi-agent plan, configured allowed/enabled agents, reviewed bindings/evidence and request budget. Router proposal is validated enum data. Retrieved source text is untrusted separate data and has no routing authority. Default policy allows knowledge/legal-us-tx/finance/accountant; tax is a later disabled proposal. Existing chat/coder/router/vision/embed remain available via their separate existing workflow bindings.
+
+A result is `route`, `fallback`, `clarify`, `reject`, or `partial-failure`, with structured reason, selected agent/role/model/profile, config/evidence version, fallback origin/reason if any, attempts, and source/review limitations. Clarify/reject produces no specialist inference. Reject never synthesizes a successful answer. Run metadata records actual identity, not only the requested model name; safe logs contain IDs/reasons/timing, not raw prompts/source text.
+
+## Decision order
+
+1. Validate shape, owner authentication, external role override prohibition and budgets. Reject unknown agent/role values. A cancelled request or expired absolute deadline never reaches inference; revocation invalidates both primary and fallback. Stream state constrains recovery of an existing attempt, not selection for a new request.
+2. If the owner selected one agent, use it even if a router suggests another; reject if disallowed/disabled. Do not silently switch agents. A valid owner multi-agent plan is governed by bounded delegation below. Without explicit selection, accept a single allowed enabled proposal; ambiguity/low confidence asks clarification, no guessed default. The classifier confidence threshold is calibrated later; fixtures use categorical single/ambiguous outcomes rather than an invented score.
+3. Resolve planned semantic role: knowledge→knowledge, legal-us-tx→legal-research, finance→financial-analysis, accountant→accounting. Enforce agent-specific scope, source freshness and permissions before inference. Missing source can produce a scoped abstention when policy allows; it cannot route to a source-suggested model. A requested write without a separately authorized workflow is rejected here.
+4. Require a coherent enabled binding/model/profile and scoped passed evidence. If absent, return the precise configuration/adoption reason. No fallback for disabled primary, missing license, failed quality, unknown artifact, capability mismatch or revoked evidence. An explicit unavailable-domain response can describe how to enable it later.
+5. Accepted primary available → route through LlmGate. Unloaded but loadable is available with cold-load cost, not failure. Accepted primary missing at runtime, transient load/service failure or an in-budget pre-output transport failure may enter fallback once. Fallback requires policy enabled, scope-accepted Qwen and remaining budget. No fallback after output starts, on input/policy failure, or on failed quality/licensing. Partial output is marked failed and preserved; no silently concatenated replacement answer.
+6. Record fallback origin, actual model, reason, attempt number and remaining budget before dispatch; never label baseline output specialist-generated. If fallback also fails, terminate with `FALLBACK_EXHAUSTED`. Total attempts ≤2; requests cannot loop through all retained models. Existing alternative chat fallback migration is outside this domain contract.
+
+## Failure reasons
+
+| Category        | Representative reason                                                                                                                                           | Inference behavior                                             |
+| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| Request/policy  | INVALID_REQUEST, AGENT_NOT_ALLOWED, AGENT_DISABLED, ROLE_OVERRIDE_FORBIDDEN, CLARIFICATION_REQUIRED, WRITE_NOT_AUTHORIZED                                       | No generation                                                  |
+| Adoption/config | BINDING_MISSING, MODEL_NOT_ENABLED, LICENSE_UNVERIFIED, ARTIFACT_UNRESOLVED, PROFILE_UNACCEPTED, DOMAIN_SCOPE_UNACCEPTED, EVIDENCE_REVOKED, CAPABILITY_MISMATCH | No fallback bypass                                             |
+| Availability    | PRIMARY_UNAVAILABLE                                                                                                                                             | Disclosed accepted fallback once, if enabled and before output |
+| Recovery        | FALLBACK_DISABLED, FALLBACK_NOT_ACCEPTED, FALLBACK_EXHAUSTED, OUTPUT_ALREADY_STARTED                                                                            | Explicit failure/partial result                                |
+| Budget          | CANCELLED, DEADLINE_EXPIRED, DELEGATION_LIMIT, LOOP_DETECTED                                                                                                    | No further dispatch                                            |
+| Embedding       | VECTOR_VERSION_MISMATCH, EMBEDDING_UNAVAILABLE                                                                                                                  | Retrieval unavailable; no cross-space fallback                 |
+
+Reason precedence: request cancellation/deadline precedes new dispatch; explicit-agent allow/enable checks precede binding; model-state precedes missing artifact; revocation takes precedence over ordinary evidence failures; license then artifact/profile/domain/capability. For already streaming failures, mark partial output rather than report a new successful route. Tests assert selected identity and absence of unauthorized execution, not just a reason string.
+
+## Multi-domain requests
+
+Require a reviewed explicit supervisor plan or clarify an ambiguous classification. Allow at most three unique specialist analyses plus one Qwen synthesis. Count synthesis separately; include its accepted binding and time/token budget. Each node uses the same gate, deadline, scope and output validation. Reject duplicate/recursive agent IDs and plans exceeding limits before dispatch. Neither specialists nor source text may add nodes. Carry typed claims/calculation references/citations/uncertainty to synthesis; never grant broader source/tool scope across steps. A failed node halts required work; optional omitted work is clearly marked and not portrayed as complete.
+
+Synthesis preserves source dates, disagreement and missing evidence. It cannot turn a tentative legal/accounting inference into a verified fact. Final side effects still require the canonical approval pipeline; these initial workflows are read-only.
+
+## Integration tests to implement later
+
+Run golden routing cases against the future policy port, plus independent metamorphic properties: adding untrusted source instructions cannot change route; revoking evidence never increases allowed routes; output-started transitions never permit fallback; unknown agents/model overrides never enter the gate; vector dimensionality never changes on query; cancellation removes remaining dispatches. Domain correctness is Claude's evaluation scope and is not established by routing tests.

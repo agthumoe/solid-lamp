@@ -1,19 +1,22 @@
-# codex workbench status
+# Codex workbench status
 
-Status: ready; agent work has not started. Read [coordination rules](../README.md) and [contract](../CONTRACT.md).
+Task: [#21](https://github.com/agthumoe/solid-lamp/issues/21). Date: 2026-10-14. Branch: `docs/21-codex-routing-design`; worktree: `/tmp/aetherion-workbenches/codex`. Status: design and local validation complete; PR publication in progress.
 
 ## Now
 
-Dedicated branch/worktree prepared by #19. No task deliverable or model evaluation claimed.
+- Added [catalog/status/binding contract](catalog-contract.md), [routing/fallback contract](routing-contract.md) and [scheduler/recovery contract](scheduling-contract.md).
+- Added [42 synthetic golden cases](../../../evals/routing/cases.json) and [coverage/validation design](evaluation-design.md). Hypothetical accepted states are explicitly separate from actual inactive specialist adoption.
+- Changes remain exclusively in owned paths; no active config, shared handoff, dependencies/lockfile, runtime package or Claude files changed. Existing locked dependencies installed offline into this worktree (156 cached packages, zero downloads).
 
 ## Next
 
-Read the assigned GitHub issue and canonical instructions, verify branch/path, then work only within the ownership allowlist. Update this file and PLAN.md during the task.
+Publish task PR and record evidence in #21; required GitHub CI must pass. Local `pnpm check` passed all gates (19 regression groups, 44 authored Markdown files before fixture README). Fixture integrity checked 42 unique cases, 43 coverage tags, fresh patch expansion and expected identity/fallback/no-write invariants; no policy/model execution. Leave PR integration and canonical handoff updates to the separately tracked integration workstream.
 
-## Blocked
+## Blocked / deferred
 
-Production implementation remains behind phase gates. No live GPU work or downloads in this initial task. Unresolved evidence is recorded rather than invented.
+Task design does not depend on Claude's unmerged work. Runtime implementation, candidate activation and live evaluation require separate tasks/phase acceptance and scoped evidence. Single-gateway cross-process transport needs an implementation spec/ADR decision. No GPU or model calls in this task.
 
 ## Session log
 
-- 2026-10-13: Coordination bootstrap; ready for the assigned agent, not started.
+- 2026-10-13: Coordination bootstrap; worktree prepared, not started.
+- 2026-10-14: Owner requested execution; #21 marked in progress, isolated branch verified. Designed candidate/enabled separation, scope-specific evidence, bounded explicit fallback, global gate recovery and embedding-space isolation; authored 42 decision fixtures. Validation/publication evidence recorded in #21.
