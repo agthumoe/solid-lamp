@@ -34,3 +34,9 @@ Tax sources: [IRS forms/instructions](https://www.irs.gov/forms-instructions) by
 ## Acceptance before adoption
 
 Confirm licenses and provenance; freeze versions; benchmark GPU/context/Ollama compatibility; compare against the existing general baseline on owner-relevant synthetic cases. Test citations, jurisdiction/year correctness, abstention, arithmetic reconciliation, ledger invariants, malformed data and safe tool behavior. Have qualified reviewers check consequential tax/legal/accounting examples. Keep filings and final advice reviewable; no model was installed or approved in this research session.
+
+## Integrated evidence and remaining work
+
+The merged [candidate evidence index](../workstreams/claude/evidence/README.md) records immutable upstream revisions, declarations and unresolved restrictions. See [Saul](../workstreams/claude/evidence/saul-7b-instruct-v1.md), [Fin-R1](../workstreams/claude/evidence/fin-r1.md), [CPA-Qwen](../workstreams/claude/evidence/cpa-qwen3-8b-v0.md) and [Qwen baseline](../workstreams/claude/evidence/qwen3.5-9b-baseline.md). Saul's reviewed upstream chat template rejects system messages; [prompt v2](../workstreams/claude/evaluation-protocol.md#prompting) uses the same reviewed first-user-turn instructions/policy for every comparison arm. Fin-R1's license remains unresolved; README/third-party labels do not establish adopted weight permissions.
+
+Merged work defines designs and synthetic fixtures, not model competence. Follow-ups: [#30](https://github.com/agthumoe/solid-lamp/issues/30) for schema-v2 domain fixture diagnostics and [#31](https://github.com/agthumoe/solid-lamp/issues/31) for gated artifact/live comparisons under #15. Personal/business scope, qualified review and actual production-profile GPU evidence remain pending.

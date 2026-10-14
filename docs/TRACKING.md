@@ -29,8 +29,15 @@ Each phase has its own GitHub milestone. Split an epic into bounded implementati
 ## Parallel workbenches
 
 - [#19](https://github.com/agthumoe/solid-lamp/issues/19): coordination/setup only; [ownership and Claude handoff](workstreams/README.md).
-- [#20](https://github.com/agthumoe/solid-lamp/issues/20): Claude specialist research/domain evaluation design; ready, user launches Claude.
-- [#21](https://github.com/agthumoe/solid-lamp/issues/21): Codex catalog/routing/scheduler design; ready, own worktree.
+- [#20](https://github.com/agthumoe/solid-lamp/issues/20): Claude specialist research/domain evaluation design; delivered in merged PR #26, review resolved.
+- [#21](https://github.com/agthumoe/solid-lamp/issues/21): Codex catalog/routing/scheduler design; delivered in merged PR #23, reviews resolved.
 - Runtime implementation/live evaluation remain separately tracked and phase-gated. Shared-file integration requires its own issue/branch.
 
-- [#24](https://github.com/agthumoe/solid-lamp/issues/24): Phase 0 routing fixture integrity diagnostics; stacked on Codex PR #23, independent of active Claude files.
+- [#24](https://github.com/agthumoe/solid-lamp/issues/24): Phase 0 routing fixture integrity diagnostics; merged PR #25, reviews resolved; 51 routing cases and 15 diagnostic groups.
+
+## Combined-main audit and remaining evaluation tasks
+
+- [#29](https://github.com/agthumoe/solid-lamp/issues/29): merged-main audit and shared handoff reconciliation; no runtime/config/model changes.
+- [#30](https://github.com/agthumoe/solid-lamp/issues/30): domain schema-v2 fixture diagnostics; ready, no model run required.
+- [#31](https://github.com/agthumoe/solid-lamp/issues/31): artifact pinning and local comparison; gated by per-candidate provenance/license/scope and qualified review. #15 remains open.
+- Review #27/PR #28 is merged; all reviewed PRs #23/#25/#26/#28 are integrated. Historical task-local handoffs retain their delivery-time snapshots.
