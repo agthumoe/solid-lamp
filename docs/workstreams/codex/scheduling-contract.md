@@ -30,7 +30,7 @@ Specialist Q4/4K starts are evaluation profiles only; no production guarantee is
 
 ## Embedding failure and version ownership
 
-Search/retrieval pins the active vector version, model digest, dimensions and prefixes from ADR 0002. If embed is unavailable or incompatible, fail/degrade retrieval explicitly; do not embed the query with Nomic against Qwen vectors. Even matching dimensions do not establish a shared embedding space. Rebuild/catch-up/validated atomic promotion is a separate approved workflow; old data/index remains readable according to the explicit version plan. Generation may explain unavailable retrieval only within permitted scope, without fabricating citations.
+Search/retrieval pins the active vector version, model digest, dimensions and prefixes from ADR 0002. If embed is unavailable or incompatible, fail/degrade retrieval explicitly; do not embed the query with Nomic against Qwen vectors. Even matching dimensions do not establish a shared embedding space. Rebuild/catch-up/validated atomic promotion is a separate approved workflow; old data/index remains readable according to the explicit version plan. When retrieval is required, reject generation with the explicit retrieval failure (R31–R33). Only optional retrieval permits a clearly disclosed degraded status/explanation with `degradedRetrieval: true`, within permitted scope and without fabricated citations.
 
 ## Acceptance matrix for future LlmGate implementation
 

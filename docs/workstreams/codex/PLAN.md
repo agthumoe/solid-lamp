@@ -11,3 +11,5 @@ See [coordination rules and task](../README.md) and [contract v1](../CONTRACT.md
 - [x] Record evidence/blockers in issue; leave shared-file integration to coordinator.
 
 Integration pending: [PR #23](https://github.com/agthumoe/solid-lamp/pull/23). Implementation/live validation remains future separately tracked work.
+
+- [x] Address Claude review: complete retained inventory, explicit fallback edge cases, required/optional retrieval policy and 51 fixtures.
