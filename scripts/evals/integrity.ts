@@ -42,17 +42,35 @@ function expectedResult(input: Input, expected: Suite['cases'][number]['expected
   if (!reasonsByKind[expected.kind].includes(expected.reason)) {
     throw new Error('reason is incompatible with expected kind');
   }
-  if (expected.degradedRetrieval === true) {
-    const retrievalFailed =
-      !input.retrieval.embedAvailable ||
-      input.retrieval.activeSpace !== input.retrieval.querySpace ||
-      input.retrieval.activeDimensions !== input.retrieval.queryDimensions;
-    if (
-      input.retrieval.required ||
-      !retrievalFailed ||
-      !['route', 'fallback'].includes(expected.kind)
-    ) {
-      throw new Error('invalid degraded retrieval expectation');
+  const retrievalFailed =
+    !input.retrieval.embedAvailable ||
+    input.retrieval.activeSpace !== input.retrieval.querySpace ||
+    input.retrieval.activeDimensions !== input.retrieval.queryDimensions;
+  const success = ['route', 'fallback'].includes(expected.kind);
+  if (
+    success &&
+    !input.retrieval.required &&
+    retrievalFailed &&
+    expected.degradedRetrieval !== true
+  ) {
+    throw new Error('missing degraded retrieval disclosure');
+  }
+  if (
+    expected.degradedRetrieval === true &&
+    (input.retrieval.required || !retrievalFailed || !success)
+  ) {
+    throw new Error('invalid degraded retrieval expectation');
+  }
+  if (success) {
+    const selected = expected.steps ?? (expected.agent === null ? [] : [expected.agent]);
+    for (const agent of selected) {
+      const binding = input.bindings[agent];
+      if (
+        binding?.fallbackEnabled &&
+        (binding.fallback === null || binding.fallback === binding.primary)
+      ) {
+        throw new Error('successful result uses invalid fallback binding');
+      }
     }
   }
   if (['reject', 'clarify'].includes(expected.kind)) {

@@ -170,3 +170,49 @@ await test('degraded retrieval cannot hide failure of required evidence', () => 
   entry.inputPatch.retrieval = { ...entry.inputPatch.retrieval, required: true };
   assert.throws(() => validateSuite(value), /degraded/);
 });
+
+await test('failed optional retrieval must disclose degradation in successful expectations', () => {
+  for (const id of ['R49', 'R50']) {
+    const value = suite();
+    const entry = value.cases.find((item) => item.id === id);
+    assert.ok(entry);
+    delete entry.expected.degradedRetrieval;
+    assert.throws(() => validateSuite(value), /missing degraded/);
+  }
+  const value = suite();
+  const entry = value.cases.find((item) => item.expected.kind === 'fallback');
+  assert.ok(entry);
+  entry.inputPatch.retrieval = { required: false, embedAvailable: false };
+  assert.throws(() => validateSuite(value), /missing degraded/);
+});
+await test('successful routes and plans cannot use self or null enabled fallback bindings', () => {
+  for (const target of ['qwen-general', null] as const) {
+    const value = suite();
+    const entry = value.cases.find((item) => item.id === 'R46');
+    assert.ok(entry);
+    entry.inputPatch.bindings = { knowledge: { fallbackEnabled: true, fallback: target } };
+    entry.expected = {
+      kind: 'route',
+      reason: 'PRIMARY_READY',
+      agent: 'knowledge',
+      modelId: 'qwen-general',
+      attemptLimit: 2,
+      writeAllowed: false,
+    };
+    assert.throws(() => validateSuite(value), /invalid fallback binding/);
+    entry.expected = {
+      kind: 'reject',
+      reason: 'BINDING_INVALID',
+      agent: null,
+      modelId: null,
+      attemptLimit: 2,
+      writeAllowed: false,
+    };
+    assert.doesNotThrow(() => validateSuite(value));
+  }
+  const value = suite();
+  const entry = value.cases.find((item) => item.expected.steps);
+  assert.ok(entry);
+  entry.inputPatch.bindings = { finance: { fallbackEnabled: true, fallback: 'fin-r1' } };
+  assert.throws(() => validateSuite(value), /invalid fallback binding/);
+});
