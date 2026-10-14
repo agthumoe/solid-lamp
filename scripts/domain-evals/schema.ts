@@ -57,14 +57,23 @@ export const sourceSchema = z.strictObject({
   status_flags: z.array(text).min(1),
   text,
 });
-const calculation = z.strictObject({
-  description: text,
-  inputs: z.record(text, z.json()),
-  formula: text,
-  result: text,
-  unit: text,
-  rounding: text,
-});
+const calculation = z
+  .strictObject({
+    description: text,
+    inputs: z.record(text, z.json()),
+    formula: text,
+    result: text,
+    unit: text,
+    rounding: text,
+  })
+  .refine(
+    (value) => {
+      if (value.unit !== 'date') return true;
+      const dates = value.result.split(' | ');
+      return dates.length <= 2 && dates.every((date) => day.safeParse(date).success);
+    },
+    { message: 'Invalid date calculation result', path: ['result'] },
+  );
 const entry = z.strictObject({
   date: day,
   memo: text,

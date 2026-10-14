@@ -33,6 +33,14 @@ function validateCase(entry: Suite['cases'][number], suite: Suite): void {
   ) {
     fail('DOMAIN_CITATION_OUTSIDE_CASE');
   }
+  if (
+    suite.sources.some(
+      (source) => entry.source_ids.includes(source.source_id) && source.document_date > entry.as_of,
+    )
+  )
+    fail('DOMAIN_SOURCE_AFTER_AS_OF');
+  if (entry.expected.journal_entries?.some((journal) => journal.date > entry.as_of))
+    fail('DOMAIN_JOURNAL_AFTER_AS_OF');
   const expected = entry.expected;
   unique(expected.claims, 'DOMAIN_CLAIM_DUPLICATE');
   unique(expected.optional_claims, 'DOMAIN_CLAIM_DUPLICATE');

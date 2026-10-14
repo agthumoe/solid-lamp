@@ -253,3 +253,49 @@ await test('filesystem/JSON failures are rejected and diagnostics cannot expose 
     rmSync(directory, { recursive: true, force: true });
   }
 });
+
+await test('case as_of excludes future documents but allows documents on the same day', () => {
+  const { manifest, files, suite, entry } = fixture('finance/answerable.json');
+  const latest = suite.sources
+    .filter((source) => entry.source_ids.includes(source.source_id))
+    .map((source) => source.document_date)
+    .sort()
+    .at(-1);
+  assert.ok(latest);
+  entry.as_of = latest;
+  assert.doesNotThrow(() => validateDomainData(manifest, files));
+  entry.as_of = '1900-01-01';
+  assert.throws(() => validateDomainData(manifest, files), /SOURCE_AFTER_AS_OF/);
+});
+await test('journal dates cannot exceed as_of and equality is valid', () => {
+  const { manifest, files, suite } = fixture();
+  const entry = suite.cases.find((entry) => entry.expected.journal_entries?.length);
+  assert.ok(entry);
+  const journal = entry.expected.journal_entries?.[0];
+  assert.ok(journal);
+  journal.date = entry.as_of;
+  assert.doesNotThrow(() => validateDomainData(manifest, files));
+  journal.date = '9999-12-31';
+  assert.throws(() => validateDomainData(manifest, files), /JOURNAL_AFTER_AS_OF/);
+});
+await test('date results accept ISO single/conditional dates and reject invalid calendars or syntax', () => {
+  const { manifest, files, suite } = fixture('legal-us-tx/adversarial.json');
+  const calculation = suite.cases.find((entry) => entry.expected.calculation?.unit === 'date')
+    ?.expected.calculation;
+  assert.ok(calculation);
+  for (const result of ['2024-02-29', '2026-08-22 | 2026-08-31']) {
+    calculation.result = result;
+    assert.doesNotThrow(() => validateDomainData(manifest, files));
+  }
+  for (const result of [
+    'soon',
+    '2026-02-29',
+    '2026-13-01',
+    '2026-08-22 | soon',
+    '2026-08-22|2026-08-31',
+    '2026-08-22 | 2026-08-31 | 2026-09-01',
+  ]) {
+    calculation.result = result;
+    assert.throws(() => validateDomainData(manifest, files), z.ZodError);
+  }
+});

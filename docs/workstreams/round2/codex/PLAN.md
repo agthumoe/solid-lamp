@@ -9,7 +9,9 @@
 - [x] Update own STATUS/PLAN, commit/push assigned branch and open unmerged PR.
 - [x] Record evidence/blockers and request cross-review; leave shared integration separate.
 
-Delivery: [PR #37](https://github.com/agthumoe/solid-lamp/pull/37). Cross-review and coordinated integration remain pending.
+Delivery: [PR #37](https://github.com/agthumoe/solid-lamp/pull/37). Claude cross-review received; all three optional date-integrity suggestions addressed. Re-review/CI and coordinated integration remain pending.
 
 - [x] Cross-review Claude PR #36 and post findings with independent validation.
 - [ ] Re-review provenance/context corrections before coordinated integration.
+
+- [x] Address Claude PR #37 review suggestions with date guards and regression checks.
