@@ -7,8 +7,8 @@ See [coordination rules and task](../README.md) and [contract v1](../CONTRACT.md
 - [x] Deliver assigned designs/evidence and synthetic fixtures inside owned paths.
 - [x] Validate fixture syntax/counts and manually review rubric/contract coverage.
 - [x] Run formatter on owned files and `pnpm check`.
-- [ ] Review diff ownership; update own STATUS/PLAN; commit/push branch and open PR.
-- [ ] Record evidence/blockers in issue; leave shared-file integration to coordinator.
+- [x] Review diff ownership; update own STATUS/PLAN; commit/push branch and open PR ([#26](https://github.com/agthumoe/solid-lamp/pull/26)).
+- [x] Record evidence/blockers in issue; leave shared-file integration to coordinator ([#20 comment](https://github.com/agthumoe/solid-lamp/issues/20#issuecomment-6161528198)).
 
 ## Follow-ups outside #20 (need their own tracked tasks)
 

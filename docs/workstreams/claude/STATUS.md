@@ -1,6 +1,6 @@
 # claude workbench status
 
-Status: **deliverables complete; PR open for review** on [#20](https://github.com/agthumoe/solid-lamp/issues/20). Read [coordination rules](../README.md) and [contract](../CONTRACT.md).
+Status: **deliverables complete; [PR #26](https://github.com/agthumoe/solid-lamp/pull/26) open for review** (CI `compliance` passing; not merged) on [#20](https://github.com/agthumoe/solid-lamp/issues/20). Read [coordination rules](../README.md) and [contract](../CONTRACT.md).
 
 ## Now
 
@@ -12,7 +12,7 @@ Status: **deliverables complete; PR open for review** on [#20](https://github.co
 
 ## Next
 
-1. Owner/integrator review of the PR. The integration owner applies any shared-file changes under a separate integration issue.
+1. Owner/integrator review of PR #26. Shared-file change requests are listed in the [#20 comment](https://github.com/agthumoe/solid-lamp/issues/20#issuecomment-6161528198); the integration owner applies them under a separate integration issue.
 2. Separately tracked follow-ups (not this task): resolve Fin-R1 licensing; authorize artifact download/conversion and a live run under the protocol with the exclusive GPU lease; a committed fixture schema validator; a qualified-reviewer pass on expected answers.
 
 ## Blocked
@@ -30,3 +30,4 @@ Status: **deliverables complete; PR open for review** on [#20](https://github.co
 - 2026-10-13: Coordination bootstrap; ready for the assigned agent, not started.
 - 2026-10-13: Claude started #20; branch/worktree verified, issue marked in progress.
 - 2026-10-14: Evidence, source requirements, rubrics, protocol and 180 synthetic fixtures delivered inside owned paths; formatted; `pnpm check` and fixture validation run (results in PR and #20).
+- 2026-10-14: Committed `ec33b03`, pushed, opened PR #26 (Refs #20, #15, #19); CI `compliance` passed; validation and blockers recorded in #20. Not merged.
