@@ -1,0 +1,1126 @@
+{
+  "schema_version": 1,
+  "task": "#34",
+  "parent_tasks": ["#31", "#15"],
+  "retrieved_at": "2026-10-14T06:13:52Z",
+  "notice": "Public metadata only. No weights were downloaded, converted, installed or run. Unknown values are null. Status words describe readiness evidence, never an enabled runtime binding.",
+  "hash_origin_legend": {
+    "hub_lfs_declaration": "SHA-256 reported by the Hugging Face hub for a Git LFS file at the pinned revision; not computed locally from the artifact.",
+    "hub_parsed_gguf_header": "Values the hub parsed from the GGUF header (architecture, parameter count, embedded chat template); not read locally.",
+    "registry_manifest_declaration": "Digest declared in a public Ollama registry manifest.",
+    "locally_computed_metadata_file": "SHA-256 computed in this task over a retrieved small metadata file (chat template text); the file, not the weights.",
+    "local_artifact_verified": "SHA-256 computed locally over the downloaded artifact. None exist in this round."
+  },
+  "derivation_status_legend": {
+    "inferred_unverified": "Compatibility signals only; the artifact is not shown to be converted from the pinned upstream weights.",
+    "verified": "Established by converter source-revision/build evidence or by a reproducible local conversion. None exist yet."
+  },
+  "candidates": [
+    {
+      "candidate_id": "Equall/Saul-7B-Instruct-v1",
+      "role": {
+        "agent": "legal-us-tx",
+        "planned_role": "legal-research",
+        "evaluation_profile": "Q4_K_M, num_ctx 4096 (protocol); optional Q5_K_M"
+      },
+      "upstream": {
+        "repo_url": "https://huggingface.co/Equall/Saul-7B-Instruct-v1",
+        "revision": "2133ba7923533934e78f73848045299dd74f08d2",
+        "last_modified": "2024-03-10T12:39:32.000Z",
+        "api_sources": [
+          "https://huggingface.co/api/models/Equall/Saul-7B-Instruct-v1",
+          "https://huggingface.co/api/models/Equall/Saul-7B-Instruct-v1/tree/2133ba7923533934e78f73848045299dd74f08d2?recursive=true"
+        ],
+        "previous_pin": {
+          "revision": "2133ba7923533934e78f73848045299dd74f08d2",
+          "unchanged_since": "2026-10-13",
+          "evidence_doc": "docs/workstreams/claude/evidence/saul-7b-instruct-v1.md"
+        },
+        "declared_parameter_count": 7241732096,
+        "weight_files": [
+          {
+            "path": "model-00001-of-00006.safetensors",
+            "size_bytes": 4987196936,
+            "sha256": "91ecc2e653502cc5de56eea83f3764f592c20cf46d88ed70bd5414936ecb0e62",
+            "hash_origin": "hub_lfs_declaration",
+            "locally_verified": false
+          },
+          {
+            "path": "model-00002-of-00006.safetensors",
+            "size_bytes": 4899116440,
+            "sha256": "0c32e810f7c16bc18507dcbd9e413d98ca607345a01f5809014042dd90a6bade",
+            "hash_origin": "hub_lfs_declaration",
+            "locally_verified": false
+          },
+          {
+            "path": "model-00003-of-00006.safetensors",
+            "size_bytes": 4999813120,
+            "sha256": "e946b479715b748f77891196bb6bbc949a173ff8d9936246f20ea04fc66a1218",
+            "hash_origin": "hub_lfs_declaration",
+            "locally_verified": false
+          },
+          {
+            "path": "model-00004-of-00006.safetensors",
+            "size_bytes": 4999813128,
+            "sha256": "41c8e8a2efc6608981f8cb3b519a92406793f38ce05190e22f7638c82aa54c38",
+            "hash_origin": "hub_lfs_declaration",
+            "locally_verified": false
+          },
+          {
+            "path": "model-00005-of-00006.safetensors",
+            "size_bytes": 4832007496,
+            "sha256": "7f66b18676a1a4c127a6984a4db186088fd95b0a0767985e22824055ea3c714e",
+            "hash_origin": "hub_lfs_declaration",
+            "locally_verified": false
+          },
+          {
+            "path": "model-00006-of-00006.safetensors",
+            "size_bytes": 4249014896,
+            "sha256": "d484f15a0008838e5348eac904b45c4e95cc36f0628f51505e6db5cccbeef08c",
+            "hash_origin": "hub_lfs_declaration",
+            "locally_verified": false
+          }
+        ],
+        "weight_total_bytes": 28966962016
+      },
+      "upstream_dtype": "float32 (config torch_dtype); 28.97 GB of shards",
+      "license": {
+        "status": "verified",
+        "meaning": "Publisher declaration found at the pinned revision; the full chain is not accepted.",
+        "declaration": {
+          "value": "MIT",
+          "sources": [
+            "https://huggingface.co/Equall/Saul-7B-Instruct-v1/blob/2133ba7923533934e78f73848045299dd74f08d2/README.md",
+            "https://arxiv.org/abs/2403.03883"
+          ]
+        },
+        "accepted_chain": "pending",
+        "unresolved_restrictions": [
+          "No LICENSE file or copyright line in the repository.",
+          "Training-data and model-output terms (SlimOrca, UltraChat, Law Stack Exchange CC BY-SA, CourtListener, etc.) not audited.",
+          "Checkpoint name ift_hermes_legal_1e-5 suggests instruction data the paper does not list."
+        ]
+      },
+      "architecture": {
+        "family": "mistral",
+        "layers": 32,
+        "kv_heads": 8,
+        "head_dim": 128,
+        "attention": "sliding-window attention (sliding_window 4096): an attention/cache mechanism, not a total sequence cap",
+        "max_position_embeddings": 32768,
+        "long_context_runtime_support": "unverified"
+      },
+      "generation_defaults": {
+        "bos_token_id": 1,
+        "eos_token_id": 2
+      },
+      "template": {
+        "source_file": "tokenizer_config.json#chat_template",
+        "revision": "2133ba7923533934e78f73848045299dd74f08d2",
+        "sha256": "26a59556925c987317ce5291811ba3b7f32ec4c647c400c6cc7e3a9993007ba7",
+        "length_chars": 470,
+        "hash_origin": "locally_computed_metadata_file",
+        "format": "Mistral [INST] … [/INST]",
+        "system_role_supported": false,
+        "default_system_prompt": null,
+        "thinking": {
+          "supported": false,
+          "default_on": false
+        },
+        "prompt_v2_compatible": true,
+        "prompt_v2_notes": "Prompt v2 uses one user turn, so the template accepts it. Any system message raises an exception; Ollama imports must not inject one."
+      },
+      "artifact_options": [
+        {
+          "kind": "gguf_third_party_conversion",
+          "repo_url": "https://huggingface.co/mradermacher/Saul-7B-Instruct-v1-GGUF",
+          "revision": "d29201363c90e5c2caf4e01a6f315db1956f45c5",
+          "last_modified": "2024-12-03T02:38:16.000Z",
+          "license_label": "mit",
+          "license_label_note": "Third-party repository label; never substitutes for upstream permission.",
+          "base_model_declared": "Equall/Saul-7B-Instruct-v1",
+          "converted_upstream_revision": null,
+          "converted_upstream_revision_note": "Not recorded by the converter.",
+          "derivation": {
+            "status": "inferred_unverified",
+            "gate": "pending",
+            "note": "Conversion dates, parameter counts and embedded templates show compatibility, not derivation: they cannot rule out modified weights or another same-architecture checkpoint. A declared GGUF hash identifies the converter's bytes only. Resolve with converter source-revision/build evidence or a reproducible local conversion."
+          },
+          "gguf_header_reported": {
+            "origin": "hub_parsed_gguf_header",
+            "architecture": "llama",
+            "context_length": 32768,
+            "parameter_count": 7241732096,
+            "embedded_chat_template_sha256": "26a59556925c987317ce5291811ba3b7f32ec4c647c400c6cc7e3a9993007ba7"
+          },
+          "quant_files": [
+            {
+              "quant": "Q4_K_M",
+              "path": "Saul-7B-Instruct-v1.Q4_K_M.gguf",
+              "size_bytes": 4368440448,
+              "sha256": "7034821b79ad7d661381ff41b2c37c605e49cb25c3cab57b1ac80c161bc7b3f0",
+              "hash_origin": "hub_lfs_declaration",
+              "locally_verified": false
+            },
+            {
+              "quant": "Q5_K_M",
+              "path": "Saul-7B-Instruct-v1.Q5_K_M.gguf",
+              "size_bytes": 5131410560,
+              "sha256": "feb544a7c8d6371f7d142dc26bfcdf3e007fca513f41b6948b615b54d7b48675",
+              "hash_origin": "hub_lfs_declaration",
+              "locally_verified": false
+            },
+            {
+              "quant": "Q8_0",
+              "path": "Saul-7B-Instruct-v1.Q8_0.gguf",
+              "size_bytes": 7695858816,
+              "sha256": "74e92982aaac42703177f716d4716e79daaf60a350cbf362dc6171f9fb2b4cc4",
+              "hash_origin": "hub_lfs_declaration",
+              "locally_verified": false
+            }
+          ],
+          "recommended": true,
+          "compatibility_evidence": "Converted 2024-12, after the final upstream commit (2024-03-10, the pinned revision), so the date does not conflict with the pinned weights. Header parameter count equals upstream (7241732096); embedded template sha256 equals upstream. Derivation from the pinned weights is inferred, not verified."
+        },
+        {
+          "kind": "local_conversion",
+          "recipe": "llama.cpp convert_hf_to_gguf.py from the pinned revision (fp32 source) to f16, then llama-quantize Q4_K_M; record llama.cpp commit and output sha256.",
+          "artifact_hash": null,
+          "notes": "Removes third-party trust at the cost of a ~29 GB source download; use if third-party GGUF verification fails."
+        }
+      ],
+      "local_artifact": {
+        "status": "not_acquired",
+        "ollama_tag": null,
+        "manifest_digest": null,
+        "model_blob_sha256": null,
+        "locally_verified": false
+      },
+      "token_budget": {
+        "fixture_domain": "legal-us-tx",
+        "prompt_v2_chars": {
+          "min_chars": 1196,
+          "median_chars": 2764,
+          "p95_chars": 4106,
+          "max_chars": 4557,
+          "max_case": "LEG-X-004"
+        },
+        "est_input_tokens_max": 1519,
+        "output_cap_tokens": 1024,
+        "est_total_tokens_max": 2543,
+        "estimate_method": "characters / 3 over the rendered prompt-v2 text; planning estimate, not a guaranteed bound",
+        "sliding_attention_window": 4096,
+        "notes": "Provisional: by estimate, input plus output fits the chosen 4096 evaluation profile. 4096 is the evaluation context profile, distinct from the 4096 sliding attention window and from the declared 32768 max positions; acceptance evidence is rendered token counts and truncation checks.",
+        "declared_max_position_embeddings": 32768,
+        "recommended_num_ctx": 4096
+      },
+      "gpu_estimate": {
+        "q4_k_m_weights_mb": 4368,
+        "kv_cache": {
+          "method": "estimate: 2 × attention_layers × kv_heads × head_dim × 1.0625 bytes (q8_0 KV cache) per token; excludes compute buffers and runtime overhead",
+          "bytes_per_token": 69632,
+          "mb_at_context": {
+            "4096": 285,
+            "8192": 570
+          }
+        },
+        "context": {
+          "measured_embed_partner": "qwen3-embedding:0.6b 2.25 GB at 8K context (1.88 GB at 2K), HARDWARE.md",
+          "desktop_vram": "0.8–1.6 GB observed on the Windows desktop",
+          "card_total_gb": 12,
+          "status": "estimates only; production-profile measurement required"
+        }
+      },
+      "readiness": {
+        "status": "ready_for_acquisition_review",
+        "blockers": [
+          "Owner acceptance of unaudited training-data terms and missing LICENSE text.",
+          "GGUF derivation from the pinned weights is inferred only: needs converter source-revision/build evidence or a reproducible local conversion.",
+          "No locally verified artifact.",
+          "No production-profile GPU evidence.",
+          "No local quality results; qualified legal review pending."
+        ],
+        "meaning": "Readiness evidence for #31 planning only; not an enabled binding, acquisition approval or adoption.",
+        "future_tests": {
+          "quality": [
+            "Verify local blob sha256 equals the pinned quant_files sha256 before import (first locally_verified hash).",
+            "Render the prompt-v2 single user turn through the imported template and diff against the upstream Jinja rendering for 3 sample cases.",
+            "Run the domain fixtures per the prompt-v2 protocol with explicit per-request sampling options (temperature 0, seed, top_p, top_k, repeat/presence penalty) so model-default parameters cannot differ across arms.",
+            "Record truncation (prompt_eval_count vs expected, done_reason) for every case; any truncation fails the case."
+          ],
+          "production_profile": [
+            "Exclusive host lease (flock), idle /api/ps and nvidia-smi before and after; post start/finish in #15.",
+            "Production profile: candidate at the evaluated quantization and num_ctx loaded together with qwen3-embedding:0.6b at its active profile; both 100% GPU in /api/ps, cross-checked with nvidia-smi used/free including desktop VRAM; record headroom.",
+            "Swap test: from resident chat (qwen3.5:9b) + embed, load the candidate, run one prompt-v2 case, restore chat; record cold load, swap time, time to first token, decode tok/s and any eviction of the embedding model.",
+            "Strict residency check (present, requested context, full allocation) via the existing benchmark harness semantics; failure keeps the candidate inactive."
+          ]
+        }
+      }
+    },
+    {
+      "candidate_id": "AudCor/cpa-qwen3-8b-v0",
+      "role": {
+        "agent": "accountant",
+        "planned_role": "accounting",
+        "evaluation_profile": "Q4_K_M and a higher-precision quant (Q8_0), num_ctx 4096, thinking disabled"
+      },
+      "upstream": {
+        "repo_url": "https://huggingface.co/AudCor/cpa-qwen3-8b-v0",
+        "revision": "a00310433dc2b9d21093bcca7f0c6a746b62fbb9",
+        "last_modified": "2026-01-18T03:24:13.000Z",
+        "api_sources": [
+          "https://huggingface.co/api/models/AudCor/cpa-qwen3-8b-v0",
+          "https://huggingface.co/api/models/AudCor/cpa-qwen3-8b-v0/tree/a00310433dc2b9d21093bcca7f0c6a746b62fbb9?recursive=true"
+        ],
+        "previous_pin": {
+          "revision": "a00310433dc2b9d21093bcca7f0c6a746b62fbb9",
+          "unchanged_since": "2026-10-13",
+          "evidence_doc": "docs/workstreams/claude/evidence/cpa-qwen3-8b-v0.md"
+        },
+        "declared_parameter_count": 8190735360,
+        "weight_files": [
+          {
+            "path": "model-00001-of-00004.safetensors",
+            "size_bytes": 4902257696,
+            "sha256": "1dd2041738a7efa86ea87081f8f05996b56b5dad1e08bee92a08602e5b2ec7c2",
+            "hash_origin": "hub_lfs_declaration",
+            "locally_verified": false
+          },
+          {
+            "path": "model-00002-of-00004.safetensors",
+            "size_bytes": 4915960368,
+            "sha256": "b41da8d9de7112a898bcfdcdb9ebcf32a4f19c405ca19c4fa82a67fdf375abf8",
+            "hash_origin": "hub_lfs_declaration",
+            "locally_verified": false
+          },
+          {
+            "path": "model-00003-of-00004.safetensors",
+            "size_bytes": 4983068496,
+            "sha256": "8df4a2f0f4c326a67f8782499362dd55d3fe034c14ac2fce5abcefef1b60d219",
+            "hash_origin": "hub_lfs_declaration",
+            "locally_verified": false
+          },
+          {
+            "path": "model-00004-of-00004.safetensors",
+            "size_bytes": 1580230264,
+            "sha256": "d63f44005571b527d285a5c72f441b90cc5a736e96253e99a2c89f86b59b2103",
+            "hash_origin": "hub_lfs_declaration",
+            "locally_verified": false
+          }
+        ],
+        "weight_total_bytes": 16381516824
+      },
+      "upstream_dtype": "bfloat16; fine-tuned from unsloth/Qwen3-8B-unsloth-bnb-4bit (4-bit base)",
+      "license": {
+        "status": "verified",
+        "meaning": "Publisher declaration found at the pinned revision; the full chain is not accepted.",
+        "declaration": {
+          "value": "Apache-2.0",
+          "sources": [
+            "https://huggingface.co/AudCor/cpa-qwen3-8b-v0/blob/a00310433dc2b9d21093bcca7f0c6a746b62fbb9/README.md"
+          ]
+        },
+        "accepted_chain": "pending",
+        "unresolved_restrictions": [
+          "Card metadata only; no LICENSE/NOTICE file.",
+          "Training set Finance-Instruct-500k is an aggregate whose upstream licenses were not traced; the revision used for training is unknown (dataset modified after the model was created).",
+          "No published evaluation results; competence unproven."
+        ]
+      },
+      "architecture": {
+        "family": "qwen3",
+        "layers": 36,
+        "kv_heads": 8,
+        "head_dim": 128,
+        "attention": "full",
+        "max_position_embeddings": 40960
+      },
+      "generation_defaults": null,
+      "template": {
+        "source_file": "chat_template.jinja (identical to tokenizer_config chat_template)",
+        "revision": "a00310433dc2b9d21093bcca7f0c6a746b62fbb9",
+        "sha256": "96fd16d36fb085260f9eb1e717b2c4e6e8b9e75a5e6504f66c8d6b128d82784d",
+        "length_chars": 4673,
+        "hash_origin": "locally_computed_metadata_file",
+        "format": "Qwen3 ChatML with <think> handling and tool formatting",
+        "system_role_supported": true,
+        "default_system_prompt": null,
+        "thinking": {
+          "supported": true,
+          "default_on": true,
+          "disable": "enable_thinking=false renders an empty <think></think> block"
+        },
+        "prompt_v2_compatible": true,
+        "prompt_v2_notes": "Thinking defaults on unless disabled; with it on, reasoning consumes the 1024-token output cap. Verify the Ollama import honors think:false."
+      },
+      "artifact_options": [
+        {
+          "kind": "gguf_third_party_conversion",
+          "repo_url": "https://huggingface.co/mradermacher/cpa-qwen3-8b-v0-GGUF",
+          "revision": "fd4ca18985c3ce7d6bfb3e0773314e7fe97f96fc",
+          "last_modified": "2026-01-19T02:07:42.000Z",
+          "license_label": "apache-2.0",
+          "license_label_note": "Third-party repository label; never substitutes for upstream permission.",
+          "base_model_declared": "AudCor/cpa-qwen3-8b-v0",
+          "converted_upstream_revision": null,
+          "converted_upstream_revision_note": "Not recorded by the converter.",
+          "derivation": {
+            "status": "inferred_unverified",
+            "gate": "pending",
+            "note": "Conversion dates, parameter counts and embedded templates show compatibility, not derivation: they cannot rule out modified weights or another same-architecture checkpoint. A declared GGUF hash identifies the converter's bytes only. Resolve with converter source-revision/build evidence or a reproducible local conversion."
+          },
+          "gguf_header_reported": {
+            "origin": "hub_parsed_gguf_header",
+            "architecture": "qwen3",
+            "context_length": 40960,
+            "parameter_count": 8190735360,
+            "embedded_chat_template_sha256": "96fd16d36fb085260f9eb1e717b2c4e6e8b9e75a5e6504f66c8d6b128d82784d"
+          },
+          "quant_files": [
+            {
+              "quant": "Q4_K_M",
+              "path": "cpa-qwen3-8b-v0.Q4_K_M.gguf",
+              "size_bytes": 5027785216,
+              "sha256": "c18b06d8c66bdb4968a9cadf496dce85178492901e29730c1a327545df5d966c",
+              "hash_origin": "hub_lfs_declaration",
+              "locally_verified": false
+            },
+            {
+              "quant": "Q5_K_M",
+              "path": "cpa-qwen3-8b-v0.Q5_K_M.gguf",
+              "size_bytes": 5851113984,
+              "sha256": "26d665a6632db5a5eed9abcb2fce81c849e3d97163a8325746adf229ad9f3478",
+              "hash_origin": "hub_lfs_declaration",
+              "locally_verified": false
+            },
+            {
+              "quant": "Q8_0",
+              "path": "cpa-qwen3-8b-v0.Q8_0.gguf",
+              "size_bytes": 8709519872,
+              "sha256": "8e7d9cf88059245f56af6cb19f7dd5b23cf1f8fcbcd8ddfad92bcb1068b0985f",
+              "hash_origin": "hub_lfs_declaration",
+              "locally_verified": false
+            }
+          ],
+          "recommended": true,
+          "compatibility_evidence": "Only GGUF found. Converted 2026-01-19, after the final upstream commit (2026-01-18T03:24:13Z). Header parameter count equals upstream (8190735360); embedded template sha256 equals upstream. Derivation from the pinned weights is inferred, not verified."
+        },
+        {
+          "kind": "local_conversion",
+          "recipe": "llama.cpp convert_hf_to_gguf.py from the pinned bf16 revision, then quantize; compare Q4_K_M against Q8_0 because the weights already passed through a 4-bit base.",
+          "artifact_hash": null,
+          "notes": "Use if third-party GGUF verification fails."
+        }
+      ],
+      "local_artifact": {
+        "status": "not_acquired",
+        "ollama_tag": null,
+        "manifest_digest": null,
+        "model_blob_sha256": null,
+        "locally_verified": false
+      },
+      "token_budget": {
+        "fixture_domain": "accountant",
+        "prompt_v2_chars": {
+          "min_chars": 1230,
+          "median_chars": 5337,
+          "p95_chars": 5925,
+          "max_chars": 6075,
+          "max_case": "ACC-A-022"
+        },
+        "est_input_tokens_max": 2025,
+        "output_cap_tokens": 1024,
+        "est_total_tokens_max": 3049,
+        "estimate_method": "characters / 3 over the rendered prompt-v2 text; planning estimate, not a guaranteed bound",
+        "sliding_attention_window": null,
+        "notes": "Provisional: by estimate fits num_ctx 4096 only with thinking disabled; with thinking on, reasoning would consume the output cap. Confirm with tokenizer counts and truncation checks.",
+        "recommended_num_ctx": 4096
+      },
+      "gpu_estimate": {
+        "q4_k_m_weights_mb": 5028,
+        "kv_cache": {
+          "method": "estimate: 2 × attention_layers × kv_heads × head_dim × 1.0625 bytes (q8_0 KV cache) per token; excludes compute buffers and runtime overhead",
+          "bytes_per_token": 78336,
+          "mb_at_context": {
+            "4096": 321,
+            "8192": 642
+          }
+        },
+        "context": {
+          "measured_embed_partner": "qwen3-embedding:0.6b 2.25 GB at 8K context (1.88 GB at 2K), HARDWARE.md",
+          "desktop_vram": "0.8–1.6 GB observed on the Windows desktop",
+          "card_total_gb": 12,
+          "status": "estimates only; production-profile measurement required"
+        }
+      },
+      "readiness": {
+        "status": "ready_for_acquisition_review",
+        "blockers": [
+          "Owner acceptance of license chain (metadata-only declaration, untraced aggregate dataset).",
+          "GGUF derivation from the pinned weights is inferred only: needs converter source-revision/build evidence or a reproducible local conversion.",
+          "No locally verified artifact; thinking-off behavior in Ollama unverified.",
+          "No production-profile GPU evidence.",
+          "No local quality results; qualified accounting review and personal vs business scope pending."
+        ],
+        "meaning": "Readiness evidence for #31 planning only; not an enabled binding, acquisition approval or adoption.",
+        "future_tests": {
+          "quality": [
+            "Verify local blob sha256 equals the pinned quant_files sha256 before import (first locally_verified hash).",
+            "Render the prompt-v2 single user turn through the imported template and diff against the upstream Jinja rendering for 3 sample cases.",
+            "Run the domain fixtures per the prompt-v2 protocol with explicit per-request sampling options (temperature 0, seed, top_p, top_k, repeat/presence penalty) so model-default parameters cannot differ across arms.",
+            "Record truncation (prompt_eval_count vs expected, done_reason) for every case; any truncation fails the case."
+          ],
+          "production_profile": [
+            "Exclusive host lease (flock), idle /api/ps and nvidia-smi before and after; post start/finish in #15.",
+            "Production profile: candidate at the evaluated quantization and num_ctx loaded together with qwen3-embedding:0.6b at its active profile; both 100% GPU in /api/ps, cross-checked with nvidia-smi used/free including desktop VRAM; record headroom.",
+            "Swap test: from resident chat (qwen3.5:9b) + embed, load the candidate, run one prompt-v2 case, restore chat; record cold load, swap time, time to first token, decode tok/s and any eviction of the embedding model.",
+            "Strict residency check (present, requested context, full allocation) via the existing benchmark harness semantics; failure keeps the candidate inactive."
+          ]
+        }
+      }
+    },
+    {
+      "candidate_id": "SUFE-AIFLM-Lab/Fin-R1",
+      "role": {
+        "agent": "finance",
+        "planned_role": "financial-analysis",
+        "evaluation_profile": "Q4_K_M, num_ctx 8192 (needs room for R1-style reasoning)"
+      },
+      "upstream": {
+        "repo_url": "https://huggingface.co/SUFE-AIFLM-Lab/Fin-R1",
+        "revision": "026768c4a015b591b54b240743edeac1de0970fa",
+        "last_modified": "2025-03-21T02:01:04.000Z",
+        "api_sources": [
+          "https://huggingface.co/api/models/SUFE-AIFLM-Lab/Fin-R1",
+          "https://huggingface.co/api/models/SUFE-AIFLM-Lab/Fin-R1/tree/026768c4a015b591b54b240743edeac1de0970fa?recursive=true"
+        ],
+        "previous_pin": {
+          "revision": "026768c4a015b591b54b240743edeac1de0970fa",
+          "unchanged_since": "2026-10-13",
+          "evidence_doc": "docs/workstreams/claude/evidence/fin-r1.md"
+        },
+        "declared_parameter_count": 7615616512,
+        "weight_files": [
+          {
+            "path": "model-00001-of-00004.safetensors",
+            "size_bytes": 4877660776,
+            "sha256": "b578c96c308a7552e6a111032ba53fcbbe05f8bad3e104a150cc6e48d91024c7",
+            "hash_origin": "hub_lfs_declaration",
+            "locally_verified": false
+          },
+          {
+            "path": "model-00002-of-00004.safetensors",
+            "size_bytes": 4932751008,
+            "sha256": "1c2a033acf8a336001d38fe91b8ac1ad7943e156378c7536978f8fa350d88db2",
+            "hash_origin": "hub_lfs_declaration",
+            "locally_verified": false
+          },
+          {
+            "path": "model-00003-of-00004.safetensors",
+            "size_bytes": 4330865200,
+            "sha256": "deeccd78025dd02d07f989b813ffeeb6a780f18c517b59ce7792260f0b481973",
+            "hash_origin": "hub_lfs_declaration",
+            "locally_verified": false
+          },
+          {
+            "path": "model-00004-of-00004.safetensors",
+            "size_bytes": 1089994880,
+            "sha256": "02cc5ac5605a563a039eadedd51bdc46624c5a5f001df3afe9f44b58d2c37c6b",
+            "hash_origin": "hub_lfs_declaration",
+            "locally_verified": false
+          }
+        ],
+        "weight_total_bytes": 15231271864
+      },
+      "upstream_dtype": "bfloat16; Qwen2.5-7B-Instruct base",
+      "license": {
+        "status": "unresolved",
+        "meaning": "No license grant found at the pinned revision. Adoption and acquisition are blocked.",
+        "declaration": {
+          "value": null,
+          "sources": [
+            "https://huggingface.co/api/models/SUFE-AIFLM-Lab/Fin-R1",
+            "https://api.github.com/repos/SUFE-AIFLM-Lab/Fin-R1/license"
+          ]
+        },
+        "observed_signals": [
+          "Hugging Face cardData has no license field; no LICENSE file in the repository.",
+          "GitHub repository license is null; /license returns HTTP 404; no commits since 2025-03-27 (06ead1e61ff77cad71dc409198b1a2575d748ecd).",
+          "README (HF and GitHub) shows only an \"Apache 2.0\" badge linking to the generic apache.org page.",
+          "arXiv:2503.16252 is at v5 (2026-03-19); not a license grant for the weights."
+        ],
+        "accepted_chain": "blocked",
+        "unresolved_restrictions": [
+          "Weights license unknown; third-party GGUF labels (e.g. apache-2.0 on Mungert/Fin-R1-GGUF) cannot establish upstream permission.",
+          "Distillation/judging chain: DeepSeek-R1 outputs (MIT), Qwen2.5-72B-Instruct scoring (Qwen license), Qwen2.5-Max verifier (proprietary service terms) not audited.",
+          "Ten source datasets with unverified licenses."
+        ]
+      },
+      "architecture": {
+        "family": "qwen2",
+        "layers": 28,
+        "kv_heads": 4,
+        "head_dim": 128,
+        "attention": "full",
+        "max_position_embeddings": 32768
+      },
+      "generation_defaults": {
+        "do_sample": true,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "repetition_penalty": 1.05,
+        "eos_token_id": [151645, 151643]
+      },
+      "template": {
+        "source_file": "tokenizer_config.json#chat_template",
+        "revision": "026768c4a015b591b54b240743edeac1de0970fa",
+        "sha256": "cd8e9439f0570856fd70470bf8889ebd8b5d1107207f67a5efb46e342330527f",
+        "length_chars": 2507,
+        "hash_origin": "locally_computed_metadata_file",
+        "format": "Qwen2.5 ChatML with tool formatting",
+        "system_role_supported": true,
+        "default_system_prompt": "You are Qwen, created by Alibaba Cloud. You are a helpful assistant.",
+        "thinking": {
+          "supported": false,
+          "default_on": false,
+          "note": "No <think> handling in the template; R1-style reasoning is emitted as plain output text."
+        },
+        "prompt_v2_compatible": true,
+        "prompt_v2_notes": "With a single user turn the template auto-inserts the default Qwen system prompt. Any Ollama import must reproduce it, and the run record should note it."
+      },
+      "artifact_options": [
+        {
+          "kind": "gguf_third_party_conversion",
+          "repo_url": "https://huggingface.co/bartowski/SUFE-AIFLM-Lab_Fin-R1-GGUF",
+          "revision": "61b412864cc5df96e415808920451a9856d7b078",
+          "last_modified": "2025-03-26T14:51:37.000Z",
+          "license_label": null,
+          "license_label_note": "Third-party repository label; never substitutes for upstream permission.",
+          "base_model_declared": "SUFE-AIFLM-Lab/Fin-R1",
+          "converted_upstream_revision": null,
+          "converted_upstream_revision_note": "Not recorded by the converter.",
+          "derivation": {
+            "status": "inferred_unverified",
+            "gate": "pending",
+            "note": "Conversion dates, parameter counts and embedded templates show compatibility, not derivation: they cannot rule out modified weights or another same-architecture checkpoint. A declared GGUF hash identifies the converter's bytes only. Resolve with converter source-revision/build evidence or a reproducible local conversion."
+          },
+          "gguf_header_reported": {
+            "origin": "hub_parsed_gguf_header",
+            "architecture": "qwen2",
+            "context_length": 32768,
+            "parameter_count": 7615616512,
+            "embedded_chat_template_sha256": "cd8e9439f0570856fd70470bf8889ebd8b5d1107207f67a5efb46e342330527f"
+          },
+          "quant_files": [
+            {
+              "quant": "Q4_K_M",
+              "path": "SUFE-AIFLM-Lab_Fin-R1-Q4_K_M.gguf",
+              "size_bytes": 4683073600,
+              "sha256": "d50f16c5149b4dc103c68e249a136ab7c82f7569a7df707a2d6150bff5994c33",
+              "hash_origin": "hub_lfs_declaration",
+              "locally_verified": false
+            },
+            {
+              "quant": "Q5_K_M",
+              "path": "SUFE-AIFLM-Lab_Fin-R1-Q5_K_M.gguf",
+              "size_bytes": 5444831296,
+              "sha256": "c7377236ecdda291058a6c096ac4f3b19764de70efc23a537d30782e22bdb430",
+              "hash_origin": "hub_lfs_declaration",
+              "locally_verified": false
+            },
+            {
+              "quant": "Q8_0",
+              "path": "SUFE-AIFLM-Lab_Fin-R1-Q8_0.gguf",
+              "size_bytes": 8098525248,
+              "sha256": "999b13aec7a6703d2fa108cabda180427e1223dcec9e525c29a1d894863b1a66",
+              "hash_origin": "hub_lfs_declaration",
+              "locally_verified": false
+            }
+          ],
+          "recommended": true,
+          "compatibility_evidence": "Converted 2025-03-26. Upstream weight/config/tokenizer_config hashes are identical across all revisions since 2025-03-17, so the date does not conflict with the pinned weights. Header parameter count equals upstream (7615616512); embedded template sha256 equals upstream. License label absent (consistent with upstream). Derivation inferred, not verified."
+        },
+        {
+          "kind": "gguf_third_party_conversion",
+          "repo_url": "https://huggingface.co/mradermacher/Fin-R1-GGUF",
+          "revision": "1daf04baeda30b120b2e5c586b296e453f9f439c",
+          "last_modified": "2025-03-17T09:06:12.000Z",
+          "license_label": null,
+          "license_label_note": "Third-party repository label; never substitutes for upstream permission.",
+          "base_model_declared": "SUFE-AIFLM-Lab/Fin-R1",
+          "converted_upstream_revision": null,
+          "converted_upstream_revision_note": "Not recorded by the converter.",
+          "derivation": {
+            "status": "inferred_unverified",
+            "gate": "pending",
+            "note": "Conversion dates, parameter counts and embedded templates show compatibility, not derivation: they cannot rule out modified weights or another same-architecture checkpoint. A declared GGUF hash identifies the converter's bytes only. Resolve with converter source-revision/build evidence or a reproducible local conversion."
+          },
+          "gguf_header_reported": {
+            "origin": "hub_parsed_gguf_header",
+            "architecture": "qwen2",
+            "context_length": 32768,
+            "parameter_count": 7615616512,
+            "embedded_chat_template_sha256": "cd8e9439f0570856fd70470bf8889ebd8b5d1107207f67a5efb46e342330527f"
+          },
+          "quant_files": [
+            {
+              "quant": "Q4_K_M",
+              "path": "Fin-R1.Q4_K_M.gguf",
+              "size_bytes": 4683073760,
+              "sha256": "d5b2c6cbe57f72b78e2645c4cbe713920c122ace8e28b21a8a843ffa9eda3f66",
+              "hash_origin": "hub_lfs_declaration",
+              "locally_verified": false
+            },
+            {
+              "quant": "Q8_0",
+              "path": "Fin-R1.Q8_0.gguf",
+              "size_bytes": 8098525408,
+              "sha256": "4c0dab7ef03699b7be758ac70ce28dd8bb493ad4589dd7f8f4d384d37f85f75c",
+              "hash_origin": "hub_lfs_declaration",
+              "locally_verified": false
+            }
+          ],
+          "recommended": false,
+          "compatibility_evidence": "Dated 2025-03-17, before the final upstream commit; upstream weight/config/tokenizer_config hashes did not change after 2025-03-17, so the date does not conflict with the pinned weights. Embedded template sha256 equals upstream. Derivation inferred, not verified."
+        },
+        {
+          "kind": "gguf_third_party_conversion",
+          "repo_url": "https://huggingface.co/Mungert/Fin-R1-GGUF",
+          "revision": "a2f39af9bfc3c49d129996e2e74c3bb5ad4e3a50",
+          "last_modified": "2025-09-24T15:41:28.000Z",
+          "license_label": "apache-2.0",
+          "license_label_note": "Third-party repository label; never substitutes for upstream permission.",
+          "base_model_declared": null,
+          "converted_upstream_revision": null,
+          "converted_upstream_revision_note": "Not recorded by the converter.",
+          "derivation": {
+            "status": "inferred_unverified",
+            "gate": "pending",
+            "note": "Conversion dates, parameter counts and embedded templates show compatibility, not derivation: they cannot rule out modified weights or another same-architecture checkpoint. A declared GGUF hash identifies the converter's bytes only. Resolve with converter source-revision/build evidence or a reproducible local conversion."
+          },
+          "gguf_header_reported": {
+            "origin": "hub_parsed_gguf_header",
+            "architecture": "qwen2",
+            "context_length": 32768,
+            "parameter_count": 7615616512,
+            "embedded_chat_template_sha256": "cd8e9439f0570856fd70470bf8889ebd8b5d1107207f67a5efb46e342330527f"
+          },
+          "quant_files": [
+            {
+              "quant": "Q4_K_M",
+              "path": "Fin-R1-q4_k_m.gguf",
+              "size_bytes": 4683073664,
+              "sha256": "841de2a6c59d0535c45d6e58958ceaef3ce2cf417a9ed536239aa30c5789de01",
+              "hash_origin": "hub_lfs_declaration",
+              "locally_verified": false
+            },
+            {
+              "quant": "Q8_0",
+              "path": "Fin-R1-q8_0.gguf",
+              "size_bytes": 8098525056,
+              "sha256": "297813bfb0e93216e47e68c1d3155c955f19eee8fd84bbc8f5b9407bcb97d790",
+              "hash_origin": "hub_lfs_declaration",
+              "locally_verified": false
+            }
+          ],
+          "recommended": false,
+          "compatibility_evidence": "No base_model declared; labels the conversion apache-2.0 without an upstream grant. Embedded template sha256 equals upstream. Derivation inferred, not verified."
+        }
+      ],
+      "local_artifact": {
+        "status": "blocked_by_license",
+        "ollama_tag": null,
+        "manifest_digest": null,
+        "model_blob_sha256": null,
+        "locally_verified": false
+      },
+      "token_budget": {
+        "fixture_domain": "finance",
+        "prompt_v2_chars": {
+          "min_chars": 1192,
+          "median_chars": 2711,
+          "p95_chars": 3971,
+          "max_chars": 3993,
+          "max_case": "FIN-X-020"
+        },
+        "est_input_tokens_max": 1331,
+        "output_cap_tokens": 4096,
+        "est_total_tokens_max": 5427,
+        "estimate_method": "characters / 3 over the rendered prompt-v2 text; planning estimate, not a guaranteed bound",
+        "sliding_attention_window": null,
+        "notes": "Exceeds num_ctx 4096 regardless of the token ratio: the protocol's 4096 reasoning cap alone fills the window before any input. Use num_ctx 8192 (or cap output at num_ctx − input) and record truncation.",
+        "recommended_num_ctx": 8192
+      },
+      "gpu_estimate": {
+        "q4_k_m_weights_mb": 4683,
+        "kv_cache": {
+          "method": "estimate: 2 × attention_layers × kv_heads × head_dim × 1.0625 bytes (q8_0 KV cache) per token; excludes compute buffers and runtime overhead",
+          "bytes_per_token": 30464,
+          "mb_at_context": {
+            "4096": 125,
+            "8192": 250
+          }
+        },
+        "context": {
+          "measured_embed_partner": "qwen3-embedding:0.6b 2.25 GB at 8K context (1.88 GB at 2K), HARDWARE.md",
+          "desktop_vram": "0.8–1.6 GB observed on the Windows desktop",
+          "card_total_gb": 12,
+          "status": "estimates only; production-profile measurement required"
+        }
+      },
+      "readiness": {
+        "status": "blocked_license",
+        "blockers": [
+          "Upstream license unresolved (badge only). Acquisition blocked unless the publisher adds a license or the owner records an explicit private-evaluation-only acceptance in #15.",
+          "Protocol context budget must change to num_ctx 8192 (or output cap reduced) before any run.",
+          "GGUF derivation from the pinned weights is inferred only.",
+          "No locally verified artifact; no GPU or quality evidence."
+        ],
+        "meaning": "Readiness evidence for #31 planning only; not an enabled binding, acquisition approval or adoption.",
+        "future_tests": {
+          "quality": [
+            "Verify local blob sha256 equals the pinned quant_files sha256 before import (first locally_verified hash).",
+            "Render the prompt-v2 single user turn through the imported template and diff against the upstream Jinja rendering for 3 sample cases.",
+            "Run the domain fixtures per the prompt-v2 protocol with explicit per-request sampling options (temperature 0, seed, top_p, top_k, repeat/presence penalty) so model-default parameters cannot differ across arms.",
+            "Record truncation (prompt_eval_count vs expected, done_reason) for every case; any truncation fails the case."
+          ],
+          "production_profile": [
+            "Exclusive host lease (flock), idle /api/ps and nvidia-smi before and after; post start/finish in #15.",
+            "Production profile: candidate at the evaluated quantization and num_ctx loaded together with qwen3-embedding:0.6b at its active profile; both 100% GPU in /api/ps, cross-checked with nvidia-smi used/free including desktop VRAM; record headroom.",
+            "Swap test: from resident chat (qwen3.5:9b) + embed, load the candidate, run one prompt-v2 case, restore chat; record cold load, swap time, time to first token, decode tok/s and any eviction of the embedding model.",
+            "Strict residency check (present, requested context, full allocation) via the existing benchmark harness semantics; failure keeps the candidate inactive."
+          ]
+        }
+      }
+    },
+    {
+      "candidate_id": "Qwen/Qwen3.5-9B",
+      "role": {
+        "agent": "all (baseline)",
+        "planned_role": "chat / knowledge / vision (existing)",
+        "evaluation_profile": "installed Ollama artifact; num_ctx per arm sized to fit (production 16384 reference row)"
+      },
+      "upstream": {
+        "repo_url": "https://huggingface.co/Qwen/Qwen3.5-9B",
+        "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a",
+        "last_modified": "2026-03-02T00:51:43.000Z",
+        "api_sources": [
+          "https://huggingface.co/api/models/Qwen/Qwen3.5-9B",
+          "https://huggingface.co/api/models/Qwen/Qwen3.5-9B/tree/c202236235762e1c871ad0ccb60c8ee5ba337b9a?recursive=true"
+        ],
+        "previous_pin": {
+          "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a",
+          "unchanged_since": "2026-10-13",
+          "evidence_doc": "docs/workstreams/claude/evidence/qwen3.5-9b-baseline.md"
+        },
+        "declared_parameter_count": 9653104368,
+        "weight_files": [
+          {
+            "path": "model.safetensors-00001-of-00004.safetensors",
+            "size_bytes": 5276436216,
+            "sha256": "db6f444b43d318c92f360a13a25561a6a65b10c0631b8ed305a426dbaa6c380e",
+            "hash_origin": "hub_lfs_declaration",
+            "locally_verified": false
+          },
+          {
+            "path": "model.safetensors-00002-of-00004.safetensors",
+            "size_bytes": 5335161512,
+            "sha256": "31c7d7e2dd5d207840b31cc59083c8f4c4718959149e0358c0364052bb9a0330",
+            "hash_origin": "hub_lfs_declaration",
+            "locally_verified": false
+          },
+          {
+            "path": "model.safetensors-00003-of-00004.safetensors",
+            "size_bytes": 5368717440,
+            "sha256": "7ec36ba3a4176a44c3c0876ad80c56a2f70c84bf008d82e9501df642f17dadec",
+            "hash_origin": "hub_lfs_declaration",
+            "locally_verified": false
+          },
+          {
+            "path": "model.safetensors-00004-of-00004.safetensors",
+            "size_bytes": 3325995712,
+            "sha256": "b62b0c4cd7e44edee103ee8f4fe225f246d5e768e07bfd5f25b63a8aa1fdd0c6",
+            "hash_origin": "hub_lfs_declaration",
+            "locally_verified": false
+          }
+        ],
+        "weight_total_bytes": 19306310880
+      },
+      "upstream_dtype": "bfloat16; multimodal (Qwen3_5ForConditionalGeneration)",
+      "license": {
+        "status": "verified",
+        "meaning": "Publisher declaration with a LICENSE file at the pinned revision.",
+        "declaration": {
+          "value": "Apache-2.0",
+          "sources": [
+            "https://huggingface.co/Qwen/Qwen3.5-9B/blob/c202236235762e1c871ad0ccb60c8ee5ba337b9a/LICENSE"
+          ]
+        },
+        "accepted_chain": "pending",
+        "unresolved_restrictions": [
+          "Ollama-distributed artifact carries its own license layer; not compared with upstream in this task."
+        ]
+      },
+      "architecture": {
+        "family": "qwen3_5 (hybrid)",
+        "layers": 32,
+        "full_attention_layers": 8,
+        "linear_attention_layers": 24,
+        "kv_heads": 4,
+        "head_dim": 256,
+        "attention": "hybrid: full attention every 4th layer, linear attention elsewhere",
+        "max_position_embeddings": 262144
+      },
+      "generation_defaults": null,
+      "template": {
+        "source_file": "chat_template.jinja (identical to tokenizer_config chat_template)",
+        "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a",
+        "sha256": "a4aee8afcf2e0711942cf848899be66016f8d14a889ff9ede07bca099c28f715",
+        "length_chars": 7756,
+        "hash_origin": "locally_computed_metadata_file",
+        "format": "Qwen3.5 ChatML with <think>, tools and vision content",
+        "system_role_supported": true,
+        "default_system_prompt": null,
+        "thinking": {
+          "supported": true,
+          "default_on": true,
+          "disable": "enable_thinking=false; the role config already runs think:false"
+        },
+        "prompt_v2_compatible": true,
+        "prompt_v2_notes": "The installed Ollama artifact does not embed this Jinja template (its template layer is {{ .Prompt }}); Ollama applies a built-in Qwen3.5 renderer. Prompt-v2 rendering must be checked live."
+      },
+      "artifact_options": [
+        {
+          "kind": "ollama_registry",
+          "source_url": "https://registry.ollama.ai/v2/library/qwen3.5/manifests/9b",
+          "manifest_sha256": "56671c2ab9385f9cfcb404638e32cd62d88e3501d44822208363c010179a3c90",
+          "hash_origin": "registry_manifest_declaration",
+          "layers": [
+            {
+              "media_type": "application/vnd.ollama.image.projector",
+              "from": "mmproj.gguf",
+              "digest": "sha256:f836f08f921193f4d6b6a6952dba0a6fb116759d26a757bcb395d570d73976ca",
+              "size_bytes": 921704832
+            },
+            {
+              "media_type": "application/vnd.ollama.image.model",
+              "from": "model.gguf",
+              "digest": "sha256:02d45dc1cf451ba2475ac33b301c2dd8f985abe4c182ce04a1f2f5bf0260278d",
+              "size_bytes": 5629109120
+            },
+            {
+              "media_type": "application/vnd.ollama.image.template",
+              "from": null,
+              "digest": "sha256:b507b9c2f6ca642bffcd06665ea7c91f235fd32daeefdf875a0f938db05fb315",
+              "size_bytes": 13
+            },
+            {
+              "media_type": "application/vnd.ollama.image.license",
+              "from": null,
+              "digest": "sha256:50cbab8a892c5f2993b8c7351a99182507472def3b1374558308605d99b86b32",
+              "size_bytes": 11343
+            },
+            {
+              "media_type": "application/vnd.ollama.image.params",
+              "from": null,
+              "digest": "sha256:9371364b27a52acac9d87f88bd93c9db1174d8d6ec57f6888925cdc1788871ff",
+              "size_bytes": 65
+            }
+          ],
+          "template_layer_content": "{{ .Prompt }}",
+          "default_params": {
+            "presence_penalty": 1.5,
+            "temperature": 1,
+            "top_k": 20,
+            "top_p": 0.95
+          },
+          "recommended": true,
+          "compatibility_evidence": "This is the installed baseline. Manifest sha256 prefix 56671c2ab938 equals the local `ollama list` ID observed on 2026-10-12 (prefix match to an earlier observation, not a full local verification in this task)."
+        },
+        {
+          "kind": "gguf_third_party_conversion",
+          "repo_url": "https://huggingface.co/bartowski/Qwen_Qwen3.5-9B-GGUF",
+          "revision": "182be2fd6c7bc44887d88a91cb03ff009cc9f549",
+          "last_modified": "2026-05-19T20:15:34.000Z",
+          "license_label": "apache-2.0",
+          "license_label_note": "Third-party repository label; never substitutes for upstream permission.",
+          "base_model_declared": "Qwen/Qwen3.5-9B",
+          "converted_upstream_revision": null,
+          "converted_upstream_revision_note": "Not recorded by the converter.",
+          "derivation": {
+            "status": "inferred_unverified",
+            "gate": "pending",
+            "note": "Conversion dates, parameter counts and embedded templates show compatibility, not derivation: they cannot rule out modified weights or another same-architecture checkpoint. A declared GGUF hash identifies the converter's bytes only. Resolve with converter source-revision/build evidence or a reproducible local conversion."
+          },
+          "gguf_header_reported": {
+            "origin": "hub_parsed_gguf_header",
+            "architecture": "qwen35",
+            "context_length": 262144,
+            "parameter_count": 9197093888,
+            "embedded_chat_template_sha256": "a4aee8afcf2e0711942cf848899be66016f8d14a889ff9ede07bca099c28f715"
+          },
+          "quant_files": [
+            {
+              "quant": "Q4_K_M",
+              "path": "Qwen_Qwen3.5-9B-Q4_K_M.gguf",
+              "size_bytes": 6169341984,
+              "sha256": "d784ce9eda1a5a7b51e8f705a9e6310844bf4f173654d115823c775fdea56d43",
+              "hash_origin": "hub_lfs_declaration",
+              "locally_verified": false
+            },
+            {
+              "quant": "Q8_0",
+              "path": "Qwen_Qwen3.5-9B-Q8_0.gguf",
+              "size_bytes": 9804541984,
+              "sha256": "b58fe056b5435070240de259f3f981aa38fee96825bbd78c088d5fd90e46f2b5",
+              "hash_origin": "hub_lfs_declaration",
+              "locally_verified": false
+            }
+          ],
+          "recommended": false,
+          "compatibility_evidence": "Reference only (baseline is the installed Ollama artifact). Embedded template sha256 equals upstream."
+        },
+        {
+          "kind": "gguf_third_party_conversion",
+          "repo_url": "https://huggingface.co/unsloth/Qwen3.5-9B-GGUF",
+          "revision": "3885219b6810b007914f3a7950a8d1b469d598a5",
+          "last_modified": "2026-03-02T14:08:36.000Z",
+          "license_label": "apache-2.0",
+          "license_label_note": "Third-party repository label; never substitutes for upstream permission.",
+          "base_model_declared": ["Qwen/Qwen3.5-9B"],
+          "converted_upstream_revision": null,
+          "converted_upstream_revision_note": "Not recorded by the converter.",
+          "derivation": {
+            "status": "inferred_unverified",
+            "gate": "pending",
+            "note": "Conversion dates, parameter counts and embedded templates show compatibility, not derivation: they cannot rule out modified weights or another same-architecture checkpoint. A declared GGUF hash identifies the converter's bytes only. Resolve with converter source-revision/build evidence or a reproducible local conversion."
+          },
+          "gguf_header_reported": {
+            "origin": "hub_parsed_gguf_header",
+            "architecture": "qwen35",
+            "context_length": 262144,
+            "parameter_count": 8953803264,
+            "embedded_chat_template_sha256": "7f0e529032c25183bcd66c7f238da2d377f43be754a94e2725a58c4e16d2ed67"
+          },
+          "quant_files": [
+            {
+              "quant": "Q4_K_M",
+              "path": "Qwen3.5-9B-Q4_K_M.gguf",
+              "size_bytes": 5680522464,
+              "sha256": "03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+              "hash_origin": "hub_lfs_declaration",
+              "locally_verified": false
+            }
+          ],
+          "recommended": false,
+          "compatibility_evidence": "Reference only. Embedded template differs from upstream (modified by the converter)."
+        }
+      ],
+      "local_artifact": {
+        "status": "installed",
+        "ollama_tag": "qwen3.5:9b",
+        "manifest_digest": null,
+        "manifest_digest_note": "Not re-read locally in this task (no Ollama calls). Observed ID prefix 56671c2ab938 on 2026-10-12 matches the registry manifest.",
+        "model_blob_sha256": null,
+        "locally_verified": false
+      },
+      "token_budget": {
+        "per_domain": [
+          {
+            "fixture_domain": "legal-us-tx",
+            "prompt_v2_chars": {
+              "min_chars": 1196,
+              "median_chars": 2764,
+              "p95_chars": 4106,
+              "max_chars": 4557,
+              "max_case": "LEG-X-004"
+            },
+            "est_input_tokens_max": 1519,
+            "output_cap_tokens": 1024,
+            "est_total_tokens_max": 2543,
+            "estimate_method": "characters / 3 over the rendered prompt-v2 text; planning estimate, not a guaranteed bound",
+            "sliding_attention_window": null,
+            "notes": "Baseline arm with thinking off."
+          },
+          {
+            "fixture_domain": "accountant",
+            "prompt_v2_chars": {
+              "min_chars": 1230,
+              "median_chars": 5337,
+              "p95_chars": 5925,
+              "max_chars": 6075,
+              "max_case": "ACC-A-022"
+            },
+            "est_input_tokens_max": 2025,
+            "output_cap_tokens": 1024,
+            "est_total_tokens_max": 3049,
+            "estimate_method": "characters / 3 over the rendered prompt-v2 text; planning estimate, not a guaranteed bound",
+            "sliding_attention_window": null,
+            "notes": "Baseline arm with thinking off."
+          },
+          {
+            "fixture_domain": "finance",
+            "prompt_v2_chars": {
+              "min_chars": 1192,
+              "median_chars": 2711,
+              "p95_chars": 3971,
+              "max_chars": 3993,
+              "max_case": "FIN-X-020"
+            },
+            "est_input_tokens_max": 1331,
+            "output_cap_tokens": 1024,
+            "est_total_tokens_max": 2355,
+            "estimate_method": "characters / 3 over the rendered prompt-v2 text; planning estimate, not a guaranteed bound",
+            "sliding_attention_window": null,
+            "notes": "Baseline arm with thinking off."
+          }
+        ],
+        "recommended_num_ctx": 4096,
+        "notes": "Each paired comparison may use a different num_ctx per arm without changing outputs, provided nothing is truncated; record num_ctx per arm."
+      },
+      "gpu_estimate": {
+        "ollama_model_layer_mb": 5629,
+        "ollama_projector_layer_mb": 922,
+        "kv_cache": {
+          "method": "estimate: 2 × attention_layers × kv_heads × head_dim × 1.0625 bytes (q8_0 KV cache) per token; excludes compute buffers and runtime overhead",
+          "bytes_per_token": 17408,
+          "mb_at_context": {
+            "4096": 71,
+            "16384": 285
+          }
+        },
+        "measured_reference": "HARDWARE.md tuned run: 5.46 GB reported at 16K context; chat + embed 7.71 GB (nvidia-smi 10096/12288 MiB).",
+        "context": {
+          "measured_embed_partner": "qwen3-embedding:0.6b 2.25 GB at 8K context (1.88 GB at 2K), HARDWARE.md",
+          "desktop_vram": "0.8–1.6 GB observed on the Windows desktop",
+          "card_total_gb": 12,
+          "status": "estimates only; production-profile measurement required"
+        }
+      },
+      "readiness": {
+        "status": "installed_baseline_pending_local_verification",
+        "blockers": [
+          "Full local manifest/blob digest verification at run time.",
+          "Prompt-v2 rendering through Ollama's built-in renderer to be checked live.",
+          "Explicit sampling parameters required to neutralize registry defaults (presence_penalty 1.5, temperature 1)."
+        ],
+        "meaning": "Readiness evidence for #31 planning only; not an enabled binding, acquisition approval or adoption.",
+        "future_tests": {
+          "quality": [
+            "Verify local blob sha256 equals the pinned quant_files sha256 before import (first locally_verified hash).",
+            "Render the prompt-v2 single user turn through the imported template and diff against the upstream Jinja rendering for 3 sample cases.",
+            "Run the domain fixtures per the prompt-v2 protocol with explicit per-request sampling options (temperature 0, seed, top_p, top_k, repeat/presence penalty) so model-default parameters cannot differ across arms.",
+            "Record truncation (prompt_eval_count vs expected, done_reason) for every case; any truncation fails the case."
+          ],
+          "production_profile": [
+            "Exclusive host lease (flock), idle /api/ps and nvidia-smi before and after; post start/finish in #15.",
+            "Production profile: candidate at the evaluated quantization and num_ctx loaded together with qwen3-embedding:0.6b at its active profile; both 100% GPU in /api/ps, cross-checked with nvidia-smi used/free including desktop VRAM; record headroom.",
+            "Swap test: from resident chat (qwen3.5:9b) + embed, load the candidate, run one prompt-v2 case, restore chat; record cold load, swap time, time to first token, decode tok/s and any eviction of the embedding model.",
+            "Strict residency check (present, requested context, full allocation) via the existing benchmark harness semantics; failure keeps the candidate inactive."
+          ]
+        }
+      }
+    }
+  ]
+}
