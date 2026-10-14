@@ -5,14 +5,14 @@
 > refresh _Now_, _Next_, _Blocked on owner_, and append one line to the _Session log_.
 > Long-lived facts go elsewhere: phase checklist → `PLAN.md`, hardware facts → `HARDWARE.md`, decisions → `adr/` + `PLAN.md` decisions log.
 
-**Last updated:** 2026-10-14 (Codex, combined-main audit #29)
+**Last updated:** 2026-10-14 (Claude, round-2 integration #38)
 **Phase:** 0 — Environment audit and models (in progress)
 
 ---
 
 ## Now
 
-- Round-2 coordination #33 assigns Codex #30 domain diagnostics and Claude #34 artifact/evaluation readiness. [Assignments, branches/worktrees and Claude prompt](workstreams/round2/README.md) define disjoint paths and per-agent handoffs. Both are ready, not started; #31 live work remains gated.
+- **Round 2 integrated (#38):** PRs #36 (Claude #34 artifact/evaluation readiness dossier: Saul and CPA-Qwen ready for acquisition review, Fin-R1 blocked on license, baseline installed pending local verification; GGUF derivation inferred/unverified) and #37 (Codex #30 schema-v2 domain fixture diagnostics with exact journal balances and date invariants) are merged with required CI after cross-review. Shared changes from #34 applied: per-arm `num_ctx` (Fin-R1 8192) with truncation as failure, explicit per-request sampling, CPA-Qwen thinking off, evidence index → [`evals/artifact-readiness`](../evals/artifact-readiness/README.md). No model downloaded or run; no specialist enabled.
 
 - **Coordinated integration complete (2026-10-14):** PRs #26 (Claude #20 domain evidence/evaluation design), #23 (Codex #21 catalog/routing/scheduling design), #25 (#24 routing fixture integrity) and #28 (review #27 of Claude's design) are merged to `main` with required CI. Cross-reviews: Codex review #27 of #26 (three P2 findings, all resolved at e7e1f60); Claude reviews of #23/#25 (findings resolved, follow-ups closed). Design and fixtures only: no specialist is enabled, no model downloaded or run.
 
@@ -20,14 +20,14 @@
 
 - Owner approved retaining all existing models and adding legal research, financial analysis/investment research, accounting and Qwen3.5-9B knowledge workflows. [#17](https://github.com/agthumoe/solid-lamp/issues/17), [domain-agent plan](specs/domain-agent-plan.md) and ADR 0004 define routing, sequential GPU swaps, source grounding and acceptance. No runtime mapping/model install changed. Specialist evaluation #15 remains open; Fin-R1 upstream license is unresolved.
 
-- Compliance task #13: strict TS (unchecked indexing/exact optionals), typed lint/hooks, formatting, Zod config/HTTP/fixtures, safe structured diagnostic logs, source/size gates and unified CI are implemented. `pnpm check` passes all gates including 34 regression groups; future application rules remain explicitly not applicable until modules exist.
+- Compliance task #13: strict TS (unchecked indexing/exact optionals), typed lint/hooks, formatting, Zod config/HTTP/fixtures, safe structured diagnostic logs, source/size gates and unified CI are implemented. `pnpm check` passes all gates including 51 regression groups; future application rules remain explicitly not applicable until modules exist.
 - Benchmark #11 findings fixed in v5: duplicate flags rejected, semantic/format refusal split, required residency failures gate exit/status. Historical artifacts preserved.
 
 - ✅ Initial publication pushed: bootstrap commit `1ebefaa7877b62a710fafe28a7720931bf5e7dd9`; [GitHub CI](https://github.com/agthumoe/solid-lamp/actions/runs/38350697723) passed. Delivery and final commit evidence are recorded in [#1](https://github.com/agthumoe/solid-lamp/issues/1).
 - ✅ Development handbook and ADR 0003 adopted: AI/API/DB/SOLID/frontend/hooks/Query+Zustand/12-factor/logging/debugging; issue-first workflow is canonical in AGENTS.
 - ✅ Three pinned project-local skills installed and read; provenance/licenses/hash inventory are committed project artifacts. Available to Codex from the next turn; other agents use the AGENTS catalog.
 - ✅ GitHub task #1 preceded this session’s file edits. Nine phase milestones/epics (#2–#10) and benchmark follow-up #11 exist → `docs/TRACKING.md`.
-- ✅ Current checks: unified `pnpm check` enforces lint/typecheck, 34 benchmark/compliance/fixture regression groups, docs/skill integrity, command mirrors, source policies and formatting. Application-specific enforcement remains phased.
+- ✅ Current checks: unified `pnpm check` enforces lint/typecheck, 51 benchmark/compliance/routing/domain-fixture regression groups, docs/skill integrity, command mirrors, source policies and formatting. Application-specific enforcement remains phased.
 
 - ✅ Baseline (default settings) and tuned (override applied) benchmarks are done; tables are in `docs/HARDWARE.md`. Tuned settings make the 14B coder fit: 15 → 33 tok/s, 100% GPU.
 - ✅ Harness fixes from `docs/REVIEW.md` #1/#3/#4 are applied (strict scoring + schema validation, honest residency checks, per-stage saves, timeouts). The first tuned artifact, scored loosely, was kept as `docs/bench/results-tuned-v1-loose-scoring.json`.
@@ -42,7 +42,7 @@
 
 ## Next (in order)
 
-1. Merged integration is reviewed under #29; shared inventory/evidence/tracking are reconciled. Next: run Codex #30 and Claude #34 in the prepared round-2 workbenches; cross-review and integrate their independent outputs. #34 prepares readiness under #31; actual artifact acquisition/local comparisons remain gated and separate. #15 remains open; no specialist is enabled.
+1. #31 (gated): owner decisions first: accept or reject the Saul and CPA-Qwen license-chain residuals; Fin-R1 stays blocked unless licensing resolves or the owner records a private-evaluation-only acceptance. Then a tracked acquisition task: pin per [`evals/artifact-readiness`](../evals/artifact-readiness/README.md), settle GGUF derivation (prefer reproducible local conversion), verify hashes locally, check template rendering, count tokens, and run quality plus production-profile GPU tests under the exclusive lease. #15 remains open; no specialist is enabled.
 2. Finish Phase 0 in [#2](https://github.com/agthumoe/solid-lamp/issues/2): final enabled role/context/residency evidence and owner acceptance. Portfolio direction is approved; phase advancement is not implied. Use a fresh v5 benchmark label on an idle host when needed.
 3. After owner's Phase 0 go-ahead, implement catalog/routing/LlmGate foundation in [#3](https://github.com/agthumoe/solid-lamp/issues/3); source/book grounding in #4; bounded delegation in #5; domain workflows in #9. See the domain-agent plan for acceptance/dependencies.
 4. Follow [TRACKING.md](TRACKING.md); create/select bounded implementation tasks before edits. Compliance PR #14 and research PR #16 are merged; required main checks remain enforced.
@@ -128,3 +128,5 @@ Initial baseline is published to `main` under the owner’s explicit authorizati
 | 2026-10-14 | Codex | #29 opened before audit cleanup. Verified merged #23/#25/#26/#28 on main 9504a1a and successful main CI; combined check validates 51 routing fixtures and 34 groups. Preserved 180 schema-v2 domain cases (82 calculations, 32 balanced-entry cases, 28 abstentions), all ten installed models and unchanged active config/dependencies. Reconciled shared inventory/evidence/tracking; created #30 domain diagnostics and #31 gated live-eval follow-ups. No runtime/model/GPU changes or phase advancement; cleanup publication evidence in #29. |
 
 | 2026-10-14 | Codex | #33 opened before round-2 setup edits. Assigned existing #30 to Codex (domain fixture diagnostics/root scripts) and created ready Claude #34 (public metadata/artifact readiness under #31). Added frozen boundary, separate branches/worktrees, per-agent handoffs and copy/paste prompt; no source fixtures/config/models/GPU changed, no task execution or phase advancement. Setup/check evidence in #33. |
+
+| 2026-10-14 | Claude | Round-2 integration #38 at owner request: squash-merged #36 (Claude #34; Codex re-review clean at 91531a3) and #37 (Codex #30; Claude re-review confirmed at 0cc8ac4, later commit handoff-only; updated to main before merge). Applied #34 shared-change requests to the evaluation protocol and evidence index; reconciled STATUS/PLAN/TRACKING; closed #30/#34. Required CI passed for each merge. No runtime, config, model or GPU changes. |
