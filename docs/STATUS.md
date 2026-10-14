@@ -5,14 +5,16 @@
 > refresh _Now_, _Next_, _Blocked on owner_, and append one line to the _Session log_.
 > Long-lived facts go elsewhere: phase checklist → `PLAN.md`, hardware facts → `HARDWARE.md`, decisions → `adr/` + `PLAN.md` decisions log.
 
-**Last updated:** 2026-10-14 (Codex)
+**Last updated:** 2026-10-14 (Claude, coordinated integration)
 **Phase:** 0 — Environment audit and models (in progress)
 
 ---
 
 ## Now
 
-- Owner requested two independent workbenches: Claude #20 owns specialist evidence/domain eval design; Codex #21 owns catalog/routing/scheduling design. [Coordination #19](https://github.com/agthumoe/solid-lamp/issues/19) and [handoff/setup](workstreams/README.md) define disjoint paths, separate branches/worktrees and per-agent STATUS/PLAN. Claude #20 has open PR #26 with passing CI; Codex #21 design is delivered in open PR #23 with passing CI. Both task-owned paths remain isolated.
+- **Coordinated integration complete (2026-10-14):** PRs #26 (Claude #20 domain evidence/evaluation design), #23 (Codex #21 catalog/routing/scheduling design), #25 (#24 routing fixture integrity) and #28 (review #27 of Claude's design) are merged to `main` with required CI. Cross-reviews: Codex review #27 of #26 (three P2 findings, all resolved at e7e1f60); Claude reviews of #23/#25 (findings resolved, follow-ups closed). Design and fixtures only: no specialist is enabled, no model downloaded or run.
+
+- [Claude review handoff](reviews/claude-pr26.md) records the review of #26. Workbench split per [coordination #19](https://github.com/agthumoe/solid-lamp/issues/19) and [handoff/setup](workstreams/README.md); per-agent STATUS/PLAN under `docs/workstreams/`.
 
 - Owner approved retaining all existing models and adding legal research, financial analysis/investment research, accounting and Qwen3.5-9B knowledge workflows. [#17](https://github.com/agthumoe/solid-lamp/issues/17), [domain-agent plan](specs/domain-agent-plan.md) and ADR 0004 define routing, sequential GPU swaps, source grounding and acceptance. No runtime mapping/model install changed. Specialist evaluation #15 remains open; Fin-R1 upstream license is unresolved.
 
@@ -38,7 +40,7 @@
 
 ## Next (in order)
 
-1. Split setup #19 is merged (PR #22). Claude PR #26 is ready for corrections/re-review; Codex PR #23 and stacked #25 have review fixes. Follow-up #24 delivers routing fixture diagnostics on an isolated stacked branch based on PR #23, leaving both task-owned paths unchanged. Integrate only after review/required checks; #15 stays open and no specialist is enabled.
+1. Follow-ups from integration, each needing its own tracked issue: (a) shared-doc updates requested in #20 (link evidence from `specs/domain-model-research.md`; add the three retained unused models to the domain-agent plan inventory); (b) a committed `evals/domain` schema validator in `pnpm check`; (c) under #15, the authorized artifact download/pinning and live comparison run per the [evaluation protocol](workstreams/claude/evaluation-protocol.md), with the exclusive GPU lease. Fin-R1 licensing remains an owner decision. #15 stays open and no specialist is enabled.
 2. Finish Phase 0 in [#2](https://github.com/agthumoe/solid-lamp/issues/2): final enabled role/context/residency evidence and owner acceptance. Portfolio direction is approved; phase advancement is not implied. Use a fresh v5 benchmark label on an idle host when needed.
 3. After owner's Phase 0 go-ahead, implement catalog/routing/LlmGate foundation in [#3](https://github.com/agthumoe/solid-lamp/issues/3); source/book grounding in #4; bounded delegation in #5; domain workflows in #9. See the domain-agent plan for acceptance/dependencies.
 4. Follow [TRACKING.md](TRACKING.md); create/select bounded implementation tasks before edits. Compliance PR #14 and research PR #16 are merged; required main checks remain enforced.
@@ -109,8 +111,14 @@ Initial baseline is published to `main` under the owner’s explicit authorizati
 
 | 2026-10-13 | Codex | #19 created before split edits; created ready Claude #20 and Codex #21 with disjoint file ownership and frozen boundary contract. Added per-agent handoffs, Git worktree setup and copy/paste Claude prompt; AGENTS routes parallel-session updates to owned handoffs. Canonical/shared files and host GPU require serialized integration/coordination. Publication/setup checks recorded in #19; neither workstream implementation started. |
 
+| 2026-10-14 | Codex | #27 created before review handoff edits. Reviewed Claude PR #26 head b7cfea3 without editing its owned files: verified 180 cases, source/citation IDs, 32 balanced entry cases, and current checks. Recorded three P2 evaluation-design findings; corrections/re-review required before integration. No inference/GPU/adoption/phase changes. |
+
+| 2026-10-14 | Codex | Re-reviewed Claude reply and head e7e1f60 under existing #27. All three findings resolved; no new blocking issue in the changed revision. Verified 180 cases/82 calculations/32 balanced entry cases/28 abstentions, consistent policies and deadline/source corrections. Current checks and exact-head CI pass; no Claude file edits, merge or specialist activation. |
+
 | 2026-10-14 | Codex | Continued under #24 in a new isolated stacked worktree/branch. Added strict routing fixture integrity schemas, independent patch expansion, expected-result checks and negative tests; root check/Makefile integration added. Claude #20 remains active; no task-owned artifacts, models, GPU or active config changed. Local `pnpm check` passes 34 regression groups and validates 51 routing fixtures; PR/CI evidence is in #24. Phase gates remain open. |
 
 | 2026-10-14 | Codex | Addressed Claude review on #23/#25 under existing open #21/#24. Added omitted installed inventory, fallback edge cases and required/optional retrieval rules; diagnostic now closes reason vocabulary, plan/attempt identity and fallback evidence invariants. Cases expanded to 51 and diagnostic groups to 13. CI/evidence in tasks; no Claude-owned or runtime configuration changes. |
 
 | 2026-10-14 | Codex | Claude second re-review confirms original findings resolved. Under #21/#24, added explicit missing inventory rows and closed two minor diagnostic gaps (mandatory degradation disclosure; invalid fallback bindings on successful routes/plans). New mutation probes reproduce both reports; 15 diagnostic groups/34 total and 51 fixtures verified. Final evidence in tasks; no Claude edits, model activation or merge. |
+
+| 2026-10-14 | Claude | Coordinated integration at owner request: squash-merged #26, #23 (after updating to main), #25 (retargeted to main after #23), and #28 (resolved STATUS/PLAN conflicts with #25 in a separate detached worktree; both sides' session-log entries kept). Required compliance CI passed for each merge. No runtime, config or model changes. |

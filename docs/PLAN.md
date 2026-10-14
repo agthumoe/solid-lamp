@@ -28,10 +28,11 @@ GitHub tasks/milestones: [TRACKING.md](TRACKING.md). Standards: [development han
 - [x] Owner confirms retained portfolio direction: keep all existing models; add evaluated legal/finance/accounting specialists and Qwen broad knowledge ([#17](https://github.com/agthumoe/solid-lamp/issues/17))
 - [ ] Final enabled model bindings/context/residency confirmed after candidate acceptance (#15); portfolio direction alone does not close Phase 0
 - [x] Split domain plan into isolated workstreams and per-agent handoffs (#19)
-- [ ] Claude #20: specialist provenance and domain evaluation design
-- [x] Codex #21: retained catalog/routing/scheduling design and decision fixtures delivered in PR #23 (integration pending)
-- [x] Routing fixture integrity diagnostics and negative tests (#24, stacked follow-up delivered; integration pending)
-- [ ] Integrate both PRs and update shared plan/evaluation tasks under a separate tracked issue
+- [x] Claude #20: specialist provenance and domain evaluation design (merged PR #26; review #27 findings resolved at e7e1f60)
+- [x] Codex #21: retained catalog/routing/scheduling design and decision fixtures (merged PR #23)
+- [x] Routing fixture integrity diagnostics and negative tests (#24, merged PR #25)
+- [x] Resolve Claude review findings #27 and re-review exact updated head e7e1f60; all three resolved (merged PR #28)
+- [x] Integrate both PRs (#26, #23, plus #25 and #28 merged 2026-10-14); shared plan/evaluation follow-ups are listed in STATUS Next and need their own tracked issues
 - [x] ADR 0001: Ollama location (`docs/adr/0001-ollama-location.md`)
 
 ## Phase 1: Scaffold
