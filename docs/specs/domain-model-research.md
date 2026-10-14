@@ -1,6 +1,6 @@
 # US/Texas specialist-model research
 
-Date: 2026-10-13. Tracking: [#15](https://github.com/agthumoe/solid-lamp/issues/15). This is an advisory shortlist, not an accepted model-role change or implemented agent spec.
+Date: 2026-10-13. Tracking: [#15](https://github.com/agthumoe/solid-lamp/issues/15). This records candidate evidence. Owner subsequently approved the retained portfolio direction in the [domain-agent plan](domain-agent-plan.md) / #17; specialist activation and implementation remain pending.
 
 ## Current project
 
