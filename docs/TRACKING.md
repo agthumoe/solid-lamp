@@ -32,3 +32,5 @@ Each phase has its own GitHub milestone. Split an epic into bounded implementati
 - [#20](https://github.com/agthumoe/solid-lamp/issues/20): Claude specialist research/domain evaluation design; ready, user launches Claude.
 - [#21](https://github.com/agthumoe/solid-lamp/issues/21): Codex catalog/routing/scheduler design; ready, own worktree.
 - Runtime implementation/live evaluation remain separately tracked and phase-gated. Shared-file integration requires its own issue/branch.
+
+- [#24](https://github.com/agthumoe/solid-lamp/issues/24): Phase 0 routing fixture integrity diagnostics; stacked on Codex PR #23, independent of active Claude files.

@@ -1,0 +1,88 @@
+{
+  "schema_version": 2,
+  "task": "https://github.com/agthumoe/solid-lamp/issues/20",
+  "generated_on": "2026-10-14",
+  "synthetic_only": true,
+  "files": [
+    {
+      "path": "legal-us-tx/answerable.json",
+      "agent": "legal-us-tx",
+      "cases": 40,
+      "by_answerability": {
+        "answerable": 40
+      },
+      "sources": 12
+    },
+    {
+      "path": "legal-us-tx/adversarial.json",
+      "agent": "legal-us-tx",
+      "cases": 20,
+      "by_answerability": {
+        "unanswerable": 12,
+        "adversarial": 8
+      },
+      "sources": 9
+    },
+    {
+      "path": "finance/answerable.json",
+      "agent": "finance",
+      "cases": 40,
+      "by_answerability": {
+        "answerable": 40
+      },
+      "sources": 18
+    },
+    {
+      "path": "finance/adversarial.json",
+      "agent": "finance",
+      "cases": 20,
+      "by_answerability": {
+        "unanswerable": 8,
+        "adversarial": 12
+      },
+      "sources": 20
+    },
+    {
+      "path": "accountant/answerable.json",
+      "agent": "accountant",
+      "cases": 40,
+      "by_answerability": {
+        "answerable": 40
+      },
+      "sources": 33
+    },
+    {
+      "path": "accountant/adversarial.json",
+      "agent": "accountant",
+      "cases": 20,
+      "by_answerability": {
+        "adversarial": 12,
+        "unanswerable": 8
+      },
+      "sources": 13
+    }
+  ],
+  "totals": {
+    "legal-us-tx": {
+      "answerable": 40,
+      "adversarial_or_unanswerable": 20,
+      "with_calculation": 21,
+      "with_journal_entries": 0,
+      "requires_abstention": 12
+    },
+    "finance": {
+      "answerable": 40,
+      "adversarial_or_unanswerable": 20,
+      "with_calculation": 40,
+      "with_journal_entries": 0,
+      "requires_abstention": 8
+    },
+    "accountant": {
+      "answerable": 40,
+      "adversarial_or_unanswerable": 20,
+      "with_calculation": 21,
+      "with_journal_entries": 32,
+      "requires_abstention": 8
+    }
+  }
+}

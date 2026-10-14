@@ -5,16 +5,16 @@
 > refresh _Now_, _Next_, _Blocked on owner_, and append one line to the _Session log_.
 > Long-lived facts go elsewhere: phase checklist → `PLAN.md`, hardware facts → `HARDWARE.md`, decisions → `adr/` + `PLAN.md` decisions log.
 
-**Last updated:** 2026-10-14 (Codex)
+**Last updated:** 2026-10-14 (Claude, coordinated integration)
 **Phase:** 0 — Environment audit and models (in progress)
 
 ---
 
 ## Now
 
-- Requested Claude review recorded in [review #27](reviews/claude-pr26.md): three original P2 evaluation-design findings are resolved on Claude head e7e1f60. Re-review finds no new blocking issue; design is ready for coordinated integration; no Claude files changed. Structural counts/journal sums and current checks pass.
+- **Coordinated integration complete (2026-10-14):** PRs #26 (Claude #20 domain evidence/evaluation design), #23 (Codex #21 catalog/routing/scheduling design), #25 (#24 routing fixture integrity) and #28 (review #27 of Claude's design) are merged to `main` with required CI. Cross-reviews: Codex review #27 of #26 (three P2 findings, all resolved at e7e1f60); Claude reviews of #23/#25 (findings resolved, follow-ups closed). Design and fixtures only: no specialist is enabled, no model downloaded or run.
 
-- Owner requested two independent workbenches: Claude #20 owns specialist evidence/domain eval design; Codex #21 owns catalog/routing/scheduling design. [Coordination #19](https://github.com/agthumoe/solid-lamp/issues/19) and [handoff/setup](workstreams/README.md) define disjoint paths, separate branches/worktrees and per-agent STATUS/PLAN. Claude design is published in PR #26; Codex design in PR #23 and diagnostic follow-up in stacked PR #25. All remain open for coordinated integration.
+- [Claude review handoff](reviews/claude-pr26.md) records the review of #26. Workbench split per [coordination #19](https://github.com/agthumoe/solid-lamp/issues/19) and [handoff/setup](workstreams/README.md); per-agent STATUS/PLAN under `docs/workstreams/`.
 
 - Owner approved retaining all existing models and adding legal research, financial analysis/investment research, accounting and Qwen3.5-9B knowledge workflows. [#17](https://github.com/agthumoe/solid-lamp/issues/17), [domain-agent plan](specs/domain-agent-plan.md) and ADR 0004 define routing, sequential GPU swaps, source grounding and acceptance. No runtime mapping/model install changed. Specialist evaluation #15 remains open; Fin-R1 upstream license is unresolved.
 
@@ -30,7 +30,7 @@
 - ✅ Baseline (default settings) and tuned (override applied) benchmarks are done; tables are in `docs/HARDWARE.md`. Tuned settings make the 14B coder fit: 15 → 33 tok/s, 100% GPU.
 - ✅ Harness fixes from `docs/REVIEW.md` #1/#3/#4 are applied (strict scoring + schema validation, honest residency checks, per-stage saves, timeouts). The first tuned artifact, scored loosely, was kept as `docs/bench/results-tuned-v1-loose-scoring.json`.
 - ✅ Strict-scoring tuned run (harness v2) **complete** → `docs/bench/results-tuned.json` (23:26–23:37); tables are updated in `HARDWARE.md`. GPU was reported idle at completion; verify host state before any new live run.
-  - It loaded v2 code before Codex's v3 changes: the tool numbers are comparable to v3; the RAG and "recovered from text" numbers may be slightly more lenient. Current harness is v4 (v3 scoring plus acceptance fixes); fresh confirmation: `pnpm bench:models --label tuned-v4` (~12 min).
+  - It loaded v2 code before Codex's v3 changes: the tool numbers are comparable to v3; the RAG and "recovered from text" numbers may be slightly more lenient. Current harness is v5 (required residency/refusal/CLI fixes); live v4 confirmation is preserved, and any fresh run needs a new v5 label on an idle host.
 - ⚠ `docs/BUILD_PROMPT.md` was edited by Codex (Node 22 → 24, §7/§8 embedding storage per ADR 0002, §16 security note). The owner's original is unchanged at `aetherion-os-build-prompt.md`. Node 24 matches the canonical AGENTS instructions and current package engine.
 - ✅ ADR 0001 written (Ollama inside WSL).
 - ✅ Remaining review fixes implemented and verified with `pnpm test:bench` (7 tests), syntax checks, and invalid/duplicate CLI probes. V3 uses explicit text repair, atomic stage saves and all-path HTTP timeouts.
@@ -40,7 +40,7 @@
 
 ## Next (in order)
 
-1. Review #27 findings are resolved on Claude PR #26 head e7e1f60. Proceed with separately tracked integration of #26/#23 and retarget stacked #25 after #23 merges. Keep workbench ownership boundaries; #15 stays open and no specialist is enabled.
+1. Follow-ups from integration, each needing its own tracked issue: (a) shared-doc updates requested in #20 (link evidence from `specs/domain-model-research.md`; add the three retained unused models to the domain-agent plan inventory); (b) a committed `evals/domain` schema validator in `pnpm check`; (c) under #15, the authorized artifact download/pinning and live comparison run per the [evaluation protocol](workstreams/claude/evaluation-protocol.md), with the exclusive GPU lease. Fin-R1 licensing remains an owner decision. #15 stays open and no specialist is enabled.
 2. Finish Phase 0 in [#2](https://github.com/agthumoe/solid-lamp/issues/2): final enabled role/context/residency evidence and owner acceptance. Portfolio direction is approved; phase advancement is not implied. Use a fresh v5 benchmark label on an idle host when needed.
 3. After owner's Phase 0 go-ahead, implement catalog/routing/LlmGate foundation in [#3](https://github.com/agthumoe/solid-lamp/issues/3); source/book grounding in #4; bounded delegation in #5; domain workflows in #9. See the domain-agent plan for acceptance/dependencies.
 4. Follow [TRACKING.md](TRACKING.md); create/select bounded implementation tasks before edits. Compliance PR #14 and research PR #16 are merged; required main checks remain enforced.
@@ -114,3 +114,11 @@ Initial baseline is published to `main` under the owner’s explicit authorizati
 | 2026-10-14 | Codex | #27 created before review handoff edits. Reviewed Claude PR #26 head b7cfea3 without editing its owned files: verified 180 cases, source/citation IDs, 32 balanced entry cases, and current checks. Recorded three P2 evaluation-design findings; corrections/re-review required before integration. No inference/GPU/adoption/phase changes. |
 
 | 2026-10-14 | Codex | Re-reviewed Claude reply and head e7e1f60 under existing #27. All three findings resolved; no new blocking issue in the changed revision. Verified 180 cases/82 calculations/32 balanced entry cases/28 abstentions, consistent policies and deadline/source corrections. Current checks and exact-head CI pass; no Claude file edits, merge or specialist activation. |
+
+| 2026-10-14 | Codex | Continued under #24 in a new isolated stacked worktree/branch. Added strict routing fixture integrity schemas, independent patch expansion, expected-result checks and negative tests; root check/Makefile integration added. Claude #20 remains active; no task-owned artifacts, models, GPU or active config changed. Local `pnpm check` passes 34 regression groups and validates 51 routing fixtures; PR/CI evidence is in #24. Phase gates remain open. |
+
+| 2026-10-14 | Codex | Addressed Claude review on #23/#25 under existing open #21/#24. Added omitted installed inventory, fallback edge cases and required/optional retrieval rules; diagnostic now closes reason vocabulary, plan/attempt identity and fallback evidence invariants. Cases expanded to 51 and diagnostic groups to 13. CI/evidence in tasks; no Claude-owned or runtime configuration changes. |
+
+| 2026-10-14 | Codex | Claude second re-review confirms original findings resolved. Under #21/#24, added explicit missing inventory rows and closed two minor diagnostic gaps (mandatory degradation disclosure; invalid fallback bindings on successful routes/plans). New mutation probes reproduce both reports; 15 diagnostic groups/34 total and 51 fixtures verified. Final evidence in tasks; no Claude edits, model activation or merge. |
+
+| 2026-10-14 | Claude | Coordinated integration at owner request: squash-merged #26, #23 (after updating to main), #25 (retargeted to main after #23), and #28 (resolved STATUS/PLAN conflicts with #25 in a separate detached worktree; both sides' session-log entries kept). Required compliance CI passed for each merge. No runtime, config or model changes. |

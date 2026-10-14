@@ -40,3 +40,7 @@ compliance\:check:
 .PHONY: check
 check:
 	pnpm check
+
+.PHONY: evals\:check
+evals\:check:
+	pnpm evals:check
