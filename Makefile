@@ -44,3 +44,7 @@ check:
 .PHONY: evals\:check
 evals\:check:
 	pnpm evals:check
+
+.PHONY: evals\:domain\:check
+evals\:domain\:check:
+	pnpm evals:domain:check
