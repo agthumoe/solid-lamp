@@ -88,7 +88,7 @@ Every current root script is mirrored in the `Makefile`; future scaffold scripts
 
 ## Parallel workbench sessions
 
-When working under the owner-requested [Claude/Codex split](docs/workstreams/README.md), use the assigned isolated Git worktree and branch, and honor its file allowlist. Treat shared canonical files as read-only in workstream task branches. **The session update requirement is satisfied by updating your own `docs/workstreams/<agent>/STATUS.md` and `PLAN.md`**; the integration owner updates canonical STATUS/PLAN on a separate tracked integration branch. Read both canonical and own handoffs at session start. No task may overwrite the other agent's files or concurrently mutate shared host services. Follow the frozen boundary contract and exclusive GPU coordination rules.
+When working under the owner-requested [Claude/Codex split](docs/workstreams/README.md), use the assigned isolated Git worktree and branch, and honor its file allowlist. Treat shared canonical files as read-only in workstream task branches. **The session update requirement is satisfied by updating your assigned workstream STATUS.md and PLAN.md**; the integration owner updates canonical STATUS/PLAN on a separate tracked integration branch. Read both canonical and own handoffs at session start. No task may overwrite the other agent's files or concurrently mutate shared host services. Follow the frozen boundary contract and exclusive GPU coordination rules. Active round-2 assignments, exact handoff paths and #30 root-script/spec exceptions are in [round 2](docs/workstreams/round2/README.md); previous-round allowlists do not authorize new work.
 
 ## Development standards and project skills
 

@@ -12,6 +12,8 @@
 
 ## Now
 
+- Round-2 coordination #33 assigns Codex #30 domain diagnostics and Claude #34 artifact/evaluation readiness. [Assignments, branches/worktrees and Claude prompt](workstreams/round2/README.md) define disjoint paths and per-agent handoffs. Both are ready, not started; #31 live work remains gated.
+
 - **Coordinated integration complete (2026-10-14):** PRs #26 (Claude #20 domain evidence/evaluation design), #23 (Codex #21 catalog/routing/scheduling design), #25 (#24 routing fixture integrity) and #28 (review #27 of Claude's design) are merged to `main` with required CI. Cross-reviews: Codex review #27 of #26 (three P2 findings, all resolved at e7e1f60); Claude reviews of #23/#25 (findings resolved, follow-ups closed). Design and fixtures only: no specialist is enabled, no model downloaded or run.
 
 - [Claude review handoff](reviews/claude-pr26.md) records the review of #26. Workbench split per [coordination #19](https://github.com/agthumoe/solid-lamp/issues/19) and [handoff/setup](workstreams/README.md); per-agent STATUS/PLAN under `docs/workstreams/`.
@@ -40,7 +42,7 @@
 
 ## Next (in order)
 
-1. Merged integration is reviewed under #29; shared inventory/evidence/tracking are reconciled. Next: [#30](https://github.com/agthumoe/solid-lamp/issues/30) adds schema-v2 domain fixture diagnostics; [#31](https://github.com/agthumoe/solid-lamp/issues/31) tracks gated artifact pinning/local comparison using prompt v2 and separate production-profile GPU evidence. #15 remains open; no specialist is enabled.
+1. Merged integration is reviewed under #29; shared inventory/evidence/tracking are reconciled. Next: run Codex #30 and Claude #34 in the prepared round-2 workbenches; cross-review and integrate their independent outputs. #34 prepares readiness under #31; actual artifact acquisition/local comparisons remain gated and separate. #15 remains open; no specialist is enabled.
 2. Finish Phase 0 in [#2](https://github.com/agthumoe/solid-lamp/issues/2): final enabled role/context/residency evidence and owner acceptance. Portfolio direction is approved; phase advancement is not implied. Use a fresh v5 benchmark label on an idle host when needed.
 3. After owner's Phase 0 go-ahead, implement catalog/routing/LlmGate foundation in [#3](https://github.com/agthumoe/solid-lamp/issues/3); source/book grounding in #4; bounded delegation in #5; domain workflows in #9. See the domain-agent plan for acceptance/dependencies.
 4. Follow [TRACKING.md](TRACKING.md); create/select bounded implementation tasks before edits. Compliance PR #14 and research PR #16 are merged; required main checks remain enforced.
@@ -124,3 +126,5 @@ Initial baseline is published to `main` under the owner’s explicit authorizati
 | 2026-10-14 | Claude | Coordinated integration at owner request: squash-merged #26, #23 (after updating to main), #25 (retargeted to main after #23), and #28 (resolved STATUS/PLAN conflicts with #25 in a separate detached worktree; both sides' session-log entries kept). Required compliance CI passed for each merge. No runtime, config or model changes. |
 
 | 2026-10-14 | Codex | #29 opened before audit cleanup. Verified merged #23/#25/#26/#28 on main 9504a1a and successful main CI; combined check validates 51 routing fixtures and 34 groups. Preserved 180 schema-v2 domain cases (82 calculations, 32 balanced-entry cases, 28 abstentions), all ten installed models and unchanged active config/dependencies. Reconciled shared inventory/evidence/tracking; created #30 domain diagnostics and #31 gated live-eval follow-ups. No runtime/model/GPU changes or phase advancement; cleanup publication evidence in #29. |
+
+| 2026-10-14 | Codex | #33 opened before round-2 setup edits. Assigned existing #30 to Codex (domain fixture diagnostics/root scripts) and created ready Claude #34 (public metadata/artifact readiness under #31). Added frozen boundary, separate branches/worktrees, per-agent handoffs and copy/paste prompt; no source fixtures/config/models/GPU changed, no task execution or phase advancement. Setup/check evidence in #33. |

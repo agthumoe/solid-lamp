@@ -1,5 +1,7 @@
 # Claude and Codex workbenches
 
+**Active work: [Round 2 assignments and Claude prompt](round2/README.md).** Round 1 below is complete and retained as history; do not start new tasks in its old branches/worktrees.
+
 Coordination: [#19](https://github.com/agthumoe/solid-lamp/issues/19). Parent design: [domain-agent plan](../specs/domain-agent-plan.md). A workbench here means an isolated Git worktree, checked out on its own branch; it does not claim to switch an editor's UI mode. The user launches Claude; no Claude session has been started automatically.
 
 ## Two independent deliverables
