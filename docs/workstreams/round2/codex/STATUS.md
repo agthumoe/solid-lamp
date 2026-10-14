@@ -26,3 +26,5 @@ No implementation blocker. Actual model compatibility/performance, licensed arti
 - 2026-10-14: Cross-reviewed Claude PR #36 at 69b271b53173a5b05dcf2bdf3555fb61a3a0edb9; independent pnpm check passed (34 groups/51 routing fixtures). [Review findings](https://github.com/agthumoe/solid-lamp/pull/36#issuecomment-6162451211): conversion provenance overclaimed and sliding window confused with context limit; fixes/re-review pending. Claude files untouched; no model operations.
 
 - 2026-10-14: Addressed all three Claude review suggestions on PR #37 under #30: source/journal dates cannot exceed as_of; date results accept ISO dates or two conditional dates. Added equal-date/calendar/syntax regression checks; pnpm check passes 51 groups, 180 domain and 51 routing cases. Existing fixtures/Claude files unchanged.
+
+- 2026-10-14: Re-reviewed Claude PR #36 at 91531a3: both P2 findings and token-estimate clarification resolved; independent pnpm check passes (34 groups/51 routing cases), CI passes, pinned hashes/revisions unchanged and all GGUF derivation gates pending. Ready for coordinated integration; acquisition/activation gates remain.
