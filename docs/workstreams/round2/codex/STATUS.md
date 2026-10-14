@@ -22,3 +22,5 @@ No implementation blocker. Actual model compatibility/performance, licensed arti
 - 2026-10-14: Spec/diagnostic/tests implemented; local unified gates and approved baseline passed. Final publication/CI evidence belongs to #30; Claude files and source fixtures untouched.
 
 - 2026-10-14: Published PR #37; owned diff verified, 48 groups/180 domain/51 routing cases pass. PR stays unmerged for round-2 integration; final checks/publication recorded in #30.
+
+- 2026-10-14: Cross-reviewed Claude PR #36 at 69b271b53173a5b05dcf2bdf3555fb61a3a0edb9; independent pnpm check passed (34 groups/51 routing fixtures). [Review findings](https://github.com/agthumoe/solid-lamp/pull/36#issuecomment-6162451211): conversion provenance overclaimed and sliding window confused with context limit; fixes/re-review pending. Claude files untouched; no model operations.
