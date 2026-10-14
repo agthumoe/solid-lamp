@@ -5,7 +5,7 @@ Full requirements: [`BUILD_PROMPT.md`](BUILD_PROMPT.md).
 
 **Current phase:** 0 — Environment audit and models (in progress)
 
-Active parallel work: [Round 2](workstreams/round2/README.md): Codex #30 domain diagnostics and Claude #34 artifact/evaluation readiness. Round 1 is merged. Separate branches/worktrees and ownership; actual #31 downloads/inference and phase advancement remain gated.
+Round 2 ([workstreams/round2](workstreams/round2/README.md)) is merged and integrated under #38: Codex #30 domain diagnostics (PR #37) and Claude #34 artifact/evaluation readiness (PR #36). Actual #31 downloads/inference and phase advancement remain gated.
 
 GitHub tasks/milestones: [TRACKING.md](TRACKING.md). Standards: [development handbook](development/README.md). Create/select a task before project edits.
 
@@ -35,8 +35,9 @@ GitHub tasks/milestones: [TRACKING.md](TRACKING.md). Standards: [development han
 - [x] Integrate both PRs (#26, #23, plus #25 and #28 merged 2026-10-14); shared plan/evaluation follow-ups are listed in STATUS Next and need their own tracked issues
 - [x] Combined-main audit and canonical model inventory/evidence/tracking reconciliation (#29)
 - [x] Round-2 workbench plan and handoffs (#33)
-- [ ] Codex: domain schema-v2 fixture diagnostics (#30)
-- [ ] Claude: artifact/evaluation readiness dossier (#34 under #31)
+- [x] Codex: domain schema-v2 fixture diagnostics (#30, merged PR #37)
+- [x] Claude: artifact/evaluation readiness dossier (#34 under #31, merged PR #36)
+- [x] Round-2 integration and shared-change reconciliation (#38)
 - [ ] Gated specialist artifact pinning and live comparisons (#31 under #15)
 - [x] ADR 0001: Ollama location (`docs/adr/0001-ollama-location.md`)
 

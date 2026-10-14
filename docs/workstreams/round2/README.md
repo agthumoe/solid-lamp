@@ -1,6 +1,6 @@
 # Round 2: domain diagnostics and model readiness
 
-Coordination [#33](https://github.com/agthumoe/solid-lamp/issues/33). Previous round is merged and audited (#29/PR #32). These assignments replace round 1 for new work; old worktrees/hand-offs are historical. Workbench means a dedicated Git worktree on its own branch. The user launches Claude; no Claude session has been started by this setup.
+Coordination [#33](https://github.com/agthumoe/solid-lamp/issues/33). **Status: complete. Both tasks were cross-reviewed and merged (PRs #36, #37) and integrated under [#38](https://github.com/agthumoe/solid-lamp/issues/38); this file is now a historical record.** Previous round is merged and audited (#29/PR #32). These assignments replace round 1 for new work; old worktrees/hand-offs are historical. Workbench means a dedicated Git worktree on its own branch. The user launches Claude; no Claude session has been started by this setup.
 
 ## Assignments
 

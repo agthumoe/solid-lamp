@@ -23,6 +23,10 @@ This is evidence for a later adoption decision, not the decision itself. A `veri
 4. **Training-data terms are not audited for any candidate.** Each chain includes third-party data or model outputs whose terms were not reviewed. That needs owner (and, if wanted, counsel) acceptance; this document doesn't give a legal opinion.
 5. **Qualified review.** Consequential legal/accounting conclusions need a qualified human reviewer under the [rubrics](../rubrics.md). Automated scoring can't establish correctness.
 
+## Artifact readiness (round 2)
+
+Per-artifact pins, GGUF options with hub-declared hashes and derivation status, template compatibility, token budgets and production-profile test requirements now live in [`evals/artifact-readiness`](../../../../evals/artifact-readiness/README.md), with the [readiness dossier](../../round2/claude/readiness-dossier.md) (#34, retrieved 2026-10-14). That record supersedes this index for artifact identity; the license and provenance findings here still apply.
+
 ## Re-verification
 
 Revisions and metadata change. Before any adoption step, re-run the same read-only requests and compare `sha`/`lastModified`:

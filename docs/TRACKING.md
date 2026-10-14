@@ -38,10 +38,10 @@ Each phase has its own GitHub milestone. Split an epic into bounded implementati
 ## Combined-main audit and remaining evaluation tasks
 
 - [#29](https://github.com/agthumoe/solid-lamp/issues/29): merged-main audit and shared handoff reconciliation; no runtime/config/model changes.
-- [#30](https://github.com/agthumoe/solid-lamp/issues/30): domain schema-v2 fixture diagnostics; ready, no model run required.
+- [#30](https://github.com/agthumoe/solid-lamp/issues/30): domain schema-v2 fixture diagnostics; merged PR #37 (17 diagnostic groups, 180 cases), Claude cross-review resolved.
 - [#31](https://github.com/agthumoe/solid-lamp/issues/31): artifact pinning and local comparison; gated by per-candidate provenance/license/scope and qualified review. #15 remains open.
 - Review #27/PR #28 is merged; all reviewed PRs #23/#25/#26/#28 are integrated. Historical task-local handoffs retain their delivery-time snapshots.
 
-## Active round 2
+## Round 2 (integrated)
 
-[Assignments/ownership and Claude prompt](workstreams/round2/README.md), [boundary v1](workstreams/round2/CONTRACT.md). Setup #33; Codex #30 implements domain fixture diagnostics; Claude #34 prepares artifact readiness under #31. Both ready, own worktrees; root scripts belong to Codex only. Live #31 stays gated. Cross-review before separate tracked integration.
+[Assignments/ownership](workstreams/round2/README.md), [boundary v1](workstreams/round2/CONTRACT.md). Setup #33. Codex #30 domain fixture diagnostics (PR #37) and Claude #34 artifact/evaluation readiness (PR #36) were cross-reviewed and merged; integration #38 applied the shared protocol/evidence changes requested in #34. Live #31 stays gated; #15 remains open.
