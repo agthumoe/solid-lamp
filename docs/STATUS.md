@@ -5,12 +5,14 @@
 > refresh _Now_, _Next_, _Blocked on owner_, and append one line to the _Session log_.
 > Long-lived facts go elsewhere: phase checklist → `PLAN.md`, hardware facts → `HARDWARE.md`, decisions → `adr/` + `PLAN.md` decisions log.
 
-**Last updated:** 2026-10-14 (Claude, round-2 integration #38)
+**Last updated:** 2026-10-15 (Claude, round-3 integration #40)
 **Phase:** 0 — Environment audit and models (in progress)
 
 ---
 
 ## Now
+
+- **Round 3 integrated (#40):** owner decision packets are merged. Codex #41 [role and hardware packet](workstreams/round3/codex/owner-decision-packet.md) (PR #45): proposes Qwen3.5-9B at 16K for chat, routing and the interim tool-driving coder; embeddings at 8K pending a 2K long-chunk test; vision unconfirmed; deep disabled; cites the latest live run `results-tuned-v4.json` (2026-10-13). Claude #42 [domain checklist](workstreams/round3/claude/decision-checklist.md) (PR #44): per-candidate evidence states, owner decisions D1–D10 and stage gates. Shared corrections applied: the domain-agent plan's context sentence follows the per-arm `num_ctx` protocol; acquisition checks verify pinned revisions and hashes rather than comparing to HEAD. Nothing is approved, enabled, downloaded or run by these packets.
 
 - **Round 2 integrated (#38):** PRs #36 (Claude #34 artifact/evaluation readiness dossier: Saul and CPA-Qwen ready for acquisition review, Fin-R1 blocked on license, baseline installed pending local verification; GGUF derivation inferred/unverified) and #37 (Codex #30 schema-v2 domain fixture diagnostics with exact journal balances and date invariants) are merged with required CI after cross-review. Shared changes from #34 applied: per-arm `num_ctx` (Fin-R1 8192) with truncation as failure, explicit per-request sampling, CPA-Qwen thinking off, evidence index → [`evals/artifact-readiness`](../evals/artifact-readiness/README.md). No model downloaded or run; no specialist enabled.
 
@@ -42,19 +44,21 @@
 
 ## Next (in order)
 
-1. #31 (gated): owner decisions first: accept or reject the Saul and CPA-Qwen license-chain residuals; Fin-R1 stays blocked unless licensing resolves or the owner records a private-evaluation-only acceptance. Then a tracked acquisition task: pin per [`evals/artifact-readiness`](../evals/artifact-readiness/README.md), settle GGUF derivation (prefer reproducible local conversion), verify hashes locally, check template rendering, count tokens, and run quality plus production-profile GPU tests under the exclusive lease. #15 remains open; no specialist is enabled.
+1. **Owner decisions** (packets above). (a) #2: accept, reject or amend each role/context proposal in the [role packet](workstreams/round3/codex/owner-decision-packet.md), then state whether Phase 0 is accepted. (b) #42 D8: whether synthetic #31 comparisons may run as Phase 0 evidence. (c) D1/D2: evaluation-only residual-risk acceptance for Saul and CPA-Qwen; D3: Fin-R1 license path. (d) D5: personal vs business accounting. The other decisions (D4, D6, D7, D9, D10) wait for results. #15 remains open; no specialist is enabled.
+   - After those: #31 as a tracked acquisition task per the [domain checklist](workstreams/round3/claude/decision-checklist.md#minimum-evidence-per-stage) (pinned-revision/hash verification, derivation, template rendering, tokenizer budgets, quality and production-profile GPU tests under the exclusive lease).
 2. Finish Phase 0 in [#2](https://github.com/agthumoe/solid-lamp/issues/2): final enabled role/context/residency evidence and owner acceptance. Portfolio direction is approved; phase advancement is not implied. Use a fresh v5 benchmark label on an idle host when needed.
 3. After owner's Phase 0 go-ahead, implement catalog/routing/LlmGate foundation in [#3](https://github.com/agthumoe/solid-lamp/issues/3); source/book grounding in #4; bounded delegation in #5; domain workflows in #9. See the domain-agent plan for acceptance/dependencies.
 4. Follow [TRACKING.md](TRACKING.md); create/select bounded implementation tasks before edits. Compliance PR #14 and research PR #16 are merged; required main checks remain enforced.
 
 ## Blocked on owner
 
-| #   | Question                                                                                                                | Default if no answer                                 |
-| --- | ----------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| 3   | Raise WSL RAM to 24 GB via `infra/windows/wslconfig.proposed`?                                                          | Don't touch; `deep` role stays disabled              |
-| 4   | Docker Desktop is installed but not running; Tailscale not found on Windows or WSL — confirm how Tailscale is installed | Needed by Phase 1 (Docker) and Phase 4 (Tailscale)   |
-| 5   | Final enabled bindings/context/residency after eval; portfolio direction is approved (#17)                              | Existing `config/models.yaml` retained               |
-| 6   | Personal vs business/entity accounting; investment scope and data sources                                               | Synthetic read-only evaluation; no private ingestion |
+| #   | Question                                                                                                                                                                                                 | Default if no answer                                                    |
+| --- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| 3   | Raise WSL RAM to 24 GB via `infra/windows/wslconfig.proposed`?                                                                                                                                           | Don't touch; `deep` role stays disabled                                 |
+| 4   | Docker Desktop is installed but not running; Tailscale not found on Windows or WSL — confirm how Tailscale is installed                                                                                  | Needed by Phase 1 (Docker) and Phase 4 (Tailscale)                      |
+| 5   | Final enabled bindings/context/residency after eval; portfolio direction is approved (#17)                                                                                                               | Existing `config/models.yaml` retained                                  |
+| 6   | Personal vs business/entity accounting; investment scope and data sources                                                                                                                                | Synthetic read-only evaluation; no private ingestion                    |
+| 7   | Round-3 decisions: #2 role/context proposals ([packet](workstreams/round3/codex/owner-decision-packet.md)); domain D1–D10 ([checklist](workstreams/round3/claude/decision-checklist.md#owner-decisions)) | Existing draft config retained; candidates stay candidates; #31 blocked |
 
 ## Repo map (what exists today)
 
@@ -130,3 +134,5 @@ Initial baseline is published to `main` under the owner’s explicit authorizati
 | 2026-10-14 | Codex | #33 opened before round-2 setup edits. Assigned existing #30 to Codex (domain fixture diagnostics/root scripts) and created ready Claude #34 (public metadata/artifact readiness under #31). Added frozen boundary, separate branches/worktrees, per-agent handoffs and copy/paste prompt; no source fixtures/config/models/GPU changed, no task execution or phase advancement. Setup/check evidence in #33. |
 
 | 2026-10-14 | Claude | Round-2 integration #38 at owner request: squash-merged #36 (Claude #34; Codex re-review clean at 91531a3) and #37 (Codex #30; Claude re-review confirmed at 0cc8ac4, later commit handoff-only; updated to main before merge). Applied #34 shared-change requests to the evaluation protocol and evidence index; reconciled STATUS/PLAN/TRACKING; closed #30/#34. Required CI passed for each merge. No runtime, config, model or GPU changes. |
+
+| 2026-10-15 | Claude | Round-3 integration #40 at owner request: PRs #44 (Claude #42) and #45 (Codex #41) were merged earlier with required CI; this pass applied #42 shared corrections S1 (domain-agent plan context sentence → per-arm `num_ctx`) and S2 (pinned-revision/hash verification wording in the round-2 dossier, artifact-readiness README and round-1 evidence index), reconciled STATUS/PLAN/TRACKING and marked rounds 2/3 handoffs complete. No runtime, config, model or GPU changes; owner decisions pending. |

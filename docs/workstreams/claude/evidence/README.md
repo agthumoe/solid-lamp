@@ -36,4 +36,4 @@ curl -s https://huggingface.co/api/models/<candidate-id>   # sha, lastModified, 
 curl -s https://api.github.com/repos/SUFE-AIFLM-Lab/Fin-R1/license   # Fin-R1 only; 404 on 2026-10-13
 ```
 
-A changed `sha` invalidates this evidence until it's reviewed again.
+These records pin immutable revisions. A newer repository HEAD doesn't invalidate them; re-fetch at the pinned revision and verify hashes before use, and treat a newer revision as a separate candidate needing its own review.

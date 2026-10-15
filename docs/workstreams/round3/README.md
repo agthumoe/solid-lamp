@@ -1,6 +1,6 @@
 # Round 3: Phase 0 owner decision packets
 
-Coordination: [#40](https://github.com/agthumoe/solid-lamp/issues/40). The round-two outputs are integrated in [PR #39](https://github.com/agthumoe/solid-lamp/pull/39). Phase 0 remains open; #31 remains blocked on owner adoption choices and candidate-specific evidence.
+Coordination: [#40](https://github.com/agthumoe/solid-lamp/issues/40). **Status: complete. Both packets were cross-reviewed and merged (PRs #44, #45) and integrated under #40; this file is now a historical record.** The round-two outputs are integrated in [PR #39](https://github.com/agthumoe/solid-lamp/pull/39). Phase 0 remains open; #31 remains blocked on owner adoption choices and candidate-specific evidence.
 
 ## Assignments
 
