@@ -156,7 +156,7 @@ Weights, KV, embedding and desktop add up to roughly 8.5–9.2 GB per candidate 
 6. **Fix the protocol's context budget for reasoning models** (shared-change request below): a per-arm `num_ctx` sized to input + output, with truncation counted as failure.
 7. **Recount tokens** with each model's tokenizer before the run, replacing the 3-characters-per-token estimates.
 8. **Run quality and production-profile measurements as separate recorded steps**, with the GPU lease. Eligibility comes only from the production profile.
-9. **Re-check upstream revisions on the day of acquisition;** a changed `sha` invalidates these records.
+9. **On the day of acquisition, re-fetch metadata and files at the pinned immutable revisions and verify their hashes.** A newer repository HEAD alone doesn't invalidate an unchanged pinned revision; stop if the pinned revision or its content is unavailable or differs.
 
 ## Shared-change requests (posted on #34; not made here)
 

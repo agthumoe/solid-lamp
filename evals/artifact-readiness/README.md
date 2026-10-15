@@ -29,7 +29,7 @@ Task [#34](https://github.com/agthumoe/solid-lamp/issues/34). Human-readable dos
 
 ## Re-verification
 
-Revisions move. Before any acquisition, re-run the same read-only requests and compare:
+Records pin immutable revisions. Before any acquisition, re-fetch at the pinned revisions and verify that the recorded hashes and sizes still match; a newer repository HEAD alone doesn't invalidate a pin, but stop if the pinned revision or its content is unavailable or differs. The Ollama baseline is referenced by a mutable tag, so verify the **installed** manifest/blob digests locally rather than relying on the registry tag:
 
 ```bash
 curl -s https://huggingface.co/api/models/<repo-id>                               # sha, lastModified, cardData.license, gguf header

@@ -5,7 +5,7 @@ Full requirements: [`BUILD_PROMPT.md`](BUILD_PROMPT.md).
 
 **Current phase:** 0 — Environment audit and models (in progress)
 
-Round 2 ([workstreams/round2](workstreams/round2/README.md)) is merged and integrated under #38: Codex #30 domain diagnostics (PR #37) and Claude #34 artifact/evaluation readiness (PR #36). Actual #31 downloads/inference and phase advancement remain gated.
+Rounds 2 and 3 are merged and integrated (#38, #40): round-2 [domain diagnostics and readiness records](workstreams/round2/README.md); round-3 [Phase 0 decision packets](workstreams/round3/README.md) for the owner. Phase 0 acceptance, #31 downloads/inference and phase advancement remain gated on owner decisions.
 
 GitHub tasks/milestones: [TRACKING.md](TRACKING.md). Standards: [development handbook](development/README.md). Create/select a task before project edits.
 
@@ -38,6 +38,8 @@ GitHub tasks/milestones: [TRACKING.md](TRACKING.md). Standards: [development han
 - [x] Codex: domain schema-v2 fixture diagnostics (#30, merged PR #37)
 - [x] Claude: artifact/evaluation readiness dossier (#34 under #31, merged PR #36)
 - [x] Round-2 integration and shared-change reconciliation (#38)
+- [x] Round-3 decision packets: Codex #41 role/hardware packet (merged PR #45) and Claude #42 domain candidate and adoption-gate checklist (merged PR #44); integration and shared corrections (#40)
+- [ ] Owner decisions from the round-3 packets: #2 role/context choices (PR #45) and domain decisions D1–D10 (PR #44)
 - [ ] Gated specialist artifact pinning and live comparisons (#31 under #15)
 - [x] ADR 0001: Ollama location (`docs/adr/0001-ollama-location.md`)
 

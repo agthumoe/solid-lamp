@@ -45,3 +45,7 @@ Each phase has its own GitHub milestone. Split an epic into bounded implementati
 ## Round 2 (integrated)
 
 [Assignments/ownership](workstreams/round2/README.md), [boundary v1](workstreams/round2/CONTRACT.md). Setup #33. Codex #30 domain fixture diagnostics (PR #37) and Claude #34 artifact/evaluation readiness (PR #36) were cross-reviewed and merged; integration #38 applied the shared protocol/evidence changes requested in #34. Live #31 stays gated; #15 remains open.
+
+## Round 3 (integrated)
+
+[Assignments](workstreams/round3/README.md), [boundary](workstreams/round3/CONTRACT.md). Coordination [#40](https://github.com/agthumoe/solid-lamp/issues/40). Codex [#41](https://github.com/agthumoe/solid-lamp/issues/41): [Phase 0 role and hardware decision packet](workstreams/round3/codex/owner-decision-packet.md) (PR #45). Claude [#42](https://github.com/agthumoe/solid-lamp/issues/42): [domain candidate and adoption-gate checklist](workstreams/round3/claude/decision-checklist.md) (PR #44). Both were cross-reviewed and merged; #40 integration applied the #42 shared corrections (S1 protocol-aligned context sentence; S2 pinned-revision verification wording). Next is owner decisions: #2 role/context and D1–D10. Phase 0 and #31 stay gated.
