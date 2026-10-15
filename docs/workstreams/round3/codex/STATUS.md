@@ -8,7 +8,7 @@ Prepared and validated [Phase 0 role and hardware decision packet](owner-decisio
 
 ## Next
 
-PR #45 is open; pushing the review fixes and posting a response are next. Cross-reviewed Claude PR #44 at fe65b4d: no blockers; three non-blocking precision suggestions are recorded at https://github.com/agthumoe/solid-lamp/pull/44#issuecomment-6184568696. Leave PR #45 unmerged. Integration stays separate.
+PR #45 is open with the review fixes pushed as `43ec629` and `7942d00`; response posted at https://github.com/agthumoe/solid-lamp/pull/45#issuecomment-6184638749. Await exact-head CI and owner review; leave PR #45 unmerged. Cross-reviewed Claude PR #44 at fe65b4d: no blockers; three non-blocking precision suggestions are recorded at https://github.com/agthumoe/solid-lamp/pull/44#issuecomment-6184568696. Integration stays separate.
 
 ## Blocked / deferred
 
@@ -25,3 +25,4 @@ Final bindings, acquisition/license decisions, personal/business scope, qualifie
 
 - 2026-10-14: Cross-reviewed Claude PR #44 at fe65b4d; evidence and gates are sound, with three non-blocking citation/decision-precision suggestions posted. No Claude files changed.
 - 2026-10-15: Addressed Claude review of PR #45. Verified v4 artifact and validation notes; updated latest-run metrics and scorer caveat, and documented measured context-switch cost. `pnpm docs:check`, `pnpm format:check`, and `git diff --check` pass; no model or host operations.
+- 2026-10-15: Posted PR response and pushed v4 residency precision update (`7942d00`). Awaiting required CI on the final head; PR remains unmerged.
