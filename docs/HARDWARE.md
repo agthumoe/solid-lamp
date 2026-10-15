@@ -119,7 +119,9 @@ The q8_0 KV cache plus flash attention are what make the 14B coder fit. **Keep t
 
 All results are close to or above the §4 ballpark (7–9B: 30–50 tok/s; 14B Q4: 20–24 tok/s). The 14B is faster than expected once it's fully on the GPU.
 
-## Recommended model roles (pending owner confirmation)
+## Recommended model roles (owner-confirmed 2026-10-15, #47)
+
+The owner accepted these recommendations as the initial bindings, with router, coder and vision sharing `qwen3.5:9b` at 16K (see `config/models.yaml`). Later evidence refined two points: the shared profile avoids the measured ~3.8 s context-switch reload ([VALIDATION.md](VALIDATION.md)), and the embedding context stays at 8K until a long-chunk 2K comparison is done.
 
 | Role      | Recommendation                                                                                                                                                   | Why (numbers above)                                                                                                                                                                                                                                                                                                                                                                                           |
 | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
