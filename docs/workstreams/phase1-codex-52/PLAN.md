@@ -7,4 +7,5 @@
 - [x] Add focused tests and mirror the test command in `package.json` and `Makefile`.
 - [x] Run `pnpm check` and inspect owned-path diff.
 - [x] Commit/push branch and open unmerged dependent PR #53 against PR #50.
-- [ ] Verify exact-head GitHub CI; retarget to `main` after #50 merges.
+- [x] Verify exact-head GitHub CI (compliance passed on `5953f1a`).
+- [ ] Retarget to `main` and rerun checks after #50 merges.
