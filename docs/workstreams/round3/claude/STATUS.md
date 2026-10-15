@@ -1,6 +1,6 @@
 # Round 3 claude status
 
-Task: [#42](https://github.com/agthumoe/solid-lamp/issues/42). Status: **checklist delivered; PR open for cross-review** (not merged). Read [assignment](../README.md) and [boundary](../CONTRACT.md).
+Task: [#42](https://github.com/agthumoe/solid-lamp/issues/42). Status: **checklist delivered; [PR #44](https://github.com/agthumoe/solid-lamp/pull/44) open for cross-review** (not merged). Read [assignment](../README.md) and [boundary](../CONTRACT.md).
 
 ## Now
 
