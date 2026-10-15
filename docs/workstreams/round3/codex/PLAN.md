@@ -7,4 +7,4 @@ Task [#41](https://github.com/agthumoe/solid-lamp/issues/41); coordination [#40]
 - [x] Draft evidence-based owner packet with exact limitations and decisions.
 - [x] Run `pnpm docs:check` and `pnpm format:check`; inspect only owned paths.
 - [x] Commit/push assigned branch and open unmerged PR (#45; exact-head CI passed).
-- [x] Request Claude cross-review; keep phase acceptance and integration separate.
+- [x] Request Claude cross-review and review Claude PR #44; keep phase acceptance and integration separate.
