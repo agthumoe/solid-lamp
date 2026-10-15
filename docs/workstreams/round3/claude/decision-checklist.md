@@ -1,0 +1,149 @@
+# Domain candidate and adoption-gate checklist (#42)
+
+Task [#42](https://github.com/agthumoe/solid-lamp/issues/42); coordination [#40](https://github.com/agthumoe/solid-lamp/issues/40); [round-3 boundary](../CONTRACT.md). Prepared 2026-10-15 from **merged records only**. No new source was fetched, and no model was downloaded, converted, run or enabled.
+
+**What this is not.** It isn't legal advice, a license opinion or an approval. "Ready for review" and every other planning status below describe evidence, not permission. The owner's approved portfolio direction ([ADR 0004](../../../adr/0004-domain-model-routing.md), [#17](https://github.com/agthumoe/solid-lamp/issues/17)) doesn't activate any model. Phase 0 stays open; [#31](https://github.com/agthumoe/solid-lamp/issues/31) stays blocked until the owner decides the items in [Owner decisions](#owner-decisions).
+
+## Records this checklist relies on
+
+| Key | Record                                                                                                                                                                                                             | Date / revision                            |
+| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------ |
+| R1  | [Artifact readiness dossier](../../round2/claude/readiness-dossier.md) and [`candidates.json`](../../../../evals/artifact-readiness/candidates.json)                                                               | Retrieved 2026-10-14T06:13:52Z; merged #36 |
+| R2  | [Round-1 candidate evidence index](../../claude/evidence/README.md) and per-candidate files                                                                                                                        | Retrieved 2026-10-13; merged #26           |
+| R3  | [Evaluation protocol](../../claude/evaluation-protocol.md) (prompt v2; per-arm `num_ctx` and explicit sampling since #38) and [rubrics](../../claude/rubrics.md)                                                   | Merged #26, amended #39                    |
+| R4  | [Domain fixtures](../../../../evals/domain/README.md): 180 synthetic cases, [manifest](../../../../evals/domain/manifest.json); integrity check [spec](../../../specs/domain-fixture-integrity.md) in `pnpm check` | Merged #26/#37                             |
+| R5  | [Domain-agent plan](../../../specs/domain-agent-plan.md) adoption gates; [ADR 0004](../../../adr/0004-domain-model-routing.md)                                                                                     | Merged #18/#32                             |
+| R6  | [HARDWARE.md](../../../HARDWARE.md) baseline measurements                                                                                                                                                          | Measured 2026-10-12 (baseline only)        |
+| R7  | Canonical [STATUS blocked table](../../../STATUS.md) (items 5 and 6)                                                                                                                                               | Current main                               |
+
+## Stage definitions
+
+Each stage needs every item of the previous stage.
+
+| Stage           | Meaning                                                                                                   | Where it happens                                         |
+| --------------- | --------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| **Acquisition** | Download or convert one pinned artifact for a named candidate and import it locally                       | A tracked #31 sub-task, with the exclusive GPU lease     |
+| **Comparison**  | Run the R4 fixtures under the R3 protocol against the Qwen baseline, plus the production-profile GPU test | #31, serialized, local                                   |
+| **Adoption**    | Owner records that a candidate is the preferred model for a scoped agent, based on reviewed results       | #15 / #31 record; owner decision                         |
+| **Activation**  | An enabled role binding in validated config, used by a real workflow                                      | Phase 1 catalog/LlmGate (#3) onward, then Phase 7 agents |
+
+## Candidate checklists
+
+Legend: ✅ established by a cited record · ◐ inferred, not verified · ☐ pending, no evidence yet.
+
+### `Equall/Saul-7B-Instruct-v1` (legal research, `legal-us-tx`)
+
+| Area                | Status | What the records show                                                                                                                                                                                                         | Source |
+| ------------------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| Upstream identity   | ✅     | Revision `2133ba79…`, unchanged between 2026-10-13 and 2026-10-14; hub-declared sha256 for six fp32 shards                                                                                                                    | R1, R2 |
+| License declaration | ✅     | MIT, stated in card metadata and the paper                                                                                                                                                                                    | R2     |
+| License chain       | ☐      | No LICENSE file or copyright line; training-data and model-output terms (SlimOrca, UltraChat, Law Stack Exchange CC BY-SA, CourtListener and others) not audited; `ift_hermes_legal` checkpoint name unexplained by the paper | R2     |
+| GGUF artifact       | ✅ / ◐ | ✅ Pinned target: `mradermacher/Saul-7B-Instruct-v1-GGUF` @ `d2920136…`, Q4_K_M hub sha256 `7034821b…`. ◐ Derivation from the pinned weights is inferred only (`inferred_unverified`, gate pending)                           | R1     |
+| Local artifact      | ☐      | Not acquired; no locally verified hash                                                                                                                                                                                        | R1     |
+| Template            | ✅ / ☐ | ✅ Upstream template (sha256 `26a59556…`) rejects system messages; prompt v2's single user turn is compatible; the GGUF embeds the same template. ☐ Rendering through an Ollama import unchecked                              | R1, R3 |
+| Context and runtime | ◐ / ☐  | ◐ Estimated ≈2,543 tokens fits the chosen 4,096 evaluation profile (4,096 is a choice, not a model limit; declared max positions 32,768). ☐ Tokenizer counts, truncation checks, GPU co-residency with the embedding model    | R1, R3 |
+| Domain quality      | ☐      | No run. Fixtures are synthetic; real-world Texas legal competence is untested by design                                                                                                                                       | R3, R4 |
+
+### `AudCor/cpa-qwen3-8b-v0` (accounting, `accountant`)
+
+| Area                  | Status | What the records show                                                                                                                                     | Source |
+| --------------------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| Upstream identity     | ✅     | Revision `a0031043…`, unchanged; hub-declared shard hashes; bf16 weights fine-tuned from a 4-bit Unsloth base                                             | R1, R2 |
+| License declaration   | ✅     | Apache-2.0 in card metadata only                                                                                                                          | R2     |
+| License chain         | ☐      | No LICENSE/NOTICE file; training set Finance-Instruct-500k is an aggregate with untraced upstream licenses; the dataset revision used is unknown          | R2     |
+| Competence claims     | ☐      | The card reports **no evaluation results**; "exam-grade" and GAAP/IFRS claims are unsupported                                                             | R2     |
+| GGUF artifact         | ✅ / ◐ | ✅ `mradermacher/cpa-qwen3-8b-v0-GGUF` @ `fd4ca189…`, Q4_K_M hub sha256 `c18b06d8…` (the only GGUF found). ◐ Derivation inferred only                     | R1     |
+| Template and thinking | ✅ / ☐ | ✅ Qwen3 template (`96fd16d3…`) defaults thinking **on**; the protocol now requires it off. ☐ Whether an Ollama import honours thinking-off is unverified | R1, R3 |
+| Context and runtime   | ◐ / ☐  | ◐ ≈3,049 tokens provisionally fits 4,096 only with thinking off. ☐ Q4_K_M vs Q8_0 quality (double quantization), GPU co-residency                         | R1     |
+| Domain quality        | ☐      | No run; synthetic fictional-bakery fixtures; accounting scope undecided                                                                                   | R4, R7 |
+
+### `SUFE-AIFLM-Lab/Fin-R1` (financial analysis, `finance`)
+
+| Area              | Status        | What the records show                                                                                                                                                                                    | Source |
+| ----------------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| Upstream identity | ✅            | Revision `026768c4…`; weights, config and tokenizer config unchanged since 2025-03-17                                                                                                                    | R1     |
+| License           | ☐ **blocked** | No license field or LICENSE file on Hugging Face; GitHub license `null` and `/license` 404; only a README "Apache 2.0" badge; arXiv v5 isn't a grant. Third-party GGUF labels can't establish permission | R1, R2 |
+| Training chain    | ☐             | DeepSeek-R1 distillation, Qwen2.5-72B-Instruct (Qwen license) scoring, Qwen2.5-Max (proprietary) verifier, ten datasets: none audited                                                                    | R2     |
+| GGUF artifact     | ✅ / ◐        | Identified only, **not to be acquired**: `bartowski/SUFE-AIFLM-Lab_Fin-R1-GGUF` @ `61b41286…` (Q4_K_M `d50f16c5…`). Derivation inferred                                                                  | R1     |
+| Template          | ✅            | Qwen2.5 template (`cd8e9439…`) auto-inserts "You are Qwen…" under prompt v2; no thinking switch; publisher recommends sampling, which the protocol deliberately overrides                                | R1, R3 |
+| Context           | ✅            | Needs `num_ctx` 8192: the 4,096-token reasoning cap alone fills a 4,096 window (ratio-independent)                                                                                                       | R1, R3 |
+| Domain quality    | ☐             | No run; publisher benchmark scores are not reproduced and are not against Qwen3.5-9B                                                                                                                     | R2     |
+
+### `Qwen/Qwen3.5-9B` (baseline for every domain; existing chat, vision and planned knowledge role)
+
+| Area                  | Status | What the records show                                                                                                                                                                                  | Source |
+| --------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------ |
+| License               | ✅     | Apache-2.0 with a LICENSE file at revision `c2022362…`                                                                                                                                                 | R1, R2 |
+| Installed artifact    | ✅ / ◐ | ✅ Installed as `qwen3.5:9b`; benchmarked 2026-10-12 (≈49–51 tok/s, 100% GPU at 16K). ◐ Registry manifest sha256 prefix `56671c2ab938` equals the locally observed ID (12-character prefix match only) | R1, R6 |
+| Template and defaults | ✅ / ☐ | ✅ Ollama uses a built-in renderer (`{{ .Prompt }}` layer) and ships `presence_penalty` 1.5; the protocol now sets every sampling parameter explicitly. ☐ Live prompt-v2 rendering check               | R1, R3 |
+| Domain quality        | ☐      | Never run on the domain fixtures. As a domain **fallback** it needs its own scoped acceptance; its chat acceptance doesn't carry over                                                                  | R4, R5 |
+
+## Owner decisions
+
+These are choices, not technical findings. Each has a default from [STATUS](../../../STATUS.md) or the plan, which applies if the owner doesn't decide. None of them is legal advice; counsel is the owner's call.
+
+| #   | Decision                                                                                                                                                | Options                                                                                                                                                                                        | Default if no answer                                                  | Unblocks                       |
+| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- | ------------------------------ |
+| D1  | **Saul license residuals** (MIT declared; no LICENSE text; unaudited training data)                                                                     | Accept for private local evaluation only · accept for evaluation and later adoption · seek counsel first · decline                                                                             | Not accepted: Saul stays a candidate                                  | Saul acquisition               |
+| D2  | **CPA-Qwen license residuals** (metadata-only Apache-2.0; untraced aggregate dataset; no competence evidence)                                           | Same options as D1                                                                                                                                                                             | Not accepted                                                          | CPA-Qwen acquisition           |
+| D3  | **Fin-R1 unresolved license**                                                                                                                           | Wait for a publisher license · authorize contacting the publisher (an outbound action) · record a private-evaluation-only acceptance despite no grant · keep it retained but out of evaluation | Blocked                                                               | Fin-R1 anything                |
+| D4  | **Artifact route** for accepted candidates                                                                                                              | Pinned third-party GGUF with derivation recorded as inferred · reproducible local conversion from upstream (closes derivation; ~29 GB fp32 source for Saul, ~16 GB for CPA-Qwen)               | Third-party GGUF for evaluation; derivation stays a pre-adoption gate | Acquisition plan               |
+| D5  | **Accounting scope:** personal vs business/entity, reporting basis                                                                                      | Personal · business/entity (name basis: cash or accrual, GAAP or tax) · both, staged                                                                                                           | Synthetic read-only evaluation only; no private ingestion (STATUS #6) | Real accounting data, adoption |
+| D6  | **Source/data scope:** which real sources each agent may read (Texas statutes and courts, SEC filings, a market-data provider, own ledgers and exports) | Per agent; market-data provider and its licensing still unchosen ([domain sources](../../claude/domain-sources.md))                                                                            | Synthetic fixtures only                                               | Phase 2 ingestion, adoption    |
+| D7  | **Qualified reviewers** for consequential examples                                                                                                      | Licensed Texas attorney · CPA · financial analyst; when (before adoption) and how many cases                                                                                                   | None named; adoption can't pass the review gate                       | Adoption                       |
+| D8  | **Sequencing:** can #31 comparisons on synthetic fixtures run before Phase 0 acceptance, as Phase 0 model evidence (#2)?                                | Yes, as Phase 0 evidence · only after Phase 0 acceptance                                                                                                                                       | Wait (phase gates unchanged)                                          | #31 start                      |
+| D9  | **Order** if more than one candidate is accepted                                                                                                        | One at a time, e.g. Saul then CPA-Qwen · both in one serialized run                                                                                                                            | One at a time (GPU and disk)                                          | #31 plan                       |
+
+## Minimum evidence per stage
+
+### Before acquisition (starting a #31 sub-task for one candidate)
+
+- [ ] Owner decision recorded for that candidate's license residuals (D1/D2; for Fin-R1, D3 resolved by a grant or an explicit private-evaluation acceptance).
+- [ ] D4 artifact route chosen; D8 sequencing allows it.
+- [ ] Tracked acquisition task naming the exact repository, revision and quant file from R1; enough disk; exclusive GPU lease and idle-host procedure ([protocol preconditions](../../claude/evaluation-protocol.md#preconditions)).
+- [ ] Upstream and GGUF revisions re-checked **on the day of download** (the R1 metadata is from 2026-10-14; a changed `sha` invalidates it).
+
+### Before live comparison
+
+- [ ] Downloaded file sha256 equals the pinned hub-declared hash, which becomes the first `local_artifact_verified` record. Ollama model digest recorded after import.
+- [ ] Derivation either settled (converter build evidence or a reproducible local conversion) or explicitly recorded as inferred for evaluation only.
+- [ ] Imported template renders three prompt-v2 cases identically to the upstream Jinja template: Saul with no system message, CPA-Qwen with thinking off verified, Fin-R1 with the default Qwen system turn.
+- [ ] Token counts measured with each tokenizer over the rendered prompts; per-arm `num_ctx` set; truncation recorded as failure.
+- [ ] Every sampling parameter set explicitly on every request for every arm.
+- [ ] Fixture commit recorded and `pnpm check` (including `evals:domain:check`) passing at that commit.
+- [ ] Baseline: full local manifest/blob digest checked (not just the 12-character prefix).
+
+### Before adoption (preferred binding for a scoped agent)
+
+- [ ] Rubric gates met on the comparison: 100% deterministic calculations, ≥ 90% substantive correctness, ≥ 95% citation support, ≥ 90% semantic abstention, **zero safety failures** ([rubrics](../../claude/rubrics.md#initial-gates-to-calibrate-before-use)).
+- [ ] Benefit over the baseline of at least 5 points on paired answerable cases, without regressing abstention or citations, or an owner-recorded trade-off (never overriding safety or license gates).
+- [ ] Production-profile run: candidate plus active embedding model co-resident at 100% GPU, cross-checked with `nvidia-smi` including desktop VRAM; swap and latency recorded ([hardware eligibility](../../claude/evaluation-protocol.md#hardware-eligibility)).
+- [ ] Qualified reviewer sign-off on consequential examples (D7).
+- [ ] Derivation settled (no longer inferred) and license chain accepted for adoption, not just evaluation (D1/D2).
+- [ ] D5/D6 scope decided for the agent's real use.
+
+### Before activation (enabled binding used by a workflow)
+
+- [ ] Phase 0 accepted by the owner; Phase 1 catalog/binding schema and LlmGate implemented (#3) with a reviewed candidate → enabled transition and disclosed fallback.
+- [ ] Baseline Qwen separately accepted for that domain's scope if it will serve as the disclosed fallback.
+- [ ] Source ingestion for the agent's approved scope (Phase 2, #4) and the agent spec/workflow (Phase 7, #9).
+- [ ] A tracked config change PR; no model deleted, replaced or silently substituted; all ten installed models and the disabled deep proposal retained.
+
+## Stale or missing citations
+
+| #   | Item                                                                                                                                                                                         | Status                                                 | Suggested handling                                                 |
+| --- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------------------------------------------ |
+| S1  | [Domain-agent plan](../../../specs/domain-agent-plan.md) says "Start specialist measurements with Q4_K_M and 4096 context". The protocol now sizes `num_ctx` per arm (Fin-R1 8192) since #38 | **Stale** in a shared spec                             | Shared-change request in #42; align at integration                 |
+| S2  | All upstream and GGUF metadata (R1) dates from 2026-10-14                                                                                                                                    | Stale at acquisition time                              | Re-check on download day (acquisition checklist)                   |
+| S3  | Baseline local digest: only a 12-character prefix observed on 2026-10-12                                                                                                                     | **Missing** full local evidence                        | Full digest check before comparison                                |
+| S4  | Token budgets are character-based estimates                                                                                                                                                  | **Missing** tokenizer measurements                     | Measure before comparison                                          |
+| S5  | GPU figures for specialists are estimates; the only measurements are for installed models (R6, 2026-10-12)                                                                                   | **Missing** for candidates                             | Production-profile run (Codex #41 covers installed-model evidence) |
+| S6  | Expected answers in the 180 fixtures are author-written and machine-checked only                                                                                                             | **Missing** professional review                        | D7 before adoption                                                 |
+| S7  | Publisher quality claims (Fin-R1 benchmark table; CPA-Qwen "exam-grade") are unreproduced and not against Qwen3.5-9B                                                                         | Not evidence for adoption                              | Ignore for decisions; use the comparison                           |
+| S8  | [#15](https://github.com/agthumoe/solid-lamp/issues/15) body lists Saul as "(legal; MIT)"                                                                                                    | Accurate as a declaration, but omits the pending chain | Read together with R2's unresolved restrictions                    |
+
+## What would change these conclusions
+
+- **A license or grant appears for Fin-R1** (a LICENSE file, license metadata or a written publisher statement). That moves it from blocked to the same owner-acceptance step as the others.
+- **An upstream revision changes.** It invalidates the pins and template hashes for that candidate until they are re-checked.
+- **A reproducible local conversion succeeds.** That settles derivation for that candidate.
