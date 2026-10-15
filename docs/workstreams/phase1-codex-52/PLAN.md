@@ -6,4 +6,5 @@
 - [x] Implement narrow `packages/shared` Result/error API and safe Pino logger.
 - [x] Add focused tests and mirror the test command in `package.json` and `Makefile`.
 - [x] Run `pnpm check` and inspect owned-path diff.
-- [ ] Commit/push branch and open unmerged dependent PR.
+- [x] Commit/push branch and open unmerged dependent PR #53 against PR #50.
+- [ ] Verify exact-head GitHub CI; retarget to `main` after #50 merges.
