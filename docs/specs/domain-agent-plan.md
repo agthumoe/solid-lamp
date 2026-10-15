@@ -27,6 +27,8 @@ This plan authorizes direction and documentation, not a claim of professional co
 | [AudCor/cpa-qwen3-8b-v0](https://huggingface.co/AudCor/cpa-qwen3-8b-v0)         | Accounting explanation/classification candidate                                              | Not installed; Apache-2.0 card declaration; experimental, competence unproven              |
 | `qwen3.6:35b-a3b`                                                               | Existing proposed deep/batch role                                                            | Still disabled; requires owner-approved RAM change and measured feasibility                |
 
+**Owner decision 2026-10-15 ([#47](https://github.com/agthumoe/solid-lamp/issues/47)):** the license-residual acceptances for Saul, CPA-Qwen and Fin-R1 (decisions D1–D3 in the [round-3 checklist](../workstreams/round3/claude/decision-checklist.md)) were **declined**. No specialist is downloaded, evaluated or bound; all three stay in the catalog as retained candidates. Domain agents use the accepted Qwen baseline only after its own scoped evaluation. Reopening any candidate needs a new owner decision.
+
 Specialist evidence and limitations: [research notes](domain-model-research.md). Published specialist scores do not establish better performance than the current general model on owner tasks. A model that fails acceptance stays retained as a candidate/comparison, with the failure recorded; it does not receive production requests. Preserve existing fallback mappings during implementation unless a separately tracked change is authorized.
 
 ## Agent responsibilities

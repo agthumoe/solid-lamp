@@ -3,7 +3,7 @@
 Source of truth for phase status. Update at the end of every phase (see `AGENTS.md`).
 Full requirements: [`BUILD_PROMPT.md`](BUILD_PROMPT.md).
 
-**Current phase:** 0 — Environment audit and models (in progress)
+**Current phase:** 1 — Scaffold (Phase 0 accepted by the owner 2026-10-15, #47)
 
 Rounds 2 and 3 are merged and integrated (#38, #40): round-2 [domain diagnostics and readiness records](workstreams/round2/README.md); round-3 [Phase 0 decision packets](workstreams/round3/README.md) for the owner. Phase 0 acceptance, #31 downloads/inference and phase advancement remain gated on owner decisions.
 
@@ -24,9 +24,9 @@ GitHub tasks/milestones: [TRACKING.md](TRACKING.md). Standards: [development han
 - [x] Run `bench:models` with settings applied; write v2 table to `docs/HARDWARE.md`
 - [x] Address validation gaps: required skipped targets must fail acceptance; validate embedding response counts/dimensions/values/norms (`VALIDATION.md`)
 - [x] Resolve remaining benchmark findings ([#11](https://github.com/agthumoe/solid-lamp/issues/11)): semantic/format refusal metrics, required residency acceptance, duplicate CLI flags
-- [ ] Every resident model shows 100% GPU
+- [x] Every resident model shows 100% GPU (chat 16K + embed 8K, v2 and v4 live runs; `results-tuned-v4.json`)
 - [x] Owner confirms retained portfolio direction: keep all existing models; add evaluated legal/finance/accounting specialists and Qwen broad knowledge ([#17](https://github.com/agthumoe/solid-lamp/issues/17))
-- [ ] Final enabled model bindings/context/residency confirmed after candidate acceptance (#15); portfolio direction alone does not close Phase 0
+- [x] Final enabled model bindings/context/residency confirmed by the owner (#47): router, coder and vision share `qwen3.5:9b` at 16K with chat; embed 8K; deep disabled; specialists declined
 - [x] Split domain plan into isolated workstreams and per-agent handoffs (#19)
 - [x] Claude #20: specialist provenance and domain evaluation design (merged PR #26; review #27 findings resolved at e7e1f60)
 - [x] Codex #21: retained catalog/routing/scheduling design and decision fixtures (merged PR #23)
@@ -39,8 +39,9 @@ GitHub tasks/milestones: [TRACKING.md](TRACKING.md). Standards: [development han
 - [x] Claude: artifact/evaluation readiness dossier (#34 under #31, merged PR #36)
 - [x] Round-2 integration and shared-change reconciliation (#38)
 - [x] Round-3 decision packets: Codex #41 role/hardware packet (merged PR #45) and Claude #42 domain candidate and adoption-gate checklist (merged PR #44); integration and shared corrections (#40)
-- [ ] Owner decisions from the round-3 packets: #2 role/context choices (PR #45) and domain decisions D1–D10 (PR #44)
-- [ ] Gated specialist artifact pinning and live comparisons (#31 under #15)
+- [x] Owner decisions from the round-3 packets (#47): roles accepted; synthetic tests acceptable in Phase 0; D1–D3 declined
+- [x] ~~Gated specialist artifact pinning and live comparisons (#31 under #15)~~: not pursued; owner declined D1–D3 (#47)
+- **Phase 0 accepted by the owner, 2026-10-15 (#47).**
 - [x] ADR 0001: Ollama location (`docs/adr/0001-ollama-location.md`)
 
 ## Phase 1: Scaffold
@@ -147,3 +148,4 @@ Review fixes (2026-10-12): see `REVIEW.md`. Embedding storage and earlier securi
 Validation follow-up (2026-10-12): both reproduced gaps fixed in harness v4; 12 regression groups and syntax checks pass → `VALIDATION.md`. Fresh hardware evidence remains separate from these stubbed checks.
 
 Decision (2026-10-13, #17): retain every existing installed/planned model and add evaluated domain specialists; Qwen3.5-9B owns broad knowledge/synthesis. [ADR 0004](adr/0004-domain-model-routing.md) and [domain-agent plan](specs/domain-agent-plan.md) define activation gates, source grounding and sequential GPU swaps. Owner approved direction; final enabled settings and Phase 0 acceptance remain pending.
+| 2026-10-15 | Phase 0 accepted. Initial bindings: chat, router, coder and vision share `qwen3.5:9b` at 16K; embed `qwen3-embedding:0.6b` at 8K; deep disabled. `qwen3.5:4b`, `qwen2.5-coder:14b` and all other installed models retained as unbound alternates. Specialist license residuals (D1–D3) declined: Saul, CPA-Qwen and Fin-R1 stay retained candidates, not acquired | Owner decision on the round-3 packets; shared profile avoids measured context-switch reloads; candidates' license chains unaccepted | [#47](https://github.com/agthumoe/solid-lamp/issues/47) |

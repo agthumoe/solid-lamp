@@ -1,5 +1,12 @@
 # Role → model mapping. Code refers to roles only, never to model tags.
-# Status: Phase 0 draft. Final choices are confirmed against docs/HARDWARE.md.
+# Status: owner-confirmed initial bindings (2026-10-15, #47); evidence in docs/HARDWARE.md and the
+# round-3 role packet (docs/workstreams/round3/codex/owner-decision-packet.md).
+# Shared roles use the same qwen3.5:9b profile (num_ctx 16384) to avoid the measured ~3.8 s
+# context-switch reload (docs/VALIDATION.md). Retained, unbound alternates (never deleted):
+#   qwen3.5:4b (fast router/background triage), qwen2.5-coder:14b (no-tool code generation
+#   after a Phase 7 repo-task evaluation), qwen3:8b and gemma4:12b (chat fallbacks below),
+#   deepseek-r1:14b, deepseek-r1:7b, qwen2.5:7b (installed, unused).
+# Domain candidates Saul, Fin-R1 and CPA-Qwen are not bound: the owner declined acquisition (#47).
 
 ollama:
   base_url: http://localhost:11434
@@ -13,16 +20,16 @@ roles:
     residency: resident
     temperature: 0.6
   router:
-    model: qwen3.5:4b
-    num_ctx: 4096
-    think: false
-    residency: on_demand
-    temperature: 0.1
-  coder:
-    model: qwen2.5-coder:14b
+    model: qwen3.5:9b # shared with chat; qwen3.5:4b retained as an alternate
     num_ctx: 16384
     think: false
-    residency: swap # evicts chat while running
+    residency: shared
+    temperature: 0.1
+  coder:
+    model: qwen3.5:9b # interim tool-driving coder; qwen2.5-coder:14b retained (0/18 native tool calls)
+    num_ctx: 16384
+    think: false
+    residency: shared
     temperature: 0.2
   embed:
     model: qwen3-embedding:0.6b
@@ -32,8 +39,8 @@ roles:
     # Prefix applied to queries only, never to documents.
     query_prefix: "Instruct: Given a question, retrieve passages from personal notes and code that answer it\nQuery: "
   vision:
-    model: qwen3.5:9b # shared with chat
-    num_ctx: 8192
+    model: qwen3.5:9b # shared with chat; vision task quality still unevaluated
+    num_ctx: 16384
     residency: shared
   # deep: disabled until WSL RAM >= 24 GB and a benchmark proves it acceptable.
   # deep:
