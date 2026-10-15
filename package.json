@@ -10,10 +10,11 @@
   "scripts": {
     "bench:models": "node scripts/bench/models.ts",
     "test:bench": "node scripts/bench/integrity.test.ts",
+    "test:templates": "node --test 'docs/development/templates/**/*.test.ts'",
     "docs:check": "node scripts/check-docs.ts",
     "lint": "eslint . --max-warnings 0",
     "typecheck": "tsc --noEmit",
-    "test": "node scripts/bench/integrity.test.ts && node scripts/compliance/compliance.test.ts && node scripts/evals/integrity.test.ts && node scripts/domain-evals/integrity.test.ts",
+    "test": "node scripts/bench/integrity.test.ts && node scripts/compliance/compliance.test.ts && node scripts/evals/integrity.test.ts && node scripts/domain-evals/integrity.test.ts && pnpm test:templates",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "compliance:check": "node scripts/check-compliance.ts",

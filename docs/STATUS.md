@@ -5,12 +5,14 @@
 > refresh _Now_, _Next_, _Blocked on owner_, and append one line to the _Session log_.
 > Long-lived facts go elsewhere: phase checklist → `PLAN.md`, hardware facts → `HARDWARE.md`, decisions → `adr/` + `PLAN.md` decisions log.
 
-**Last updated:** 2026-10-15 (Claude, owner Phase 0 decisions #47)
+**Last updated:** 2026-10-15 (Claude, Phase 1 foundations #49)
 **Phase:** 1 — Scaffold (Phase 0 accepted 2026-10-15, #47)
 
 ---
 
 ## Now
+
+- **Phase 1 foundations in review ([#49](https://github.com/agthumoe/solid-lamp/issues/49)).** Before scaffolding: [ARCHITECTURE](ARCHITECTURE.md) (six processes incl. a separate `inference` LlmGate process, flows, trust boundaries), [structure](development/structure.md), [AI orchestration](development/ai-orchestration.md), [testing](development/testing.md), [templates](development/templates/README.md) (pure-TS templates type-checked and tested via `pnpm test:templates`; framework templates reference-only until installed) and [ADR 0005](adr/0005-phase1-stack-and-topology.md) (proposed stack/topology). Awaiting Codex review.
 
 - **Owner decisions 2026-10-15 ([#47](https://github.com/agthumoe/solid-lamp/issues/47)). Phase 0 accepted.**
   - Initial bindings applied in `config/models.yaml`: chat, router, coder and vision share `qwen3.5:9b` at 16K; embed `qwen3-embedding:0.6b` at 8K; deep disabled. `qwen3.5:4b` and `qwen2.5-coder:14b` are retained as unbound alternates, and every installed model is kept.
@@ -49,11 +51,12 @@
 
 ## Next (in order)
 
-1. **Start Phase 1 ([#3](https://github.com/agthumoe/solid-lamp/issues/3)): scaffold.** Create bounded child issues (monorepo, Supabase/migrations with ADR 0002 schema, Redis compose, `packages/shared`/`db`/`llm` with LlmGate, `pnpm doctor`, `/health`). Requires Docker Desktop running (blocked item 4).
-2. Optional synthetic domain baseline: run the 180 domain fixtures on the installed `qwen3.5:9b` per the prompt-v2 protocol, under the GPU lease. This gives the scoped domain evidence Qwen needs before serving domain agents; it is not scheduled until requested.
-3. Finish Phase 0 in [#2](https://github.com/agthumoe/solid-lamp/issues/2): final enabled role/context/residency evidence and owner acceptance. Portfolio direction is approved; phase advancement is not implied. Use a fresh v5 benchmark label on an idle host when needed.
-4. After owner's Phase 0 go-ahead, implement catalog/routing/LlmGate foundation in [#3](https://github.com/agthumoe/solid-lamp/issues/3); source/book grounding in #4; bounded delegation in #5; domain workflows in #9. See the domain-agent plan for acceptance/dependencies.
-5. Follow [TRACKING.md](TRACKING.md); create/select bounded implementation tasks before edits. Compliance PR #14 and research PR #16 are merged; required main checks remain enforced.
+1. **Codex review of #49 foundations**, fix findings, merge. Then ADR 0005 becomes accepted as libraries are pinned.
+2. **Start Phase 1 ([#3](https://github.com/agthumoe/solid-lamp/issues/3)): scaffold** following the templates. Create bounded child issues (monorepo, Supabase/migrations with ADR 0002 schema, Redis compose, `packages/shared`/`db`/`llm` with LlmGate, `pnpm doctor`, `/health`). Requires Docker Desktop running (blocked item 4).
+3. Optional synthetic domain baseline: run the 180 domain fixtures on the installed `qwen3.5:9b` per the prompt-v2 protocol, under the GPU lease. This gives the scoped domain evidence Qwen needs before serving domain agents; it is not scheduled until requested.
+4. Finish Phase 0 in [#2](https://github.com/agthumoe/solid-lamp/issues/2): final enabled role/context/residency evidence and owner acceptance. Portfolio direction is approved; phase advancement is not implied. Use a fresh v5 benchmark label on an idle host when needed.
+5. After owner's Phase 0 go-ahead, implement catalog/routing/LlmGate foundation in [#3](https://github.com/agthumoe/solid-lamp/issues/3); source/book grounding in #4; bounded delegation in #5; domain workflows in #9. See the domain-agent plan for acceptance/dependencies.
+6. Follow [TRACKING.md](TRACKING.md); create/select bounded implementation tasks before edits. Compliance PR #14 and research PR #16 are merged; required main checks remain enforced.
 
 ## Blocked on owner
 
@@ -141,3 +144,4 @@ Initial baseline is published to `main` under the owner’s explicit authorizati
 | 2026-10-15 | Claude | Round-3 integration #40 at owner request: PRs #44 (Claude #42) and #45 (Codex #41) were merged earlier with required CI; this pass applied #42 shared corrections S1 (domain-agent plan context sentence → per-arm `num_ctx`) and S2 (pinned-revision/hash verification wording in the round-2 dossier, artifact-readiness README and round-1 evidence index), reconciled STATUS/PLAN/TRACKING and marked rounds 2/3 handoffs complete. No runtime, config, model or GPU changes; owner decisions pending. |
 
 | 2026-10-15 | Claude | Owner Phase 0 decisions recorded under #47: initial role bindings applied to `config/models.yaml` (shared `qwen3.5:9b` 16K for chat/router/coder/vision; embed 8K; deep disabled; alternates retained), synthetic tests acceptable, specialist D1–D3 declined, Phase 0 accepted. Updated PLAN/STATUS/HARDWARE/domain-agent plan; #2 closed, #3 ready, #31/#15 closed. No model download, deletion or GPU run. |
+| 2026-10-15 | Claude Code | #49 Phase 1 foundations: ARCHITECTURE, structure, AI orchestration, testing, templates (type-checked result/errors, approval use case with fake + 6 tests, tool executor + 6 tests), ADR 0005 proposed. `test:templates` added to `pnpm test`. No dependencies installed, no app code. Codex review requested. |

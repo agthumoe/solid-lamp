@@ -8,7 +8,8 @@ Status: **development governance adopted (2026-10-13)**; application enforcement
 1. Read **[`docs/STATUS.md`](docs/STATUS.md)**: what's in flight, the next steps in order, what's blocked on the owner, and gotchas.
 2. Skim **[`docs/PLAN.md`](docs/PLAN.md)**: phase checklist + decisions log.
 3. Read the [development handbook](docs/development/README.md) and the relevant topic guide. **Create/select an open GitHub task before writing project files**; see [delivery](docs/development/delivery.md). If GitHub is unavailable, continue read-only discovery and report the blocker.
-4. Consult as needed: [`docs/BUILD_PROMPT.md`](docs/BUILD_PROMPT.md) (full requirements), [`docs/HARDWARE.md`](docs/HARDWARE.md) (host facts + benchmarks), `docs/adr/`, `docs/specs/`.
+4. Before writing application code, read [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) (processes, flows, trust boundaries), [structure](docs/development/structure.md) (folders, naming, imports) and the [templates](docs/development/templates/README.md); for agents/tools/prompts also [AI orchestration](docs/development/ai-orchestration.md).
+5. Consult as needed: [`docs/BUILD_PROMPT.md`](docs/BUILD_PROMPT.md) (full requirements), [`docs/HARDWARE.md`](docs/HARDWARE.md) (host facts + benchmarks), `docs/adr/`, `docs/specs/`.
 
 **Before ending a session**, update `docs/STATUS.md` (Now / Next / Blocked / Session log) and tick boxes in `docs/PLAN.md`. Another agent must be able to continue from those files alone.
 
@@ -52,6 +53,7 @@ supabase/      migrations     infra/  compose, systemd, ollama, windows docs    
 | ----------------------------- | ---------------------------------------------------------------------------------------------- | -------------- |
 | Install                       | `pnpm install`                                                                                 | Phase 0        |
 | Benchmark models              | `pnpm bench:models` (flags: `--only chat,router`, `--no-fallbacks`, `--no-think`, `--label x`) | Phase 0        |
+| Template tests                | `pnpm test:templates`                                                                          | Phase 1        |
 | Benchmark regression tests    | `pnpm test:bench`                                                                              | Phase 0        |
 | Documentation/skill integrity | `pnpm docs:check`                                                                              | Phase 0        |
 | Full current quality gates    | `pnpm check` (lint/typecheck/test/docs/compliance/format)                                      | Now            |

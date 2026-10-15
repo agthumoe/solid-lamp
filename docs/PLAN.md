@@ -46,6 +46,7 @@ GitHub tasks/milestones: [TRACKING.md](TRACKING.md). Standards: [development han
 
 ## Phase 1: Scaffold
 
+- [x] Foundations: ARCHITECTURE, structure, AI orchestration, testing, templates, ADR 0005 (proposed) ([#49](https://github.com/agthumoe/solid-lamp/issues/49), pending review)
 - [ ] pnpm monorepo (`apps/*`, `packages/*`), strict TS, ESLint, Vitest, Makefile mirror
 - [x] Development handbook/ADR 0003 and issue-first AGENTS adopted; `CLAUDE.md` imports canonical instructions
 - [x] Project-local React/composition/Postgres skills pinned with license/provenance/hash checks
@@ -149,3 +150,4 @@ Validation follow-up (2026-10-12): both reproduced gaps fixed in harness v4; 12 
 
 Decision (2026-10-13, #17): retain every existing installed/planned model and add evaluated domain specialists; Qwen3.5-9B owns broad knowledge/synthesis. [ADR 0004](adr/0004-domain-model-routing.md) and [domain-agent plan](specs/domain-agent-plan.md) define activation gates, source grounding and sequential GPU swaps. Owner approved direction; final enabled settings and Phase 0 acceptance remain pending.
 | 2026-10-15 | Phase 0 accepted. Initial bindings: chat, router, coder and vision share `qwen3.5:9b` at 16K; embed `qwen3-embedding:0.6b` at 8K; deep disabled. `qwen3.5:4b`, `qwen2.5-coder:14b` and all other installed models retained as unbound alternates. Specialist license residuals (D1–D3) declined: Saul, CPA-Qwen and Fin-R1 stay retained candidates, not acquired | Owner decision on the round-3 packets; shared profile avoids measured context-switch reloads; candidates' license chains unaccepted | [#47](https://github.com/agthumoe/solid-lamp/issues/47) |
+| 2026-10-15 | Proposed: separate `apps/inference` process as the single LlmGate; Fastify + zod, Drizzle, BullMQ, LangGraph, Next/Query/Zustand, Vitest/Playwright candidate versions; pure-TS templates type-checked in CI | Cross-process GPU priority needs one queue owner; templates must not rot | [ADR 0005](adr/0005-phase1-stack-and-topology.md), [#49](https://github.com/agthumoe/solid-lamp/issues/49) |
