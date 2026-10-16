@@ -95,6 +95,7 @@ GitHub tasks/milestones: [TRACKING.md](TRACKING.md). Standards: [development han
 
 ## Phase 4: Dashboard v1
 
+- [x] Spec `docs/specs/dashboard.md`: routes ↔ API, auth, per-screen states and state ownership, approval lifecycle UI, keyboard map, tokens ([#51](https://github.com/agthumoe/solid-lamp/issues/51), in review)
 - [ ] Home (health + approvals), Chat, Brain search, Runs, Approvals, Auth
 - [ ] Feature/component size enforcement; Query/Zustand/URL state ownership, hooks and SSR policies; accessibility/component tests
 - Acceptance target: Playwright smoke tests pass; reachable over Tailscale from phone
