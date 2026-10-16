@@ -137,7 +137,9 @@ interface CallOptions {
 // time and returns the actual identity used, so runs can record it.
 ```
 
-`InferenceError` is a discriminated union: `QUEUE_FULL`, `DEADLINE_EXPIRED`, `CANCELLED`, `INFERENCE_UNAVAILABLE`, `MODEL_NOT_LOADED`, `OUTPUT_ALREADY_STARTED`, `INVALID_RESPONSE`. Callers handle each explicitly; nothing retries a stream that already produced output.
+`InferenceError` is a discriminated union: `QUEUE_FULL`, `DEADLINE_EXPIRED`, `CANCELLED`, `INFERENCE_UNAVAILABLE`, `MODEL_NOT_LOADED`, `INVALID_RESPONSE`. `generate` and `embed` return it in a `Result`; callers handle each code explicitly.
+
+**Streaming failure contract** ([template + tests](templates/inference-stream.ts)): `stream()` never throws for an expected failure. It yields `started`, zero or more `token` events, then **exactly one terminal event**: `done` (finish reason, token counts) or `error` (`InferenceError` plus `partial`). `partial: true` means output was already emitted: the caller keeps or marks the partial text and **never retries** (this replaces a separate `OUTPUT_ALREADY_STARTED` code). A failure before output (`partial: false`, for example `QUEUE_FULL`) may be retried within the deadline. A stream that ends without a terminal event is `INVALID_RESPONSE`. A thrown error from the iterator is a programmer bug, not a handled case. `api` maps terminal events to the SSE `done`/`error` frames.
 
 Every request sets `num_ctx` and **all sampling options explicitly** from the role config (temperature, top_p, top_k, repeat/presence penalty, seed when deterministic). Registry/Modelfile defaults are never relied on.
 
