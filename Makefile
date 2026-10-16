@@ -13,6 +13,10 @@ test\:bench:
 test\:templates:
 	pnpm test:templates
 
+.PHONY: test\:shared
+test\:shared:
+	pnpm test:shared
+
 .PHONY: docs\:check
 docs\:check:
 	pnpm docs:check
