@@ -5,14 +5,16 @@
 > refresh _Now_, _Next_, _Blocked on owner_, and append one line to the _Session log_.
 > Long-lived facts go elsewhere: phase checklist → `PLAN.md`, hardware facts → `HARDWARE.md`, decisions → `adr/` + `PLAN.md` decisions log.
 
-**Last updated:** 2026-10-15 (Claude, Phase 1 foundations #49)
+**Last updated:** 2026-10-16 (Claude, merged PRs #50, #54, #53 at owner request; Codex review notes retained)
 **Phase:** 1 — Scaffold (Phase 0 accepted 2026-10-15, #47)
 
 ---
 
 ## Now
 
-- **Phase 1 foundations in review ([#49](https://github.com/agthumoe/solid-lamp/issues/49)).** Before scaffolding: [ARCHITECTURE](ARCHITECTURE.md) (six processes incl. a separate `inference` LlmGate process, flows, trust boundaries), [structure](development/structure.md), [AI orchestration](development/ai-orchestration.md), [testing](development/testing.md), [templates](development/templates/README.md) (pure-TS templates type-checked and tested via `pnpm test:templates`; framework templates reference-only until installed) and [ADR 0005](adr/0005-phase1-stack-and-topology.md) (proposed stack/topology). Awaiting Codex review.
+- **Merged 2026-10-16 (owner go-ahead):** PR #50 foundations ([#49](https://github.com/agthumoe/solid-lamp/issues/49)) → `197e3ae`; PR #54 [dashboard spec](specs/dashboard.md) ([#51](https://github.com/agthumoe/solid-lamp/issues/51)) → `ea6d358`; PR #53 `@aetherion/shared` Result/errors/safe logging ([#52](https://github.com/agthumoe/solid-lamp/issues/52), Codex) → `ea1a556`. Stacked PRs were rebased onto `main` and passed CI before merging; #49, #51 and #52 closed. Codex reviews of #50 (4 rounds) and #51 found no open defects; framework Markdown templates stay reference-only until their libraries are installed.
+
+- Foundations now on `main`: [ARCHITECTURE](ARCHITECTURE.md), [structure](development/structure.md), [AI orchestration](development/ai-orchestration.md), [testing](development/testing.md), [templates](development/templates/README.md) (25 tested template cases), [ADR 0005](adr/0005-phase1-stack-and-topology.md) (proposed until pins are installed).
 
 - **Owner decisions 2026-10-15 ([#47](https://github.com/agthumoe/solid-lamp/issues/47)). Phase 0 accepted.**
   - Initial bindings applied in `config/models.yaml`: chat, router, coder and vision share `qwen3.5:9b` at 16K; embed `qwen3-embedding:0.6b` at 8K; deep disabled. `qwen3.5:4b` and `qwen2.5-coder:14b` are retained as unbound alternates, and every installed model is kept.
@@ -51,12 +53,11 @@
 
 ## Next (in order)
 
-1. **Codex review of #49 foundations**, fix findings, merge. Then ADR 0005 becomes accepted as libraries are pinned.
-2. **Start Phase 1 ([#3](https://github.com/agthumoe/solid-lamp/issues/3)): scaffold** following the templates. Create bounded child issues (monorepo, Supabase/migrations with ADR 0002 schema, Redis compose, `packages/shared`/`db`/`llm` with LlmGate, `pnpm doctor`, `/health`). Requires Docker Desktop running (blocked item 4).
-3. Optional synthetic domain baseline: run the 180 domain fixtures on the installed `qwen3.5:9b` per the prompt-v2 protocol, under the GPU lease. This gives the scoped domain evidence Qwen needs before serving domain agents; it is not scheduled until requested.
-4. Finish Phase 0 in [#2](https://github.com/agthumoe/solid-lamp/issues/2): final enabled role/context/residency evidence and owner acceptance. Portfolio direction is approved; phase advancement is not implied. Use a fresh v5 benchmark label on an idle host when needed.
-5. After owner's Phase 0 go-ahead, implement catalog/routing/LlmGate foundation in [#3](https://github.com/agthumoe/solid-lamp/issues/3); source/book grounding in #4; bounded delegation in #5; domain workflows in #9. See the domain-agent plan for acceptance/dependencies.
-6. Follow [TRACKING.md](TRACKING.md); create/select bounded implementation tasks before edits. Compliance PR #14 and research PR #16 are merged; required main checks remain enforced.
+1. **Continue Phase 1 ([#3](https://github.com/agthumoe/solid-lamp/issues/3)): scaffold** following the templates; `packages/shared` Result/errors/logging is done (#52), config loader still open. Create bounded child issues (monorepo, Supabase/migrations with ADR 0002 schema, Redis compose, `packages/shared`/`db`/`llm` with LlmGate, `pnpm doctor`, `/health`). Requires Docker Desktop running (blocked item 4).
+2. Optional synthetic domain baseline: run the 180 domain fixtures on the installed `qwen3.5:9b` per the prompt-v2 protocol, under the GPU lease. This gives the scoped domain evidence Qwen needs before serving domain agents; it is not scheduled until requested.
+3. Finish Phase 0 in [#2](https://github.com/agthumoe/solid-lamp/issues/2): final enabled role/context/residency evidence and owner acceptance. Portfolio direction is approved; phase advancement is not implied. Use a fresh v5 benchmark label on an idle host when needed.
+4. After owner's Phase 0 go-ahead, implement catalog/routing/LlmGate foundation in [#3](https://github.com/agthumoe/solid-lamp/issues/3); source/book grounding in #4; bounded delegation in #5; domain workflows in #9. See the domain-agent plan for acceptance/dependencies.
+5. Follow [TRACKING.md](TRACKING.md); create/select bounded implementation tasks before edits. Compliance PR #14 and research PR #16 are merged; required main checks remain enforced.
 
 ## Blocked on owner
 
@@ -147,3 +148,14 @@ Initial baseline is published to `main` under the owner’s explicit authorizati
 | 2026-10-15 | Claude Code | #49 Phase 1 foundations: ARCHITECTURE, structure, AI orchestration, testing, templates (type-checked result/errors, approval use case with fake + 6 tests, tool executor + 6 tests), ADR 0005 proposed. `test:templates` added to `pnpm test`. No dependencies installed, no app code. Codex review requested. |
 | 2026-10-15 | Claude Code | #49 Codex review (2×P2) addressed on PR #50: approval decision + audit + outbox now commit through a `DecisionUnitOfWork` (fake proves rollback on outbox failure and retry); typed streaming failure contract (`inference-stream.ts`, one terminal `done`/`error` event with `partial`). 17 template tests. |
 | 2026-10-16 | Claude Code | #51 dashboard design: private design canvas (8 boards) plus reviewable text spec `docs/specs/dashboard.md` (auth, routes ↔ API, per-screen ownership/states, approval decision × execution lifecycle, SSE, a11y, acceptance tests). Stacked on PR #50. |
+
+| 2026-10-15 | Codex | Reviewed open dashboard design issue #51 read-only on GitHub; identified missing explicit Auth acceptance and approval lifecycle states. Private canvas inaccessible; dashboard spec absent locally. Recorded review limitations; no GitHub writes, runtime changes or phase advancement. |
+
+| 2026-10-15 | Codex | Re-reviewed #51: issue/comments unchanged, no dashboard spec found in main or checked worktrees and no associated PR in the retrieved list; private canvas remains inaccessible. Corrected earlier P2 severity: Auth/approval lifecycle items are recommendations pending inspectable design evidence, not confirmed defects. |
+
+| 2026-10-15 | Codex | Reviewed PR #50 head 735a420 under open #49; verified the two earlier fixes, ran full pnpm check successfully and reproduced both ingestion job ID defects. Findings returned in chat; foundations files unchanged, no GitHub writes or merge. |
+
+| 2026-10-15 | Codex | Re-reviewed PR #50 head fc86baf under #49. Verified prior BullMQ fixes; reproduced a new NFC filename collision using two distinct Linux files. Full pnpm check and CI pass; findings returned in chat, no foundations changes or GitHub writes. |
+
+| 2026-10-16 | Codex | Re-reviewed PR #50 head 41b8272 under #49; filename collision fixed and independently verified with actual files. No new findings in latest changes. Full pnpm check, diff whitespace checks and CI pass; no foundations edits, GitHub writes or merge. |
+| 2026-10-16 | Claude Code | Owner said all good: merged PR #50 (#49), rebased and merged stacked PRs #54 (#51) and #53 (#52, Codex) after green CI; closed #49/#51/#52, deleted merged branches. Kept Codex's uncommitted review notes from the main checkout (reconciled into STATUS/PLAN). |
