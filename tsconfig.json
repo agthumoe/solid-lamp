@@ -21,7 +21,8 @@
     "apps/**/*.ts",
     "apps/**/*.tsx",
     "packages/**/*.ts",
-    "packages/**/*.tsx"
+    "packages/**/*.tsx",
+    "docs/development/templates/**/*.ts"
   ],
   "exclude": ["node_modules", ".agents"]
 }

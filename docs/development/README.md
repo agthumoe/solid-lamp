@@ -6,10 +6,15 @@ Read AGENTS → STATUS → PLAN → this index → the relevant guide before edi
 
 | Guide                                       | Covers                                                       | Enforcement begins                                        |
 | ------------------------------------------- | ------------------------------------------------------------ | --------------------------------------------------------- |
+| [System architecture](../ARCHITECTURE.md)   | Processes, ports, data stores, core flows, trust boundaries  | Phase 1                                                   |
+| [Structure and conventions](structure.md)   | Folder layout, naming, code conventions, import rules        | Phase 1                                                   |
+| [Templates](templates/README.md)            | Copyable, type-checked layer templates                       | Now (`.ts`); `.md` when libraries are installed           |
 | [Architecture and API](architecture-api.md) | SOLID, dependency direction, patterns, TypeScript, contracts | Phase 1                                                   |
 | [Frontend and state](frontend-state.md)     | Small components, React hooks, Query, Zustand, SSR           | Phase 4; foundation planned in Phase 1                    |
 | [Database and migrations](database.md)      | Drizzle, SQL history, locks, versions, restore               | Phases 1–2                                                |
 | [AI engineering](ai.md)                     | Local inference, tools, approvals, evaluation                | Phases 1–3                                                |
+| [AI orchestration](ai-orchestration.md)     | Agents, graphs, nodes, tools, prompts, LlmGate client        | Phases 1–3, 7                                             |
+| [Testing](testing.md)                       | Test levels, fakes, determinism, layout, commands            | Phase 1                                                   |
 | [Operations](operations.md)                 | 12 factors, logs, debugging, runbooks                        | Phase 1 baseline; Phase 8 automation                      |
 | [Delivery](delivery.md)                     | GitHub tasks, branches, reviews, CI, definition of done      | Now                                                       |
 | [Examples](examples.md)                     | Query/mutation, components, selectors, safe SSE lifecycle    | Reference now; typecheck when frontend dependencies exist |

@@ -9,6 +9,10 @@ bench\:models:
 test\:bench:
 	pnpm test:bench
 
+.PHONY: test\:templates
+test\:templates:
+	pnpm test:templates
+
 .PHONY: docs\:check
 docs\:check:
 	pnpm docs:check
