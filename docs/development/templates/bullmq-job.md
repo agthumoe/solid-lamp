@@ -20,7 +20,7 @@ export const ingestDocumentPayloadSchema = z.strictObject({
   contentHash: z.string().length(64),
 });
 
-// Enqueue with a deterministic ID: sha256 of (kind, sourceId, normalised path, content
+// Enqueue with a deterministic ID: sha256 of (kind, sourceId, canonical path, content
 // hash), so two documents with the same contents never collide and the ID contains no ':'
 // (BullMQ rejects it). See job-id.ts.
 //   queue.add(INGEST_DOCUMENT, payload, { jobId: ingestDocumentJobId(payload) })

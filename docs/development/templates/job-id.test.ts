@@ -23,11 +23,11 @@ void describe('ingestDocumentJobId', () => {
     assert.notEqual(ingestDocumentJobId(doc), ingestDocumentJobId(other));
   });
 
-  void it('is stable for the same document written with different path spellings', () => {
+  void it('is stable for spellings that always name the same file', () => {
     const variants = [
       './Projects/aetherion.md',
       'Projects//aetherion.md',
-      'Projects\\aetherion.md',
+      'Projects/./aetherion.md',
     ];
 
     for (const path of variants) {
@@ -51,8 +51,18 @@ void describe('ingestDocumentJobId', () => {
     assert.throws(() => deterministicJobId('ingest:document', []), /invalid job kind/);
   });
 
-  void it('preserves case and Unicode-normalises paths', () => {
+  void it('keeps distinct Linux files distinct: Unicode form, case and backslash', () => {
+    const nfc = { ...doc, path: 'Caf\u00e9.md' };
+    const nfd = { ...doc, path: 'Cafe\u0301.md' };
+
+    assert.notEqual(ingestDocumentJobId(nfc), ingestDocumentJobId(nfd));
     assert.notEqual(normalizeDocumentPath('Notes/A.md'), normalizeDocumentPath('notes/a.md'));
-    assert.equal(normalizeDocumentPath('Café.md'), normalizeDocumentPath('Café.md'));
+    assert.notEqual(normalizeDocumentPath('a\\b.md'), normalizeDocumentPath('a/b.md'));
+  });
+
+  void it('rejects absolute, parent-relative and empty paths', () => {
+    assert.throws(() => normalizeDocumentPath('/etc/passwd'), /source-relative/);
+    assert.throws(() => normalizeDocumentPath('Projects/../secret.md'), /'\.\.'/);
+    assert.throws(() => normalizeDocumentPath('./'), /empty/);
   });
 });

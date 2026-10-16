@@ -6,16 +6,20 @@
 // leaks a private path into Redis keys or logs.
 
 import { createHash } from 'node:crypto';
-import { posix } from 'node:path';
 
-// Normalise a source-relative path so the same document always has the same identity:
-// Unicode NFC, forward slashes, no '.' segments or duplicate slashes, no leading './'.
-// Case is preserved (Linux paths are case-sensitive). Traversal checks happen at the
-// source boundary, not here.
+// Canonical spelling of a source-relative path, preserving filesystem identity. Linux
+// paths are byte strings: Unicode forms (NFC vs NFD), case and backslashes are all part of
+// the name, so they are NOT changed, or two distinct files would share one ID. Only
+// spellings that always name the same file are folded: '.' segments, empty segments from
+// duplicate slashes, a trailing slash. Absolute paths and '..' segments are rejected
+// (resolving '..' lexically can change the file when a symlink is involved); the source
+// watcher only produces clean relative paths, so either means a bug upstream.
 export const normalizeDocumentPath = (path: string): string => {
-  const slashed = path.normalize('NFC').replaceAll('\\', '/');
-  const normalized = posix.normalize(slashed);
-  return normalized.startsWith('./') ? normalized.slice(2) : normalized;
+  if (path.startsWith('/')) throw new Error('document path must be source-relative');
+  const segments = path.split('/').filter((segment) => segment !== '' && segment !== '.');
+  if (segments.includes('..')) throw new Error("document path must not contain '..'");
+  if (segments.length === 0) throw new Error('document path is empty');
+  return segments.join('/');
 };
 
 // `kind` is a kebab-case job kind (no ':'); `identity` lists every field that makes two
