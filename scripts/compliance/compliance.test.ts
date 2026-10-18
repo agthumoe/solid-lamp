@@ -7,6 +7,7 @@ import { ESLint } from 'eslint';
 import { modelsSchema, privateUrlSchema } from '../bench/schemas.ts';
 import { parseOptions, scoreRefusal, completionStatus } from '../bench/policy.ts';
 import { createLogger } from '../lib/logger.ts';
+import { composeViolations } from './compose-policy.ts';
 import { pinViolations } from './package-policy.ts';
 import { sourceViolations } from './source-policy.ts';
 
@@ -131,5 +132,43 @@ await test('every manifest pins exact versions; only internal workspace links ar
       'apps/x/package.json: dependency left is not exact-pinned',
       'apps/x/package.json: dependency next is not exact-pinned',
     ],
+  );
+});
+await test('compose services publish only on private hosts and pin images by digest', () => {
+  const pinned = 'redis:8@sha256:' + 'a'.repeat(64);
+  const wildcard = ['0', '0', '0', '0'].join('.');
+  assert.deepEqual(
+    composeViolations(
+      'infra/compose.yml',
+      `
+services:
+  ok:
+    image: ${pinned}
+    ports: ['127.0.0.1:6379:6379', { host_ip: '100.64.1.2', published: 80 }, '[::1]:53:53']
+  open:
+    image: redis:latest
+    ports: ['6379:6379', 8080, '${wildcard}:5432:5432', { published: 9000 }]
+  host:
+    image: ${pinned}
+    network_mode: host
+    privileged: true
+`,
+    ),
+    [
+      'infra/compose.yml: service open image is not pinned by digest',
+      'infra/compose.yml: service open publishes "6379:6379" beyond loopback/Tailscale',
+      'infra/compose.yml: service open publishes 8080 beyond loopback/Tailscale',
+      `infra/compose.yml: service open publishes "${wildcard}:5432:5432" beyond loopback/Tailscale`,
+      'infra/compose.yml: service open publishes {"published":9000} beyond loopback/Tailscale',
+      'infra/compose.yml: service host uses host networking',
+      'infra/compose.yml: service host is privileged',
+    ],
+  );
+  assert.deepEqual(composeViolations('x.yml', 'version: 3'), [
+    'x.yml: not a compose file with services',
+  ]);
+  assert.deepEqual(
+    composeViolations('infra/docker-compose.yml', readFileSync('infra/docker-compose.yml', 'utf8')),
+    [],
   );
 });
