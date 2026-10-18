@@ -138,7 +138,6 @@ create table public.search_config (
     references public.embedding_versions (id, status)
     deferrable initially deferred
 );
-insert into public.search_config (id) values (true);
 
 -- Single-user app behind owner auth; RLS on so any accidental Supabase API exposure fails
 -- closed. The server connects with a role that bypasses RLS.
@@ -150,3 +149,7 @@ alter table public.embedding_versions enable row level security;
 alter table public.chunk_embeddings_1024 enable row level security;
 alter table public.chunk_embeddings_768 enable row level security;
 alter table public.search_config enable row level security;
+
+-- Seed the singleton last: the insert queues a deferred FK check, and Postgres refuses ALTER
+-- TABLE on a table with pending trigger events in the same transaction.
+insert into public.search_config (id) values (true);
