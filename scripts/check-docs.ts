@@ -76,6 +76,29 @@ for (const script of Object.keys(pkg.scripts)) {
   if (!makefile.includes(`${script.replaceAll(':', '\\:')}:`))
     problems.push(`Missing Makefile mirror: ${script}`);
 }
+// pnpm built-ins win over package.json scripts of the same name (pnpm 11 added `doctor`), so a
+// colliding script must be called as `pnpm run <name>` in the Makefile and in current guidance.
+// `test` and `start` are excluded: pnpm runs the script for those.
+const PNPM_BUILTINS = new Set(
+  (
+    'add approve-builds audit bin cat-file cat-index clean config create dedupe deploy dlx ' +
+    'doctor env exec fetch find-hash i ignored-builds import init install install-test it ' +
+    'licenses link list ln ls outdated pack patch patch-commit patch-remove prune publish rb ' +
+    'rebuild remove rm root runtime self-update server setup stage store unlink up update why'
+  ).split(' '),
+);
+const guidance = [
+  ...['AGENTS.md', 'README.md', 'CONTRIBUTING.md'].map((path) => join(root, path)),
+  ...walk(join(root, 'docs/development')).filter((path) => extname(path) === '.md'),
+  ...walk(join(root, 'docs/specs')).filter((path) => extname(path) === '.md'),
+];
+for (const script of Object.keys(pkg.scripts).filter((name) => PNPM_BUILTINS.has(name))) {
+  if (new RegExp(`^\\s+pnpm ${script}\\b`, 'm').test(makefile))
+    problems.push(`Makefile must call \`pnpm run ${script}\` (pnpm built-in shadows the script)`);
+  for (const file of guidance)
+    if (new RegExp(`\`pnpm ${script}\\b`).test(readFileSync(file, 'utf8')))
+      problems.push(`${relative(root, file)}: write \`pnpm run ${script}\` (pnpm built-in)`);
+}
 if (problems.length) {
   console.error(problems.join('\n'));
   process.exitCode = 1;

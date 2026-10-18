@@ -31,7 +31,7 @@ dev\:api:
 
 .PHONY: doctor
 doctor:
-	pnpm doctor
+	pnpm run doctor
 
 .PHONY: db\:start
 db\:start:

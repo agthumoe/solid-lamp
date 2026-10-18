@@ -1,4 +1,5 @@
-// `pnpm doctor`: read-only local environment report (#62). Exit code 1 when any check fails.
+// `pnpm run doctor`: read-only local environment report (#62). Plain `pnpm doctor` is pnpm's
+// own built-in (#81). Exit code 1 when any check fails.
 // It never changes host settings, installs anything or loads a model onto the GPU.
 import { execFile } from 'node:child_process';
 import { readFile } from 'node:fs/promises';

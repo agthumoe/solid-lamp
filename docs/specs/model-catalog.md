@@ -27,7 +27,7 @@ For every bound role and every configured fallback:
 5. Embed dimensions match the catalog, for the primary and for each embedding fallback's options.
 6. A fallback differs from the role's primary.
 
-All problems are reported together as `binding invalid: …` (up to five listed). `apps/inference` exits at startup on any failure. `pnpm doctor` reports `catalog.yaml`, `bindings` and `artifacts`:
+All problems are reported together as `binding invalid: …` (up to five listed). `apps/inference` exits at startup on any failure. `pnpm run doctor` reports `catalog.yaml`, `bindings` and `artifacts`:
 
 - **Fail:** a changed digest on an enabled record.
 - **Warn:** a changed digest on any other record, or an installed model missing from the catalog.

@@ -76,7 +76,7 @@
 
 ## Next (in order)
 
-1. **Owner setup** (blocked items 4 and 7): turn on Docker Desktop WSL integration for this distro, then create `.env` from `.env.example` (`AETHERION_POSTGRES_PASSWORD`, `AETHERION_DATABASE_URL`, `AETHERION_INFERENCE_SECRET`). Then run `pnpm db:start && pnpm db:migrate && pnpm doctor`, and start `pnpm dev:inference` and `pnpm dev:api`. Expected: doctor fully green and `/api/v1/health/ready` all `ok`.
+1. **Owner setup** (blocked items 4 and 7): turn on Docker Desktop WSL integration for this distro, then create `.env` from `.env.example` (`AETHERION_POSTGRES_PASSWORD`, `AETHERION_DATABASE_URL`, `AETHERION_INFERENCE_SECRET`). Then run `pnpm db:start && pnpm db:migrate && pnpm run doctor`, and start `pnpm dev:inference` and `pnpm dev:api`. Expected: doctor fully green and `/api/v1/health/ready` all `ok`.
 2. **Owner go-ahead to close Phase 1** ([#3](https://github.com/agthumoe/solid-lamp/issues/3)). Acceptance was met locally on 2026-10-18; PRs #63–#79 are merged. Leftover Phase 1 items that do not block: Vitest (added with the first suite that needs it), and domain-role runtime bindings (Phase 3/7).
 3. **Then Phase 2, brain ([#4](https://github.com/agthumoe/solid-lamp/issues/4))**, starting with `docs/specs/brain.md`. Order: backup/restore smoke test on a synthetic database (REVIEW #6), Obsidian ingestion and heading-aware chunking, embeddings through the inference gate into versioned tables, `search_brain` hybrid + RRF, links, `brain:*` commands, the brain MCP server with access checks, and the real-vault eval set last.
 4. Optional, on request: synthetic domain baseline (180 fixtures on `qwen3.5:9b`, under the GPU lease), and Phase 0 closure evidence in [#2](https://github.com/agthumoe/solid-lamp/issues/2).
@@ -115,6 +115,7 @@ Initial baseline is published to `main` under the owner’s explicit authorizati
 
 ## Gotchas learned
 
+- Use `pnpm run doctor`, not `pnpm doctor`: pnpm 11's built-in `doctor` (it checks pnpm itself) shadows the script. `pnpm run docs:check` guards this (#81).
 - Never run `supabase start`: it publishes Postgres and Kong on all interfaces. Use `pnpm db:start` (compose, loopback) plus `pnpm db:migrate`.
 - Supabase CLI telemetry is on by default; the repo scripts set `SUPABASE_TELEMETRY_DISABLED=1`. Raw `npx supabase` calls do not.
 - Ollama residency is not stable across roles: after an embed then a chat request, `/api/ps` listed only the chat model (2026-10-18). Observe `/api/ps` around each job; never assume the chat+embed pair is loaded.
@@ -199,3 +200,4 @@ Initial baseline is published to `main` under the owner’s explicit authorizati
 | 2026-10-18 | Claude Code | Owner asked me to start Docker Desktop. Redis is up on loopback. #75: `supabase start` bound all interfaces, so it was stopped, rejected and its volume removed; Supabase Postgres now runs via compose on loopback with the CLI as migration operator. Migration applied, `test:int` 9/9 on Supabase Postgres, `/health/ready` all ok, doctor green (verified in a throwaway project, since torn down). Phase 1 acceptance met; owner go-ahead pending. |
 | 2026-10-18 | Claude Code | Fixed Codex's five P2 findings on the Phase 1 stack (#63 NDJSON bound, #64 body deadline, #66 configured ports, #72 relative imports, #74 link lifecycle), each with a regression that fails on the old code; replied on each PR; merged #63–#76 bottom-up with CI green; closed #59–#75. |
 | 2026-10-18 | Claude Code | #78: fixed Codex re-review findings (dynamic-import boundaries, error-body deadline mapping) with regressions; ignored `.claude/` worktrees in lint/format/git. Full local `pnpm check` passes; the inference suite was stable across 3 runs. |
+| 2026-10-18 | Claude Code | Owner ran `pnpm doctor` and got pnpm 11's built-in. #81: docs/Makefile now use `pnpm run doctor`, plus a docs-check guard against script names shadowed by pnpm built-ins. On the owner's real `.env`: `pnpm run doctor` 23/23 ok, migration applied (local = remote), `/api/v1/health/ready` 200 with all `ok`. |
