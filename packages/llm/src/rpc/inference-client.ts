@@ -119,8 +119,10 @@ export const createInferenceClient = (options: InferenceClientOptions): Inferenc
         ? ok(parsed.data)
         : err(inferenceError('INVALID_RESPONSE', 'unexpected inference response'));
     } catch {
+      // The body read is bounded by the deadline-plus-grace signal from post(); a stall after the
+      // headers is a deadline expiry, not a malformed response.
       return err(
-        call.signal.aborted
+        call.signal.aborted || call.deadline.getTime() <= now()
           ? abortedError(call)
           : inferenceError('INVALID_RESPONSE', 'inference response is not JSON'),
       );
