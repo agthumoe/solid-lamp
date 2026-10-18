@@ -17,6 +17,10 @@ test\:templates:
 test\:shared:
 	pnpm test:shared
 
+.PHONY: test\:llm
+test\:llm:
+	pnpm test:llm
+
 .PHONY: docs\:check
 docs\:check:
 	pnpm docs:check
