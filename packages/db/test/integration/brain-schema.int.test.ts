@@ -170,19 +170,22 @@ await migrated(
   },
 );
 
-await migrated('search config is a singleton that can only point at the active version', async (sql) => {
-  const building = await version(sql, 1024);
+await migrated(
+  'search config is a singleton that can only point at the active version',
+  async (sql) => {
+    const building = await version(sql, 1024);
 
-  await rejects(sql`insert into search_config (id) values (false)`, /search_config_id_check/);
-  await rejects(sql`insert into search_config (id) values (true)`, /search_config_pkey/);
-  await rejects(
-    sql.begin(
-      (tx) => tx`update search_config set active_embedding_version_id = ${building},
+    await rejects(sql`insert into search_config (id) values (false)`, /search_config_id_check/);
+    await rejects(sql`insert into search_config (id) values (true)`, /search_config_pkey/);
+    await rejects(
+      sql.begin(
+        (tx) => tx`update search_config set active_embedding_version_id = ${building},
                  active_status = 'active'`,
-    ),
-    /search_config_active_version_fk/,
-  );
-});
+      ),
+      /search_config_active_version_fk/,
+    );
+  },
+);
 
 await migrated(
   'promotion swaps the active version atomically; a dangling pointer cannot commit',
