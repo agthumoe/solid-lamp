@@ -211,14 +211,24 @@ export const parseListeners = (output: string): { host: string; port: number }[]
 // Built from parts so the source policy's wildcard-binding check does not flag the detector.
 const WILDCARDS = new Set([['0', '0', '0', '0'].join('.'), '::', '*']);
 
+const PORT_KEYS = ['AETHERION_API_PORT', 'AETHERION_INFERENCE_PORT'] as const;
+
+export const configuredPorts = (env: Probes['env']): number[] =>
+  PORT_KEYS.flatMap((key) => {
+    const port = Number(env[key]);
+    return Number.isInteger(port) && port >= 1 && port <= 65_535 ? [port] : [];
+  });
+
 export const checkBindings = async (probes: Probes): Promise<CheckResult[]> => {
   const ss = await probes.command('ss', ['-ltnH']);
   if (ss.code !== 0) return [result('bindings', 'warn', 'ss unavailable; bindings not checked')];
-  const known = new Set<number>(KNOWN_PORTS);
+  // Defaults plus any valid AETHERION_*_PORT overrides, so a moved service is still checked.
+  const known = new Set<number>([...KNOWN_PORTS, ...configuredPorts(probes.env)]);
   const exposed = parseListeners(ss.stdout).filter(
     ({ host, port }) => known.has(port) && (WILDCARDS.has(host) || !isPrivateHost(host)),
   );
-  if (exposed.length === 0) return [result('bindings', 'ok', 'known ports bound privately')];
+  if (exposed.length === 0)
+    return [result('bindings', 'ok', 'known and configured ports bound privately')];
   return [
     result(
       'bindings',
