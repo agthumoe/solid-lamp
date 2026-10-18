@@ -55,12 +55,12 @@ GitHub tasks/milestones: [TRACKING.md](TRACKING.md). Standards: [development han
 - [x] Enforce current handbook: strict TS, typed lint/hooks/boundaries, formatting, Zod diagnostics and safe logging, negative policy tests, unified CI ([#13](https://github.com/agthumoe/solid-lamp/issues/13))
 - [ ] Extend enforcement to API/DB/production LlmGate/logging and migration/restore integration tests when implemented
 - [x] Decide embedding storage strategy: versioned fixed-dimension tables and atomic promotion → ADR 0002, `specs/embedding-storage.md`
-- [ ] Implement ADR 0002 schema in the first migrations
-- [ ] Supabase local project + first migrations (§7)
+- [x] Implement ADR 0002 schema in the first migrations ([#73](https://github.com/agthumoe/solid-lamp/issues/73), [spec](specs/brain-schema.md); replay/parity verified in CI on pgvector Postgres)
+- [ ] Supabase local project + first migrations (§7) (brain-core migration done in #73; `supabase init`/`config.toml` and `supabase db reset` verification wait for Docker)
 - [ ] Private binding/port checks at service introduction (`specs/security-recovery.md`) (inference/api: private-host config + loopback defaults, #60/#61; doctor `bindings` check, #62)
 - [x] Redis via `infra/docker-compose.yml` ([#67](https://github.com/agthumoe/solid-lamp/issues/67); authored and policy-checked, first `up` pending Docker Desktop)
 - [x] `packages/shared` (config loader, zod schemas, pino logger) ([#52](https://github.com/agthumoe/solid-lamp/issues/52), [#56](https://github.com/agthumoe/solid-lamp/issues/56))
-- [ ] `packages/db` (Drizzle schema)
+- [x] `packages/db` (Drizzle schema) ([#73](https://github.com/agthumoe/solid-lamp/issues/73); brain tables, client factory)
 - [x] Spec `docs/specs/llm-gate.md`: queue limits, cancellation, interactive priority, starvation prevention, model/ctx switching, eviction behaviour
 - [ ] Retained model catalog/status schema, semantic domain-role bindings and disclosed fallback; no candidate enabled without evidence (ADR 0004)
   - [x] Catalog with states/digests/scoped evidence; bindings validated at inference startup and by doctor ([#69](https://github.com/agthumoe/solid-lamp/issues/69), [spec](specs/model-catalog.md))
@@ -163,6 +163,7 @@ Decision (2026-10-13, #17): retain every existing installed/planned model and ad
 | 2026-10-18 | `apps/api` readiness reports `not_configured` when `AETHERION_DATABASE_URL` is unset and reaches Ollama only via inference `/readyz`; health responses carry statuses only until Phase 3 auth | API can start and be checked while Docker/Supabase are down; one GPU authority; no information leak from an unauthenticated route | [#61](https://github.com/agthumoe/solid-lamp/issues/61), `specs/api-health.md` |
 | 2026-10-18 | `pnpm doctor` lives in `scripts/doctor` as pure checks over injected probes; root links `@aetherion/shared` (`workspace:*`) to reuse runtime config validation; app processes not running are warnings | Doctor must reuse the exact runtime schemas, stay read-only, and be green without dev servers running | [#62](https://github.com/agthumoe/solid-lamp/issues/62), `specs/doctor.md` |
 | 2026-10-18 | `config/catalog.yaml` is the retained inventory; a binding needs an enabled record accepted for the role with passed `gpu_context` evidence and no failed/revoked scoped evidence; inference refuses to start otherwise; doctor fails on a changed digest of an enabled record | Retention ≠ selection (ADR 0004); fail closed on contradictory config; a changed artifact invalidates its evidence | [#69](https://github.com/agthumoe/solid-lamp/issues/69), `specs/model-catalog.md` |
+| 2026-10-18 | Migration invariants enforced in SQL (composite version/dimension FKs, partial unique active index, deferrable active-only search pointer); migration replay/parity tests run in CI against a digest-pinned `pgvector/pgvector:0.8.7-pg17` service and skip locally without a database URL | Database constraints, not application code, keep vector spaces apart; CI gives real Postgres verification while local Docker is down | [#73](https://github.com/agthumoe/solid-lamp/issues/73), `specs/brain-schema.md` |
 
 Review note (2026-10-15, #51): dashboard design issue reviewed for scope/acceptance only. Second review: explicit Auth and approval lifecycle coverage are recommendations for the planned spec, not confirmed design defects; earlier P2 severity withdrawn. Private visual draft was inaccessible and the spec is absent locally; Phase 4 checkboxes remain unchanged.
 

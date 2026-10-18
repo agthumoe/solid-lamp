@@ -5,12 +5,14 @@
 > refresh _Now_, _Next_, _Blocked on owner_, and append one line to the _Session log_.
 > Long-lived facts go elsewhere: phase checklist → `PLAN.md`, hardware facts → `HARDWARE.md`, decisions → `adr/` + `PLAN.md` decisions log.
 
-**Last updated:** 2026-10-18 (Claude, stacked PRs #63 (#59) → #64 (#60) → #65 (#61) → #66 (#62) → #68 (#67) → #70 (#69) → #71 import boundaries on `feat/71-import-boundaries`)
+**Last updated:** 2026-10-18 (Claude, stacked PRs #63 (#59) → #64 (#60) → #65 (#61) → #66 (#62) → #68 (#67) → #70 (#69) → #72 (#71) → #73 brain schema on `feat/73-brain-schema`)
 **Phase:** 1 — Scaffold (Phase 0 accepted 2026-10-15, #47)
 
 ---
 
 ## Now
+
+- **In review (2026-10-18), stacked on PR #72:** [#73](https://github.com/agthumoe/solid-lamp/issues/73) first migration ([spec](specs/brain-schema.md)): the brain core (sources, documents, chunks with a generated `tsvector`, links) plus ADR 0002 versioned embeddings (fixed-dimension tables, composite version/dimension FKs, one active version, deferrable active-only search pointer, HNSW indexes, RLS). Adds the `packages/db` Drizzle mirror. `pnpm test:int` replays the history against pgvector Postgres in CI and skips locally until Docker runs.
 
 - **In review (2026-10-18), stacked on PR #70:** [#71](https://github.com/agthumoe/solid-lamp/issues/71) ESLint import boundaries: no deep `src` imports across packages, no app imports from packages or other apps, `packages/shared` standalone, `/testing` doubles only in tests, and `apps/web` limited to `@aetherion/shared/contracts`. Negative lint tests use virtual sample files.
 
@@ -185,3 +187,4 @@ Initial baseline is published to `main` under the owner’s explicit authorizati
 | 2026-10-18 | Claude Code | #67 (stacked on #66): Redis compose + compose exposure policy in compliance (1 new test group); compliance evidence table refreshed. Docker-dependent items (Supabase, migrations, `packages/db`) remain blocked on owner item 4. |
 | 2026-10-18 | Claude Code | #69 (stacked on #68): catalog schema + binding validation (6 tests), inference startup gate (manually verified exit on contradiction), doctor catalog/bindings/artifacts checks (2 new tests). No binding or routing change. |
 | 2026-10-18 | Claude Code | #71 (stacked on #70): ESLint `no-restricted-imports` boundaries per structure.md with negative lint tests; structure/compliance docs updated. |
+| 2026-10-18 | Claude Code | #73 (stacked on #72): brain-core migration, `packages/db`, integration replay/parity tests (9) running in CI on pgvector 0.8.7-pg17; local run skipped (Docker stopped). Note: one commit was pushed before `pnpm check` finished (format-only miss) and fixed in the next commit. |
