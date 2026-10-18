@@ -237,13 +237,22 @@ export const checkBackingServices = async (probes: Probes): Promise<CheckResult[
   const docker = await probes.command('docker', ['info', '--format', '{{.ServerVersion}}']);
   const dockerUp = docker.code === 0 && /^\d/.test(docker.stdout.trim());
   const services: [string, number, string][] = [
-    ['postgres', 54322, 'supabase start'],
-    ['redis', 6379, 'docker compose -f infra/docker-compose.yml up -d redis'],
+    ['postgres', 54322, 'pnpm db:start && pnpm db:migrate'],
+    ['redis', 6379, 'pnpm db:start'],
   ];
+  const compose = await probes.command('docker', ['compose', 'version', '--short']);
   const results = [
     dockerUp
       ? result('docker', 'ok', `engine ${docker.stdout.trim()}`)
       : result('docker', 'fail', 'engine not running', 'start Docker Desktop (WSL integration on)'),
+    compose.code === 0
+      ? result('docker compose', 'ok', compose.stdout.trim())
+      : result(
+          'docker compose',
+          'warn',
+          'plugin not found; pnpm db:start needs it',
+          'turn on Docker Desktop WSL integration for this distro (Settings → Resources → WSL integration)',
+        ),
   ];
   for (const [name, port, hint] of services)
     results.push(

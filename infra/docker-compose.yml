@@ -1,11 +1,30 @@
-# Aetherion OS backing services (Docker Desktop with WSL integration). Postgres comes from the
-# Supabase CLI (`supabase start`), not from this file.
-# Start:  docker compose -f infra/docker-compose.yml up -d redis
+# Aetherion OS backing services (Docker Desktop with WSL integration).
+# Start:  pnpm db:start   (docker compose --env-file .env -f infra/docker-compose.yml up -d)
 # Check:  pnpm doctor
+# Postgres runs Supabase's own image here instead of `supabase start`, which publishes its
+# ports on every interface (docs/specs/supabase-local.md). The Supabase CLI only applies
+# migrations (`pnpm db:migrate`).
 # Every published port binds 127.0.0.1 (AGENTS hard constraint 3); images are pinned by digest.
 name: aetherion
 
 services:
+  postgres:
+    # Supabase Postgres 17.11.0.002 (bundles pgvector), ECR digest, image built 2026-09-29
+    image: public.ecr.aws/supabase/postgres:17.11.0.002@sha256:0450166354dc9c1d25f0322ac8b580774d4fb0184d2b087f6e4fe9499c66cf53
+    environment:
+      # From the repo .env; compose refuses to start without it.
+      POSTGRES_PASSWORD: ${AETHERION_POSTGRES_PASSWORD:?set AETHERION_POSTGRES_PASSWORD in .env}
+    ports:
+      - '127.0.0.1:54322:5432'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD', 'pg_isready', '-U', 'postgres', '-h', '127.0.0.1']
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
   redis:
     # redis 8.8.3-alpine, multi-arch index digest (Docker Hub, 2026-09-25)
     image: redis:8.8.3-alpine@sha256:0b2b77d3ea5078274795e3177cdbdada8b96316684a38911d528534ed679b5ec
@@ -33,4 +52,5 @@ services:
     restart: unless-stopped
 
 volumes:
+  postgres-data:
   redis-data:

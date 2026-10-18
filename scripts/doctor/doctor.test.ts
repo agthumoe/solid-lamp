@@ -66,7 +66,8 @@ const probes = (
       ),
     getJson: (url) => Promise.resolve(url.endsWith('/api/tags') ? INSTALLED : { status: 'ok' }),
     postJson: () => Promise.resolve({ model_info: { 'qwen3.embedding_length': 1024 } }),
-    command: (cmd) => Promise.resolve(commands[cmd] ?? { code: 127, stdout: '' }),
+    command: (cmd, args) =>
+      Promise.resolve(commands[`${cmd} ${args[0]}`] ?? commands[cmd] ?? { code: 127, stdout: '' }),
     tcp: () => Promise.resolve(true),
     ...overrides,
   };
@@ -266,4 +267,15 @@ await test('changed digests fail for enabled records; uncatalogued models warn',
   assert.equal(extra[0]?.status, 'warn');
   assert.equal(extra[0]?.detail, 'llama9:70b not in catalog');
   assert.equal(clean[0]?.status, 'ok');
+});
+
+await test('a missing docker compose plugin warns with the WSL integration hint', async () => {
+  const results = await runDoctor(
+    probes({ commands: { 'docker compose': { code: 1, stdout: '' } } }),
+  );
+  const compose = results.find((entry) => entry.name === 'docker compose');
+
+  assert.equal(compose?.status, 'warn');
+  assert.match(compose?.hint ?? '', /WSL integration/);
+  assert.equal(statuses(results).docker, 'ok');
 });
