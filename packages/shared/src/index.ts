@@ -19,3 +19,14 @@ export {
   type LogLevel,
 } from './logging/logger.ts';
 export { err, ok, type Err, type Ok, type Result } from './result.ts';
+export { loadEnvConfig, type EnvConfig } from './config/env-config.ts';
+export {
+  loadModelsConfig,
+  parseModelsConfig,
+  ROLE_NAMES,
+  type EmbedRoleConfig,
+  type GenerationRoleConfig,
+  type ModelsConfig,
+  type RoleName,
+} from './config/models-config.ts';
+export { isPrivateHost, isPrivateHttpUrl } from './config/private-host.ts';

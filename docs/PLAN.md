@@ -59,11 +59,13 @@ GitHub tasks/milestones: [TRACKING.md](TRACKING.md). Standards: [development han
 - [ ] Supabase local project + first migrations (§7)
 - [ ] Private binding/port checks at service introduction (`specs/security-recovery.md`)
 - [ ] Redis via `infra/docker-compose.yml`
-- [ ] `packages/shared` (config loader, zod schemas, pino logger)
+- [x] `packages/shared` (config loader, zod schemas, pino logger) ([#52](https://github.com/agthumoe/solid-lamp/issues/52), [#56](https://github.com/agthumoe/solid-lamp/issues/56))
 - [ ] `packages/db` (Drizzle schema)
 - [x] Spec `docs/specs/llm-gate.md`: queue limits, cancellation, interactive priority, starvation prevention, model/ctx switching, eviction behaviour
 - [ ] Retained model catalog/status schema, semantic domain-role bindings and disclosed fallback; no candidate enabled without evidence (ADR 0004)
 - [ ] `packages/llm` (role router, LlmGate, tool-call repair) + unit tests, including negative repair cases: JSON quoted in prose, scalar/invalid args, tools outside the allowlist (REVIEW #2)
+  - [x] Pure core: role snapshots, gate queue/priority/cancellation/deadlines, embedding batch interleave, allowlisted tool-call validation and repair with REVIEW #2 negative cases ([#57](https://github.com/agthumoe/solid-lamp/issues/57), [spec](specs/llm-package.md))
+  - [ ] `apps/inference` Ollama adapter: residency/eviction observation, context reload accounting, transient retries, streaming
 - [ ] `pnpm doctor`
 - [ ] `/health` endpoint reporting Ollama + DB
 - Acceptance target: `pnpm doctor` green, `packages/llm` tests pass, `/health` reports Ollama and DB
@@ -152,6 +154,7 @@ Validation follow-up (2026-10-12): both reproduced gaps fixed in harness v4; 12 
 Decision (2026-10-13, #17): retain every existing installed/planned model and add evaluated domain specialists; Qwen3.5-9B owns broad knowledge/synthesis. [ADR 0004](adr/0004-domain-model-routing.md) and [domain-agent plan](specs/domain-agent-plan.md) define activation gates, source grounding and sequential GPU swaps. Owner approved direction; final enabled settings and Phase 0 acceptance remain pending.
 | 2026-10-15 | Phase 0 accepted. Initial bindings: chat, router, coder and vision share `qwen3.5:9b` at 16K; embed `qwen3-embedding:0.6b` at 8K; deep disabled. `qwen3.5:4b`, `qwen2.5-coder:14b` and all other installed models retained as unbound alternates. Specialist license residuals (D1–D3) declined: Saul, CPA-Qwen and Fin-R1 stay retained candidates, not acquired | Owner decision on the round-3 packets; shared profile avoids measured context-switch reloads; candidates' license chains unaccepted | [#47](https://github.com/agthumoe/solid-lamp/issues/47) |
 | 2026-10-15 | Proposed: separate `apps/inference` process as the single LlmGate; Fastify + zod, Drizzle, BullMQ, LangGraph, Next/Query/Zustand, Vitest/Playwright candidate versions; pure-TS templates type-checked in CI | Cross-process GPU priority needs one queue owner; templates must not rot | [ADR 0005](adr/0005-phase1-stack-and-topology.md), [#49](https://github.com/agthumoe/solid-lamp/issues/49) |
+| 2026-10-17 | Pure `packages/llm` core before the inference process: gate is a class with injected clock, jobs are `(signal) => Result`; workspace packages linked via `pnpm-workspace.yaml` `packages/*` | Gate behavior from the LlmGate spec is testable without Ollama or Docker; residency/eviction checks wait for `apps/inference` | [#57](https://github.com/agthumoe/solid-lamp/issues/57), `specs/llm-package.md` |
 
 Review note (2026-10-15, #51): dashboard design issue reviewed for scope/acceptance only. Second review: explicit Auth and approval lifecycle coverage are recommendations for the planned spec, not confirmed design defects; earlier P2 severity withdrawn. Private visual draft was inaccessible and the spec is absent locally; Phase 4 checkboxes remain unchanged.
 
