@@ -5,12 +5,14 @@
 > refresh _Now_, _Next_, _Blocked on owner_, and append one line to the _Session log_.
 > Long-lived facts go elsewhere: phase checklist → `PLAN.md`, hardware facts → `HARDWARE.md`, decisions → `adr/` + `PLAN.md` decisions log.
 
-**Last updated:** 2026-10-18 (Claude, refreshed Next after merging #63–#79)
-**Phase:** 1 — Scaffold (Phase 0 accepted 2026-10-15, #47)
+**Last updated:** 2026-10-18 (Claude, Phase 1 accepted by the owner; Phase 2 unblocked)
+**Phase:** 2 — Brain (Phase 1 accepted 2026-10-18; Phase 0 accepted 2026-10-15, #47)
 
 ---
 
 ## Now
+
+- **Phase 1 accepted (2026-10-18, owner).** On the owner's real `.env` and database: `pnpm run doctor` 23/23 ok, migration applied (local = remote), `/api/v1/health/ready` 200 with database/inference/Ollama `ok`. Epic [#3](https://github.com/agthumoe/solid-lamp/issues/3) is closed; Phase 2 epic [#4](https://github.com/agthumoe/solid-lamp/issues/4) is unblocked.
 
 - **Follow-up (2026-10-18), [#78](https://github.com/agthumoe/solid-lamp/issues/78):** Codex re-reviewed the merged stack at `9c7e0ba` and found two more P2s. Both are fixed with regressions that fail on the old code:
   - `import()` bypassed the package-boundary rules. A local `aetherion/restricted-dynamic-import` rule now applies the same per-area patterns to static dynamic-import specifiers.
@@ -76,11 +78,12 @@
 
 ## Next (in order)
 
-1. **Owner setup** (blocked items 4 and 7): turn on Docker Desktop WSL integration for this distro, then create `.env` from `.env.example` (`AETHERION_POSTGRES_PASSWORD`, `AETHERION_DATABASE_URL`, `AETHERION_INFERENCE_SECRET`). Then run `pnpm db:start && pnpm db:migrate && pnpm run doctor`, and start `pnpm dev:inference` and `pnpm dev:api`. Expected: doctor fully green and `/api/v1/health/ready` all `ok`.
-2. **Owner go-ahead to close Phase 1** ([#3](https://github.com/agthumoe/solid-lamp/issues/3)). Acceptance was met locally on 2026-10-18; PRs #63–#79 are merged. Leftover Phase 1 items that do not block: Vitest (added with the first suite that needs it), and domain-role runtime bindings (Phase 3/7).
-3. **Then Phase 2, brain ([#4](https://github.com/agthumoe/solid-lamp/issues/4))**, starting with `docs/specs/brain.md`. Order: backup/restore smoke test on a synthetic database (REVIEW #6), Obsidian ingestion and heading-aware chunking, embeddings through the inference gate into versioned tables, `search_brain` hybrid + RRF, links, `brain:*` commands, the brain MCP server with access checks, and the real-vault eval set last.
-4. Optional, on request: synthetic domain baseline (180 fixtures on `qwen3.5:9b`, under the GPU lease), and Phase 0 closure evidence in [#2](https://github.com/agthumoe/solid-lamp/issues/2).
-5. Follow [TRACKING.md](TRACKING.md): create or select bounded issues before edits.
+1. **Phase 2, brain ([#4](https://github.com/agthumoe/solid-lamp/issues/4)), spec first:** write `docs/specs/brain.md` (sources, ingestion, chunking, embedding rebuild/promotion, `search_brain` RRF, citations, MCP access, acceptance), then create bounded child issues.
+2. Backup/restore smoke test on a synthetic database before anything touches the real vault (REVIEW #6, `specs/security-recovery.md` Phase 2).
+3. Obsidian ingestion (watch + full resync, path boundaries, symlink/traversal tests) → heading-aware chunking by content hash → embeddings through the inference gate into a building version → catch-up/coverage → atomic promotion.
+4. `search_brain` hybrid + RRF with pinned version and citations; links → graph; `brain:ingest|query|stats`; brain MCP server with access checks.
+5. Real-vault eval set last (recall@5 ≥ 0.8, incremental < 5 s); needs the owner's vault path and approval to ingest.
+6. Optional, on request: synthetic domain baseline; Phase 0 closure evidence (#2).
 
 ## Blocked on owner
 
@@ -201,3 +204,4 @@ Initial baseline is published to `main` under the owner’s explicit authorizati
 | 2026-10-18 | Claude Code | Fixed Codex's five P2 findings on the Phase 1 stack (#63 NDJSON bound, #64 body deadline, #66 configured ports, #72 relative imports, #74 link lifecycle), each with a regression that fails on the old code; replied on each PR; merged #63–#76 bottom-up with CI green; closed #59–#75. |
 | 2026-10-18 | Claude Code | #78: fixed Codex re-review findings (dynamic-import boundaries, error-body deadline mapping) with regressions; ignored `.claude/` worktrees in lint/format/git. Full local `pnpm check` passes; the inference suite was stable across 3 runs. |
 | 2026-10-18 | Claude Code | Owner ran `pnpm doctor` and got pnpm 11's built-in. #81: docs/Makefile now use `pnpm run doctor`, plus a docs-check guard against script names shadowed by pnpm built-ins. On the owner's real `.env`: `pnpm run doctor` 23/23 ok, migration applied (local = remote), `/api/v1/health/ready` 200 with all `ok`. |
+| 2026-10-18 | Claude Code | Owner accepted Phase 1. Merged #82 (`pnpm run doctor`). Closed epic #3; unblocked #4; recorded leftovers (Vitest deferred, domain bindings → #5/#9, restore tests → Phase 2). |
