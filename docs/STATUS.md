@@ -5,12 +5,14 @@
 > refresh _Now_, _Next_, _Blocked on owner_, and append one line to the _Session log_.
 > Long-lived facts go elsewhere: phase checklist → `PLAN.md`, hardware facts → `HARDWARE.md`, decisions → `adr/` + `PLAN.md` decisions log.
 
-**Last updated:** 2026-10-18 (Claude, stacked PRs #63 (#59) → #64 (#60) → #65 (#61) → #66 (#62) → #68 (#67) → #69 model catalog on `feat/69-model-catalog`)
+**Last updated:** 2026-10-18 (Claude, stacked PRs #63 (#59) → #64 (#60) → #65 (#61) → #66 (#62) → #68 (#67) → #70 (#69) → #71 import boundaries on `feat/71-import-boundaries`)
 **Phase:** 1 — Scaffold (Phase 0 accepted 2026-10-15, #47)
 
 ---
 
 ## Now
+
+- **In review (2026-10-18), stacked on PR #70:** [#71](https://github.com/agthumoe/solid-lamp/issues/71) ESLint import boundaries: no deep `src` imports across packages, no app imports from packages or other apps, `packages/shared` standalone, `/testing` doubles only in tests, and `apps/web` limited to `@aetherion/shared/contracts`. Negative lint tests use virtual sample files.
 
 - **In review (2026-10-18), stacked on PR #68:** [#69](https://github.com/agthumoe/solid-lamp/issues/69) retained model catalog ([spec](specs/model-catalog.md)): `config/catalog.yaml` holds all 14 retained models with states, digests, allowed roles and scoped evidence. `validateBindings` makes inference refuse contradictory bindings. Doctor adds `catalog.yaml`, `bindings` and `artifacts` checks, and installed digests match today. Active bindings are unchanged.
 
@@ -182,3 +184,4 @@ Initial baseline is published to `main` under the owner’s explicit authorizati
 | 2026-10-18 | Claude Code | #62 (stacked on #65): `pnpm doctor` with 10 unit tests; root links `@aetherion/shared`. Local run: only Docker/Postgres/Redis fail (Docker Desktop stopped). |
 | 2026-10-18 | Claude Code | #67 (stacked on #66): Redis compose + compose exposure policy in compliance (1 new test group); compliance evidence table refreshed. Docker-dependent items (Supabase, migrations, `packages/db`) remain blocked on owner item 4. |
 | 2026-10-18 | Claude Code | #69 (stacked on #68): catalog schema + binding validation (6 tests), inference startup gate (manually verified exit on contradiction), doctor catalog/bindings/artifacts checks (2 new tests). No binding or routing change. |
+| 2026-10-18 | Claude Code | #71 (stacked on #70): ESLint `no-restricted-imports` boundaries per structure.md with negative lint tests; structure/compliance docs updated. |
