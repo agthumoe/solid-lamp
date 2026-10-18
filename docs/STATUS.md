@@ -5,12 +5,14 @@
 > refresh _Now_, _Next_, _Blocked on owner_, and append one line to the _Session log_.
 > Long-lived facts go elsewhere: phase checklist → `PLAN.md`, hardware facts → `HARDWARE.md`, decisions → `adr/` + `PLAN.md` decisions log.
 
-**Last updated:** 2026-10-18 (Claude, #59 PR #63 and stacked #60 inference RPC on `feat/60-inference-rpc`)
+**Last updated:** 2026-10-18 (Claude, stacked PRs #63 (#59) → #64 (#60) → #61 api health on `feat/61-api-health`)
 **Phase:** 1 — Scaffold (Phase 0 accepted 2026-10-15, #47)
 
 ---
 
 ## Now
+
+- **In review (2026-10-18), stacked on PR #64:** [#61](https://github.com/agthumoe/solid-lamp/issues/61) `apps/api` skeleton ([spec](specs/api-health.md)): `pnpm dev:api` on `127.0.0.1:4000`, shared error envelope with server request IDs, `GET /api/v1/health` liveness, and `GET /api/v1/health/ready` with database/inference/Ollama statuses. `postgres` 3.4.9 is pinned. `InferenceClient.ready()` is added. The database reports `not_configured` without `AETHERION_DATABASE_URL`, and `unavailable` while Docker is stopped.
 
 - **In review (2026-10-18), stacked on PR #63:** [#60](https://github.com/agthumoe/solid-lamp/issues/60) inference RPC ([spec](specs/inference-rpc.md)): `pnpm dev:inference` binds `127.0.0.1:4100`, has one `LlmGate` and a shared-secret header, and serves `/v1/generate`, `/v1/stream` (NDJSON), `/v1/embed`, `/readyz` and `/livez`. `packages/llm` adds `createInferenceClient` and `@aetherion/llm/testing` `createFakeInferenceClient`. Fastify 5.12.7 and `fastify-type-provider-zod` 7.0.0 are installed (ADR 0005). Exact-pin compliance now covers workspace manifests. A live run against local Ollama streamed chat and embeddings through the server. To run it locally, set `AETHERION_INFERENCE_SECRET` in `.env`.
 
@@ -170,3 +172,4 @@ Initial baseline is published to `main` under the owner’s explicit authorizati
 | 2026-10-18 | Claude Code | Fixed Codex PR #58 review (#57): `LlmGate` re-checks deadlines against the clock at dispatch and settlement; `scheduleGeneration` wraps the executor value as `{ value, snapshot }` instead of spreading it. Two regression tests (lagging-timer test fails on the old code). Spec updated; `pnpm check` passes. |
 | 2026-10-18 | Claude Code | PR #58 merged. Created #59–#62 under #3. #59: `apps/inference` Ollama adapter (chat stream/generate, embed, `/api/ps` residency, retry-before-output) with 26 fake-fetch tests plus 3 `collectStream` tests; live smoke against local Ollama OK. Spec `inference-ollama-adapter.md`; `test:inference` + Makefile mirror. Docker still stopped (blocked item 4). |
 | 2026-10-18 | Claude Code | #60 (stacked on PR #63): inference RPC server, gate-wired service (terminal event after gate settles, per-job residency observation), env config, client + fake, NDJSON reader moved to `packages/llm`, workspace exact-pin compliance. 45 new tests (service, `server.inject` contract, loopback client↔server, client, fake, config, pin policy). Live server smoke against local Ollama OK. |
+| 2026-10-18 | Claude Code | #61 (stacked on #64): `apps/api` skeleton with liveness/readiness, error envelope plugin, postgres + inference probes, env config; `InferenceClient.ready()` + readiness contract. 14 api tests (incl. real `postgres` driver against a refused port); live api+inference readiness checked. GitHub API rate limit hit mid-session (gh calls paused). |

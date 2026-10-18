@@ -120,6 +120,27 @@ export const embedResponseSchema = z.strictObject({
   totalMs: z.number().nonnegative(),
 });
 
+const gateMetricsSchema = z.strictObject({
+  active: z.string().nullable(),
+  queued: z.strictObject({ interactive: z.int().nonnegative(), background: z.int().nonnegative() }),
+  oldestQueuedMs: z.number().nonnegative(),
+  completed: z.int().nonnegative(),
+  rejected: z.int().nonnegative(),
+});
+
+export const readinessSchema = z.strictObject({
+  status: z.enum(['ready', 'not_ready']),
+  ollama: z.enum(['ok', 'unavailable']),
+  gate: gateMetricsSchema,
+  residency: z.strictObject({
+    coldLoads: z.int().nonnegative(),
+    contextReloads: z.int().nonnegative(),
+    evictions: z.int().nonnegative(),
+    notResidentAfter: z.int().nonnegative(),
+  }),
+});
+
+export type Readiness = z.infer<typeof readinessSchema>;
 export type GenerateResponse = z.infer<typeof generateResponseSchema>;
 export type EmbedResponse = z.infer<typeof embedResponseSchema>;
 
