@@ -1,6 +1,8 @@
-# `pnpm doctor`
+# `pnpm run doctor`
 
 Issue: [#62](https://github.com/agthumoe/solid-lamp/issues/62). Status: implemented. Parent: #3. Contracts: [security/recovery](security-recovery.md) (doctor verifies the bind policy), [operations](../development/operations.md) (admin processes, debugging runbook step 2).
+
+Run it as `pnpm run doctor` (or `make doctor`). pnpm 11 has a built-in `doctor` command that checks the pnpm installation and takes priority over the script ([#81](https://github.com/agthumoe/solid-lamp/issues/81)).
 
 ## Goal
 

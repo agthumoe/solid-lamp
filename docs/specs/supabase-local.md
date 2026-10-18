@@ -8,7 +8,7 @@ Run Supabase's own Postgres locally on loopback only, and apply `supabase/migrat
 
 ## Finding: `supabase start` exposes every interface
 
-With Supabase CLI 2.119.0 on Docker Desktop 29.6.2, `supabase start` published Postgres (`54322`) and Kong (`54321`) on `0.0.0.0`/`::`. Kong started even with `[api] enabled = false`. The CLI has no bind-address setting, and Docker Desktop also forwards published ports on the Windows side. That violates AGENTS hard constraint 3, so it was stopped immediately and is not used. `supabase/config.toml` says so at the top. If someone runs it anyway, `pnpm doctor` reports the wildcard bind as a failure.
+With Supabase CLI 2.119.0 on Docker Desktop 29.6.2, `supabase start` published Postgres (`54322`) and Kong (`54321`) on `0.0.0.0`/`::`. Kong started even with `[api] enabled = false`. The CLI has no bind-address setting, and Docker Desktop also forwards published ports on the Windows side. That violates AGENTS hard constraint 3, so it was stopped immediately and is not used. `supabase/config.toml` says so at the top. If someone runs it anyway, `pnpm run doctor` reports the wildcard bind as a failure.
 
 ## Shape
 
@@ -26,7 +26,7 @@ With Supabase CLI 2.119.0 on Docker Desktop 29.6.2, `supabase start` published P
 | `pnpm db:status` → `db:migrate` → `db:status`                   | `20261018120000` pending → applied → listed local = remote             |
 | `pnpm test:int` against Supabase Postgres                       | 9/9 pass (replay, invariants, Drizzle parity, RLS)                     |
 | `GET /api/v1/health/ready` (api + inference, real database URL) | 200 `ready`: database, inference and Ollama all `ok`                   |
-| `pnpm doctor`                                                   | 22 ok, 0 warnings, 0 failures (with the secret set in the environment) |
+| `pnpm run doctor`                                               | 22 ok, 0 warnings, 0 failures (with the secret set in the environment) |
 | Logs                                                            | no database password in api/inference logs                             |
 
 Verification used a throwaway compose project (`aetherion-verify`) with an ephemeral password that existed only in the session. It was removed afterwards, leaving the real `aetherion` Postgres volume uncreated for the owner's own password. The volume from the stopped `supabase start` attempt was deleted.

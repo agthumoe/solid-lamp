@@ -49,17 +49,17 @@ supabase/      migrations     infra/  compose, systemd, ollama, windows docs    
 
 ## Commands
 
-| Task                          | Command                                                                                        | Available from |
-| ----------------------------- | ---------------------------------------------------------------------------------------------- | -------------- |
-| Install                       | `pnpm install`                                                                                 | Phase 0        |
-| Benchmark models              | `pnpm bench:models` (flags: `--only chat,router`, `--no-fallbacks`, `--no-think`, `--label x`) | Phase 0        |
-| Template tests                | `pnpm test:templates`                                                                          | Phase 1        |
-| Benchmark regression tests    | `pnpm test:bench`                                                                              | Phase 0        |
-| Documentation/skill integrity | `pnpm docs:check`                                                                              | Phase 0        |
-| Full current quality gates    | `pnpm check` (lint/typecheck/test/docs/compliance/format)                                      | Now            |
-| Dev (per process)             | `pnpm dev:inference`, `pnpm dev:api` (read `.env`; set `AETHERION_INFERENCE_SECRET`)           | Now            |
-| Doctor                        | `pnpm doctor` (read-only; exit 1 on any failed check)                                          | Now            |
-| Brain                         | `pnpm brain:ingest [--source]`, `pnpm brain:query "..."`, `pnpm brain:stats`                   | Phase 2        |
+| Task                          | Command                                                                                                    | Available from |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------- | -------------- |
+| Install                       | `pnpm install`                                                                                             | Phase 0        |
+| Benchmark models              | `pnpm bench:models` (flags: `--only chat,router`, `--no-fallbacks`, `--no-think`, `--label x`)             | Phase 0        |
+| Template tests                | `pnpm test:templates`                                                                                      | Phase 1        |
+| Benchmark regression tests    | `pnpm test:bench`                                                                                          | Phase 0        |
+| Documentation/skill integrity | `pnpm docs:check`                                                                                          | Phase 0        |
+| Full current quality gates    | `pnpm check` (lint/typecheck/test/docs/compliance/format)                                                  | Now            |
+| Dev (per process)             | `pnpm dev:inference`, `pnpm dev:api` (read `.env`; set `AETHERION_INFERENCE_SECRET`)                       | Now            |
+| Doctor                        | `pnpm run doctor` (read-only; exit 1 on any failed check; pnpm's built-in `doctor` is a different command) | Now            |
+| Brain                         | `pnpm brain:ingest [--source]`, `pnpm brain:query "..."`, `pnpm brain:stats`                               | Phase 2        |
 
 Every current root script is mirrored in the `Makefile`; future scaffold scripts must be mirrored too.
 
