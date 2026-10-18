@@ -7,6 +7,7 @@ import { ESLint } from 'eslint';
 import { modelsSchema, privateUrlSchema } from '../bench/schemas.ts';
 import { parseOptions, scoreRefusal, completionStatus } from '../bench/policy.ts';
 import { createLogger } from '../lib/logger.ts';
+import { pinViolations } from './package-policy.ts';
 import { sourceViolations } from './source-policy.ts';
 
 await test('CLI refuses duplicate flags and refusal format is separate from semantic quality', () => {
@@ -115,4 +116,20 @@ await test('hook lint rules reject conditional useState and missing Effect depen
   );
   assert.ok(result?.messages.some((message) => message.ruleId === 'react-hooks/rules-of-hooks'));
   assert.ok(result?.messages.some((message) => message.ruleId === 'react-hooks/exhaustive-deps'));
+});
+await test('every manifest pins exact versions; only internal workspace links are exempt', () => {
+  assert.deepEqual(
+    pinViolations('apps/x/package.json', {
+      fastify: '5.12.7',
+      '@aetherion/llm': 'workspace:*',
+      zod: '^4.0.0',
+      left: 'workspace:*',
+      next: 'latest',
+    }),
+    [
+      'apps/x/package.json: dependency zod is not exact-pinned',
+      'apps/x/package.json: dependency left is not exact-pinned',
+      'apps/x/package.json: dependency next is not exact-pinned',
+    ],
+  );
 });

@@ -30,6 +30,38 @@ export {
   type StreamFailure,
   type StreamOutcome,
 } from './inference/stream-event.ts';
+export { NdjsonError, readNdjson } from './inference/ndjson.ts';
+export {
+  chatMessageSchema,
+  chatToolSchema,
+  embedRequestSchema,
+  embedResponseSchema,
+  generateRequestSchema,
+  generateResponseSchema,
+  INFERENCE_KEY_HEADER,
+  inferenceErrorSchema,
+  isInferenceErrorCode,
+  RPC_ERROR_CODES,
+  RPC_PATHS,
+  rpcErrorEnvelopeSchema,
+  rpcStatusFor,
+  streamEventSchema,
+  type ChatMessage,
+  type ChatTool,
+  type EmbedRequest,
+  type EmbedResponse,
+  type GenerateRequest,
+  type GenerateResponse,
+  type RpcErrorCode,
+} from './rpc/contract.ts';
+export {
+  createInferenceClient,
+  type ClientCallOptions,
+  type EmbedInput,
+  type GenerateInput,
+  type InferenceClient,
+  type InferenceClientOptions,
+} from './rpc/inference-client.ts';
 export { repairToolCalls } from './repair/repair-tool-calls.ts';
 export {
   validateToolCall,

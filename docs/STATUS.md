@@ -5,12 +5,14 @@
 > refresh _Now_, _Next_, _Blocked on owner_, and append one line to the _Session log_.
 > Long-lived facts go elsewhere: phase checklist → `PLAN.md`, hardware facts → `HARDWARE.md`, decisions → `adr/` + `PLAN.md` decisions log.
 
-**Last updated:** 2026-10-18 (Claude, #59 Ollama adapter on branch `feat/59-ollama-adapter`; #56/#57 merged via PR #58)
+**Last updated:** 2026-10-18 (Claude, #59 PR #63 and stacked #60 inference RPC on `feat/60-inference-rpc`)
 **Phase:** 1 — Scaffold (Phase 0 accepted 2026-10-15, #47)
 
 ---
 
 ## Now
+
+- **In review (2026-10-18), stacked on PR #63:** [#60](https://github.com/agthumoe/solid-lamp/issues/60) inference RPC ([spec](specs/inference-rpc.md)): `pnpm dev:inference` binds `127.0.0.1:4100`, has one `LlmGate` and a shared-secret header, and serves `/v1/generate`, `/v1/stream` (NDJSON), `/v1/embed`, `/readyz` and `/livez`. `packages/llm` adds `createInferenceClient` and `@aetherion/llm/testing` `createFakeInferenceClient`. Fastify 5.12.7 and `fastify-type-provider-zod` 7.0.0 are installed (ADR 0005). Exact-pin compliance now covers workspace manifests. A live run against local Ollama streamed chat and embeddings through the server. To run it locally, set `AETHERION_INFERENCE_SECRET` in `.env`.
 
 - **In review (2026-10-18):** [#59](https://github.com/agthumoe/solid-lamp/issues/59) `apps/inference` Ollama adapter ([spec](specs/inference-ollama-adapter.md)): explicit `num_ctx`/sampling, streamed events with one terminal event and `partial`, one retry only before output, embed prefixes with `truncate: false` and dimension checks, `/api/ps` residency with cold/context-reload/eviction accounting. `StreamEvent`/`collectStream` now live in `packages/llm`. Workspace links `apps/*`. Live smoke run against local Ollama passed (no CI model calls). Follow-ups opened: [#60](https://github.com/agthumoe/solid-lamp/issues/60) inference RPC/gate wiring, [#61](https://github.com/agthumoe/solid-lamp/issues/61) `apps/api` `/health`, [#62](https://github.com/agthumoe/solid-lamp/issues/62) `pnpm doctor`.
 
@@ -167,3 +169,4 @@ Initial baseline is published to `main` under the owner’s explicit authorizati
 | 2026-10-17 | Claude Code | Owner selected config loader + `packages/llm`. Created #56/#57 under #3. Implemented `@aetherion/shared` config loader (11 tests) and `@aetherion/llm` core (21 tests: queue limits, priority/starvation, cancellation/teardown, deadlines, snapshots, batch interleave, REVIEW #2 repair negatives). Specs `config-loader.md`, `llm-package.md`; `test:llm` + Makefile mirror. No Ollama/GPU/Docker use. |
 | 2026-10-18 | Claude Code | Fixed Codex PR #58 review (#57): `LlmGate` re-checks deadlines against the clock at dispatch and settlement; `scheduleGeneration` wraps the executor value as `{ value, snapshot }` instead of spreading it. Two regression tests (lagging-timer test fails on the old code). Spec updated; `pnpm check` passes. |
 | 2026-10-18 | Claude Code | PR #58 merged. Created #59–#62 under #3. #59: `apps/inference` Ollama adapter (chat stream/generate, embed, `/api/ps` residency, retry-before-output) with 26 fake-fetch tests plus 3 `collectStream` tests; live smoke against local Ollama OK. Spec `inference-ollama-adapter.md`; `test:inference` + Makefile mirror. Docker still stopped (blocked item 4). |
+| 2026-10-18 | Claude Code | #60 (stacked on PR #63): inference RPC server, gate-wired service (terminal event after gate settles, per-job residency observation), env config, client + fake, NDJSON reader moved to `packages/llm`, workspace exact-pin compliance. 45 new tests (service, `server.inject` contract, loopback client↔server, client, fake, config, pin policy). Live server smoke against local Ollama OK. |

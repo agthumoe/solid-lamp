@@ -26,6 +26,8 @@ Six process entry points (`web`, `api`, `inference`, `worker`, `channels`, `mcp`
 | Frontend     | `next`, `react`, `tailwindcss`, `@tanstack/react-query`, `zustand` | 16.4.1, 19.3.1, 4.3.3, 5.104.2, 5.0.15 |
 | Tests        | `vitest`, `@playwright/test`                                       | 5.0.4, 1.64.1                          |
 
+Installed so far: `fastify` 5.12.7 and `fastify-type-provider-zod` 7.0.0 in `apps/inference` ([#60](https://github.com/agthumoe/solid-lamp/issues/60)). The internal inference stream uses NDJSON; `@fastify/sse` stays planned for `apps/api`.
+
 Rules: install exact versions (no ranges) in the PR that first uses each library; run `pnpm check` and that package's tests; record any version change in this ADR's table. Each library is added in the phase that needs it (frontend in Phase 4, MCP in Phase 2), not all at once.
 
 ## Alternatives considered
