@@ -30,3 +30,12 @@ export {
   type RoleName,
 } from './config/models-config.ts';
 export { isPrivateHost, isPrivateHttpUrl } from './config/private-host.ts';
+export {
+  canonicalTag,
+  DOMAIN_ROLES,
+  loadCatalog,
+  parseCatalog,
+  validateBindings,
+  type CatalogRecord,
+  type ModelCatalog,
+} from './config/catalog-config.ts';

@@ -2,9 +2,13 @@
 // unit-tested; doctor.ts supplies the real filesystem, HTTP, TCP and command probes.
 import { z } from 'zod';
 import {
+  canonicalTag,
   isPrivateHost,
   loadEnvConfig,
+  parseCatalog,
   parseModelsConfig,
+  validateBindings,
+  type ModelCatalog,
   type ModelsConfig,
 } from '@aetherion/shared';
 
@@ -58,7 +62,11 @@ export const checkRuntime = async (probes: Probes): Promise<CheckResult[]> => {
   ];
 };
 
-export type ConfigOutcome = { readonly results: CheckResult[]; readonly models?: ModelsConfig };
+export type ConfigOutcome = {
+  readonly results: CheckResult[];
+  readonly models?: ModelsConfig;
+  readonly catalog?: ModelCatalog;
+};
 
 export const checkConfig = async (probes: Probes): Promise<ConfigOutcome> => {
   const results: CheckResult[] = [];
@@ -92,16 +100,78 @@ export const checkConfig = async (probes: Probes): Promise<ConfigOutcome> => {
   }
   const bound = Object.keys(models.value.roles).length;
   results.push(result('models.yaml', 'ok', `${bound} roles bound`));
-  return { results, models: models.value };
+  const catalogText = await probes.readText(`${dir}/catalog.yaml`);
+  const catalog = catalogText === undefined ? undefined : parseCatalog(catalogText);
+  if (!catalog?.ok) {
+    results.push(
+      result(
+        'catalog.yaml',
+        'fail',
+        catalog ? catalog.error.message : `${dir}/catalog.yaml not found`,
+      ),
+    );
+    return { results, models: models.value };
+  }
+  results.push(result('catalog.yaml', 'ok', `${catalog.value.models.length} retained models`));
+  const bindings = validateBindings(models.value, catalog.value);
+  results.push(
+    bindings.ok
+      ? result('bindings', 'ok', 'every role and fallback is an enabled, evidenced record')
+      : result(
+          'bindings',
+          'fail',
+          bindings.error.message,
+          'fix models.yaml or the catalog record (ADR 0004)',
+        ),
+  );
+  return { results, models: models.value, catalog: catalog.value };
 };
 
-const tagsSchema = z.object({ models: z.array(z.object({ name: z.string() })) });
+const tagsSchema = z.object({
+  models: z.array(z.object({ name: z.string(), digest: z.string().optional() })),
+});
 const showSchema = z.object({ model_info: z.record(z.string(), z.unknown()) });
 const liveSchema = z.object({ status: z.literal('ok') });
 
-const installedModelNames = (body: unknown): string[] | undefined => {
+const installedModels = (body: unknown) => {
   const parsed = tagsSchema.safeParse(body);
-  return parsed.success ? parsed.data.models.map((entry) => entry.name) : undefined;
+  return parsed.success ? parsed.data.models : undefined;
+};
+
+// Installed artifacts vs the catalog: a changed digest invalidates that record's evidence.
+export const checkCatalogArtifacts = (
+  installed: readonly { readonly name: string; readonly digest?: string | undefined }[],
+  catalog: ModelCatalog,
+): CheckResult[] => {
+  const byTag = new Map(installed.map((entry) => [canonicalTag(entry.name), entry.digest]));
+  const listed = new Set(
+    catalog.models.flatMap((record) => (record.tag ? [canonicalTag(record.tag)] : [])),
+  );
+  const problems: string[] = [];
+  let status: CheckStatus = 'ok';
+  for (const record of catalog.models) {
+    if (!record.tag || !record.digest || !byTag.has(canonicalTag(record.tag))) continue;
+    if (byTag.get(canonicalTag(record.tag)) !== record.digest) {
+      problems.push(`${record.tag} digest changed`);
+      if (record.state === 'enabled') status = 'fail';
+      else if (status === 'ok') status = 'warn';
+    }
+  }
+  for (const name of byTag.keys())
+    if (!listed.has(name)) {
+      problems.push(`${name} not in catalog`);
+      if (status === 'ok') status = 'warn';
+    }
+  return [
+    problems.length
+      ? result(
+          'artifacts',
+          status,
+          problems.join(', '),
+          'review the model and update its catalog digest and evidence (ADR 0004)',
+        )
+      : result('artifacts', 'ok', 'installed digests match the catalog'),
+  ];
 };
 
 const canonical = (model: string) => (model.includes(':') ? model : `${model}:latest`);
@@ -119,10 +189,12 @@ export const checkOllama = async (
   probes: Probes,
   models: ModelsConfig,
   ollamaUrl: string,
+  catalog?: ModelCatalog,
 ): Promise<CheckResult[]> => {
   const root = ollamaUrl.replace(/\/+$/, '');
-  const tags = installedModelNames(await probes.getJson(`${root}/api/tags`));
-  if (!tags)
+  const installedList = installedModels(await probes.getJson(`${root}/api/tags`));
+  const tags = installedList?.map((entry) => entry.name);
+  if (!installedList || !tags)
     return [
       result('ollama', 'fail', `no answer from ${root}`, 'systemctl status ollama (inside WSL)'),
     ];
@@ -141,6 +213,7 @@ export const checkOllama = async (
           ),
     );
   }
+  if (catalog) results.push(...checkCatalogArtifacts(installedList, catalog));
   const embed = models.roles.embed;
   if (installed.has(canonical(embed.model))) {
     const length = embeddingLength(
@@ -263,7 +336,7 @@ export const runDoctor = async (probes: Probes): Promise<CheckResult[]> => {
   return [
     ...(await checkRuntime(probes)),
     ...config.results,
-    ...(config.models ? await checkOllama(probes, config.models, ollamaUrl) : []),
+    ...(config.models ? await checkOllama(probes, config.models, ollamaUrl, config.catalog) : []),
     ...(await checkBackingServices(probes)),
     ...(await checkAppProcesses(probes)),
     ...(await checkBindings(probes)),
