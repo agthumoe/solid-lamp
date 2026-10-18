@@ -267,3 +267,31 @@ await test('changed digests fail for enabled records; uncatalogued models warn',
   assert.equal(extra[0]?.detail, 'llama9:70b not in catalog');
   assert.equal(clean[0]?.status, 'ok');
 });
+
+await test('configured nondefault app ports are checked for wildcard and LAN binds', async () => {
+  const listeners = [
+    'LISTEN 0 511 0.0.0.0:4555 0.0.0.0:*',
+    'LISTEN 0 511 [::]:4666 [::]:*',
+    'LISTEN 0 511 192.168.1.20:4555 0.0.0.0:*',
+    'LISTEN 0 511 0.0.0.0:9999 0.0.0.0:*',
+  ].join('\n');
+  const env = {
+    AETHERION_INFERENCE_SECRET: 'x'.repeat(40),
+    AETHERION_API_PORT: '4555',
+    AETHERION_INFERENCE_PORT: '4666',
+  };
+
+  const results = await checkBindings(
+    probes({ env, commands: { ss: { code: 0, stdout: listeners } } }),
+  );
+  const unconfigured = await checkBindings(
+    probes({
+      env: { AETHERION_API_PORT: 'abc' },
+      commands: { ss: { code: 0, stdout: listeners } },
+    }),
+  );
+
+  assert.equal(results[0]?.status, 'fail');
+  assert.equal(results[0]?.detail, '0.0.0.0:4555, :::4666, 192.168.1.20:4555');
+  assert.equal(unconfigured[0]?.status, 'ok');
+});

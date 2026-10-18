@@ -124,3 +124,40 @@ await test('streams stop at the first invalid event or report a missing terminal
     assert.equal(last?.type === 'error' ? last.partial : null, true);
   }
 });
+
+await test('a body that stalls after the headers past the deadline is DEADLINE_EXPIRED', async () => {
+  let now = 1_000;
+  const stalled = (_url: string, init: RequestInit) =>
+    Promise.resolve(
+      new Response(
+        new ReadableStream<Uint8Array>({
+          start(controller) {
+            // The headers arrive at once; the body never does until the request signal fires.
+            init.signal?.addEventListener('abort', () => {
+              now += 60_000;
+              controller.error(new DOMException('aborted', 'AbortError'));
+            });
+          },
+        }),
+      ),
+    );
+  const client = createInferenceClient({
+    baseUrl: 'http://localhost:4100',
+    secret: SECRET,
+    fetch: stalled,
+    now: () => now,
+  });
+  const caller = new AbortController();
+  const pending = client.generate(input, {
+    priority: 'interactive',
+    signal: caller.signal,
+    deadline: new Date(now + 30),
+  });
+
+  // AbortSignal.timeout is unref'd; a live server keeps the loop running, so the test does too.
+  const keepAlive = setInterval(() => undefined, 1_000);
+  const result = await pending.finally(() => clearInterval(keepAlive));
+
+  assert.equal(result.ok ? null : result.error.code, 'DEADLINE_EXPIRED');
+  assert.equal(caller.signal.aborted, false);
+});

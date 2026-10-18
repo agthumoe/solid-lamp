@@ -10,9 +10,11 @@ export class NdjsonError extends Error {}
 export async function* readNdjson(body: ReadableStream<Uint8Array>): AsyncGenerator<unknown> {
   const decoder = new TextDecoder();
   let buffer = '';
-  const parse = (line: string): unknown => {
+  // Every line is bounded before parsing, whether or not its newline arrived in the same chunk.
+  const parse = (raw: string): unknown => {
+    if (raw.length > MAX_LINE_CHARS) throw new NdjsonError('line exceeds size limit');
     try {
-      return JSON.parse(line);
+      return JSON.parse(raw.trim());
     } catch {
       throw new NdjsonError('malformed JSON line');
     }
@@ -21,13 +23,13 @@ export async function* readNdjson(body: ReadableStream<Uint8Array>): AsyncGenera
     buffer += decoder.decode(bytes, { stream: true });
     let newline = buffer.indexOf('\n');
     while (newline !== -1) {
-      const line = buffer.slice(0, newline).trim();
+      const line = buffer.slice(0, newline);
       buffer = buffer.slice(newline + 1);
-      if (line) yield parse(line);
+      if (line.trim()) yield parse(line);
       newline = buffer.indexOf('\n');
     }
     if (buffer.length > MAX_LINE_CHARS) throw new NdjsonError('line exceeds size limit');
   }
-  const rest = (buffer + decoder.decode()).trim();
-  if (rest) yield parse(rest);
+  const rest = buffer + decoder.decode();
+  if (rest.trim()) yield parse(rest);
 }
