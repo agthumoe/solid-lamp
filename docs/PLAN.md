@@ -57,7 +57,7 @@ GitHub tasks/milestones: [TRACKING.md](TRACKING.md). Standards: [development han
 - [x] Decide embedding storage strategy: versioned fixed-dimension tables and atomic promotion → ADR 0002, `specs/embedding-storage.md`
 - [ ] Implement ADR 0002 schema in the first migrations
 - [ ] Supabase local project + first migrations (§7)
-- [ ] Private binding/port checks at service introduction (`specs/security-recovery.md`) (inference: private-host config + loopback default, #60; doctor check pending #62)
+- [ ] Private binding/port checks at service introduction (`specs/security-recovery.md`) (inference/api: private-host config + loopback defaults, #60/#61; doctor `bindings` check, #62)
 - [ ] Redis via `infra/docker-compose.yml`
 - [x] `packages/shared` (config loader, zod schemas, pino logger) ([#52](https://github.com/agthumoe/solid-lamp/issues/52), [#56](https://github.com/agthumoe/solid-lamp/issues/56))
 - [ ] `packages/db` (Drizzle schema)
@@ -67,7 +67,7 @@ GitHub tasks/milestones: [TRACKING.md](TRACKING.md). Standards: [development han
   - [x] Pure core: role snapshots, gate queue/priority/cancellation/deadlines, embedding batch interleave, allowlisted tool-call validation and repair with REVIEW #2 negative cases ([#57](https://github.com/agthumoe/solid-lamp/issues/57), [spec](specs/llm-package.md))
   - [x] `apps/inference` Ollama adapter: residency/eviction observation, context reload accounting, transient retries, streaming ([#59](https://github.com/agthumoe/solid-lamp/issues/59), [spec](specs/inference-ollama-adapter.md))
   - [x] `apps/inference` RPC server, gate wiring, readiness; `packages/llm` `InferenceClient` ([#60](https://github.com/agthumoe/solid-lamp/issues/60), [spec](specs/inference-rpc.md))
-- [ ] `pnpm doctor`
+- [x] `pnpm doctor` ([#62](https://github.com/agthumoe/solid-lamp/issues/62), [spec](specs/doctor.md); currently red only for Docker/Postgres/Redis)
 - [x] `/health` endpoint reporting Ollama + DB ([#61](https://github.com/agthumoe/solid-lamp/issues/61), [spec](specs/api-health.md); DB reports `unavailable` until Supabase runs)
 - Acceptance target: `pnpm doctor` green, `packages/llm` tests pass, `/health` reports Ollama and DB
 
@@ -159,6 +159,7 @@ Decision (2026-10-13, #17): retain every existing installed/planned model and ad
 | 2026-10-18 | Ollama adapter lives in `apps/inference/src/ollama` (structure.md) and keeps `node:test`; `StreamEvent`/`collectStream` move into `packages/llm` as the client contract | ADR 0005 installs each library in the PR that first needs it; the adapter needs no new dependency, so Vitest arrives with the first suite that needs fake timers or Fastify | [#59](https://github.com/agthumoe/solid-lamp/issues/59), `specs/inference-ollama-adapter.md` |
 | 2026-10-18 | Internal inference RPC: NDJSON stream, shared-secret header (SHA-256 + constant-time compare), 15 min max deadline, stream failures as terminal events in a 200 response; client throws only on `VALIDATION_FAILED`; exact-pin compliance now covers workspace manifests | Same streaming contract in-process and over RPC; no browser reconnect semantics needed; a rejected request shape is a caller bug | [#60](https://github.com/agthumoe/solid-lamp/issues/60), `specs/inference-rpc.md` |
 | 2026-10-18 | `apps/api` readiness reports `not_configured` when `AETHERION_DATABASE_URL` is unset and reaches Ollama only via inference `/readyz`; health responses carry statuses only until Phase 3 auth | API can start and be checked while Docker/Supabase are down; one GPU authority; no information leak from an unauthenticated route | [#61](https://github.com/agthumoe/solid-lamp/issues/61), `specs/api-health.md` |
+| 2026-10-18 | `pnpm doctor` lives in `scripts/doctor` as pure checks over injected probes; root links `@aetherion/shared` (`workspace:*`) to reuse runtime config validation; app processes not running are warnings | Doctor must reuse the exact runtime schemas, stay read-only, and be green without dev servers running | [#62](https://github.com/agthumoe/solid-lamp/issues/62), `specs/doctor.md` |
 
 Review note (2026-10-15, #51): dashboard design issue reviewed for scope/acceptance only. Second review: explicit Auth and approval lifecycle coverage are recommendations for the planned spec, not confirmed design defects; earlier P2 severity withdrawn. Private visual draft was inaccessible and the spec is absent locally; Phase 4 checkboxes remain unchanged.
 

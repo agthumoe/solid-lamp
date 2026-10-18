@@ -5,12 +5,14 @@
 > refresh _Now_, _Next_, _Blocked on owner_, and append one line to the _Session log_.
 > Long-lived facts go elsewhere: phase checklist → `PLAN.md`, hardware facts → `HARDWARE.md`, decisions → `adr/` + `PLAN.md` decisions log.
 
-**Last updated:** 2026-10-18 (Claude, stacked PRs #63 (#59) → #64 (#60) → #61 api health on `feat/61-api-health`)
+**Last updated:** 2026-10-18 (Claude, stacked PRs #63 (#59) → #64 (#60) → #65 (#61) → #62 doctor on `feat/62-doctor`)
 **Phase:** 1 — Scaffold (Phase 0 accepted 2026-10-15, #47)
 
 ---
 
 ## Now
+
+- **In review (2026-10-18), stacked on PR #65:** [#62](https://github.com/agthumoe/solid-lamp/issues/62) `pnpm doctor` ([spec](specs/doctor.md)): read-only checks with fix hints for Node/pnpm, env/secret, `models.yaml`, Ollama and installed role models, embed dimensions from metadata, Docker/Postgres/Redis, dev processes, private bindings on known ports and a tracked `.env`. Today it reports 13 ok, 3 warnings and 3 failures (Docker, Postgres, Redis, all waiting on Docker Desktop).
 
 - **In review (2026-10-18), stacked on PR #64:** [#61](https://github.com/agthumoe/solid-lamp/issues/61) `apps/api` skeleton ([spec](specs/api-health.md)): `pnpm dev:api` on `127.0.0.1:4000`, shared error envelope with server request IDs, `GET /api/v1/health` liveness, and `GET /api/v1/health/ready` with database/inference/Ollama statuses. `postgres` 3.4.9 is pinned. `InferenceClient.ready()` is added. The database reports `not_configured` without `AETHERION_DATABASE_URL`, and `unavailable` while Docker is stopped.
 
@@ -173,3 +175,4 @@ Initial baseline is published to `main` under the owner’s explicit authorizati
 | 2026-10-18 | Claude Code | PR #58 merged. Created #59–#62 under #3. #59: `apps/inference` Ollama adapter (chat stream/generate, embed, `/api/ps` residency, retry-before-output) with 26 fake-fetch tests plus 3 `collectStream` tests; live smoke against local Ollama OK. Spec `inference-ollama-adapter.md`; `test:inference` + Makefile mirror. Docker still stopped (blocked item 4). |
 | 2026-10-18 | Claude Code | #60 (stacked on PR #63): inference RPC server, gate-wired service (terminal event after gate settles, per-job residency observation), env config, client + fake, NDJSON reader moved to `packages/llm`, workspace exact-pin compliance. 45 new tests (service, `server.inject` contract, loopback client↔server, client, fake, config, pin policy). Live server smoke against local Ollama OK. |
 | 2026-10-18 | Claude Code | #61 (stacked on #64): `apps/api` skeleton with liveness/readiness, error envelope plugin, postgres + inference probes, env config; `InferenceClient.ready()` + readiness contract. 14 api tests (incl. real `postgres` driver against a refused port); live api+inference readiness checked. GitHub API rate limit hit mid-session (gh calls paused). |
+| 2026-10-18 | Claude Code | #62 (stacked on #65): `pnpm doctor` with 10 unit tests; root links `@aetherion/shared`. Local run: only Docker/Postgres/Redis fail (Docker Desktop stopped). |
