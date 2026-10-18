@@ -180,7 +180,8 @@ await test('import boundaries: public entries only, no app imports, doubles only
       .filter(
         (message) =>
           message.ruleId === 'no-restricted-imports' ||
-          message.ruleId === 'aetherion/cross-workspace-relative',
+          message.ruleId === 'aetherion/cross-workspace-relative' ||
+          message.ruleId === 'aetherion/restricted-dynamic-import',
       )
       .map((message) => message.message);
   };
@@ -287,5 +288,48 @@ await test('import boundaries: public entries only, no app imports, doubles only
       imports('@aetherion/llm', '@aetherion/shared', 'fastify', './features/health/x.ts'),
     ),
     [],
+  );
+});
+
+await test('dynamic imports obey the same package boundaries as static imports', async () => {
+  const eslint = new ESLint();
+  const dynamic = async (filePath: string, source: string) => {
+    const [result] = await eslint.lintText(`${source}\nexport {};\n`, { filePath });
+    return (result?.messages ?? []).filter(
+      (message) => message.ruleId === 'aetherion/restricted-dynamic-import',
+    ).length;
+  };
+
+  // The reviewer's reproduction: server packages and test doubles from apps/web.
+  assert.equal(await dynamic('apps/web/src/policy-sample.ts', "void import('@aetherion/db');"), 1);
+  assert.equal(
+    await dynamic('apps/web/src/policy-sample.ts', "void import('@aetherion/llm/testing');"),
+    1,
+  );
+  assert.equal(await dynamic('apps/web/src/policy-sample.ts', 'void import(`@aetherion/llm`);'), 1);
+  assert.equal(
+    await dynamic('packages/shared/src/policy-sample.ts', "void import('@aetherion/llm');"),
+    1,
+  );
+  assert.equal(
+    await dynamic('apps/api/src/policy-sample.ts', "void import('@aetherion/llm/src/errors.ts');"),
+    1,
+  );
+  assert.equal(
+    await dynamic('apps/api/src/policy-sample.ts', "void import('@aetherion/inference');"),
+    1,
+  );
+  // Allowed: public entries where permitted, doubles in tests, contracts from web.
+  assert.equal(await dynamic('apps/api/src/policy-sample.ts', "void import('@aetherion/llm');"), 0);
+  assert.equal(
+    await dynamic(
+      'packages/llm/src/policy-sample.test.ts',
+      "void import('@aetherion/llm/testing');",
+    ),
+    0,
+  );
+  assert.equal(
+    await dynamic('apps/web/src/policy-sample.ts', "void import('@aetherion/shared/contracts');"),
+    0,
   );
 });

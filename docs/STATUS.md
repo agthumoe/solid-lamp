@@ -5,12 +5,18 @@
 > refresh _Now_, _Next_, _Blocked on owner_, and append one line to the _Session log_.
 > Long-lived facts go elsewhere: phase checklist → `PLAN.md`, hardware facts → `HARDWARE.md`, decisions → `adr/` + `PLAN.md` decisions log.
 
-**Last updated:** 2026-10-18 (Claude, merged the Phase 1 stack #63–#76 after fixing Codex's five review findings)
+**Last updated:** 2026-10-18 (Claude, #78 follow-up fixes from Codex's re-review of the merged stack)
 **Phase:** 1 — Scaffold (Phase 0 accepted 2026-10-15, #47)
 
 ---
 
 ## Now
+
+- **Follow-up (2026-10-18), [#78](https://github.com/agthumoe/solid-lamp/issues/78):** Codex re-reviewed the merged stack at `9c7e0ba` and found two more P2s. Both are fixed with regressions that fail on the old code:
+  - `import()` bypassed the package-boundary rules. A local `aetherion/restricted-dynamic-import` rule now applies the same per-area patterns to static dynamic-import specifiers.
+  - A stalled error-response body returned `INFERENCE_UNAVAILABLE` past the deadline. `failure()` now maps it to `DEADLINE_EXPIRED`/`CANCELLED`.
+
+  `.claude/` (other agents' worktrees) is ignored by git, ESLint and Prettier, so local `pnpm check` no longer walks another checkout.
 
 - **Merged 2026-10-18 (owner said to merge after the reviews):** the Phase 1 stack, squash-merged bottom-up, with CI green on each up-to-date head:
   - #63 → `d31bd6a`: [#59](https://github.com/agthumoe/solid-lamp/issues/59) Ollama adapter ([spec](specs/inference-ollama-adapter.md))
@@ -192,3 +198,4 @@ Initial baseline is published to `main` under the owner’s explicit authorizati
 | 2026-10-18 | Claude Code | #73 (stacked on #72): brain-core migration, `packages/db`, integration replay/parity tests (9) running in CI on pgvector 0.8.7-pg17; local run skipped (Docker stopped). Note: one commit was pushed before `pnpm check` finished (format-only miss) and fixed in the next commit. |
 | 2026-10-18 | Claude Code | Owner asked me to start Docker Desktop. Redis is up on loopback. #75: `supabase start` bound all interfaces, so it was stopped, rejected and its volume removed; Supabase Postgres now runs via compose on loopback with the CLI as migration operator. Migration applied, `test:int` 9/9 on Supabase Postgres, `/health/ready` all ok, doctor green (verified in a throwaway project, since torn down). Phase 1 acceptance met; owner go-ahead pending. |
 | 2026-10-18 | Claude Code | Fixed Codex's five P2 findings on the Phase 1 stack (#63 NDJSON bound, #64 body deadline, #66 configured ports, #72 relative imports, #74 link lifecycle), each with a regression that fails on the old code; replied on each PR; merged #63–#76 bottom-up with CI green; closed #59–#75. |
+| 2026-10-18 | Claude Code | #78: fixed Codex re-review findings (dynamic-import boundaries, error-body deadline mapping) with regressions; ignored `.claude/` worktrees in lint/format/git. Full local `pnpm check` passes; the inference suite was stable across 3 runs. |

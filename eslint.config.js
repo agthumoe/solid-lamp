@@ -65,6 +65,62 @@ const crossWorkspaceRelative = {
   },
 };
 
+// `no-restricted-imports` ignores `import()`, so the same per-area patterns are applied to
+// dynamic imports with a static specifier (string or expression-free template literal).
+const staticSpecifier = (source) => {
+  if (source?.type === 'Literal' && typeof source.value === 'string') return source.value;
+  if (source?.type === 'TemplateLiteral' && source.expressions.length === 0)
+    return source.quasis[0]?.value.cooked ?? undefined;
+  return undefined;
+};
+const restrictedDynamicImport = {
+  meta: {
+    type: 'problem',
+    messages: { restricted: "'{{specifier}}' is restricted: {{message}}" },
+    schema: [
+      {
+        type: 'object',
+        properties: {
+          patterns: {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: { regex: { type: 'string' }, message: { type: 'string' } },
+              required: ['regex', 'message'],
+            },
+          },
+        },
+        additionalProperties: false,
+      },
+    ],
+  },
+  create(context) {
+    const patterns = (context.options[0]?.patterns ?? []).map(({ regex, message }) => ({
+      test: new RegExp(regex),
+      message,
+    }));
+    return {
+      ImportExpression(node) {
+        const specifier = staticSpecifier(node.source);
+        if (specifier === undefined) return;
+        const hit = patterns.find(({ test }) => test.test(specifier));
+        if (hit)
+          context.report({
+            node: node.source,
+            messageId: 'restricted',
+            data: { specifier, message: hit.message },
+          });
+      },
+    };
+  },
+};
+const aetherionPlugin = {
+  rules: {
+    'cross-workspace-relative': crossWorkspaceRelative,
+    'restricted-dynamic-import': restrictedDynamicImport,
+  },
+};
+
 const areas = [
   { files: ['**/*.{ts,tsx}'], extra: [] },
   { files: ['apps/**/*.{ts,tsx}'], extra: [boundary.apps] },
@@ -72,7 +128,10 @@ const areas = [
   { files: ['packages/shared/**/*.{ts,tsx}'], extra: [boundary.apps, boundary.internal] },
   { files: ['apps/web/**/*.{ts,tsx}'], extra: [boundary.apps, boundary.server] },
 ];
-const restrict = (patterns) => ({ 'no-restricted-imports': ['error', { patterns }] });
+const restrict = (patterns) => ({
+  'no-restricted-imports': ['error', { patterns }],
+  'aetherion/restricted-dynamic-import': ['error', { patterns }],
+});
 // A nested `files` array matches only when every glob in it matches (area AND test file).
 const boundaryConfigs = areas.flatMap(({ files, extra }) => [
   { files, ignores: TEST_FILES, rules: restrict([boundary.deep, boundary.testing, ...extra]) },
@@ -83,7 +142,9 @@ const boundaryConfigs = areas.flatMap(({ files, extra }) => [
 ]);
 
 export default tseslint.config(
-  { ignores: ['node_modules/**', '.agents/**', '**/dist/**', '**/.next/**'] },
+  // `.claude/` holds other agents' git worktrees; they are separate checkouts, not this one.
+  { ignores: ['node_modules/**', '.agents/**', '.claude/**', '**/dist/**', '**/.next/**'] },
+  { files: ['**/*.{ts,tsx}'], plugins: { aetherion: aetherionPlugin } },
   js.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked.map((config) => ({
     ...config,
@@ -116,7 +177,6 @@ export default tseslint.config(
   ...boundaryConfigs,
   {
     files: ['**/*.{ts,tsx}'],
-    plugins: { aetherion: { rules: { 'cross-workspace-relative': crossWorkspaceRelative } } },
     rules: { 'aetherion/cross-workspace-relative': 'error' },
   },
   {
