@@ -46,14 +46,16 @@ GitHub tasks/milestones: [TRACKING.md](TRACKING.md). Standards: [development han
 
 ## Phase 1: Scaffold
 
+**Accepted by the owner on 2026-10-18.** Acceptance on the owner's machine: `pnpm run doctor` 23/23 ok, `/api/v1/health/ready` all `ok`, `packages/llm` tests pass. Merged PRs #58–#82.
+
 - [x] Foundations: ARCHITECTURE, structure, AI orchestration, testing, templates, ADR 0005 (proposed) ([#49](https://github.com/agthumoe/solid-lamp/issues/49), pending review)
-- [ ] pnpm monorepo (`apps/*`, `packages/*`), strict TS, ESLint, Vitest, Makefile mirror (workspace, strict TS, ESLint with import boundaries [#71](https://github.com/agthumoe/solid-lamp/issues/71) and Makefile mirror done; Vitest arrives with the first suite that needs it, per the 2026-10-18 decision)
+- [x] pnpm monorepo (`apps/*`, `packages/*`), strict TS, ESLint, Makefile mirror (import boundaries [#71](https://github.com/agthumoe/solid-lamp/issues/71)/[#78](https://github.com/agthumoe/solid-lamp/issues/78)). Vitest is deferred until a suite needs it (2026-10-18 decision); `node:test` covers everything today.
 - [x] Development handbook/ADR 0003 and issue-first AGENTS adopted; `CLAUDE.md` imports canonical instructions
 - [x] Project-local React/composition/Postgres skills pinned with license/provenance/hash checks
 - [x] GitHub phase milestones/epics, issue/PR templates, baseline docs/tests CI
 - [x] Owner-authorized baseline publication pushed; GitHub CI green ([#1](https://github.com/agthumoe/solid-lamp/issues/1))
 - [x] Enforce current handbook: strict TS, typed lint/hooks/boundaries, formatting, Zod diagnostics and safe logging, negative policy tests, unified CI ([#13](https://github.com/agthumoe/solid-lamp/issues/13))
-- [ ] Extend enforcement to API/DB/production LlmGate/logging and migration/restore integration tests when implemented
+- [x] Extend enforcement to API/DB/production LlmGate/logging and migration integration tests (contract tests, `test:int` replay/parity in CI, compose/pin/binding policies). Restore tests move to Phase 2 (backup/restore smoke test).
 - [x] Decide embedding storage strategy: versioned fixed-dimension tables and atomic promotion → ADR 0002, `specs/embedding-storage.md`
 - [x] Implement ADR 0002 schema in the first migrations ([#73](https://github.com/agthumoe/solid-lamp/issues/73), [spec](specs/brain-schema.md); replay/parity verified in CI on pgvector Postgres)
 - [x] Supabase local project + first migrations (§7) ([#73](https://github.com/agthumoe/solid-lamp/issues/73), [#75](https://github.com/agthumoe/solid-lamp/issues/75), [spec](specs/supabase-local.md): Supabase Postgres via compose on loopback; CLI as migration operator; `supabase start` rejected for binding all interfaces)
@@ -62,10 +64,10 @@ GitHub tasks/milestones: [TRACKING.md](TRACKING.md). Standards: [development han
 - [x] `packages/shared` (config loader, zod schemas, pino logger) ([#52](https://github.com/agthumoe/solid-lamp/issues/52), [#56](https://github.com/agthumoe/solid-lamp/issues/56))
 - [x] `packages/db` (Drizzle schema) ([#73](https://github.com/agthumoe/solid-lamp/issues/73); brain tables, client factory)
 - [x] Spec `docs/specs/llm-gate.md`: queue limits, cancellation, interactive priority, starvation prevention, model/ctx switching, eviction behaviour
-- [ ] Retained model catalog/status schema, semantic domain-role bindings and disclosed fallback; no candidate enabled without evidence (ADR 0004)
+- [x] Retained model catalog/status schema; no candidate enabled without evidence (ADR 0004). Domain-role bindings and disclosed runtime fallback move to Phase 3 ([#5](https://github.com/agthumoe/solid-lamp/issues/5)) and Phase 7 ([#9](https://github.com/agthumoe/solid-lamp/issues/9)).
   - [x] Catalog with states/digests/scoped evidence; bindings validated at inference startup and by doctor ([#69](https://github.com/agthumoe/solid-lamp/issues/69), [spec](specs/model-catalog.md))
-  - [ ] Domain-role bindings and disclosed fallback at runtime (with agents, Phase 3/7)
-- [ ] `packages/llm` (role router, LlmGate, tool-call repair) + unit tests, including negative repair cases: JSON quoted in prose, scalar/invalid args, tools outside the allowlist (REVIEW #2)
+  - [ ] Domain-role bindings and disclosed fallback at runtime → Phase 3/7 (tracked in #5/#9)
+- [x] `packages/llm` (role router, LlmGate, tool-call repair) + unit tests, including negative repair cases: JSON quoted in prose, scalar/invalid args, tools outside the allowlist (REVIEW #2)
   - [x] Pure core: role snapshots, gate queue/priority/cancellation/deadlines, embedding batch interleave, allowlisted tool-call validation and repair with REVIEW #2 negative cases ([#57](https://github.com/agthumoe/solid-lamp/issues/57), [spec](specs/llm-package.md))
   - [x] `apps/inference` Ollama adapter: residency/eviction observation, context reload accounting, transient retries, streaming ([#59](https://github.com/agthumoe/solid-lamp/issues/59), [spec](specs/inference-ollama-adapter.md))
   - [x] `apps/inference` RPC server, gate wiring, readiness; `packages/llm` `InferenceClient` ([#60](https://github.com/agthumoe/solid-lamp/issues/60), [spec](specs/inference-rpc.md))
@@ -167,6 +169,7 @@ Decision (2026-10-13, #17): retain every existing installed/planned model and ad
 | 2026-10-18 | Do not use `supabase start`; run `supabase/postgres` from `infra/docker-compose.yml` on `127.0.0.1:54322` and use the pinned Supabase CLI only for `migration up/list --db-url` (password via `PGPASSWORD`, telemetry disabled) | `supabase start` published Postgres and Kong on all interfaces with no bind option (hard constraint 3); one migration operator and Supabase's own image are kept | [#75](https://github.com/agthumoe/solid-lamp/issues/75), `specs/supabase-local.md` |
 | 2026-10-18 | Relative imports are resolved and must stay inside their own `apps/*`/`packages/*` workspace (local ESLint rule); every link keeps `to_title` so target deletion only unresolves it | Codex review of #72/#74: path regexes missed sibling imports, and a nullable title conflicted with `ON DELETE SET NULL` | #72, #74 |
 | 2026-10-18 | Package-boundary patterns also apply to `import()` with a static specifier (local ESLint rule); unreadable RPC error bodies past the deadline or after a caller abort map to `DEADLINE_EXPIRED`/`CANCELLED` | Codex re-review: `no-restricted-imports` ignores dynamic imports; error bodies need the same deadline rule as success bodies | [#78](https://github.com/agthumoe/solid-lamp/issues/78) |
+| 2026-10-18 | **Phase 1 accepted** by the owner; Phase 2 (brain, #4) unblocked. Leftovers: Vitest stays deferred; domain-role runtime bindings move to #5/#9; restore tests come with the Phase 2 backup/restore smoke test | Acceptance met on the owner's real `.env`/database; remaining items belong to later phases | #3, #4 |
 
 Review note (2026-10-15, #51): dashboard design issue reviewed for scope/acceptance only. Second review: explicit Auth and approval lifecycle coverage are recommendations for the planned spec, not confirmed design defects; earlier P2 severity withdrawn. Private visual draft was inaccessible and the spec is absent locally; Phase 4 checkboxes remain unchanged.
 
