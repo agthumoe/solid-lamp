@@ -1,6 +1,6 @@
 import { join } from 'node:path';
 
-import { createLogger, loadModelsConfig } from '@aetherion/shared';
+import { createLogger, loadCatalog, loadModelsConfig, validateBindings } from '@aetherion/shared';
 
 import { composeInference } from './composition.ts';
 import { loadInferenceConfig } from './config.ts';
@@ -18,6 +18,15 @@ const logger = createLogger({ service: 'inference' }, undefined, config.value.lo
 const models = await loadModelsConfig(join(config.value.configDir, 'models.yaml'));
 if (!models.ok) {
   logger.error({ event: 'config.invalid', outcome: 'failed', errorCode: models.error.code });
+  process.exit(1);
+}
+// Bindings must resolve to enabled, evidence-backed catalog records (ADR 0004); a
+// contradiction refuses the whole config instead of routing around it.
+const catalog = await loadCatalog(join(config.value.configDir, 'catalog.yaml'));
+const bindings = catalog.ok ? validateBindings(models.value, catalog.value) : catalog;
+if (!bindings.ok) {
+  console.error(bindings.error.message);
+  logger.error({ event: 'config.bindings', outcome: 'failed', errorCode: bindings.error.code });
   process.exit(1);
 }
 

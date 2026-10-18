@@ -1,0 +1,215 @@
+# Retained model catalog (ADR 0004, docs/specs/model-catalog.md). Every model the owner keeps is
+# listed here, whether or not a role uses it. Retention is not selection: only `enabled` records
+# may back a role in models.yaml, and only for the roles listed under `roles` with passed
+# evidence scoped to that role. Digests come from `ollama list`; a changed digest invalidates
+# the record's evidence and `pnpm doctor` reports it. No secrets or private text in this file.
+revision: 1
+
+models:
+  - id: qwen-general
+    tag: qwen3.5:9b
+    digest: 56671c2ab9385f9cfcb404638e32cd62d88e3501d44822208363c010179a3c90
+    upstream: ollama.com/library/qwen3.5
+    state: enabled
+    retained: true
+    capabilities: [text, vision, tools, thinking]
+    roles: [chat, router, coder, vision]
+    evidence:
+      - kind: gpu_context
+        status: passed
+        scope: [chat, router, coder, vision]
+        ref: docs/HARDWARE.md
+      - kind: tool_calling
+        status: passed
+        scope: [chat, router, coder]
+        ref: docs/HARDWARE.md
+      - kind: owner_acceptance
+        status: passed
+        scope: [chat, router, coder, vision]
+        ref: https://github.com/agthumoe/solid-lamp/issues/47
+      - kind: task_quality
+        status: pending
+        scope: [vision]
+        ref: config/models.yaml
+
+  - id: qwen-embed
+    tag: qwen3-embedding:0.6b
+    digest: ac6da0dfba84a81fdbfbaf330198c33cd77c4cdfc53e8bc50eb581914a15621d
+    upstream: ollama.com/library/qwen3-embedding
+    state: enabled
+    retained: true
+    capabilities: [embedding]
+    dimensions: 1024
+    roles: [embed]
+    evidence:
+      - kind: gpu_context
+        status: passed
+        scope: [embed]
+        ref: docs/HARDWARE.md
+      - kind: owner_acceptance
+        status: passed
+        scope: [embed]
+        ref: https://github.com/agthumoe/solid-lamp/issues/47
+
+  - id: qwen-alternative
+    tag: qwen3:8b
+    digest: 500a1f067a9f782620b40bee6f7b0c89e17ae61f686b92c24933e4ca4b2b8b41
+    upstream: ollama.com/library/qwen3
+    state: enabled
+    retained: true
+    capabilities: [text, tools, thinking]
+    roles: [chat] # fallback for general chat only; never a legal/accounting fallback
+    evidence:
+      - kind: gpu_context
+        status: passed
+        scope: [chat]
+        ref: docs/HARDWARE.md
+      - kind: tool_calling
+        status: passed
+        scope: [chat]
+        ref: docs/HARDWARE.md
+
+  - id: gemma-alternative
+    tag: gemma4:12b
+    digest: 6114515d63c17436a7c0417d82820ac65ad643e2806c5a3c89cb62846436ed0b
+    upstream: ollama.com/library/gemma4
+    state: enabled
+    retained: true
+    capabilities: [text, tools]
+    roles: [chat] # /api/ps under-reports its VRAM; cross-check nvidia-smi
+    evidence:
+      - kind: gpu_context
+        status: passed
+        scope: [chat]
+        ref: docs/HARDWARE.md
+
+  - id: nomic-embed
+    tag: nomic-embed-text
+    digest: 0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f
+    upstream: ollama.com/library/nomic-embed-text
+    state: enabled
+    retained: true
+    capabilities: [embedding]
+    dimensions: 768
+    roles: [embed] # versioned rebuild/promotion only (ADR 0002); never a query-time fallback
+    evidence:
+      - kind: gpu_context
+        status: passed
+        scope: [embed]
+        ref: docs/HARDWARE.md
+
+  - id: qwen-router-fast
+    tag: qwen3.5:4b
+    digest: d8b0f5e9760cd1682034f292d7ef72ec46f432149be0df7574bf2d6e92e38c04
+    upstream: ollama.com/library/qwen3.5
+    state: disabled
+    retained: true
+    capabilities: [text, tools, thinking]
+    roles: [router]
+    disabled_reason: unbound alternate; loading it evicts chat or embed under MAX_LOADED_MODELS=2 (#47)
+    evidence: []
+
+  - id: qwen-coder
+    tag: qwen2.5-coder:14b
+    digest: 9ec8897f747e246e970bc5cfdda85d22f1123dc2e3d34978a010a75968716849
+    upstream: ollama.com/library/qwen2.5-coder
+    state: disabled
+    retained: true
+    capabilities: [text]
+    roles: [coder]
+    disabled_reason: 0/18 native tool calls under strict scoring; no-tool code generation awaits a Phase 7 evaluation
+    evidence:
+      - kind: tool_calling
+        status: failed
+        scope: [coder]
+        ref: docs/HARDWARE.md
+
+  - id: deepseek-existing-14b
+    tag: deepseek-r1:14b
+    digest: c333b7232bdb521236694ffbb5f5a6b11cc45d98e9142c73123b670fca400b09
+    upstream: ollama.com/library/deepseek-r1
+    state: disabled
+    retained: true
+    capabilities: [text, thinking]
+    roles: []
+    disabled_reason: pre-existing installed artifact; retained, no binding
+    evidence: []
+
+  - id: deepseek-existing-7b
+    tag: deepseek-r1:7b
+    digest: 755ced02ce7befdb13b7ca74e1e4d08cddba4986afdb63a480f2c93d3140383f
+    upstream: ollama.com/library/deepseek-r1
+    state: disabled
+    retained: true
+    capabilities: [text, thinking]
+    roles: []
+    disabled_reason: pre-existing installed artifact; retained, no binding
+    evidence: []
+
+  - id: qwen-existing-7b
+    tag: qwen2.5:7b
+    digest: 845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e
+    upstream: ollama.com/library/qwen2.5
+    state: disabled
+    retained: true
+    capabilities: [text, tools]
+    roles: []
+    disabled_reason: pre-existing installed artifact; retained, no binding
+    evidence: []
+
+  - id: qwen-deep
+    tag: qwen3.6:35b-a3b
+    digest: null
+    upstream: ollama.com/library/qwen3.6
+    state: disabled
+    retained: true
+    capabilities: [text, tools, thinking]
+    roles: [deep]
+    disabled_reason: needs WSL RAM >= 24 GB (owner item 3) and a feasibility benchmark
+    evidence: []
+
+  - id: saul-legal
+    tag: null
+    digest: null
+    upstream: Equall/Saul-7B-Instruct-v1
+    state: candidate
+    retained: true
+    capabilities: [text]
+    roles: []
+    evidence:
+      - kind: owner_acceptance
+        status: failed
+        scope: [legal-research]
+        ref: https://github.com/agthumoe/solid-lamp/issues/47 # acquisition declined
+
+  - id: fin-r1
+    tag: null
+    digest: null
+    upstream: SUFE-AIFLM-Lab/Fin-R1
+    state: candidate
+    retained: true
+    capabilities: [text, thinking]
+    roles: []
+    evidence:
+      - kind: license
+        status: pending
+        scope: [financial-analysis]
+        ref: docs/specs/domain-model-research.md
+      - kind: owner_acceptance
+        status: failed
+        scope: [financial-analysis]
+        ref: https://github.com/agthumoe/solid-lamp/issues/47 # acquisition declined
+
+  - id: cpa-qwen
+    tag: null
+    digest: null
+    upstream: AudCor/cpa-qwen3-8b-v0
+    state: candidate
+    retained: true
+    capabilities: [text]
+    roles: []
+    evidence:
+      - kind: owner_acceptance
+        status: failed
+        scope: [accounting]
+        ref: https://github.com/agthumoe/solid-lamp/issues/47 # acquisition declined

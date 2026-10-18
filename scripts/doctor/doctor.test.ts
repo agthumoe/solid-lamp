@@ -3,6 +3,7 @@ import test from 'node:test';
 
 import {
   checkBindings,
+  checkCatalogArtifacts,
   checkConfig,
   checkOllama,
   checkRuntime,
@@ -22,6 +23,21 @@ roles:
   embed: { model: 'qwen3-embedding:0.6b', num_ctx: 8192, residency: resident, dimensions: 1024 }
 `;
 
+const evidence = (scope: string) =>
+  `[{ kind: gpu_context, status: passed, scope: [${scope}], ref: docs/HARDWARE.md }]`;
+const CATALOG = `
+revision: 1
+models:
+  - { id: general, tag: qwen3.5:9b, digest: ${'a'.repeat(64)}, upstream: x, state: enabled, retained: true, capabilities: [text, tools], roles: [chat, router, coder], evidence: ${evidence('chat, router, coder')} }
+  - { id: embed, tag: qwen3-embedding:0.6b, digest: ${'b'.repeat(64)}, upstream: x, state: enabled, retained: true, capabilities: [embedding], dimensions: 1024, roles: [embed], evidence: ${evidence('embed')} }
+`;
+const INSTALLED = {
+  models: [
+    { name: 'qwen3.5:9b', digest: 'a'.repeat(64) },
+    { name: 'qwen3-embedding:0.6b', digest: 'b'.repeat(64) },
+  ],
+};
+
 const healthyCommands: Record<string, CommandResult> = {
   pnpm: { code: 0, stdout: '11.17.0\n' },
   docker: { code: 0, stdout: '28.1.1\n' },
@@ -40,13 +56,15 @@ const probes = (
     nodeVersion: 'v24.17.0',
     packageManager: 'pnpm@11.17.0',
     env: { AETHERION_INFERENCE_SECRET: 'x'.repeat(40) },
-    readText: (path) => Promise.resolve(path === 'config/models.yaml' ? MODELS : undefined),
-    getJson: (url) =>
+    readText: (path) =>
       Promise.resolve(
-        url.endsWith('/api/tags')
-          ? { models: [{ name: 'qwen3.5:9b' }, { name: 'qwen3-embedding:0.6b' }] }
-          : { status: 'ok' },
+        path === 'config/models.yaml'
+          ? MODELS
+          : path === 'config/catalog.yaml'
+            ? CATALOG
+            : undefined,
       ),
+    getJson: (url) => Promise.resolve(url.endsWith('/api/tags') ? INSTALLED : { status: 'ok' }),
     postJson: () => Promise.resolve({ model_info: { 'qwen3.embedding_length': 1024 } }),
     command: (cmd) => Promise.resolve(commands[cmd] ?? { code: 127, stdout: '' }),
     tcp: () => Promise.resolve(true),
@@ -131,12 +149,7 @@ await test('stopped Docker and unreachable Postgres/Redis fail with hints', asyn
 await test('app processes that are not running are warnings, not failures', async () => {
   const results = await runDoctor(
     probes({
-      getJson: (url) =>
-        Promise.resolve(
-          url.endsWith('/api/tags')
-            ? { models: [{ name: 'qwen3.5:9b' }, { name: 'qwen3-embedding:0.6b' }] }
-            : undefined,
-        ),
+      getJson: (url) => Promise.resolve(url.endsWith('/api/tags') ? INSTALLED : undefined),
     }),
   );
 
@@ -204,4 +217,53 @@ await test('the report shows hints only for problems and a summary line', () => 
   assert.doesNotMatch(report, /unused/);
   assert.match(report, /✖ docker {2}down\n.*→ start it/);
   assert.match(report, /1 failed, 0 warnings, 1 ok$/);
+});
+
+await test('a missing catalog or a contradictory binding fails', async () => {
+  const missing = await checkConfig(
+    probes({
+      readText: (path) => Promise.resolve(path.endsWith('models.yaml') ? MODELS : undefined),
+    }),
+  );
+  const contradictory = await checkConfig(
+    probes({
+      readText: (path) =>
+        Promise.resolve(
+          path.endsWith('models.yaml')
+            ? MODELS
+            : CATALOG.replace('roles: [chat, router, coder]', 'roles: [chat]'),
+        ),
+    }),
+  );
+
+  assert.equal(statuses(missing.results)['catalog.yaml'], 'fail');
+  assert.equal(statuses(contradictory.results).bindings, 'fail');
+  assert.match(
+    contradictory.results.find((entry) => entry.name === 'bindings')?.detail ?? '',
+    /general is not accepted for router/,
+  );
+});
+
+await test('changed digests fail for enabled records; uncatalogued models warn', async () => {
+  const config = await checkConfig(probes());
+  assert.ok(config.catalog);
+
+  const changed = checkCatalogArtifacts(
+    [
+      { name: 'qwen3.5:9b', digest: 'f'.repeat(64) },
+      { name: 'qwen3-embedding:0.6b', digest: 'b'.repeat(64) },
+    ],
+    config.catalog,
+  );
+  const extra = checkCatalogArtifacts(
+    [...INSTALLED.models, { name: 'llama9:70b' }],
+    config.catalog,
+  );
+  const clean = checkCatalogArtifacts(INSTALLED.models, config.catalog);
+
+  assert.equal(changed[0]?.status, 'fail');
+  assert.equal(changed[0]?.detail, 'qwen3.5:9b digest changed');
+  assert.equal(extra[0]?.status, 'warn');
+  assert.equal(extra[0]?.detail, 'llama9:70b not in catalog');
+  assert.equal(clean[0]?.status, 'ok');
 });
