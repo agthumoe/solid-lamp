@@ -37,6 +37,14 @@ doctor:
 test\:doctor:
 	pnpm test:doctor
 
+.PHONY: test\:db
+test\:db:
+	pnpm test:db
+
+.PHONY: test\:int
+test\:int:
+	pnpm test:int
+
 .PHONY: test\:api
 test\:api:
 	pnpm test:api
