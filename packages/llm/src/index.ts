@@ -19,6 +19,17 @@ export {
   type ScheduleDeps,
   type ScheduledGeneration,
 } from './gate/schedule.ts';
+export {
+  collectStream,
+  type FinishReason,
+  type GenerationTimings,
+  type NativeToolCall,
+  type ResolvedModel,
+  type StreamDone,
+  type StreamEvent,
+  type StreamFailure,
+  type StreamOutcome,
+} from './inference/stream-event.ts';
 export { repairToolCalls } from './repair/repair-tool-calls.ts';
 export {
   validateToolCall,

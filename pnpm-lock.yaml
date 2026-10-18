@@ -40,6 +40,15 @@ importers:
         specifier: 8.71.2
         version: 8.71.2(eslint@10.12.0)(typescript@6.0.3)
 
+  apps/inference:
+    dependencies:
+      '@aetherion/llm':
+        specifier: workspace:*
+        version: link:../../packages/llm
+      '@aetherion/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
+
   packages/llm:
     dependencies:
       '@aetherion/shared':
