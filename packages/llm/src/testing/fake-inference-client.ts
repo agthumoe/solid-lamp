@@ -11,6 +11,7 @@ import type {
 } from '../rpc/inference-client.ts';
 
 export type FakeScript = {
+  readonly ollamaReady?: boolean;
   // Text the fake "model" answers with for a generation request; split into tokens by word.
   readonly reply?: (input: GenerateInput) => Result<string, InferenceError>;
   readonly toolCalls?: StreamDone['toolCalls'];
@@ -95,6 +96,22 @@ export const createFakeInferenceClient = (
         model: model(input.role),
         done: done(tokens.length, script.toolCalls ?? []),
       });
+    },
+    ready: async () => {
+      await Promise.resolve();
+      const up = script.ollamaReady ?? true;
+      return ok({
+        status: up ? 'ready' : 'not_ready',
+        ollama: up ? 'ok' : 'unavailable',
+        gate: {
+          active: null,
+          queued: { interactive: 0, background: 0 },
+          oldestQueuedMs: 0,
+          completed: calls.length,
+          rejected: 0,
+        },
+        residency: { coldLoads: 0, contextReloads: 0, evictions: 0, notResidentAfter: 0 },
+      } as const);
     },
     embed: async (input: EmbedInput, options): Promise<Result<EmbedResponse, InferenceError>> => {
       calls.push({ kind: 'embed', options });

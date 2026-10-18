@@ -17,6 +17,8 @@ import {
   type EmbedResponse,
   type GenerateRequest,
   type GenerateResponse,
+  type Readiness,
+  readinessSchema,
 } from './contract.ts';
 
 type CallFields = 'priority' | 'deadline' | 'runId';
@@ -37,6 +39,8 @@ export type InferenceClient = {
     input: EmbedInput,
     options: ClientCallOptions,
   ) => Promise<Result<EmbedResponse, InferenceError>>;
+  // The inference process's own readiness (Ollama reachable, gate and residency counters).
+  readonly ready: (signal: AbortSignal) => Promise<Result<Readiness, InferenceError>>;
 };
 
 export type InferenceClientOptions = {
@@ -175,6 +179,21 @@ export const createInferenceClient = (options: InferenceClientOptions): Inferenc
     embed: async (input, call) => {
       const response = await post(RPC_PATHS.embed, input, call);
       return response.ok ? json(response.value, embedResponseSchema, call) : response;
+    },
+    // 503 still carries a readiness body; only transport or auth failures are errors here.
+    ready: async (signal) => {
+      try {
+        const response = await fetch(`${root}${RPC_PATHS.ready}`, {
+          method: 'GET',
+          headers: { [INFERENCE_KEY_HEADER]: options.secret },
+          signal,
+        });
+        const parsed = readinessSchema.safeParse(await response.json());
+        if (parsed.success) return ok(parsed.data);
+        return err(inferenceError('INFERENCE_UNAVAILABLE', `readiness ${response.status}`));
+      } catch {
+        return err(inferenceError('INFERENCE_UNAVAILABLE', 'inference service unreachable'));
+      }
     },
   };
 };

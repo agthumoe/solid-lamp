@@ -68,7 +68,7 @@ GitHub tasks/milestones: [TRACKING.md](TRACKING.md). Standards: [development han
   - [x] `apps/inference` Ollama adapter: residency/eviction observation, context reload accounting, transient retries, streaming ([#59](https://github.com/agthumoe/solid-lamp/issues/59), [spec](specs/inference-ollama-adapter.md))
   - [x] `apps/inference` RPC server, gate wiring, readiness; `packages/llm` `InferenceClient` ([#60](https://github.com/agthumoe/solid-lamp/issues/60), [spec](specs/inference-rpc.md))
 - [ ] `pnpm doctor`
-- [ ] `/health` endpoint reporting Ollama + DB
+- [x] `/health` endpoint reporting Ollama + DB ([#61](https://github.com/agthumoe/solid-lamp/issues/61), [spec](specs/api-health.md); DB reports `unavailable` until Supabase runs)
 - Acceptance target: `pnpm doctor` green, `packages/llm` tests pass, `/health` reports Ollama and DB
 
 ## Phase 2: Brain
@@ -158,6 +158,7 @@ Decision (2026-10-13, #17): retain every existing installed/planned model and ad
 | 2026-10-17 | Pure `packages/llm` core before the inference process: gate is a class with injected clock, jobs are `(signal) => Result`; workspace packages linked via `pnpm-workspace.yaml` `packages/*` | Gate behavior from the LlmGate spec is testable without Ollama or Docker; residency/eviction checks wait for `apps/inference` | [#57](https://github.com/agthumoe/solid-lamp/issues/57), `specs/llm-package.md` |
 | 2026-10-18 | Ollama adapter lives in `apps/inference/src/ollama` (structure.md) and keeps `node:test`; `StreamEvent`/`collectStream` move into `packages/llm` as the client contract | ADR 0005 installs each library in the PR that first needs it; the adapter needs no new dependency, so Vitest arrives with the first suite that needs fake timers or Fastify | [#59](https://github.com/agthumoe/solid-lamp/issues/59), `specs/inference-ollama-adapter.md` |
 | 2026-10-18 | Internal inference RPC: NDJSON stream, shared-secret header (SHA-256 + constant-time compare), 15 min max deadline, stream failures as terminal events in a 200 response; client throws only on `VALIDATION_FAILED`; exact-pin compliance now covers workspace manifests | Same streaming contract in-process and over RPC; no browser reconnect semantics needed; a rejected request shape is a caller bug | [#60](https://github.com/agthumoe/solid-lamp/issues/60), `specs/inference-rpc.md` |
+| 2026-10-18 | `apps/api` readiness reports `not_configured` when `AETHERION_DATABASE_URL` is unset and reaches Ollama only via inference `/readyz`; health responses carry statuses only until Phase 3 auth | API can start and be checked while Docker/Supabase are down; one GPU authority; no information leak from an unauthenticated route | [#61](https://github.com/agthumoe/solid-lamp/issues/61), `specs/api-health.md` |
 
 Review note (2026-10-15, #51): dashboard design issue reviewed for scope/acceptance only. Second review: explicit Auth and approval lifecycle coverage are recommendations for the planned spec, not confirmed design defects; earlier P2 severity withdrawn. Private visual draft was inaccessible and the spec is absent locally; Phase 4 checkboxes remain unchanged.
 

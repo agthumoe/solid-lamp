@@ -44,6 +44,7 @@ export {
   RPC_ERROR_CODES,
   RPC_PATHS,
   rpcErrorEnvelopeSchema,
+  readinessSchema,
   rpcStatusFor,
   streamEventSchema,
   type ChatMessage,
@@ -52,6 +53,7 @@ export {
   type EmbedResponse,
   type GenerateRequest,
   type GenerateResponse,
+  type Readiness,
   type RpcErrorCode,
 } from './rpc/contract.ts';
 export {

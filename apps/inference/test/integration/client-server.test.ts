@@ -44,6 +44,7 @@ await test('generate, stream and embed round-trip through the real server', asyn
   const generated = await client.generate(input, options());
   const streamed = await collectStream(client.stream(input, options()));
   const embedded = await client.embed({ texts: ['x', 'y'], kind: 'query' }, options());
+  const ready = await client.ready(AbortSignal.timeout(2_000));
   await app.close();
 
   assert.ok(generated.ok);
@@ -53,6 +54,9 @@ await test('generate, stream and embed round-trip through the real server', asyn
   assert.equal(streamed.value.model?.role, 'chat');
   assert.ok(embedded.ok);
   assert.equal(embedded.value.vectors.length, 2);
+  assert.ok(ready.ok);
+  assert.equal(ready.value.status, 'ready');
+  assert.equal(ready.value.gate.completed, 3);
 });
 
 await test('a wrong secret surfaces as INFERENCE_UNAVAILABLE, not as a thrown error', async () => {

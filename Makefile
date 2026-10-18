@@ -25,6 +25,14 @@ test\:llm:
 dev\:inference:
 	pnpm dev:inference
 
+.PHONY: dev\:api
+dev\:api:
+	pnpm dev:api
+
+.PHONY: test\:api
+test\:api:
+	pnpm test:api
+
 .PHONY: test\:inference
 test\:inference:
 	pnpm test:inference
