@@ -21,6 +21,10 @@ test\:shared:
 test\:llm:
 	pnpm test:llm
 
+.PHONY: test\:inference
+test\:inference:
+	pnpm test:inference
+
 .PHONY: docs\:check
 docs\:check:
 	pnpm docs:check

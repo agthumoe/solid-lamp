@@ -5,14 +5,16 @@
 > refresh _Now_, _Next_, _Blocked on owner_, and append one line to the _Session log_.
 > Long-lived facts go elsewhere: phase checklist → `PLAN.md`, hardware facts → `HARDWARE.md`, decisions → `adr/` + `PLAN.md` decisions log.
 
-**Last updated:** 2026-10-18 (Claude, PR #58 review fixes for #57 on branch `claude/remaining-tasks-github-issues-dlniqm`)
+**Last updated:** 2026-10-18 (Claude, #59 Ollama adapter on branch `feat/59-ollama-adapter`; #56/#57 merged via PR #58)
 **Phase:** 1 — Scaffold (Phase 0 accepted 2026-10-15, #47)
 
 ---
 
 ## Now
 
-- **In review (2026-10-17):** [#56](https://github.com/agthumoe/solid-lamp/issues/56) `@aetherion/shared` config loader ([spec](specs/config-loader.md): strict `models.yaml` schema, private-network URL guard, `AETHERION_*` env, `.env.example`) and [#57](https://github.com/agthumoe/solid-lamp/issues/57) `@aetherion/llm` pure core ([spec](specs/llm-package.md): role snapshots, `LlmGate`, embedding batches, tool-call validation/repair). `pnpm-workspace.yaml` now links `packages/*`; `yaml` moved to runtime dependencies. `pnpm check` passes. Ollama-dependent gate behavior is deferred to `apps/inference`. Codex review of head `bc886a2` (2 findings: deadline not enforced at dispatch/settlement when timers lag; `scheduleGeneration` spread corrupted primitive results) fixed with regression tests; result is now `{ value, snapshot }`.
+- **In review (2026-10-18):** [#59](https://github.com/agthumoe/solid-lamp/issues/59) `apps/inference` Ollama adapter ([spec](specs/inference-ollama-adapter.md)): explicit `num_ctx`/sampling, streamed events with one terminal event and `partial`, one retry only before output, embed prefixes with `truncate: false` and dimension checks, `/api/ps` residency with cold/context-reload/eviction accounting. `StreamEvent`/`collectStream` now live in `packages/llm`. Workspace links `apps/*`. Live smoke run against local Ollama passed (no CI model calls). Follow-ups opened: [#60](https://github.com/agthumoe/solid-lamp/issues/60) inference RPC/gate wiring, [#61](https://github.com/agthumoe/solid-lamp/issues/61) `apps/api` `/health`, [#62](https://github.com/agthumoe/solid-lamp/issues/62) `pnpm doctor`.
+
+- **Merged 2026-10-18:** PR #58 → `4b1d578`: [#56](https://github.com/agthumoe/solid-lamp/issues/56) config loader ([spec](specs/config-loader.md)) and [#57](https://github.com/agthumoe/solid-lamp/issues/57) `packages/llm` pure core ([spec](specs/llm-package.md)), including fixes for Codex's two review findings (deadline at dispatch/settlement; `{ value, snapshot }` results).
 
 - **Merged 2026-10-16 (owner go-ahead):** PR #50 foundations ([#49](https://github.com/agthumoe/solid-lamp/issues/49)) → `197e3ae`; PR #54 [dashboard spec](specs/dashboard.md) ([#51](https://github.com/agthumoe/solid-lamp/issues/51)) → `ea6d358`; PR #53 `@aetherion/shared` Result/errors/safe logging ([#52](https://github.com/agthumoe/solid-lamp/issues/52), Codex) → `ea1a556`. Stacked PRs were rebased onto `main` and passed CI before merging; #49, #51 and #52 closed. Codex reviews of #50 (4 rounds) and #51 found no open defects; framework Markdown templates stay reference-only until their libraries are installed.
 
@@ -93,6 +95,7 @@ Initial baseline is published to `main` under the owner’s explicit authorizati
 
 ## Gotchas learned
 
+- Ollama residency is not stable across roles: after an embed then a chat request, `/api/ps` listed only the chat model (2026-10-18). Observe `/api/ps` around each job; never assume the chat+embed pair is loaded.
 - Scripts run with Node 24's native TS type stripping (`node file.ts`). **No parameter properties, enums, or namespaces**; imports need the `.ts` extension.
 - `sudo` needs a password → the agent can't apply system config; hand the owner the exact command.
 - Ollama runs as the `ollama` systemd service; models live in `/usr/share/ollama/.ollama/models`. Verify settings from the `server config` line in `journalctl -u ollama`, not from env vars.
@@ -163,3 +166,4 @@ Initial baseline is published to `main` under the owner’s explicit authorizati
 | 2026-10-16 | Claude Code | Owner said all good: merged PR #50 (#49), rebased and merged stacked PRs #54 (#51) and #53 (#52, Codex) after green CI; closed #49/#51/#52, deleted merged branches. Kept Codex's uncommitted review notes from the main checkout (reconciled into STATUS/PLAN). |
 | 2026-10-17 | Claude Code | Owner selected config loader + `packages/llm`. Created #56/#57 under #3. Implemented `@aetherion/shared` config loader (11 tests) and `@aetherion/llm` core (21 tests: queue limits, priority/starvation, cancellation/teardown, deadlines, snapshots, batch interleave, REVIEW #2 repair negatives). Specs `config-loader.md`, `llm-package.md`; `test:llm` + Makefile mirror. No Ollama/GPU/Docker use. |
 | 2026-10-18 | Claude Code | Fixed Codex PR #58 review (#57): `LlmGate` re-checks deadlines against the clock at dispatch and settlement; `scheduleGeneration` wraps the executor value as `{ value, snapshot }` instead of spreading it. Two regression tests (lagging-timer test fails on the old code). Spec updated; `pnpm check` passes. |
+| 2026-10-18 | Claude Code | PR #58 merged. Created #59–#62 under #3. #59: `apps/inference` Ollama adapter (chat stream/generate, embed, `/api/ps` residency, retry-before-output) with 26 fake-fetch tests plus 3 `collectStream` tests; live smoke against local Ollama OK. Spec `inference-ollama-adapter.md`; `test:inference` + Makefile mirror. Docker still stopped (blocked item 4). |
