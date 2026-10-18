@@ -86,7 +86,7 @@ export const links = pgTable('links', {
     .notNull()
     .references(() => documents.id, { onDelete: 'cascade' }),
   toDocumentId: ref('to_document_id').references(() => documents.id, { onDelete: 'set null' }),
-  toTitle: text('to_title'),
+  toTitle: text('to_title').notNull(),
   kind: text('kind', { enum: LINK_KINDS }).notNull(),
   createdAt: createdAt(),
 });

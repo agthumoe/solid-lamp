@@ -1,3 +1,5 @@
+import { dirname, relative, resolve } from 'node:path';
+
 import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import reactHooks from 'eslint-plugin-react-hooks';
@@ -8,7 +10,7 @@ import reactHooks from 'eslint-plugin-react-hooks';
 const TEST_FILES = ['**/*.test.ts', '**/*.test.tsx', '**/test/**/*.ts'];
 const boundary = {
   deep: {
-    regex: '^@aetherion/[^/]+/src(/|$)|^\\.{1,2}/.*\\bpackages/[^/]+/src/',
+    regex: '^@aetherion/[^/]+/src(/|$)',
     message: 'Import another package through its public entry, never its src files.',
   },
   testing: {
@@ -16,7 +18,7 @@ const boundary = {
     message: 'Test doubles are for tests only.',
   },
   apps: {
-    regex: '^@aetherion/(api|inference|worker|web|channels|mcp)(/|$)|^\\.{1,2}/.*\\bapps/',
+    regex: '^@aetherion/(api|inference|worker|web|channels|mcp)(/|$)',
     message: 'Apps are entry points: packages and other apps never import them.',
   },
   internal: {
@@ -28,6 +30,41 @@ const boundary = {
     message: 'apps/web may only import @aetherion/shared/contracts.',
   },
 };
+// Relative paths are resolved against the importing file: one that lands in another
+// apps/* or packages/* workspace (sibling `../../llm/src/...` included) must use that
+// package's name, so the name-based rules above apply to it.
+const workspaceOf = (path) => {
+  const match = relative(import.meta.dirname, path)
+    .split('\\')
+    .join('/')
+    .match(/^(apps|packages)\/([^/]+)\//);
+  return match ? `${match[1]}/${match[2]}` : 'root';
+};
+const crossWorkspaceRelative = {
+  meta: {
+    type: 'problem',
+    messages: {
+      cross: 'Relative import leaves {{from}} for {{to}}: import the package by name instead.',
+    },
+    schema: [],
+  },
+  create(context) {
+    const from = workspaceOf(context.filename);
+    const check = (source) => {
+      if (source?.type !== 'Literal' || typeof source.value !== 'string') return;
+      if (!source.value.startsWith('.')) return;
+      const to = workspaceOf(resolve(dirname(context.filename), source.value));
+      if (to !== from) context.report({ node: source, messageId: 'cross', data: { from, to } });
+    };
+    return {
+      ImportDeclaration: (node) => check(node.source),
+      ExportNamedDeclaration: (node) => check(node.source),
+      ExportAllDeclaration: (node) => check(node.source),
+      ImportExpression: (node) => check(node.source),
+    };
+  },
+};
+
 const areas = [
   { files: ['**/*.{ts,tsx}'], extra: [] },
   { files: ['apps/**/*.{ts,tsx}'], extra: [boundary.apps] },
@@ -77,6 +114,11 @@ export default tseslint.config(
     },
   },
   ...boundaryConfigs,
+  {
+    files: ['**/*.{ts,tsx}'],
+    plugins: { aetherion: { rules: { 'cross-workspace-relative': crossWorkspaceRelative } } },
+    rules: { 'aetherion/cross-workspace-relative': 'error' },
+  },
   {
     files: ['**/*.tsx', '**/use-*.ts'],
     plugins: { 'react-hooks': reactHooks },
