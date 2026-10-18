@@ -161,3 +161,62 @@ await test('a body that stalls after the headers past the deadline is DEADLINE_E
   assert.equal(result.ok ? null : result.error.code, 'DEADLINE_EXPIRED');
   assert.equal(caller.signal.aborted, false);
 });
+
+await test('an error response whose body stalls past the deadline is DEADLINE_EXPIRED', async () => {
+  let now = 1_000;
+  const stalledError = (_url: string, init: RequestInit) =>
+    Promise.resolve(
+      new Response(
+        new ReadableStream<Uint8Array>({
+          start(controller) {
+            init.signal?.addEventListener('abort', () => {
+              now += 60_000;
+              controller.error(new DOMException('aborted', 'AbortError'));
+            });
+          },
+        }),
+        { status: 503 },
+      ),
+    );
+  const client = createInferenceClient({
+    baseUrl: 'http://localhost:4100',
+    secret: SECRET,
+    fetch: stalledError,
+    now: () => now,
+  });
+
+  const keepAlive = setInterval(() => undefined, 1_000);
+  const result = await client
+    .embed(
+      { texts: ['a'], kind: 'query' },
+      { ...options(new Date(now + 30)), priority: 'interactive' },
+    )
+    .finally(() => clearInterval(keepAlive));
+
+  assert.equal(result.ok ? null : result.error.code, 'DEADLINE_EXPIRED');
+});
+
+await test('a caller abort while reading an error body is CANCELLED', async () => {
+  const caller = new AbortController();
+  const abortingBody = () =>
+    Promise.resolve(
+      new Response(
+        new ReadableStream<Uint8Array>({
+          start(controller) {
+            caller.abort();
+            controller.error(new DOMException('aborted', 'AbortError'));
+          },
+        }),
+        { status: 500 },
+      ),
+    );
+  const client = createInferenceClient({
+    baseUrl: 'http://localhost:4100',
+    secret: SECRET,
+    fetch: abortingBody,
+  });
+
+  const result = await client.generate(input, { ...options(), signal: caller.signal });
+
+  assert.equal(result.ok ? null : result.error.code, 'CANCELLED');
+});

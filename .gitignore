@@ -17,3 +17,6 @@ test-results/
 *.key
 *.pem
 infra/whatsapp-session/
+
+# Agent worktrees and local agent state (separate checkouts)
+.claude/

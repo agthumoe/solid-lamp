@@ -97,11 +97,20 @@ export const createInferenceClient = (options: InferenceClientOptions): Inferenc
       );
     }
     if (response.ok) return ok(response);
-    return err(await failure(response));
+    return err(await failure(response, call));
   };
 
-  const failure = async (response: Response): Promise<InferenceError> => {
-    const envelope = rpcErrorEnvelopeSchema.safeParse(await response.json().catch(() => null));
+  const failure = async (response: Response, call: ClientCallOptions): Promise<InferenceError> => {
+    let body: unknown;
+    try {
+      body = await response.json();
+    } catch {
+      // Same rule as success bodies: a stall past the deadline or a caller abort wins over the
+      // unreadable error body.
+      if (call.signal.aborted || call.deadline.getTime() <= now()) return abortedError(call);
+      body = null;
+    }
+    const envelope = rpcErrorEnvelopeSchema.safeParse(body);
     if (!envelope.success)
       return inferenceError('INFERENCE_UNAVAILABLE', `inference service error ${response.status}`);
     const { code, message } = envelope.data.error;
