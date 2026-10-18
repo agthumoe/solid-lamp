@@ -58,7 +58,7 @@ GitHub tasks/milestones: [TRACKING.md](TRACKING.md). Standards: [development han
 - [ ] Implement ADR 0002 schema in the first migrations
 - [ ] Supabase local project + first migrations (§7)
 - [ ] Private binding/port checks at service introduction (`specs/security-recovery.md`) (inference/api: private-host config + loopback defaults, #60/#61; doctor `bindings` check, #62)
-- [ ] Redis via `infra/docker-compose.yml`
+- [x] Redis via `infra/docker-compose.yml` ([#67](https://github.com/agthumoe/solid-lamp/issues/67); authored and policy-checked, first `up` pending Docker Desktop)
 - [x] `packages/shared` (config loader, zod schemas, pino logger) ([#52](https://github.com/agthumoe/solid-lamp/issues/52), [#56](https://github.com/agthumoe/solid-lamp/issues/56))
 - [ ] `packages/db` (Drizzle schema)
 - [x] Spec `docs/specs/llm-gate.md`: queue limits, cancellation, interactive priority, starvation prevention, model/ctx switching, eviction behaviour

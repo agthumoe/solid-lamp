@@ -5,12 +5,14 @@
 > refresh _Now_, _Next_, _Blocked on owner_, and append one line to the _Session log_.
 > Long-lived facts go elsewhere: phase checklist → `PLAN.md`, hardware facts → `HARDWARE.md`, decisions → `adr/` + `PLAN.md` decisions log.
 
-**Last updated:** 2026-10-18 (Claude, stacked PRs #63 (#59) → #64 (#60) → #65 (#61) → #62 doctor on `feat/62-doctor`)
+**Last updated:** 2026-10-18 (Claude, stacked PRs #63 (#59) → #64 (#60) → #65 (#61) → #66 (#62) → #67 Redis compose on `feat/67-redis-compose`)
 **Phase:** 1 — Scaffold (Phase 0 accepted 2026-10-15, #47)
 
 ---
 
 ## Now
+
+- **In review (2026-10-18), stacked on PR #66:** [#67](https://github.com/agthumoe/solid-lamp/issues/67) `infra/docker-compose.yml`: Redis 8.8.3-alpine pinned by digest, `127.0.0.1:6379` only, `noeviction`, AOF volume, healthcheck. `pnpm compliance:check` now rejects compose ports beyond loopback/Tailscale, unpinned images, host networking and privileged containers. Not yet started, because Docker Desktop is stopped and the WSL `docker compose` plugin is missing.
 
 - **In review (2026-10-18), stacked on PR #65:** [#62](https://github.com/agthumoe/solid-lamp/issues/62) `pnpm doctor` ([spec](specs/doctor.md)): read-only checks with fix hints for Node/pnpm, env/secret, `models.yaml`, Ollama and installed role models, embed dimensions from metadata, Docker/Postgres/Redis, dev processes, private bindings on known ports and a tracked `.env`. Today it reports 13 ok, 3 warnings and 3 failures (Docker, Postgres, Redis, all waiting on Docker Desktop).
 
@@ -71,11 +73,11 @@
 
 ## Blocked on owner
 
-| #   | Question                                                                                                                | Default if no answer                                 |
-| --- | ----------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| 3   | Raise WSL RAM to 24 GB via `infra/windows/wslconfig.proposed`?                                                          | Don't touch; `deep` role stays disabled              |
-| 4   | Docker Desktop is installed but not running; Tailscale not found on Windows or WSL — confirm how Tailscale is installed | Needed by Phase 1 (Docker) and Phase 4 (Tailscale)   |
-| 6   | Personal vs business/entity accounting; investment scope and data sources                                               | Synthetic read-only evaluation; no private ingestion |
+| #   | Question                                                                                                                                                                                           | Default if no answer                                                                  |
+| --- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| 3   | Raise WSL RAM to 24 GB via `infra/windows/wslconfig.proposed`?                                                                                                                                     | Don't touch; `deep` role stays disabled                                               |
+| 4   | Docker Desktop is installed but not running (WSL has no `docker compose` plugin until Desktop's WSL integration is on); Tailscale not found on Windows or WSL — confirm how Tailscale is installed | Needed by Phase 1 (Redis, Supabase/migrations, `packages/db`) and Phase 4 (Tailscale) |
+| 6   | Personal vs business/entity accounting; investment scope and data sources                                                                                                                          | Synthetic read-only evaluation; no private ingestion                                  |
 
 ## Repo map (what exists today)
 
@@ -176,3 +178,4 @@ Initial baseline is published to `main` under the owner’s explicit authorizati
 | 2026-10-18 | Claude Code | #60 (stacked on PR #63): inference RPC server, gate-wired service (terminal event after gate settles, per-job residency observation), env config, client + fake, NDJSON reader moved to `packages/llm`, workspace exact-pin compliance. 45 new tests (service, `server.inject` contract, loopback client↔server, client, fake, config, pin policy). Live server smoke against local Ollama OK. |
 | 2026-10-18 | Claude Code | #61 (stacked on #64): `apps/api` skeleton with liveness/readiness, error envelope plugin, postgres + inference probes, env config; `InferenceClient.ready()` + readiness contract. 14 api tests (incl. real `postgres` driver against a refused port); live api+inference readiness checked. GitHub API rate limit hit mid-session (gh calls paused). |
 | 2026-10-18 | Claude Code | #62 (stacked on #65): `pnpm doctor` with 10 unit tests; root links `@aetherion/shared`. Local run: only Docker/Postgres/Redis fail (Docker Desktop stopped). |
+| 2026-10-18 | Claude Code | #67 (stacked on #66): Redis compose + compose exposure policy in compliance (1 new test group); compliance evidence table refreshed. Docker-dependent items (Supabase, migrations, `packages/db`) remain blocked on owner item 4. |

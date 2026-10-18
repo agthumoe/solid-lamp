@@ -2,6 +2,7 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
+import { composeViolations } from './compliance/compose-policy.ts';
 import { pinViolations } from './compliance/package-policy.ts';
 import { sourceViolations } from './compliance/source-policy.ts';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -42,6 +43,10 @@ for (const path of ['package.json', ...workspaceManifests]) {
   const manifest = path === 'package.json' ? pkg : readManifest(path);
   problems.push(...pinViolations(path, { ...manifest.dependencies, ...manifest.devDependencies }));
 }
+const infra = join(root, 'infra');
+for (const name of existsSync(infra) ? readdirSync(infra) : [])
+  if (/^(?:docker-)?compose.*\.ya?ml$/.test(name))
+    problems.push(...composeViolations(`infra/${name}`, readFileSync(join(infra, name), 'utf8')));
 for (const command of [
   'lint',
   'typecheck',
@@ -58,5 +63,5 @@ if (problems.length) {
   process.exitCode = 1;
 } else
   console.log(
-    'Applicable source boundaries, frontend size, private bindings and exact pins pass. Manual/future gates: docs/development/compliance.md.',
+    'Applicable source boundaries, frontend size, private bindings, compose exposure and exact pins pass. Manual/future gates: docs/development/compliance.md.',
   );

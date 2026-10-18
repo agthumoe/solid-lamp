@@ -1,0 +1,36 @@
+# Aetherion OS backing services (Docker Desktop with WSL integration). Postgres comes from the
+# Supabase CLI (`supabase start`), not from this file.
+# Start:  docker compose -f infra/docker-compose.yml up -d redis
+# Check:  pnpm doctor
+# Every published port binds 127.0.0.1 (AGENTS hard constraint 3); images are pinned by digest.
+name: aetherion
+
+services:
+  redis:
+    # redis 8.8.3-alpine, multi-arch index digest (Docker Hub, 2026-09-25)
+    image: redis:8.8.3-alpine@sha256:0b2b77d3ea5078274795e3177cdbdada8b96316684a38911d528534ed679b5ec
+    # BullMQ requires noeviction. Redis is disposable (queues rebuild from the Postgres outbox),
+    # but AOF keeps delayed jobs across restarts.
+    command:
+      - redis-server
+      - --appendonly
+      - 'yes'
+      - --appendfsync
+      - everysec
+      - --maxmemory
+      - 512mb
+      - --maxmemory-policy
+      - noeviction
+    ports:
+      - '127.0.0.1:6379:6379'
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  redis-data:
