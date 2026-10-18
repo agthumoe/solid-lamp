@@ -250,14 +250,27 @@ await migrated('the generated tsvector is searchable and deletes cascade', async
 });
 
 await migrated(
-  'links need a resolved target or a title; bad kinds and hashes are rejected',
+  'links always keep a target label; deleting the target only unresolves them',
   async (sql) => {
     const { documentId } = await seedChunk(sql);
+    const [other] = await sql<{ id: string }[]>`
+    insert into sources (kind, name) values ('repo', 'code') returning id`;
+    const [target] = await sql<{ id: string }[]>`
+    insert into documents (source_id, uri, content_hash)
+    values (${other?.id ?? ''}, 'README.md', ${hash('readme')}) returning id`;
+    await sql`insert into links (from_document_id, to_document_id, to_title, kind)
+            values (${documentId}, ${target?.id ?? ''}, 'README', 'wikilink')`;
 
-    await sql`insert into links (from_document_id, to_title, kind) values (${documentId}, 'Later', 'wikilink')`;
+    // Cross-source cascade: deleting the target's source must succeed and unresolve the edge.
+    await sql`delete from sources where id = ${other?.id ?? ''}`;
+    const links = await sql<{ to_document_id: string | null; to_title: string }[]>`
+    select to_document_id, to_title from links`;
+
+    assert.deepEqual([...links], [{ to_document_id: null, to_title: 'README' }]);
     await rejects(
-      sql`insert into links (from_document_id, kind) values (${documentId}, 'wikilink')`,
-      /links_target_present/,
+      sql`insert into links (from_document_id, to_document_id, kind)
+        values (${documentId}, ${documentId}, 'wikilink')`,
+      /null value in column "to_title"/,
     );
     await rejects(
       sql`insert into links (from_document_id, to_title, kind) values (${documentId}, 'x', 'hyperlink')`,

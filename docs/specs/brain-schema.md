@@ -18,7 +18,7 @@ The first migration gives the brain its durable core and the ADR 0002 versioned 
 - **`sources`:** kind enum check, unique name, `config` object (paths and filters only, no credentials), `enabled`, `last_synced_at`.
 - **`documents`:** unique `(source_id, uri)`, SHA-256 `content_hash`, a `deleted_at` tombstone for reconciliation, GIN on `tags`.
 - **`chunks`:** unique `(document_id, ordinal)`, `heading_path text[]`, `content_hash`, `token_count`, `chunker_version`, `tsv` generated from `to_tsvector('english', content)` with a GIN index. There is no embedding column.
-- **`links`:** wikilink, tag, mention or import; a resolved target or an unresolved title is required.
+- **`links`:** wikilink, tag, mention or import. `to_title` (the target label) is always required; `to_document_id` is the optional resolution and becomes null when the target is deleted, so a delete never conflicts with a link.
 - **`embedding_versions`:** model, digest, `dimensions` in (768, 1024), prefixes, chunker version, and `status` (`building | ready | active | retired | failed`). At most one active version (partial unique index), and an active version must have `promoted_at`.
 - **`chunk_embeddings_1024` / `_768`:**
   - Primary key `(embedding_version_id, chunk_id)` and a fixed `dimensions` column with a check.

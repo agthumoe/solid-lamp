@@ -55,15 +55,16 @@ create table public.chunks (
 );
 create index chunks_tsv_idx on public.chunks using gin (tsv);
 
--- Graph edges. An unresolved wikilink keeps only its title until the target appears.
+-- Graph edges. Every link keeps its target label (wikilink text, tag, import path), so deleting
+-- the target document only unresolves the edge (to_document_id -> null); it never blocks the
+-- delete or leaves a link with no target at all.
 create table public.links (
   id               bigint generated always as identity primary key,
   from_document_id bigint not null references public.documents (id) on delete cascade,
   to_document_id   bigint references public.documents (id) on delete set null,
-  to_title         text check (to_title is null or length(to_title) between 1 and 500),
+  to_title         text not null check (length(to_title) between 1 and 500),
   kind             text not null check (kind in ('wikilink', 'tag', 'mention', 'import')),
-  created_at       timestamptz not null default now(),
-  constraint links_target_present check (to_document_id is not null or to_title is not null)
+  created_at       timestamptz not null default now()
 );
 create index links_from_document_id_idx on public.links (from_document_id);
 create index links_to_document_id_idx on public.links (to_document_id);
