@@ -47,7 +47,7 @@ GitHub tasks/milestones: [TRACKING.md](TRACKING.md). Standards: [development han
 ## Phase 1: Scaffold
 
 - [x] Foundations: ARCHITECTURE, structure, AI orchestration, testing, templates, ADR 0005 (proposed) ([#49](https://github.com/agthumoe/solid-lamp/issues/49), pending review)
-- [ ] pnpm monorepo (`apps/*`, `packages/*`), strict TS, ESLint, Vitest, Makefile mirror
+- [ ] pnpm monorepo (`apps/*`, `packages/*`), strict TS, ESLint, Vitest, Makefile mirror (workspace, strict TS, ESLint with import boundaries [#71](https://github.com/agthumoe/solid-lamp/issues/71) and Makefile mirror done; Vitest arrives with the first suite that needs it, per the 2026-10-18 decision)
 - [x] Development handbook/ADR 0003 and issue-first AGENTS adopted; `CLAUDE.md` imports canonical instructions
 - [x] Project-local React/composition/Postgres skills pinned with license/provenance/hash checks
 - [x] GitHub phase milestones/epics, issue/PR templates, baseline docs/tests CI
