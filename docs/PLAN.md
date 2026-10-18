@@ -56,9 +56,9 @@ GitHub tasks/milestones: [TRACKING.md](TRACKING.md). Standards: [development han
 - [ ] Extend enforcement to API/DB/production LlmGate/logging and migration/restore integration tests when implemented
 - [x] Decide embedding storage strategy: versioned fixed-dimension tables and atomic promotion → ADR 0002, `specs/embedding-storage.md`
 - [x] Implement ADR 0002 schema in the first migrations ([#73](https://github.com/agthumoe/solid-lamp/issues/73), [spec](specs/brain-schema.md); replay/parity verified in CI on pgvector Postgres)
-- [ ] Supabase local project + first migrations (§7) (brain-core migration done in #73; `supabase init`/`config.toml` and `supabase db reset` verification wait for Docker)
-- [ ] Private binding/port checks at service introduction (`specs/security-recovery.md`) (inference/api: private-host config + loopback defaults, #60/#61; doctor `bindings` check, #62)
-- [x] Redis via `infra/docker-compose.yml` ([#67](https://github.com/agthumoe/solid-lamp/issues/67); authored and policy-checked, first `up` pending Docker Desktop)
+- [x] Supabase local project + first migrations (§7) ([#73](https://github.com/agthumoe/solid-lamp/issues/73), [#75](https://github.com/agthumoe/solid-lamp/issues/75), [spec](specs/supabase-local.md): Supabase Postgres via compose on loopback; CLI as migration operator; `supabase start` rejected for binding all interfaces)
+- [x] Private binding/port checks at service introduction (`specs/security-recovery.md`) (inference/api loopback defaults #60/#61; doctor `bindings` #62; compose policy #67; Supabase Postgres on loopback #75)
+- [x] Redis via `infra/docker-compose.yml` ([#67](https://github.com/agthumoe/solid-lamp/issues/67); running healthy on `127.0.0.1:6379`, `noeviction`, AOF)
 - [x] `packages/shared` (config loader, zod schemas, pino logger) ([#52](https://github.com/agthumoe/solid-lamp/issues/52), [#56](https://github.com/agthumoe/solid-lamp/issues/56))
 - [x] `packages/db` (Drizzle schema) ([#73](https://github.com/agthumoe/solid-lamp/issues/73); brain tables, client factory)
 - [x] Spec `docs/specs/llm-gate.md`: queue limits, cancellation, interactive priority, starvation prevention, model/ctx switching, eviction behaviour
@@ -69,8 +69,8 @@ GitHub tasks/milestones: [TRACKING.md](TRACKING.md). Standards: [development han
   - [x] Pure core: role snapshots, gate queue/priority/cancellation/deadlines, embedding batch interleave, allowlisted tool-call validation and repair with REVIEW #2 negative cases ([#57](https://github.com/agthumoe/solid-lamp/issues/57), [spec](specs/llm-package.md))
   - [x] `apps/inference` Ollama adapter: residency/eviction observation, context reload accounting, transient retries, streaming ([#59](https://github.com/agthumoe/solid-lamp/issues/59), [spec](specs/inference-ollama-adapter.md))
   - [x] `apps/inference` RPC server, gate wiring, readiness; `packages/llm` `InferenceClient` ([#60](https://github.com/agthumoe/solid-lamp/issues/60), [spec](specs/inference-rpc.md))
-- [x] `pnpm doctor` ([#62](https://github.com/agthumoe/solid-lamp/issues/62), [spec](specs/doctor.md); currently red only for Docker/Postgres/Redis)
-- [x] `/health` endpoint reporting Ollama + DB ([#61](https://github.com/agthumoe/solid-lamp/issues/61), [spec](specs/api-health.md); DB reports `unavailable` until Supabase runs)
+- [x] `pnpm doctor` ([#62](https://github.com/agthumoe/solid-lamp/issues/62), [spec](specs/doctor.md); green on 2026-10-18 with Docker, Supabase Postgres, Redis, inference and api running)
+- [x] `/health` endpoint reporting Ollama + DB ([#61](https://github.com/agthumoe/solid-lamp/issues/61), [spec](specs/api-health.md); `ready` with database/inference/Ollama `ok` on 2026-10-18)
 - Acceptance target: `pnpm doctor` green, `packages/llm` tests pass, `/health` reports Ollama and DB
 
 ## Phase 2: Brain
@@ -164,6 +164,7 @@ Decision (2026-10-13, #17): retain every existing installed/planned model and ad
 | 2026-10-18 | `pnpm doctor` lives in `scripts/doctor` as pure checks over injected probes; root links `@aetherion/shared` (`workspace:*`) to reuse runtime config validation; app processes not running are warnings | Doctor must reuse the exact runtime schemas, stay read-only, and be green without dev servers running | [#62](https://github.com/agthumoe/solid-lamp/issues/62), `specs/doctor.md` |
 | 2026-10-18 | `config/catalog.yaml` is the retained inventory; a binding needs an enabled record accepted for the role with passed `gpu_context` evidence and no failed/revoked scoped evidence; inference refuses to start otherwise; doctor fails on a changed digest of an enabled record | Retention ≠ selection (ADR 0004); fail closed on contradictory config; a changed artifact invalidates its evidence | [#69](https://github.com/agthumoe/solid-lamp/issues/69), `specs/model-catalog.md` |
 | 2026-10-18 | Migration invariants enforced in SQL (composite version/dimension FKs, partial unique active index, deferrable active-only search pointer); migration replay/parity tests run in CI against a digest-pinned `pgvector/pgvector:0.8.7-pg17` service and skip locally without a database URL | Database constraints, not application code, keep vector spaces apart; CI gives real Postgres verification while local Docker is down | [#73](https://github.com/agthumoe/solid-lamp/issues/73), `specs/brain-schema.md` |
+| 2026-10-18 | Do not use `supabase start`; run `supabase/postgres` from `infra/docker-compose.yml` on `127.0.0.1:54322` and use the pinned Supabase CLI only for `migration up/list --db-url` (password via `PGPASSWORD`, telemetry disabled) | `supabase start` published Postgres and Kong on all interfaces with no bind option (hard constraint 3); one migration operator and Supabase's own image are kept | [#75](https://github.com/agthumoe/solid-lamp/issues/75), `specs/supabase-local.md` |
 
 Review note (2026-10-15, #51): dashboard design issue reviewed for scope/acceptance only. Second review: explicit Auth and approval lifecycle coverage are recommendations for the planned spec, not confirmed design defects; earlier P2 severity withdrawn. Private visual draft was inaccessible and the spec is absent locally; Phase 4 checkboxes remain unchanged.
 

@@ -33,6 +33,22 @@ dev\:api:
 doctor:
 	pnpm doctor
 
+.PHONY: db\:start
+db\:start:
+	pnpm db:start
+
+.PHONY: db\:stop
+db\:stop:
+	pnpm db:stop
+
+.PHONY: db\:migrate
+db\:migrate:
+	pnpm db:migrate
+
+.PHONY: db\:status
+db\:status:
+	pnpm db:status
+
 .PHONY: test\:doctor
 test\:doctor:
 	pnpm test:doctor

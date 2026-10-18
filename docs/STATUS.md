@@ -5,12 +5,15 @@
 > refresh _Now_, _Next_, _Blocked on owner_, and append one line to the _Session log_.
 > Long-lived facts go elsewhere: phase checklist → `PLAN.md`, hardware facts → `HARDWARE.md`, decisions → `adr/` + `PLAN.md` decisions log.
 
-**Last updated:** 2026-10-18 (Claude, stacked PRs #63 (#59) → #64 (#60) → #65 (#61) → #66 (#62) → #68 (#67) → #70 (#69) → #72 (#71) → #73 brain schema on `feat/73-brain-schema`)
+**Last updated:** 2026-10-18 (Claude, stacked PRs #63 (#59) → #64 (#60) → #65 (#61) → #66 (#62) → #68 (#67) → #70 (#69) → #72 (#71) → #74 (#73) → #75 Supabase local on `feat/75-supabase-local`)
 **Phase:** 1 — Scaffold (Phase 0 accepted 2026-10-15, #47)
 
 ---
 
 ## Now
+
+- **Phase 1 acceptance met locally (2026-10-18):** `pnpm doctor` is green (22 ok), `GET /api/v1/health/ready` reports database/inference/Ollama `ok`, and the `packages/llm` tests pass. Docker Desktop was started at the owner's request; Redis runs healthy on loopback. **Owner go-ahead is needed to merge stacked PRs #63–#76 and to close Phase 1.**
+- **In review (2026-10-18), stacked on PR #74:** [#75](https://github.com/agthumoe/solid-lamp/issues/75) local Supabase ([spec](specs/supabase-local.md)). `supabase start` bound Postgres and Kong to all interfaces, so it was stopped and rejected. Supabase's own Postgres image now runs from compose on `127.0.0.1:54322`. The pinned CLI applies migrations (`pnpm db:migrate`, with the password in `PGPASSWORD` and telemetry off). The migration applied cleanly and `test:int` passed 9/9 on Supabase Postgres. `pnpm db:start/stop/migrate/status` are mirrored in the Makefile. **Owner action:** set `AETHERION_POSTGRES_PASSWORD`, `AETHERION_DATABASE_URL` and `AETHERION_INFERENCE_SECRET` in `.env`, then run `pnpm db:start && pnpm db:migrate`. `docker compose` needs Docker Desktop WSL integration for this distro (doctor warns).
 
 - **In review (2026-10-18), stacked on PR #72:** [#73](https://github.com/agthumoe/solid-lamp/issues/73) first migration ([spec](specs/brain-schema.md)): the brain core (sources, documents, chunks with a generated `tsvector`, links) plus ADR 0002 versioned embeddings (fixed-dimension tables, composite version/dimension FKs, one active version, deferrable active-only search pointer, HNSW indexes, RLS). Adds the `packages/db` Drizzle mirror. `pnpm test:int` replays the history against pgvector Postgres in CI and skips locally until Docker runs.
 
@@ -79,11 +82,12 @@
 
 ## Blocked on owner
 
-| #   | Question                                                                                                                                                                                           | Default if no answer                                                                  |
-| --- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| 3   | Raise WSL RAM to 24 GB via `infra/windows/wslconfig.proposed`?                                                                                                                                     | Don't touch; `deep` role stays disabled                                               |
-| 4   | Docker Desktop is installed but not running (WSL has no `docker compose` plugin until Desktop's WSL integration is on); Tailscale not found on Windows or WSL — confirm how Tailscale is installed | Needed by Phase 1 (Redis, Supabase/migrations, `packages/db`) and Phase 4 (Tailscale) |
-| 6   | Personal vs business/entity accounting; investment scope and data sources                                                                                                                          | Synthetic read-only evaluation; no private ingestion                                  |
+| #   | Question                                                                                                                                                                                                                           | Default if no answer                                                  |
+| --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| 3   | Raise WSL RAM to 24 GB via `infra/windows/wslconfig.proposed`?                                                                                                                                                                     | Don't touch; `deep` role stays disabled                               |
+| 4   | Docker Desktop now runs (started 2026-10-18 at owner request), but this distro's CLI lacks the `docker compose` plugin: turn on WSL integration for it. Tailscale not found on Windows or WSL — confirm how Tailscale is installed | `pnpm db:start` needs compose; Tailscale needed by Phase 4            |
+| 7   | Create `.env` with `AETHERION_POSTGRES_PASSWORD`, `AETHERION_DATABASE_URL` and `AETHERION_INFERENCE_SECRET` (see `.env.example`). Credentials are owner-handled                                                                    | api readiness reports `not_configured` and inference refuses to start |
+| 6   | Personal vs business/entity accounting; investment scope and data sources                                                                                                                                                          | Synthetic read-only evaluation; no private ingestion                  |
 
 ## Repo map (what exists today)
 
@@ -109,6 +113,8 @@ Initial baseline is published to `main` under the owner’s explicit authorizati
 
 ## Gotchas learned
 
+- Never run `supabase start`: it publishes Postgres and Kong on all interfaces. Use `pnpm db:start` (compose, loopback) plus `pnpm db:migrate`.
+- Supabase CLI telemetry is on by default; the repo scripts set `SUPABASE_TELEMETRY_DISABLED=1`. Raw `npx supabase` calls do not.
 - Ollama residency is not stable across roles: after an embed then a chat request, `/api/ps` listed only the chat model (2026-10-18). Observe `/api/ps` around each job; never assume the chat+embed pair is loaded.
 - Scripts run with Node 24's native TS type stripping (`node file.ts`). **No parameter properties, enums, or namespaces**; imports need the `.ts` extension.
 - `sudo` needs a password → the agent can't apply system config; hand the owner the exact command.
@@ -188,3 +194,4 @@ Initial baseline is published to `main` under the owner’s explicit authorizati
 | 2026-10-18 | Claude Code | #69 (stacked on #68): catalog schema + binding validation (6 tests), inference startup gate (manually verified exit on contradiction), doctor catalog/bindings/artifacts checks (2 new tests). No binding or routing change. |
 | 2026-10-18 | Claude Code | #71 (stacked on #70): ESLint `no-restricted-imports` boundaries per structure.md with negative lint tests; structure/compliance docs updated. |
 | 2026-10-18 | Claude Code | #73 (stacked on #72): brain-core migration, `packages/db`, integration replay/parity tests (9) running in CI on pgvector 0.8.7-pg17; local run skipped (Docker stopped). Note: one commit was pushed before `pnpm check` finished (format-only miss) and fixed in the next commit. |
+| 2026-10-18 | Claude Code | Owner asked me to start Docker Desktop. Redis is up on loopback. #75: `supabase start` bound all interfaces, so it was stopped, rejected and its volume removed; Supabase Postgres now runs via compose on loopback with the CLI as migration operator. Migration applied, `test:int` 9/9 on Supabase Postgres, `/health/ready` all ok, doctor green (verified in a throwaway project, since torn down). Phase 1 acceptance met; owner go-ahead pending. |
