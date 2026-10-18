@@ -57,8 +57,8 @@ supabase/      migrations     infra/  compose, systemd, ollama, windows docs    
 | Benchmark regression tests    | `pnpm test:bench`                                                                              | Phase 0        |
 | Documentation/skill integrity | `pnpm docs:check`                                                                              | Phase 0        |
 | Full current quality gates    | `pnpm check` (lint/typecheck/test/docs/compliance/format)                                      | Now            |
-| Dev                           | `pnpm dev`                                                                                     | Phase 1        |
-| Doctor                        | `pnpm doctor`                                                                                  | Phase 1        |
+| Dev (per process)             | `pnpm dev:inference`, `pnpm dev:api` (read `.env`; set `AETHERION_INFERENCE_SECRET`)           | Now            |
+| Doctor                        | `pnpm doctor` (read-only; exit 1 on any failed check)                                          | Now            |
 | Brain                         | `pnpm brain:ingest [--source]`, `pnpm brain:query "..."`, `pnpm brain:stats`                   | Phase 2        |
 
 Every current root script is mirrored in the `Makefile`; future scaffold scripts must be mirrored too.

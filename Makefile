@@ -29,6 +29,14 @@ dev\:inference:
 dev\:api:
 	pnpm dev:api
 
+.PHONY: doctor
+doctor:
+	pnpm doctor
+
+.PHONY: test\:doctor
+test\:doctor:
+	pnpm test:doctor
+
 .PHONY: test\:api
 test\:api:
 	pnpm test:api

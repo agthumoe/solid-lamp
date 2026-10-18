@@ -11,16 +11,18 @@
     "bench:models": "node scripts/bench/models.ts",
     "dev:inference": "node --env-file-if-exists=.env apps/inference/src/main.ts",
     "dev:api": "node --env-file-if-exists=.env apps/api/src/main.ts",
+    "doctor": "node --env-file-if-exists=.env scripts/doctor/doctor.ts",
     "test:bench": "node scripts/bench/integrity.test.ts",
     "test:templates": "node --test 'docs/development/templates/**/*.test.ts'",
     "test:shared": "node --test 'packages/shared/**/*.test.ts'",
     "test:llm": "node --test 'packages/llm/**/*.test.ts'",
     "test:inference": "node --test 'apps/inference/**/*.test.ts'",
     "test:api": "node --test 'apps/api/**/*.test.ts'",
+    "test:doctor": "node --test scripts/doctor/doctor.test.ts",
     "docs:check": "node scripts/check-docs.ts",
     "lint": "eslint . --max-warnings 0",
     "typecheck": "tsc --noEmit",
-    "test": "node scripts/bench/integrity.test.ts && node scripts/compliance/compliance.test.ts && node scripts/evals/integrity.test.ts && node scripts/domain-evals/integrity.test.ts && pnpm test:templates && pnpm test:shared && pnpm test:llm && pnpm test:inference && pnpm test:api",
+    "test": "node scripts/bench/integrity.test.ts && node scripts/compliance/compliance.test.ts && node scripts/evals/integrity.test.ts && node scripts/domain-evals/integrity.test.ts && pnpm test:templates && pnpm test:shared && pnpm test:llm && pnpm test:inference && pnpm test:api && pnpm test:doctor",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "compliance:check": "node scripts/check-compliance.ts",
@@ -38,6 +40,7 @@
     "typescript-eslint": "8.71.2"
   },
   "dependencies": {
+    "@aetherion/shared": "workspace:*",
     "pino": "10.4.0",
     "yaml": "2.8.4",
     "zod": "4.6.7"
