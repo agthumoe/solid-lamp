@@ -177,7 +177,11 @@ await test('import boundaries: public entries only, no app imports, doubles only
   const violations = async (filePath: string, source: string) => {
     const [result] = await eslint.lintText(`${source}\nexport {};\n`, { filePath });
     return (result?.messages ?? [])
-      .filter((message) => message.ruleId === 'no-restricted-imports')
+      .filter(
+        (message) =>
+          message.ruleId === 'no-restricted-imports' ||
+          message.ruleId === 'aetherion/cross-workspace-relative',
+      )
       .map((message) => message.message);
   };
   const imports = (...specifiers: string[]) =>
@@ -196,6 +200,50 @@ await test('import boundaries: public entries only, no app imports, doubles only
       )
     ).length,
     1,
+  );
+  // Sibling-package relative paths, re-exports and dynamic imports are resolved, not pattern-matched.
+  assert.match(
+    (
+      await violations(
+        'packages/shared/src/policy-sample.ts',
+        imports('../../llm/src/gate/llm-gate.ts'),
+      )
+    )[0] ?? '',
+    /leaves packages\/shared for packages\/llm/,
+  );
+  assert.equal(
+    (
+      await violations(
+        'packages/shared/src/policy-sample.ts',
+        "export { LlmGate } from '../../llm/src/gate/llm-gate.ts';",
+      )
+    ).length,
+    1,
+  );
+  assert.equal(
+    (
+      await violations(
+        'apps/api/src/policy-sample.ts',
+        "await import('../../inference/src/server.ts');",
+      )
+    ).length,
+    1,
+  );
+  assert.equal(
+    (
+      await violations(
+        'apps/api/src/policy-sample.ts',
+        imports('../../../packages/llm/src/testing/index.ts'),
+      )
+    ).length,
+    1,
+  );
+  assert.deepEqual(
+    await violations(
+      'packages/llm/src/policy-sample.ts',
+      imports('./gate/llm-gate.ts', '../package.json'),
+    ),
+    [],
   );
   assert.match(
     (await violations('apps/api/src/policy-sample.ts', imports('@aetherion/llm/testing')))[0] ?? '',
