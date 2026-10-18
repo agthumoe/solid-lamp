@@ -44,4 +44,10 @@ await test('a multi-byte character split across chunks decodes intact', async ()
 await test('malformed JSON and oversized lines throw NdjsonError', async () => {
   await assert.rejects(collect(['{"a":1}\n{oops}\n']), NdjsonError);
   await assert.rejects(collect(['"', 'x'.repeat(1_048_577)]), NdjsonError);
+  // A complete oversized line must fail whether it arrives in one chunk or many.
+  const oversized = `"${'x'.repeat(1_048_577)}"\n`;
+  await assert.rejects(collect([oversized]), /size limit/);
+  const parts = oversized.match(/[\s\S]{1,65536}/g) ?? [];
+  await assert.rejects(collect(parts), /size limit/);
+  await assert.rejects(collect([oversized.trimEnd()]), /size limit/);
 });
