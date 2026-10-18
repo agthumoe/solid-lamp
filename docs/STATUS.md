@@ -5,7 +5,7 @@
 > refresh _Now_, _Next_, _Blocked on owner_, and append one line to the _Session log_.
 > Long-lived facts go elsewhere: phase checklist → `PLAN.md`, hardware facts → `HARDWARE.md`, decisions → `adr/` + `PLAN.md` decisions log.
 
-**Last updated:** 2026-10-18 (Claude, #78 follow-up fixes from Codex's re-review of the merged stack)
+**Last updated:** 2026-10-18 (Claude, refreshed Next after merging #63–#79)
 **Phase:** 1 — Scaffold (Phase 0 accepted 2026-10-15, #47)
 
 ---
@@ -76,11 +76,11 @@
 
 ## Next (in order)
 
-1. **Continue Phase 1 ([#3](https://github.com/agthumoe/solid-lamp/issues/3)): scaffold** following the templates; `packages/shared` is done (#52, #56 config loader); `packages/llm` pure core is in review (#57); next are monorepo/Vitest, `apps/inference` Ollama adapter, `pnpm doctor`, `/health`. Create bounded child issues (monorepo, Supabase/migrations with ADR 0002 schema, Redis compose, `packages/shared`/`db`/`llm` with LlmGate, `pnpm doctor`, `/health`). Requires Docker Desktop running (blocked item 4).
-2. Optional synthetic domain baseline: run the 180 domain fixtures on the installed `qwen3.5:9b` per the prompt-v2 protocol, under the GPU lease. This gives the scoped domain evidence Qwen needs before serving domain agents; it is not scheduled until requested.
-3. Finish Phase 0 in [#2](https://github.com/agthumoe/solid-lamp/issues/2): final enabled role/context/residency evidence and owner acceptance. Portfolio direction is approved; phase advancement is not implied. Use a fresh v5 benchmark label on an idle host when needed.
-4. After owner's Phase 0 go-ahead, implement catalog/routing/LlmGate foundation in [#3](https://github.com/agthumoe/solid-lamp/issues/3); source/book grounding in #4; bounded delegation in #5; domain workflows in #9. See the domain-agent plan for acceptance/dependencies.
-5. Follow [TRACKING.md](TRACKING.md); create/select bounded implementation tasks before edits. Compliance PR #14 and research PR #16 are merged; required main checks remain enforced.
+1. **Owner setup** (blocked items 4 and 7): turn on Docker Desktop WSL integration for this distro, then create `.env` from `.env.example` (`AETHERION_POSTGRES_PASSWORD`, `AETHERION_DATABASE_URL`, `AETHERION_INFERENCE_SECRET`). Then run `pnpm db:start && pnpm db:migrate && pnpm doctor`, and start `pnpm dev:inference` and `pnpm dev:api`. Expected: doctor fully green and `/api/v1/health/ready` all `ok`.
+2. **Owner go-ahead to close Phase 1** ([#3](https://github.com/agthumoe/solid-lamp/issues/3)). Acceptance was met locally on 2026-10-18; PRs #63–#79 are merged. Leftover Phase 1 items that do not block: Vitest (added with the first suite that needs it), and domain-role runtime bindings (Phase 3/7).
+3. **Then Phase 2, brain ([#4](https://github.com/agthumoe/solid-lamp/issues/4))**, starting with `docs/specs/brain.md`. Order: backup/restore smoke test on a synthetic database (REVIEW #6), Obsidian ingestion and heading-aware chunking, embeddings through the inference gate into versioned tables, `search_brain` hybrid + RRF, links, `brain:*` commands, the brain MCP server with access checks, and the real-vault eval set last.
+4. Optional, on request: synthetic domain baseline (180 fixtures on `qwen3.5:9b`, under the GPU lease), and Phase 0 closure evidence in [#2](https://github.com/agthumoe/solid-lamp/issues/2).
+5. Follow [TRACKING.md](TRACKING.md): create or select bounded issues before edits.
 
 ## Blocked on owner
 
