@@ -18,6 +18,12 @@ export type ScheduleDeps = {
 
 export type CallOptions = Omit<GateRunOptions, 'label'>;
 
+// The executor's value is wrapped, not spread, so primitives, arrays and classes survive intact.
+export type ScheduledGeneration<T> = {
+  readonly value: T;
+  readonly snapshot: GenerationSnapshot;
+};
+
 // Resolves the role at enqueue time so queued work keeps the identity it was admitted with.
 export const scheduleGeneration = <T>(
   deps: ScheduleDeps,
@@ -27,14 +33,14 @@ export const scheduleGeneration = <T>(
     snapshot: GenerationSnapshot,
     signal: AbortSignal,
   ) => Promise<Result<T, InferenceError>>,
-): Promise<Result<T & { readonly snapshot: GenerationSnapshot }, InferenceError>> => {
+): Promise<Result<ScheduledGeneration<T>, InferenceError>> => {
   const resolved = resolveGenerationRole(deps.config(), role);
   if (!resolved.ok) return Promise.resolve(err(resolved.error));
   const snapshot = resolved.value;
   return deps.gate.run(
     async (signal) => {
       const result = await execute(snapshot, signal);
-      return result.ok ? ok({ ...result.value, snapshot }) : result;
+      return result.ok ? ok({ value: result.value, snapshot }) : result;
     },
     { ...options, label: role },
   );

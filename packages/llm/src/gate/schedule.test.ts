@@ -46,15 +46,31 @@ await test('role identity is snapshotted at enqueue, not at dispatch', async () 
   await hold;
   const result = await queued;
   assert.ok(result.ok);
-  assert.equal(result.value.model, 'qwen3.5:9b');
-  assert.equal(result.value.numCtx, 16384);
+  assert.equal(result.value.value.model, 'qwen3.5:9b');
+  assert.equal(result.value.value.numCtx, 16384);
   assert.deepEqual(result.value.snapshot.options, { temperature: 0.6 });
   assert.ok(Object.isFrozen(result.value.snapshot));
   const later = await scheduleGeneration(deps, 'chat', callOptions('interactive'), (snapshot) =>
     Promise.resolve(ok({ model: snapshot.model })),
   );
   assert.ok(later.ok);
-  assert.equal(later.value.model, 'qwen3:8b');
+  assert.equal(later.value.value.model, 'qwen3:8b');
+});
+
+await test('primitive and array generation results are preserved, not spread', async () => {
+  const deps = { gate: new LlmGate(), config: () => configFor('qwen3.5:9b') };
+  const text = await scheduleGeneration(deps, 'chat', callOptions('interactive'), () =>
+    Promise.resolve(ok('hello')),
+  );
+  assert.ok(text.ok);
+  assert.equal(text.value.value, 'hello');
+  assert.equal(text.value.snapshot.model, 'qwen3.5:9b');
+  const list = await scheduleGeneration(deps, 'router', callOptions('interactive'), () =>
+    Promise.resolve(ok(['a', 'b'])),
+  );
+  assert.ok(list.ok);
+  assert.deepEqual(list.value.value, ['a', 'b']);
+  assert.ok(Array.isArray(list.value.value));
 });
 
 await test('unbound role fails before reaching the gate', async () => {

@@ -5,14 +5,14 @@
 > refresh _Now_, _Next_, _Blocked on owner_, and append one line to the _Session log_.
 > Long-lived facts go elsewhere: phase checklist → `PLAN.md`, hardware facts → `HARDWARE.md`, decisions → `adr/` + `PLAN.md` decisions log.
 
-**Last updated:** 2026-10-17 (Claude, #56 config loader + #57 `packages/llm` core on PR branch `claude/remaining-tasks-github-issues-dlniqm`)
+**Last updated:** 2026-10-18 (Claude, PR #58 review fixes for #57 on branch `claude/remaining-tasks-github-issues-dlniqm`)
 **Phase:** 1 — Scaffold (Phase 0 accepted 2026-10-15, #47)
 
 ---
 
 ## Now
 
-- **In review (2026-10-17):** [#56](https://github.com/agthumoe/solid-lamp/issues/56) `@aetherion/shared` config loader ([spec](specs/config-loader.md): strict `models.yaml` schema, private-network URL guard, `AETHERION_*` env, `.env.example`) and [#57](https://github.com/agthumoe/solid-lamp/issues/57) `@aetherion/llm` pure core ([spec](specs/llm-package.md): role snapshots, `LlmGate`, embedding batches, tool-call validation/repair). `pnpm-workspace.yaml` now links `packages/*`; `yaml` moved to runtime dependencies. `pnpm check` passes. Ollama-dependent gate behavior is deferred to `apps/inference`.
+- **In review (2026-10-17):** [#56](https://github.com/agthumoe/solid-lamp/issues/56) `@aetherion/shared` config loader ([spec](specs/config-loader.md): strict `models.yaml` schema, private-network URL guard, `AETHERION_*` env, `.env.example`) and [#57](https://github.com/agthumoe/solid-lamp/issues/57) `@aetherion/llm` pure core ([spec](specs/llm-package.md): role snapshots, `LlmGate`, embedding batches, tool-call validation/repair). `pnpm-workspace.yaml` now links `packages/*`; `yaml` moved to runtime dependencies. `pnpm check` passes. Ollama-dependent gate behavior is deferred to `apps/inference`. Codex review of head `bc886a2` (2 findings: deadline not enforced at dispatch/settlement when timers lag; `scheduleGeneration` spread corrupted primitive results) fixed with regression tests; result is now `{ value, snapshot }`.
 
 - **Merged 2026-10-16 (owner go-ahead):** PR #50 foundations ([#49](https://github.com/agthumoe/solid-lamp/issues/49)) → `197e3ae`; PR #54 [dashboard spec](specs/dashboard.md) ([#51](https://github.com/agthumoe/solid-lamp/issues/51)) → `ea6d358`; PR #53 `@aetherion/shared` Result/errors/safe logging ([#52](https://github.com/agthumoe/solid-lamp/issues/52), Codex) → `ea1a556`. Stacked PRs were rebased onto `main` and passed CI before merging; #49, #51 and #52 closed. Codex reviews of #50 (4 rounds) and #51 found no open defects; framework Markdown templates stay reference-only until their libraries are installed.
 
@@ -162,3 +162,4 @@ Initial baseline is published to `main` under the owner’s explicit authorizati
 | 2026-10-16 | Codex | Re-reviewed PR #50 head 41b8272 under #49; filename collision fixed and independently verified with actual files. No new findings in latest changes. Full pnpm check, diff whitespace checks and CI pass; no foundations edits, GitHub writes or merge. |
 | 2026-10-16 | Claude Code | Owner said all good: merged PR #50 (#49), rebased and merged stacked PRs #54 (#51) and #53 (#52, Codex) after green CI; closed #49/#51/#52, deleted merged branches. Kept Codex's uncommitted review notes from the main checkout (reconciled into STATUS/PLAN). |
 | 2026-10-17 | Claude Code | Owner selected config loader + `packages/llm`. Created #56/#57 under #3. Implemented `@aetherion/shared` config loader (11 tests) and `@aetherion/llm` core (21 tests: queue limits, priority/starvation, cancellation/teardown, deadlines, snapshots, batch interleave, REVIEW #2 repair negatives). Specs `config-loader.md`, `llm-package.md`; `test:llm` + Makefile mirror. No Ollama/GPU/Docker use. |
+| 2026-10-18 | Claude Code | Fixed Codex PR #58 review (#57): `LlmGate` re-checks deadlines against the clock at dispatch and settlement; `scheduleGeneration` wraps the executor value as `{ value, snapshot }` instead of spreading it. Two regression tests (lagging-timer test fails on the old code). Spec updated; `pnpm check` passes. |

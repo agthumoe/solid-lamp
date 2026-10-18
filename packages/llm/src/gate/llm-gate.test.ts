@@ -184,6 +184,39 @@ await test('deadline covers queue wait and execution', async () => {
     );
 });
 
+await test('deadline is enforced at dispatch and settlement even when timers lag', async () => {
+  let now = 1_000;
+  const gate = new LlmGate({}, () => now);
+  const release = deferred<void>();
+  const active = gate.run(
+    async () => {
+      await release.promise;
+      now += 100; // clock passes the queued deadline before its timer can fire
+      return ok('slow');
+    },
+    { ...options('interactive'), deadline: new Date(now + 50) },
+  );
+  let queuedCalls = 0;
+  const queued = gate.run(
+    () => {
+      queuedCalls++;
+      return Promise.resolve<Outcome>(ok('x'));
+    },
+    { ...options('interactive'), deadline: new Date(now + 50) },
+  );
+  release.resolve();
+  const [settled, dispatched] = await Promise.all([active, queued]);
+  assert.equal(settled.ok ? null : settled.error.code, 'DEADLINE_EXPIRED');
+  assert.equal(dispatched.ok ? null : dispatched.error.code, 'DEADLINE_EXPIRED');
+  assert.equal(queuedCalls, 0);
+  assert.equal(gate.metrics().active, null);
+  const after = await gate.run(() => Promise.resolve<Outcome>(ok('after')), {
+    ...options('interactive'),
+    deadline: new Date(now + 50),
+  });
+  assert.deepEqual(after, ok('after'));
+});
+
 await test('slot is released after error results and thrown jobs', async () => {
   const gate = new LlmGate();
   const failed = await gate.run(

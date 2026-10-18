@@ -17,6 +17,7 @@ export {
   scheduleGeneration,
   type CallOptions,
   type ScheduleDeps,
+  type ScheduledGeneration,
 } from './gate/schedule.ts';
 export { repairToolCalls } from './repair/repair-tool-calls.ts';
 export {

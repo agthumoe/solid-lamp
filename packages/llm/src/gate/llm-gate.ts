@@ -146,9 +146,18 @@ export class LlmGate {
     return interactive.shift();
   }
 
+  #expired(entry: Entry): boolean {
+    return this.#now() >= entry.options.deadline.getTime();
+  }
+
   #dispatch(): void {
     if (this.#active) return;
-    const entry = this.#next();
+    let entry = this.#next();
+    // Timers may lag the clock; work already past its deadline never reaches the executor.
+    while (entry && this.#expired(entry)) {
+      this.#settle(entry, err(terminationError('DEADLINE_EXPIRED')));
+      entry = this.#next();
+    }
     if (!entry) return;
     if (entry.options.priority === 'background') this.#interactiveStreak = 0;
     entry.state = 'active';
@@ -163,6 +172,8 @@ export class LlmGate {
 
   #finish(entry: Entry, deliver: () => void): void {
     this.#active = undefined;
+    // A job that settles after its deadline expired is expired, even if the timer has not fired.
+    if (!entry.terminated && this.#expired(entry)) entry.terminated = 'DEADLINE_EXPIRED';
     this.#completed++;
     if (entry.options.priority === 'interactive') this.#interactiveStreak++;
     deliver();
