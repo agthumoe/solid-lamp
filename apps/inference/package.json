@@ -5,6 +5,8 @@
   "type": "module",
   "dependencies": {
     "@aetherion/llm": "workspace:*",
-    "@aetherion/shared": "workspace:*"
+    "@aetherion/shared": "workspace:*",
+    "fastify": "5.12.7",
+    "fastify-type-provider-zod": "7.0.0"
   }
 }

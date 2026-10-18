@@ -1,8 +1,12 @@
 import {
   collectStream,
+  type ChatMessage,
+  type ChatTool,
   inferenceError,
   type GenerationSnapshot,
   type InferenceError,
+  NdjsonError,
+  readNdjson,
   type NativeToolCall,
   type StreamDone,
   type StreamEvent,
@@ -11,33 +15,13 @@ import {
 import { err, ok, type Result } from '@aetherion/shared';
 import { z } from 'zod';
 
-import { NdjsonError, readNdjson } from './ndjson.ts';
 import { abortError, type OllamaHttp } from './ollama-http.ts';
 import { isTransient, type RetryPolicy, type Sleep } from './retry.ts';
 
-export type ChatMessage = {
-  readonly role: 'system' | 'user' | 'assistant' | 'tool';
-  readonly content: string;
-  readonly images?: readonly string[]; // base64, vision role only
-  readonly tool_calls?: readonly {
-    readonly function: { readonly name: string; readonly arguments: unknown };
-  }[];
-  readonly tool_name?: string;
-};
-
-export type ChatTool = {
-  readonly type: 'function';
-  readonly function: {
-    readonly name: string;
-    readonly description: string;
-    readonly parameters: Readonly<Record<string, unknown>>;
-  };
-};
-
 export type ChatRequest = {
   readonly messages: readonly ChatMessage[];
-  readonly tools?: readonly ChatTool[];
-  readonly think?: boolean; // per-request override of the role default
+  readonly tools?: readonly ChatTool[] | undefined;
+  readonly think?: boolean | undefined; // per-request override of the role default
 };
 
 // The adapter yields everything but `started`; the gate wiring emits that with queue time.

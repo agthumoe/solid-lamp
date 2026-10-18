@@ -9,6 +9,7 @@
   },
   "scripts": {
     "bench:models": "node scripts/bench/models.ts",
+    "dev:inference": "node --env-file-if-exists=.env apps/inference/src/main.ts",
     "test:bench": "node scripts/bench/integrity.test.ts",
     "test:templates": "node --test 'docs/development/templates/**/*.test.ts'",
     "test:shared": "node --test 'packages/shared/**/*.test.ts'",

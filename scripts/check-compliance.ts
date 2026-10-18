@@ -2,6 +2,7 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
+import { pinViolations } from './compliance/package-policy.ts';
 import { sourceViolations } from './compliance/source-policy.ts';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const problems: string[] = [];
@@ -23,14 +24,23 @@ for (const directory of ['scripts', 'apps', 'packages'])
       problems.push(`${path}: ${violation}`);
   }
 const packageSchema = z.object({
-  scripts: z.record(z.string(), z.string()),
+  scripts: z.record(z.string(), z.string()).default({}),
   dependencies: z.record(z.string(), z.string()).default({}),
   devDependencies: z.record(z.string(), z.string()).default({}),
 });
-const pkg = packageSchema.parse(JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')));
-for (const [name, version] of Object.entries({ ...pkg.dependencies, ...pkg.devDependencies })) {
-  if (!/^\d+\.\d+\.\d+(?:-[a-zA-Z0-9.-]+)?$/.test(version))
-    problems.push(`dependency ${name} is not exact-pinned`);
+const readManifest = (path: string) =>
+  packageSchema.parse(JSON.parse(readFileSync(join(root, path), 'utf8')));
+const pkg = readManifest('package.json');
+const workspaceManifests = ['apps', 'packages'].flatMap((directory) =>
+  existsSync(join(root, directory))
+    ? readdirSync(join(root, directory))
+        .map((name) => `${directory}/${name}/package.json`)
+        .filter((path) => existsSync(join(root, path)))
+    : [],
+);
+for (const path of ['package.json', ...workspaceManifests]) {
+  const manifest = path === 'package.json' ? pkg : readManifest(path);
+  problems.push(...pinViolations(path, { ...manifest.dependencies, ...manifest.devDependencies }));
 }
 for (const command of [
   'lint',
