@@ -5,12 +5,14 @@
 > refresh _Now_, _Next_, _Blocked on owner_, and append one line to the _Session log_.
 > Long-lived facts go elsewhere: phase checklist → `PLAN.md`, hardware facts → `HARDWARE.md`, decisions → `adr/` + `PLAN.md` decisions log.
 
-**Last updated:** 2026-10-18 (Claude, Phase 1 accepted by the owner; Phase 2 unblocked)
+**Last updated:** 2026-10-18 (Codex, independent Phase 1 readiness audit under #4)
 **Phase:** 2 — Brain (Phase 1 accepted 2026-10-18; Phase 0 accepted 2026-10-15, #47)
 
 ---
 
 ## Now
+
+- **Independent Phase 1 audit (2026-10-18), [#4](https://github.com/agthumoe/solid-lamp/issues/4), code at `49ec50d`:** full `pnpm check` passes with loopback access; `pnpm run doctor` is 23/23 ok; migration `20261018120000` is applied (local = remote); live API readiness is 200 with database/inference/Ollama `ok`; all nine integration tests pass against isolated synthetic databases on the local Supabase Postgres, with none skipped. Phase 1 runtime acceptance is met. One non-blocking lint follow-up remains: in `packages/shared/src`, an expression-free template literal such as ``void import(`../../llm/src/errors.ts`)`` bypasses `cross-workspace-relative`, while the quoted equivalent is rejected. Reuse `staticSpecifier()` in that rule and add a regression before expanding package boundaries. No new model inference or application-data changes were needed for this audit.
 
 - **Phase 1 accepted (2026-10-18, owner).** On the owner's real `.env` and database: `pnpm run doctor` 23/23 ok, migration applied (local = remote), `/api/v1/health/ready` 200 with database/inference/Ollama `ok`. Epic [#3](https://github.com/agthumoe/solid-lamp/issues/3) is closed; Phase 2 epic [#4](https://github.com/agthumoe/solid-lamp/issues/4) is unblocked.
 
@@ -33,7 +35,7 @@
 
   Codex reviewed every PR at combined head `983af5f`. Five P2 findings were fixed with regression tests before merge: NDJSON oversized complete lines (#63), body-stall deadline mapping in the client (#64), configured nondefault ports in doctor bindings (#66), sibling-package relative imports (#72, via a new `aetherion/cross-workspace-relative` lint rule), and link deletion versus the target check (#74; `links.to_title` is now required). The last was verified against a throwaway pgvector Postgres: it fails on the old migration and passes 9/9 on the fix. There were no findings for #65/#68/#70/#76. Issues #59–#75 are closed as `status:done`.
 
-- **Phase 1 acceptance was met locally before the merge:** `pnpm doctor` green (22 ok), `/api/v1/health/ready` all `ok`, `packages/llm` tests pass. **Owner go-ahead to close Phase 1 is still pending.** Owner actions: create `.env` (`AETHERION_POSTGRES_PASSWORD`, `AETHERION_DATABASE_URL`, `AETHERION_INFERENCE_SECRET`), then `pnpm db:start && pnpm db:migrate`; turn on Docker Desktop WSL integration so `docker compose` works.
+- **Historical pre-merge acceptance:** doctor was green (22 ok), `/api/v1/health/ready` all `ok`, and `packages/llm` tests passed. Owner setup and acceptance are now complete; the independent audit above verifies the current environment.
 
 - **Merged 2026-10-18:** PR #58 → `4b1d578`: [#56](https://github.com/agthumoe/solid-lamp/issues/56) config loader ([spec](specs/config-loader.md)) and [#57](https://github.com/agthumoe/solid-lamp/issues/57) `packages/llm` pure core ([spec](specs/llm-package.md)), including fixes for Codex's two review findings (deadline at dispatch/settlement; `{ value, snapshot }` results).
 
@@ -78,7 +80,7 @@
 
 ## Next (in order)
 
-1. **Phase 2, brain ([#4](https://github.com/agthumoe/solid-lamp/issues/4)), spec first:** write `docs/specs/brain.md` (sources, ingestion, chunking, embedding rebuild/promotion, `search_brain` RRF, citations, MCP access, acceptance), then create bounded child issues.
+1. **Phase 2, brain ([#4](https://github.com/agthumoe/solid-lamp/issues/4)):** the plan/spec draft [`specs/brain.md`](specs/brain.md) ([#84](https://github.com/agthumoe/solid-lamp/issues/84)) awaits owner review and answers to D1–D5. After approval, open the 13 child issues in its order; steps 1–5 need no owner input or real data. Include the remaining relative template-literal import regression/fix before expanding package boundaries.
 2. Backup/restore smoke test on a synthetic database before anything touches the real vault (REVIEW #6, `specs/security-recovery.md` Phase 2).
 3. Obsidian ingestion (watch + full resync, path boundaries, symlink/traversal tests) → heading-aware chunking by content hash → embeddings through the inference gate into a building version → catch-up/coverage → atomic promotion.
 4. `search_brain` hybrid + RRF with pinned version and citations; links → graph; `brain:ingest|query|stats`; brain MCP server with access checks.
@@ -87,12 +89,11 @@
 
 ## Blocked on owner
 
-| #   | Question                                                                                                                                                                                                                           | Default if no answer                                                  |
-| --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| 3   | Raise WSL RAM to 24 GB via `infra/windows/wslconfig.proposed`?                                                                                                                                                                     | Don't touch; `deep` role stays disabled                               |
-| 4   | Docker Desktop now runs (started 2026-10-18 at owner request), but this distro's CLI lacks the `docker compose` plugin: turn on WSL integration for it. Tailscale not found on Windows or WSL — confirm how Tailscale is installed | `pnpm db:start` needs compose; Tailscale needed by Phase 4            |
-| 7   | Create `.env` with `AETHERION_POSTGRES_PASSWORD`, `AETHERION_DATABASE_URL` and `AETHERION_INFERENCE_SECRET` (see `.env.example`). Credentials are owner-handled                                                                    | api readiness reports `not_configured` and inference refuses to start |
-| 6   | Personal vs business/entity accounting; investment scope and data sources                                                                                                                                                          | Synthetic read-only evaluation; no private ingestion                  |
+| #   | Question                                                                                                                                               | Default if no answer                                       |
+| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------- |
+| 3   | Raise WSL RAM to 24 GB via `infra/windows/wslconfig.proposed`?                                                                                         | Don't touch; `deep` role stays disabled                    |
+| 4   | Confirm how Tailscale is installed before Phase 4 remote access. Docker engine/compose and the owner's `.env`/database setup passed the Phase 1 audit. | Keep services on loopback; remote access waits for Phase 4 |
+| 6   | Personal vs business/entity accounting; investment scope and data sources                                                                              | Synthetic read-only evaluation; no private ingestion       |
 
 ## Repo map (what exists today)
 
@@ -205,3 +206,5 @@ Initial baseline is published to `main` under the owner’s explicit authorizati
 | 2026-10-18 | Claude Code | #78: fixed Codex re-review findings (dynamic-import boundaries, error-body deadline mapping) with regressions; ignored `.claude/` worktrees in lint/format/git. Full local `pnpm check` passes; the inference suite was stable across 3 runs. |
 | 2026-10-18 | Claude Code | Owner ran `pnpm doctor` and got pnpm 11's built-in. #81: docs/Makefile now use `pnpm run doctor`, plus a docs-check guard against script names shadowed by pnpm built-ins. On the owner's real `.env`: `pnpm run doctor` 23/23 ok, migration applied (local = remote), `/api/v1/health/ready` 200 with all `ok`. |
 | 2026-10-18 | Claude Code | Owner accepted Phase 1. Merged #82 (`pnpm run doctor`). Closed epic #3; unblocked #4; recorded leftovers (Vitest deferred, domain bindings → #5/#9, restore tests → Phase 2). |
+| 2026-10-18 | Codex | Selected open #4 for the owner-requested Phase 1 readiness audit at 49ec50d. Full check passes; doctor 23/23, migration status matched, live API ready, and real Postgres integration 9/9 with no skips. Previous template-literal relative-import lint finding remains reproducible and non-blocking for Phase 2 planning; recorded it before further package expansion. Corrected stale Docker/credentials/acceptance blockers. Test databases were removed by the harness; application code/config/data unchanged. |
+| 2026-10-18 | Claude Code | Owner asked for a Phase 2 plan, no code. #84: drafted `docs/specs/brain.md` (scope, worker/BullMQ/inference/MCP topology, ingestion and embedding lifecycle, `search_brain` RRF contract, recovery gate, evals, risks, decisions D1–D5, 13-step breakdown). PR open for review; no implementation issues opened yet. |

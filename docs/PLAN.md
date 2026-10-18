@@ -48,6 +48,8 @@ GitHub tasks/milestones: [TRACKING.md](TRACKING.md). Standards: [development han
 
 **Accepted by the owner on 2026-10-18.** Acceptance on the owner's machine: `pnpm run doctor` 23/23 ok, `/api/v1/health/ready` all `ok`, `packages/llm` tests pass. Merged PRs #58–#82.
 
+Independent Codex audit under [#4](https://github.com/agthumoe/solid-lamp/issues/4), 2026-10-18 at `49ec50d`: full `pnpm check` passes; doctor 23/23 ok; migration local = remote; live readiness 200/all dependencies ok; real Supabase Postgres integration tests 9/9 pass with no skips. Phase 2 can proceed. Retain the relative template-literal import lint follow-up before expanding package boundaries; Vitest, runtime domain bindings and backup/restore remain deferred as recorded below.
+
 - [x] Foundations: ARCHITECTURE, structure, AI orchestration, testing, templates, ADR 0005 (proposed) ([#49](https://github.com/agthumoe/solid-lamp/issues/49), pending review)
 - [x] pnpm monorepo (`apps/*`, `packages/*`), strict TS, ESLint, Makefile mirror (import boundaries [#71](https://github.com/agthumoe/solid-lamp/issues/71)/[#78](https://github.com/agthumoe/solid-lamp/issues/78)). Vitest is deferred until a suite needs it (2026-10-18 decision); `node:test` covers everything today.
 - [x] Development handbook/ADR 0003 and issue-first AGENTS adopted; `CLAUDE.md` imports canonical instructions
@@ -77,7 +79,7 @@ GitHub tasks/milestones: [TRACKING.md](TRACKING.md). Standards: [development han
 
 ## Phase 2: Brain
 
-- [ ] Spec `docs/specs/brain.md`
+- [ ] Spec `docs/specs/brain.md` (draft for owner review, [#84](https://github.com/agthumoe/solid-lamp/issues/84): scope, topology, search contract, recovery gate, decisions D1–D5, 13-step task breakdown)
 - [ ] Spec/task for book extraction and dated official-source ingestion; edition/location/jurisdiction/freshness citations (domain-agent plan)
 - [ ] Obsidian ingestion (chokidar watch + full resync), frontmatter, wikilinks, tags, embeds
 - [ ] Heading-aware chunking, incremental by content hash, renames/deletes
