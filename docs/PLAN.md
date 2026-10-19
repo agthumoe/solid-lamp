@@ -79,7 +79,7 @@ Independent Codex audit under [#4](https://github.com/agthumoe/solid-lamp/issues
 
 ## Phase 2: Brain
 
-- [ ] Spec `docs/specs/brain.md` (draft for owner review, [#84](https://github.com/agthumoe/solid-lamp/issues/84): scope, topology, search contract, recovery gate, decisions D1–D5, 13-step task breakdown)
+- [ ] Spec `docs/specs/brain.md` (revised draft for owner/peer review, [#84](https://github.com/agthumoe/solid-lamp/issues/84), PR #85: [review findings](reviews/phase2-plan-pr85.md), [proposed ADR 0006](adr/0006-brain-version-bound-retrieval.md), version-bound RPC/chunk sets, recovery/path/latency gates, decisions D1–D5 and 13-step breakdown; no implementation approved)
 - [ ] Spec/task for book extraction and dated official-source ingestion; edition/location/jurisdiction/freshness citations (domain-agent plan)
 - [ ] Obsidian ingestion (chokidar watch + full resync), frontmatter, wikilinks, tags, embeds
 - [ ] Heading-aware chunking, incremental by content hash, renames/deletes

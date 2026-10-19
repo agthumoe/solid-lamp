@@ -5,12 +5,14 @@
 > refresh _Now_, _Next_, _Blocked on owner_, and append one line to the _Session log_.
 > Long-lived facts go elsewhere: phase checklist → `PLAN.md`, hardware facts → `HARDWARE.md`, decisions → `adr/` + `PLAN.md` decisions log.
 
-**Last updated:** 2026-10-18 (Codex, independent Phase 1 readiness audit under #4)
+**Last updated:** 2026-10-18 (Codex, Phase 2 plan review and proposed revisions under #84)
 **Phase:** 2 — Brain (Phase 1 accepted 2026-10-18; Phase 0 accepted 2026-10-15, #47)
 
 ---
 
 ## Now
+
+- **Phase 2 plan review, [#84](https://github.com/agthumoe/solid-lamp/issues/84), PR [#85](https://github.com/agthumoe/solid-lamp/pull/85) at `0ed2f69`:** [review](reviews/phase2-plan-pr85.md) records seven design findings and required tests. Revised [brain spec](specs/brain.md) and [proposed ADR 0006](adr/0006-brain-version-bound-retrieval.md) add pinned embedding profiles, immutable revision/chunker sets, transactional promotion and work recovery, safe file-open requirements, absolute relevance evidence, protected API/excerpt contracts and complete latency/recovery/real-data gates. These are local documentation proposals for another reviewer, not owner approval; no implementation issues, code changes, inference runs or real-vault reads. D1–D5 remain open.
 
 - **Independent Phase 1 audit (2026-10-18), [#4](https://github.com/agthumoe/solid-lamp/issues/4), code at `49ec50d`:** full `pnpm check` passes with loopback access; `pnpm run doctor` is 23/23 ok; migration `20261018120000` is applied (local = remote); live API readiness is 200 with database/inference/Ollama `ok`; all nine integration tests pass against isolated synthetic databases on the local Supabase Postgres, with none skipped. Phase 1 runtime acceptance is met. One non-blocking lint follow-up remains: in `packages/shared/src`, an expression-free template literal such as ``void import(`../../llm/src/errors.ts`)`` bypasses `cross-workspace-relative`, while the quoted equivalent is rejected. Reuse `staticSpecifier()` in that rule and add a regression before expanding package boundaries. No new model inference or application-data changes were needed for this audit.
 
@@ -80,7 +82,7 @@
 
 ## Next (in order)
 
-1. **Phase 2, brain ([#4](https://github.com/agthumoe/solid-lamp/issues/4)):** the plan/spec draft [`specs/brain.md`](specs/brain.md) ([#84](https://github.com/agthumoe/solid-lamp/issues/84)) awaits owner review and answers to D1–D5. After approval, open the 13 child issues in its order; steps 1–5 need no owner input or real data. Include the remaining relative template-literal import regression/fix before expanding package boundaries.
+1. **Phase 2, brain ([#4](https://github.com/agthumoe/solid-lamp/issues/4)):** review the revised [`specs/brain.md`](specs/brain.md), [Codex findings](reviews/phase2-plan-pr85.md) and [proposed ADR 0006](adr/0006-brain-version-bound-retrieval.md) under [#84](https://github.com/agthumoe/solid-lamp/issues/84). Obtain plan approval and D1–D5 as needed before opening the 13 implementation issues. Tasks 1–12 use synthetic data; task 13 alone may read the real vault after explicit D1/D2 and the complete recovery/path gate. Include the remaining relative template-literal import regression/fix before expanding package boundaries.
 2. Backup/restore smoke test on a synthetic database before anything touches the real vault (REVIEW #6, `specs/security-recovery.md` Phase 2).
 3. Obsidian ingestion (watch + full resync, path boundaries, symlink/traversal tests) → heading-aware chunking by content hash → embeddings through the inference gate into a building version → catch-up/coverage → atomic promotion.
 4. `search_brain` hybrid + RRF with pinned version and citations; links → graph; `brain:ingest|query|stats`; brain MCP server with access checks.
@@ -94,6 +96,7 @@
 | 3   | Raise WSL RAM to 24 GB via `infra/windows/wslconfig.proposed`?                                                                                         | Don't touch; `deep` role stays disabled                    |
 | 4   | Confirm how Tailscale is installed before Phase 4 remote access. Docker engine/compose and the owner's `.env`/database setup passed the Phase 1 audit. | Keep services on loopback; remote access waits for Phase 4 |
 | 6   | Personal vs business/entity accounting; investment scope and data sources                                                                              | Synthetic read-only evaluation; no private ingestion       |
+| P2  | Review revised Phase 2 plan/ADR 0006; supply D1–D5 where known, with D2 a separate explicit real-vault approval                                        | Documentation only; no implementation or real-vault reads  |
 
 ## Repo map (what exists today)
 
@@ -208,3 +211,4 @@ Initial baseline is published to `main` under the owner’s explicit authorizati
 | 2026-10-18 | Claude Code | Owner accepted Phase 1. Merged #82 (`pnpm run doctor`). Closed epic #3; unblocked #4; recorded leftovers (Vitest deferred, domain bindings → #5/#9, restore tests → Phase 2). |
 | 2026-10-18 | Codex | Selected open #4 for the owner-requested Phase 1 readiness audit at 49ec50d. Full check passes; doctor 23/23, migration status matched, live API ready, and real Postgres integration 9/9 with no skips. Previous template-literal relative-import lint finding remains reproducible and non-blocking for Phase 2 planning; recorded it before further package expansion. Corrected stale Docker/credentials/acceptance blockers. Test databases were removed by the harness; application code/config/data unchanged. |
 | 2026-10-18 | Claude Code | Owner asked for a Phase 2 plan, no code. #84: drafted `docs/specs/brain.md` (scope, worker/BullMQ/inference/MCP topology, ingestion and embedding lifecycle, `search_brain` RRF contract, recovery gate, evals, risks, decisions D1–D5, 13-step breakdown). PR open for review; no implementation issues opened yet. |
+| 2026-10-18 | Codex | Owner requested review and Markdown updates for other reviewers. Selected open #84 and verified PR #85 head 0ed2f69. Added review findings/required tests, revised brain.md and proposed ADR 0006; updated PLAN/STATUS. Documentation changes only; plan/ADR and D1–D5 remain unapproved. No application code, migration, runtime config, real-data access, implementation issues, commit/push/merge or PR comment. |
