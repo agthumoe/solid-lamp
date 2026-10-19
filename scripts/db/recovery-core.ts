@@ -34,6 +34,12 @@ export const loadRecoveryConfig = (env: Readonly<Record<string, string | undefin
     'AETHERION_MAINTENANCE_DATABASE_URL',
   );
   const primary = parsePostgresUrl(env.AETHERION_DATABASE_URL, 'AETHERION_DATABASE_URL');
+  // Every connection and the container tools must reach one server; the runtime identity
+  // check (recovery.ts) proves the container half before any write.
+  if (url.hostname !== primary.hostname || (url.port || '5432') !== (primary.port || '5432'))
+    throw new Error(
+      'AETHERION_DATABASE_URL and AETHERION_MAINTENANCE_DATABASE_URL must name the same server',
+    );
   const keep = Number(env.AETHERION_BACKUP_KEEP || 7);
   if (!Number.isInteger(keep) || keep < 1 || keep > 90)
     throw new Error('AETHERION_BACKUP_KEEP must be an integer from 1 to 90');

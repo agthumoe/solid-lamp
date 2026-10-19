@@ -50,6 +50,9 @@ await test('missing, public or malformed settings are refused', () => {
     { ...env, AETHERION_BACKUP_KEEP: '0' },
     { ...env, AETHERION_BACKUP_KEEP: 'many' },
     { ...env, AETHERION_PG_CONTAINER: 'x; rm -rf /' },
+    // Primary and maintenance on different servers (port or host).
+    { ...env, AETHERION_DATABASE_URL: 'postgresql://app:x@127.0.0.1:54323/aetherion' },
+    { ...env, AETHERION_DATABASE_URL: 'postgresql://app:x@100.64.0.1:54322/aetherion' },
   ];
   for (const values of cases) assert.throws(() => loadRecoveryConfig(values));
 });

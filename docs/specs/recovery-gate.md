@@ -39,7 +39,9 @@ Both run `pg_dump`/`pg_restore`/`psql` inside the Postgres container (`AETHERION
 
 5. **Comparison.** The restored database must match every manifest field. The search config must point at an `active` version, and every probe must return the same chunk IDs in the same order. Any difference fails, with the field named.
 6. **What is dumped and restored.** Only the application schemas (`public`, `supabase_migrations`). Supabase-owned schemas belong to the image. The new target gets the `vector` extension, and its empty `public` is replaced by the dump's. Default-privilege entries (`DEFAULT ACL`, which Supabase's `supabase_admin` sets on its own databases) are skipped at restore time, because the maintenance role cannot recreate them and the application does not depend on them. Table grants and RLS policies are restored. The filtered restore list is copied into the container with `docker cp`.
-7. **Cleanup.** The restored database is dropped after verification, pass or fail, unless `--keep` is given for inspection.
+7. **One server.** `AETHERION_DATABASE_URL` and `AETHERION_MAINTENANCE_DATABASE_URL` must name the same host and port. Before any file or database write, `db:backup` and `db:restore-verify` compare the server identity (postmaster start time) seen over the SQL connection with the one `psql` sees inside `AETHERION_PG_CONTAINER`; a mismatch is refused.
+8. **No overwrite.** A backup is written under private `.aetherion-partial-*` temp names and published with `link()`, which never replaces an existing name: manifest, then checksum, then dump. A same-second collision or any failure leaves existing backups byte-for-byte intact and removes the temp files and any names this run published.
+9. **Cleanup.** The restored database is dropped after verification, pass or fail, unless `--keep` is given for inspection.
 
 ## Verification (2026-10-18)
 
@@ -72,10 +74,14 @@ The primary is never overwritten in place. The vault and repos stay the source o
   - checksum mismatch;
   - manifest comparison naming each differing field;
   - retention selection;
-  - URL parsing that keeps the password out of the arguments.
+  - URL parsing that keeps the password out of the arguments;
+  - primary and maintenance URLs on different servers are refused.
 - Integration (`pnpm test:int`, CI pgvector service; locally a throwaway container), on a migrated synthetic database with documents, chunks, links, an active 1024 version and vectors:
   - backup → restore-verify passes and drops the restored database;
   - a tampered dump is refused before any database is created;
   - an existing target and the primary name are refused with zero writes;
   - a restored database that drifts from the manifest fails with the field named;
-  - files have private permissions.
+  - files have private permissions;
+  - a container that is not the configured server is refused with zero writes;
+  - same-second and concurrent backups never replace an existing backup;
+  - a failed dump leaves the previous backup intact and no partial files.

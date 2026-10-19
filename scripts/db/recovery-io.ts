@@ -93,7 +93,8 @@ export const dumpDatabase = async (
       database,
     ],
     target.password,
-    { stdout: createWriteStream(file, { mode: 0o600 }) },
+    // Exclusive create: never truncate an existing file.
+    { stdout: createWriteStream(file, { mode: 0o600, flags: 'wx' }) },
   );
 };
 
@@ -106,7 +107,7 @@ export const restorableEntries = (list: string): string =>
     .filter((line) => !/^\d+;.* DEFAULT ACL /.test(line))
     .join('\n');
 
-const captured = (args: string[], password: string, stdin: NodeJS.ReadableStream) => {
+const captured = (args: string[], password: string, stdin?: NodeJS.ReadableStream) => {
   const chunks: Buffer[] = [];
   const sink = new Writable({
     write(chunk: Buffer, _encoding, done) {
@@ -114,10 +115,43 @@ const captured = (args: string[], password: string, stdin: NodeJS.ReadableStream
       done();
     },
   });
-  return run(args, password, { stdin, stdout: sink }).then(() =>
+  return run(args, password, { ...(stdin ? { stdin } : {}), stdout: sink }).then(() =>
     Buffer.concat(chunks).toString('utf8'),
   );
 };
+
+// The postmaster start time (microseconds) identifies one running server: two servers that
+// answer with the same value are, in practice, the same instance.
+const IDENTITY_QUERY = 'select extract(epoch from pg_postmaster_start_time())::text';
+
+/** Identity of the server a SQL connection reaches. */
+export const sqlServerIdentity = async (sql: Sql): Promise<string> => {
+  const [row] = await sql.unsafe<{ id: string }[]>(`${IDENTITY_QUERY} as id`);
+  return row?.id ?? '';
+};
+
+/** Identity of the server the container's pg_dump/pg_restore reach. Read-only. */
+export const containerServerIdentity = async (
+  container: string,
+  target: MaintenanceTarget,
+): Promise<string> =>
+  (
+    await captured(
+      [
+        ...execArgs(container, target, ['psql']),
+        '-X',
+        '-A',
+        '-t',
+        '-v',
+        'ON_ERROR_STOP=1',
+        '-d',
+        target.database,
+        '-c',
+        IDENTITY_QUERY,
+      ],
+      target.password,
+    )
+  ).trim();
 
 export const restoreDatabase = async (
   container: string,

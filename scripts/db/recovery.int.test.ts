@@ -3,9 +3,9 @@
 // as CI's pgvector service provides. Synthetic data only.
 import assert from 'node:assert/strict';
 import { createHash, randomBytes } from 'node:crypto';
-import { mkdtemp, readdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
+import { access, chmod, mkdtemp, readdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { delimiter, join } from 'node:path';
 import test from 'node:test';
 
 import { createDatabaseClient } from '@aetherion/db';
@@ -223,3 +223,116 @@ await test('retention keeps the newest dumps with their companions', { skip }, a
     await cleanup();
   }
 });
+
+// Puts a `docker` shim first on PATH for `body`. The shim runs `script` (sh) with the real
+// docker in $REAL_DOCKER, so a test can fake one tool and pass every other call through.
+const withDockerShim = async (script: string, body: () => Promise<void>) => {
+  const path = process.env.PATH ?? '';
+  let real = '';
+  for (const dir of path.split(delimiter))
+    if (
+      !real &&
+      (await access(join(dir, 'docker')).then(
+        () => true,
+        () => false,
+      ))
+    )
+      real = join(dir, 'docker');
+  const bin = await mkdtemp(join(tmpdir(), 'aetherion-shim-'));
+  await writeFile(join(bin, 'docker'), `#!/bin/sh\nREAL_DOCKER='${real}'\n${script}\n`);
+  await chmod(join(bin, 'docker'), 0o700);
+  process.env.PATH = `${bin}${delimiter}${path}`;
+  try {
+    await body();
+  } finally {
+    process.env.PATH = path;
+    await rm(bin, { recursive: true, force: true });
+  }
+};
+
+const snapshot = async (dir: string): Promise<Record<string, string>> => {
+  const files: Record<string, string> = {};
+  for (const name of (await readdir(dir)).sort())
+    files[name] = createHash('sha256')
+      .update(await readFile(join(dir, name)))
+      .digest('hex');
+  return files;
+};
+
+// Answers the identity query as some other server would; everything else is real.
+const OTHER_SERVER = `case "$*" in *pg_postmaster_start_time*) echo 1.5; exit 0;; esac
+exec "$REAL_DOCKER" "$@"`;
+
+await test(
+  'a container that is not the configured server is refused with zero writes',
+  { skip },
+  async () => {
+    const { config, backupDir, cleanup } = await setup();
+    const now = new Date('2026-10-18T08:00:00Z');
+    try {
+      const result = await backup(config);
+      const before = await snapshot(backupDir);
+
+      await withDockerShim(OTHER_SERVER, async () => {
+        await assert.rejects(backup(config, now), /is not the server/);
+        await assert.rejects(restoreVerify(config, result.file, { now }), /is not the server/);
+      });
+
+      assert.deepEqual(await snapshot(backupDir), before);
+      assert.equal(await databaseExists(restoreTargetName(now)), false);
+    } finally {
+      await cleanup();
+    }
+  },
+);
+
+await test(
+  'same-second and concurrent backups never replace an existing backup',
+  { skip },
+  async () => {
+    const { config, backupDir, cleanup } = await setup();
+    const now = new Date('2026-10-18T09:00:00Z');
+    try {
+      const first = await backup(config, now);
+      const before = await snapshot(backupDir);
+
+      await assert.rejects(backup(config, now), /already exists; nothing replaced/);
+      assert.deepEqual(await snapshot(backupDir), before);
+
+      const later = new Date('2026-10-18T10:00:00Z');
+      const results = await Promise.allSettled([backup(config, later), backup(config, later)]);
+      assert.deepEqual(results.map((r) => r.status).sort(), ['fulfilled', 'rejected']);
+      const files = await readdir(backupDir);
+      assert.equal(files.length, 6);
+      assert.equal(files.filter((name) => name.startsWith('.')).length, 0);
+      assert.deepEqual((await restoreVerify(config, first.file)).problems, []);
+      const winner = results.find((r) => r.status === 'fulfilled');
+      assert.ok(winner?.status === 'fulfilled');
+      assert.deepEqual((await restoreVerify(config, winner.value.file)).problems, []);
+    } finally {
+      await cleanup();
+    }
+  },
+);
+
+await test(
+  'a failed dump leaves the previous backup intact and no partials',
+  { skip },
+  async () => {
+    const { config, backupDir, cleanup } = await setup();
+    const now = new Date('2026-10-18T11:00:00Z');
+    try {
+      await backup(config, now);
+      const before = await snapshot(backupDir);
+
+      await withDockerShim(
+        `case "$*" in *pg_dump*) echo garbage; exit 1;; esac\nexec "$REAL_DOCKER" "$@"`,
+        () => assert.rejects(backup(config, now), /pg_dump exited 1/),
+      );
+
+      assert.deepEqual(await snapshot(backupDir), before);
+    } finally {
+      await cleanup();
+    }
+  },
+);
