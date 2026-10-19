@@ -1,6 +1,10 @@
 packages:
   - 'apps/*'
   - 'packages/*'
+# Native install scripts stay off unless reviewed. msgpackr-extract is an optional speed-up for
+# BullMQ's msgpackr, which falls back to plain JavaScript (#92).
+allowBuilds:
+  msgpackr-extract: false
 minimumReleaseAgeExclude:
   - '@typescript-eslint/eslint-plugin@8.71.2'
   - '@typescript-eslint/parser@8.71.2'

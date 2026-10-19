@@ -20,11 +20,13 @@ Six process entry points (`web`, `api`, `inference`, `worker`, `channels`, `mcp`
 | Validation   | `zod` (already installed)                                          | 4.6.7                                  |
 | Logging      | `pino` (already installed)                                         | 10.4.0                                 |
 | DB access    | `drizzle-orm`, `drizzle-kit` (diff/introspect only), `postgres`    | 0.45.4, 0.31.11, 3.4.9                 |
-| Queues       | `bullmq`, `ioredis`                                                | 6.3.15, 6.0.0                          |
+| Queues       | `bullmq`, `ioredis`                                                | 6.3.10 (was 6.3.15), 6.0.0             |
 | Agent graphs | `@langchain/langgraph`, `@langchain/langgraph-checkpoint-postgres` | 1.5.0, 1.1.0                           |
 | MCP          | `@modelcontextprotocol/sdk`                                        | 1.32.1                                 |
 | Frontend     | `next`, `react`, `tailwindcss`, `@tanstack/react-query`, `zustand` | 16.4.1, 19.3.1, 4.3.3, 5.104.2, 5.0.15 |
 | Tests        | `vitest`, `@playwright/test`                                       | 5.0.4, 1.64.1                          |
+
+BullMQ is pinned to 6.3.10, not 6.3.15: 6.3.15 was four days old at install, 6.3.10 had been out 19 days (#92). Its optional native `msgpackr-extract` install script is not allowed (`allowBuilds: false`); msgpackr falls back to JavaScript.
 
 Installed so far: `fastify` 5.12.7 and `fastify-type-provider-zod` 7.0.0 in `apps/inference` ([#60](https://github.com/agthumoe/solid-lamp/issues/60)). The internal inference stream uses NDJSON; `@fastify/sse` stays planned for `apps/api`.
 
