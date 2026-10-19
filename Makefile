@@ -65,6 +65,10 @@ test\:int:
 test\:api:
 	pnpm test:api
 
+.PHONY: test\:brain
+test\:brain:
+	pnpm test:brain
+
 .PHONY: test\:inference
 test\:inference:
 	pnpm test:inference
