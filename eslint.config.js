@@ -50,10 +50,11 @@ const crossWorkspaceRelative = {
   },
   create(context) {
     const from = workspaceOf(context.filename);
+    // Same specifier rule as restricted-dynamic-import: string or expression-free template.
     const check = (source) => {
-      if (source?.type !== 'Literal' || typeof source.value !== 'string') return;
-      if (!source.value.startsWith('.')) return;
-      const to = workspaceOf(resolve(dirname(context.filename), source.value));
+      const specifier = staticSpecifier(source);
+      if (specifier === undefined || !specifier.startsWith('.')) return;
+      const to = workspaceOf(resolve(dirname(context.filename), specifier));
       if (to !== from) context.report({ node: source, messageId: 'cross', data: { from, to } });
     };
     return {
