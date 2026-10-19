@@ -15,7 +15,7 @@ One agent per issue. Claim by adding `agent:claude` (or `agent:codex`) and switc
 
 ## Next
 
-Unclaimed and unblocked: #88 path boundary, #89 parsing, #90 chunker, #92 worker. Blocked: #91 and #94 on ADR 0006 acceptance; #99 on owner D1/D2.
+Codex holds #89 (parsing) and #90 (chunker). Unclaimed and unblocked: #92 worker skeleton; #93 watcher after #88/#92. Blocked: #91 and #94 on ADR 0006 acceptance; #99 on owner D1/D2.
 
 ## Blocked
 
@@ -26,7 +26,8 @@ Unclaimed and unblocked: #88 path boundary, #89 parsing, #90 chunker, #92 worker
 
 ## Session log
 
-| Date       | Session     | Summary                                                                                                                                                                                                                                                                     |
-| ---------- | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 2026-10-18 | Claude Code | Committed Codex's plan review/ADR 0006 to PR #85. Opened #86–#99 from the revised breakdown with blocked states; created `agent:*` labels; claimed #86 and #87. #86: `cross-workspace-relative` now uses `staticSpecifier()`, with a regression that fails on the old rule. |
-| 2026-10-18 | Claude Code | #87 recovery gate: `db:backup`/`db:restore-verify` with checksum, target safety, manifest compare and retention; integration tests on pgvector and the Supabase image; found and fixed the Supabase default-ACL restore failure. PR #101.                                   |
+| Date       | Session     | Summary                                                                                                                                                                                                                                                                             |
+| ---------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-10-18 | Claude Code | Committed Codex's plan review/ADR 0006 to PR #85. Opened #86–#99 from the revised breakdown with blocked states; created `agent:*` labels; claimed #86 and #87. #86: `cross-workspace-relative` now uses `staticSpecifier()`, with a regression that fails on the old rule.         |
+| 2026-10-18 | Claude Code | #87 recovery gate: `db:backup`/`db:restore-verify` with checksum, target safety, manifest compare and retention; integration tests on pgvector and the Supabase image; found and fixed the Supabase default-ACL restore failure. PR #101.                                           |
+| 2026-10-18 | Claude Code | Mistakenly labelled #89 while Codex held it (a chained command didn't stop on the existing claim); reverted within a minute (label removed, comment deleted). Claims are now checked in a separate step. #88: sources config + fail-closed verified reader with race test; PR #102. |
