@@ -1,10 +1,10 @@
 // Verified root-relative reader for ingestion sources (#88, docs/specs/source-boundary.md).
-// The check is on the opened descriptor, not the path string: after an O_NOFOLLOW open, the
-// kernel's path for that descriptor must be under the root, so a swapped ancestor or root
-// directory is caught even when the swap races the open. Content is never logged.
+// Traversal starts from a descriptor held on the approved root and opens one component at a
+// time with O_NOFOLLOW (an openat walk through /proc/self/fd), so neither a swapped root nor
+// a symlinked ancestor can redirect it. The opened descriptor's kernel path is then checked
+// to be exactly root + relative path. Content is never logged.
 import { constants, type Stats } from 'node:fs';
-import { open, readdir, readlink, realpath, stat, statfs } from 'node:fs/promises';
-import { join } from 'node:path';
+import { open, readdir, readlink, realpath, stat, statfs, type FileHandle } from 'node:fs/promises';
 
 export type RefusalReason =
   | 'invalid_path'
@@ -84,6 +84,15 @@ export const createSourceReader = async (options: SourceReaderOptions) => {
     throw new UnsupportedSourceError(
       `source root filesystem 0x${fsType.toString(16)} is not supported for verified reads`,
     );
+  // Held for the reader's lifetime: every open and listing is relative to this exact directory.
+  const rootHandle = await open(rootReal, OPEN_FLAGS | constants.O_DIRECTORY);
+  const held = await rootHandle.stat();
+  if (held.dev !== rootStat.dev || held.ino !== rootStat.ino) {
+    await rootHandle.close();
+    throw new UnsupportedSourceError('source root changed during creation');
+  }
+  const viaRoot = (relative: string) =>
+    relative ? `/proc/self/fd/${rootHandle.fd}/${relative}` : `/proc/self/fd/${rootHandle.fd}`;
   const excluded = new Set(options.excludeDirs);
   const included = new Set(options.includeExtensions.map((ext) => ext.toLowerCase()));
   const timeoutMs = options.readTimeoutMs ?? 5_000;
@@ -115,29 +124,50 @@ export const createSourceReader = async (options: SourceReaderOptions) => {
     }
   };
 
+  // Opens each component relative to its parent's descriptor, never following a symlink.
+  // Every intermediate must be a directory on the root's device.
+  const openBeneathRoot = async (relativePath: string): Promise<FileHandle | RefusalReason> => {
+    const parts = relativePath.split('/');
+    const opened: FileHandle[] = [];
+    let parent = rootHandle;
+    try {
+      for (const [index, part] of parts.entries()) {
+        const handle = await open(`/proc/self/fd/${parent.fd}/${part}`, OPEN_FLAGS);
+        if (index === parts.length - 1) return handle;
+        opened.push(handle);
+        const info = await handle.stat();
+        if (!info.isDirectory()) return 'not_found';
+        if (info.dev !== rootStat.dev) return 'outside_root';
+        parent = handle;
+      }
+      return 'not_found';
+    } catch (error) {
+      const code = (error as NodeJS.ErrnoException).code;
+      if (code === 'ELOOP') return 'symlink';
+      if (code === 'ENOENT' || code === 'ENOTDIR') return 'not_found';
+      return 'unreadable';
+    } finally {
+      await Promise.all(opened.map((handle) => handle.close()));
+    }
+  };
+
   const open_ = async (relativePath: string): Promise<OpenResult> => {
     const blocked = policy(relativePath);
     if (blocked) return refuse(relativePath, blocked);
     if (!(await rootUnchanged())) return refuse(relativePath, 'root_changed');
 
-    let handle;
+    const handle = await openBeneathRoot(relativePath);
+    if (typeof handle === 'string') return refuse(relativePath, handle);
     try {
-      handle = await open(join(rootReal, relativePath), OPEN_FLAGS);
-    } catch (error) {
-      const code = (error as NodeJS.ErrnoException).code;
-      if (code === 'ELOOP') return refuse(relativePath, 'symlink');
-      if (code === 'ENOENT' || code === 'ENOTDIR') return refuse(relativePath, 'not_found');
-      return refuse(relativePath, 'unreadable');
-    }
-    try {
+      // The approved root must still be at its path, and the kernel's path for this exact
+      // descriptor must be root + the requested path: no component was moved or aliased.
+      if (!(await rootUnchanged())) return refuse(relativePath, 'root_changed');
+      const opened = await readlink(`/proc/self/fd/${handle.fd}`);
+      if (opened !== `${rootReal}/${relativePath}`) return refuse(relativePath, 'outside_root');
       const info: Stats = await handle.stat();
       if (!info.isFile()) return refuse(relativePath, 'not_regular_file');
       if (info.nlink !== 1) return refuse(relativePath, 'hardlink');
       if (info.size > options.maxFileBytes) return refuse(relativePath, 'too_large');
-      // The kernel's path for this exact descriptor: the object we would read.
-      const opened = await readlink(`/proc/self/fd/${handle.fd}`);
-      if (!isWithin(rootReal, opened) || opened === rootReal)
-        return refuse(relativePath, 'outside_root');
 
       const buffer = Buffer.alloc(info.size);
       const deadline = AbortSignal.timeout(timeoutMs);
@@ -170,15 +200,18 @@ export const createSourceReader = async (options: SourceReaderOptions) => {
     }
   };
 
-  /** Deterministic advisory listing; symlinked entries are never followed. */
+  /**
+   * Deterministic advisory listing; symlinked entries are never followed. A listing that would
+   * exceed the entry or depth bound throws: a truncated scan must never look complete.
+   */
   const list = async (): Promise<string[]> => {
     const maxEntries = options.maxListEntries ?? 200_000;
     const maxDepth = options.maxDepth ?? 32;
     const found: string[] = [];
     let seen = 0;
     const walk = async (relativeDir: string, depth: number): Promise<void> => {
-      if (depth > maxDepth) return;
-      const entries = await readdir(join(rootReal, relativeDir), { withFileTypes: true });
+      if (depth > maxDepth) throw new UnsupportedSourceError('source exceeds the depth limit');
+      const entries = await readdir(viaRoot(relativeDir), { withFileTypes: true });
       entries.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
       for (const entry of entries) {
         if (++seen > maxEntries) throw new UnsupportedSourceError('source exceeds the entry limit');
@@ -198,6 +231,7 @@ export const createSourceReader = async (options: SourceReaderOptions) => {
     open: open_,
     list,
     refusals: (): Readonly<Partial<Record<RefusalReason, number>>> => Object.fromEntries(refusals),
+    close: () => rootHandle.close(),
   };
 };
 

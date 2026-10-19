@@ -1,9 +1,11 @@
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
+import { promises as fsPromises } from 'node:fs';
 import { link, mkdir, mkdtemp, rename, rm, symlink, writeFile } from 'node:fs/promises';
+import { syncBuiltinESMExports } from 'node:module';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import test from 'node:test';
+import test, { mock } from 'node:test';
 
 import {
   createSourceReader,
@@ -115,7 +117,7 @@ await test('a final symlink, even to a file inside the root, is refused', async 
   }
 });
 
-await test('an ancestor directory symlinked outside the root is refused after open', async () => {
+await test('an ancestor directory symlinked outside the root is refused', async () => {
   const { reader, root, base, cleanup } = await fixture();
   try {
     await symlink(join(base, 'outside'), join(root, 'linked'));
@@ -123,7 +125,28 @@ await test('an ancestor directory symlinked outside the root is refused after op
 
     const result = await r.open('linked/a.md');
 
-    assert.deepEqual(result, { ok: false, reason: 'outside_root', relativePath: 'linked/a.md' });
+    assert.deepEqual(result, { ok: false, reason: 'symlink', relativePath: 'linked/a.md' });
+  } finally {
+    await cleanup();
+  }
+});
+
+await test('an ancestor symlink into an excluded folder inside the root is refused', async () => {
+  const { reader, root, cleanup } = await fixture();
+  try {
+    await mkdir(join(root, 'AI-Inbox'));
+    await mkdir(join(root, 'private'));
+    for (const dir of ['.obsidian', 'AI-Inbox', 'private'])
+      await writeFile(join(root, dir, 'Secret.md'), SECRET);
+    await symlink(join(root, '.obsidian'), join(root, 'Alias'));
+    await symlink('AI-Inbox', join(root, 'Inbox'));
+    await symlink(join(root, 'private'), join(root, 'notes', 'Mine'));
+    const r = await reader({ excludeDirs: ['.obsidian', '.trash', 'AI-Inbox', 'private'] });
+
+    for (const path of ['Alias/Secret.md', 'Inbox/Secret.md', 'notes/Mine/Secret.md']) {
+      const result = await r.open(path);
+      assert.deepEqual(result, { ok: false, reason: 'symlink', relativePath: path });
+    }
   } finally {
     await cleanup();
   }
@@ -184,7 +207,7 @@ await test('racing directory/symlink swaps never yield outside content', async (
       600,
     );
     assert.ok(
-      (reasons.get('outside_root') ?? 0) + (reasons.get('not_found') ?? 0) > 0,
+      (reasons.get('symlink') ?? 0) + (reasons.get('not_found') ?? 0) > 0,
       JSON.stringify([...reasons]),
     );
     assert.ok((reasons.get('read-inside') ?? 0) > 0, JSON.stringify([...reasons]));
@@ -256,5 +279,62 @@ await test('listing is sorted, skips symlinks, excluded folders and other extens
     await assert.rejects((await reader({ maxListEntries: 3 })).list(), /entry limit/);
   } finally {
     await cleanup();
+  }
+});
+
+await test('a depth-limited listing throws instead of looking complete', async () => {
+  const { reader, root, cleanup } = await fixture();
+  try {
+    await rm(join(root, 'notes'), { recursive: true });
+    await mkdir(join(root, 'Deep'));
+    await writeFile(join(root, 'Deep', 'Note.md'), 'deep\n');
+
+    await assert.rejects((await reader({ maxDepth: 0 })).list(), /depth limit/);
+    assert.deepEqual(await (await reader({ maxDepth: 1 })).list(), ['Deep/Note.md', 'top.md']);
+  } finally {
+    await cleanup();
+  }
+});
+
+// Interposes the builtin `open` used by the reader: `beforeOpen` runs once, just before the
+// first open whose path ends with `suffix`, then the real open proceeds.
+const interposeOpen = (suffix: string, beforeOpen: () => Promise<void>) => {
+  const real = fsPromises.open;
+  let fired = false;
+  mock.method(fsPromises, 'open', async (...args: Parameters<typeof real>) => {
+    if (!fired && String(args[0]).endsWith(suffix)) {
+      fired = true;
+      await beforeOpen();
+    }
+    return real(...args);
+  });
+  syncBuiltinESMExports();
+  return () => {
+    mock.restoreAll();
+    syncBuiltinESMExports();
+  };
+};
+
+await test('a root replaced between the root check and the open is never read', async () => {
+  for (const path of ['top.md', 'notes/a.md']) {
+    const { reader, root, base, cleanup } = await fixture();
+    const replacement = join(base, 'replacement');
+    await mkdir(join(replacement, 'notes'), { recursive: true });
+    await writeFile(join(replacement, 'top.md'), SECRET);
+    await writeFile(join(replacement, 'notes', 'a.md'), SECRET);
+    const r = await reader();
+    const restore = interposeOpen(path.split('/')[0] ?? path, async () => {
+      await rename(root, join(base, 'vault-aside'));
+      await rename(replacement, root);
+    });
+    try {
+      const result = await r.open(path);
+
+      assert.deepEqual(result, { ok: false, reason: 'root_changed', relativePath: path });
+    } finally {
+      restore();
+      await r.close();
+      await cleanup();
+    }
   }
 });

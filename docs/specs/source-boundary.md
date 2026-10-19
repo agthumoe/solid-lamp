@@ -33,18 +33,18 @@ sources:
 
 ## Reader (`createSourceReader`, `packages/brain/src/sources`)
 
-Created from a resolved root, it captures the root's `realpath`, device and inode, and refuses filesystems outside an allowlist (ext4, btrfs, xfs, tmpfs, overlayfs). 9p (`/mnt/c`) is refused.
+Created from a resolved root, it captures the root's `realpath`, device and inode, holds an `O_NOFOLLOW` descriptor on the root for its lifetime (released by `close()`), and refuses filesystems outside an allowlist (ext4, btrfs, xfs, tmpfs, overlayfs). 9p (`/mnt/c`) is refused.
 
 `open(relativePath)` returns the file's content, size and identity, or a typed refusal. The order is fixed:
 
 1. **Path shape:** a root-relative POSIX path; no absolute path, NUL, backslash, empty segment, `.` or `..`. Rejected without touching the filesystem (`invalid_path`).
 2. **Policy:** an excluded directory segment or a non-included extension is rejected before any filesystem call (`excluded`, `extension`).
 3. **Root unchanged:** the root's realpath, device and inode still match; otherwise `root_changed`.
-4. **Open:** `O_RDONLY | O_NOFOLLOW | O_NONBLOCK`. A final-component symlink fails (`symlink`), and a FIFO cannot block the reader.
-5. **Verify the opened object, not the path:** `fstat` must be a regular file (`not_regular_file`) with a single link (`hardlink`) and at most `max_file_bytes` (`too_large`, nothing read). Then the kernel path of the descriptor (`/proc/self/fd/<fd>`) must be under `rootReal + '/'` (`outside_root`). This check is on the object that will be read, so a swapped ancestor or root directory is caught even when the swap races the open.
+4. **Open beneath the held root:** one component at a time, each relative to its parent's descriptor (`/proc/self/fd/<parent>/<name>`, an `openat` walk), with `O_RDONLY | O_NOFOLLOW | O_NONBLOCK`. A symlink at **any** component fails (`symlink`), so an alias such as `Alias -> .obsidian` cannot bypass exclusions; every intermediate must be a directory on the root's device. A FIFO cannot block the reader. Because the walk starts from the held root descriptor, replacing the root pathname cannot redirect it.
+5. **Verify the opened object, not the path:** the root pathname must still be the held root (`root_changed`), and the kernel path of the descriptor (`/proc/self/fd/<fd>`) must equal `rootReal + '/' + relativePath` exactly (`outside_root`), so no component was moved or aliased. `fstat` must be a regular file (`not_regular_file`) with a single link (`hardlink`) and at most `max_file_bytes` (`too_large`, nothing read).
 6. **Read** from that descriptor only, bounded by size and `readTimeoutMs` (`timeout`). Content must be valid UTF-8 (`invalid_encoding`). The descriptor is always closed.
 
-`list()` walks the root deterministically (sorted). It does not follow symlinked entries, skips excluded directories before descending, and keeps only included extensions. It is bounded by entry count and depth. Listing is advisory: every read still goes through `open`.
+`list()` walks the root deterministically (sorted). It does not follow symlinked entries, skips excluded directories before descending, and keeps only included extensions. It is bounded by entry count and depth; exceeding either bound throws, so a truncated scan can never be mistaken for a complete one (and cannot authorize tombstoning). Listing is advisory: every read still goes through `open`.
 
 Refusals are counted by reason for `brain:stats`. Paths and reasons may be logged; file content never is.
 
@@ -58,6 +58,8 @@ Refusals are counted by reason for `brain:stats`. Paths and reasons may be logge
   - excluded directories and extensions;
   - a final symlink;
   - an ancestor directory symlink to outside;
+  - an ancestor symlink into `.obsidian`, `AI-Inbox` or a user-excluded folder inside the root;
+  - the root replaced between the root check and the open (interposed `open`);
   - the root replaced by a symlink after creation;
   - a symlink/directory swap stress race in which no read ever returns outside content;
   - FIFO without blocking;
@@ -66,4 +68,5 @@ Refusals are counted by reason for `brain:stats`. Paths and reasons may be logge
   - an unsupported filesystem refused;
   - invalid UTF-8;
   - a timeout;
-  - `list()` skipping symlinks and excluded paths, and bounded.
+  - `list()` skipping symlinks and excluded paths, and bounded;
+  - a depth-limited `list()` throws instead of returning a partial result.
