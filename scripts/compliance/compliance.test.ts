@@ -230,6 +230,16 @@ await test('import boundaries: public entries only, no app imports, doubles only
     ).length,
     1,
   );
+  // An expression-free template literal is the same static path (#86).
+  assert.equal(
+    (
+      await violations(
+        'packages/shared/src/policy-sample.ts',
+        'void import(`../../llm/src/errors.ts`);',
+      )
+    ).length,
+    1,
+  );
   assert.equal(
     (
       await violations(

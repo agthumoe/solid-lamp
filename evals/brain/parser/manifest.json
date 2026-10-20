@@ -1,0 +1,285 @@
+{
+  "schemaVersion": 1,
+  "notes": [
+    {
+      "path": "Home.md",
+      "tags": ["home"],
+      "aliases": ["Hub"],
+      "targets": ["Projects/Alpha", "Projects/Beta", "Archive/Same"],
+      "warnings": []
+    },
+    {
+      "path": "Projects/Alpha.md",
+      "tags": ["project/alpha"],
+      "aliases": ["First project"],
+      "targets": ["../Home"],
+      "warnings": []
+    },
+    {
+      "path": "Projects/Beta.md",
+      "tags": ["project/beta"],
+      "aliases": [],
+      "targets": ["Images/Diagram.png"],
+      "warnings": []
+    },
+    {
+      "path": "Archive/Same.md",
+      "tags": ["archive"],
+      "aliases": [],
+      "targets": [],
+      "warnings": []
+    },
+    {
+      "path": "Current/Same.md",
+      "tags": ["current"],
+      "aliases": [],
+      "targets": [],
+      "warnings": []
+    },
+    {
+      "path": "Edges/Code.md",
+      "tags": ["visible"],
+      "aliases": [],
+      "targets": [],
+      "warnings": []
+    },
+    {
+      "path": "Edges/Unsafe.md",
+      "tags": ["safe"],
+      "aliases": [],
+      "targets": [],
+      "warnings": ["INVALID_FRONTMATTER"]
+    },
+    {
+      "path": "Edges/Broken.md",
+      "tags": ["recovered"],
+      "aliases": [],
+      "targets": [],
+      "warnings": ["INVALID_FRONTMATTER"]
+    },
+    {
+      "path": "Edges/CRLF.md",
+      "tags": ["windows"],
+      "aliases": ["CRLF"],
+      "targets": ["Home"],
+      "warnings": []
+    },
+    {
+      "path": "Edges/Adversarial.md",
+      "tags": ["untrusted"],
+      "aliases": [],
+      "targets": ["Home"],
+      "warnings": []
+    },
+    {
+      "path": "Edges/Unicode.md",
+      "tags": ["日本語"],
+      "aliases": [],
+      "targets": ["café"],
+      "warnings": []
+    },
+    {
+      "path": "café.md",
+      "tags": ["unicode"],
+      "aliases": [],
+      "targets": [],
+      "warnings": []
+    },
+    {
+      "path": "Topics/01-gardening.md",
+      "tags": ["synthetic", "topic/gardening"],
+      "aliases": ["Synthetic gardening"],
+      "targets": ["Home"],
+      "warnings": []
+    },
+    {
+      "path": "Topics/02-astronomy.md",
+      "tags": ["synthetic", "topic/astronomy"],
+      "aliases": ["Synthetic astronomy"],
+      "targets": ["Home"],
+      "warnings": []
+    },
+    {
+      "path": "Topics/03-cycling.md",
+      "tags": ["synthetic", "topic/cycling"],
+      "aliases": ["Synthetic cycling"],
+      "targets": ["Home"],
+      "warnings": []
+    },
+    {
+      "path": "Topics/04-cooking.md",
+      "tags": ["synthetic", "topic/cooking"],
+      "aliases": ["Synthetic cooking"],
+      "targets": ["Home"],
+      "warnings": []
+    },
+    {
+      "path": "Topics/05-music.md",
+      "tags": ["synthetic", "topic/music"],
+      "aliases": ["Synthetic music"],
+      "targets": ["Home"],
+      "warnings": []
+    },
+    {
+      "path": "Topics/06-robotics.md",
+      "tags": ["synthetic", "topic/robotics"],
+      "aliases": ["Synthetic robotics"],
+      "targets": ["Home"],
+      "warnings": []
+    },
+    {
+      "path": "Topics/07-maps.md",
+      "tags": ["synthetic", "topic/maps"],
+      "aliases": ["Synthetic maps"],
+      "targets": ["Home"],
+      "warnings": []
+    },
+    {
+      "path": "Topics/08-weather.md",
+      "tags": ["synthetic", "topic/weather"],
+      "aliases": ["Synthetic weather"],
+      "targets": ["Home"],
+      "warnings": []
+    },
+    {
+      "path": "Topics/09-photography.md",
+      "tags": ["synthetic", "topic/photography"],
+      "aliases": ["Synthetic photography"],
+      "targets": ["Home"],
+      "warnings": []
+    },
+    {
+      "path": "Topics/10-reading.md",
+      "tags": ["synthetic", "topic/reading"],
+      "aliases": ["Synthetic reading"],
+      "targets": ["Home"],
+      "warnings": []
+    },
+    {
+      "path": "Topics/11-woodwork.md",
+      "tags": ["synthetic", "topic/woodwork"],
+      "aliases": ["Synthetic woodwork"],
+      "targets": ["Home"],
+      "warnings": []
+    },
+    {
+      "path": "Topics/12-ceramics.md",
+      "tags": ["synthetic", "topic/ceramics"],
+      "aliases": ["Synthetic ceramics"],
+      "targets": ["Home"],
+      "warnings": []
+    },
+    {
+      "path": "Topics/13-baking.md",
+      "tags": ["synthetic", "topic/baking"],
+      "aliases": ["Synthetic baking"],
+      "targets": ["Home"],
+      "warnings": []
+    },
+    {
+      "path": "Topics/14-hiking.md",
+      "tags": ["synthetic", "topic/hiking"],
+      "aliases": ["Synthetic hiking"],
+      "targets": ["Home"],
+      "warnings": []
+    },
+    {
+      "path": "Topics/15-drawing.md",
+      "tags": ["synthetic", "topic/drawing"],
+      "aliases": ["Synthetic drawing"],
+      "targets": ["Home"],
+      "warnings": []
+    },
+    {
+      "path": "Topics/16-birds.md",
+      "tags": ["synthetic", "topic/birds"],
+      "aliases": ["Synthetic birds"],
+      "targets": ["Home"],
+      "warnings": []
+    },
+    {
+      "path": "Topics/17-geology.md",
+      "tags": ["synthetic", "topic/geology"],
+      "aliases": ["Synthetic geology"],
+      "targets": ["Home"],
+      "warnings": []
+    },
+    {
+      "path": "Topics/18-puzzles.md",
+      "tags": ["synthetic", "topic/puzzles"],
+      "aliases": ["Synthetic puzzles"],
+      "targets": ["Home"],
+      "warnings": []
+    },
+    {
+      "path": "Topics/19-theatre.md",
+      "tags": ["synthetic", "topic/theatre"],
+      "aliases": ["Synthetic theatre"],
+      "targets": ["Home"],
+      "warnings": []
+    },
+    {
+      "path": "Topics/20-sailing.md",
+      "tags": ["synthetic", "topic/sailing"],
+      "aliases": ["Synthetic sailing"],
+      "targets": ["Home"],
+      "warnings": []
+    },
+    {
+      "path": "Topics/21-history.md",
+      "tags": ["synthetic", "topic/history"],
+      "aliases": ["Synthetic history"],
+      "targets": ["Home"],
+      "warnings": []
+    },
+    {
+      "path": "Topics/22-languages.md",
+      "tags": ["synthetic", "topic/languages"],
+      "aliases": ["Synthetic languages"],
+      "targets": ["Home"],
+      "warnings": []
+    },
+    {
+      "path": "Topics/23-chess.md",
+      "tags": ["synthetic", "topic/chess"],
+      "aliases": ["Synthetic chess"],
+      "targets": ["Home"],
+      "warnings": []
+    },
+    {
+      "path": "Topics/24-tea.md",
+      "tags": ["synthetic", "topic/tea"],
+      "aliases": ["Synthetic tea"],
+      "targets": ["Home"],
+      "warnings": []
+    },
+    {
+      "path": "Topics/25-flowers.md",
+      "tags": ["synthetic", "topic/flowers"],
+      "aliases": ["Synthetic flowers"],
+      "targets": ["Home"],
+      "warnings": []
+    },
+    {
+      "path": "Topics/26-camping.md",
+      "tags": ["synthetic", "topic/camping"],
+      "aliases": ["Synthetic camping"],
+      "targets": ["Home"],
+      "warnings": []
+    },
+    {
+      "path": "Topics/27-sewing.md",
+      "tags": ["synthetic", "topic/sewing"],
+      "aliases": ["Synthetic sewing"],
+      "targets": ["Home"],
+      "warnings": []
+    },
+    {
+      "path": "Topics/28-orchards.md",
+      "tags": ["synthetic", "topic/orchards"],
+      "aliases": ["Synthetic orchards"],
+      "targets": ["Home"],
+      "warnings": []
+    }
+  ]
+}

@@ -77,6 +77,10 @@ test\:api:
 test\:inference:
 	pnpm test:inference
 
+.PHONY: test\:brain
+test\:brain:
+	pnpm test:brain
+
 .PHONY: docs\:check
 docs\:check:
 	pnpm docs:check
