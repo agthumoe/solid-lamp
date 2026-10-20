@@ -39,8 +39,7 @@
     "compliance:check": "node scripts/check-compliance.ts",
     "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm evals:check && pnpm evals:domain:check && pnpm docs:check && pnpm compliance:check && pnpm format:check",
     "evals:check": "node scripts/evals/check.ts",
-    "evals:domain:check": "node scripts/domain-evals/check.ts",
-    "test:brain": "node --test 'packages/brain/**/*.test.ts'"
+    "evals:domain:check": "node scripts/domain-evals/check.ts"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
