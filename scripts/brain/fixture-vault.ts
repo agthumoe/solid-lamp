@@ -4,8 +4,8 @@
 // (git-ignored). The fixtures themselves are never modified.
 import { createHash } from 'node:crypto';
 import { existsSync } from 'node:fs';
-import { mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
-import { dirname, isAbsolute, join, relative, resolve } from 'node:path';
+import { mkdir, readdir, readFile, realpath, rm, writeFile } from 'node:fs/promises';
+import { basename, dirname, isAbsolute, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { z } from 'zod';
@@ -31,10 +31,29 @@ const manifestSchema = z.object({
 
 const sha256 = (bytes: Buffer) => createHash('sha256').update(bytes).digest('hex');
 
+const isWithin = (parent: string, child: string) => {
+  const path = relative(parent, child);
+  return path === '' || (!path.startsWith('..') && !isAbsolute(path));
+};
+
+// The filesystem location a path refers to: the real path of its nearest existing ancestor plus
+// the not-yet-existing remainder. A lexical check alone misses symlinked ancestors.
+const physicalPath = async (path: string): Promise<string> => {
+  const missing: string[] = [];
+  let current = path;
+  while (!existsSync(current)) {
+    missing.unshift(basename(current));
+    const parent = dirname(current);
+    if (parent === current) break;
+    current = parent;
+  }
+  return join(await realpath(current), ...missing);
+};
+
 export const materializeFixtureVault = async (target: string): Promise<number> => {
-  const destination = resolve(target);
-  const inside = relative(fixtures, destination);
-  if (!inside.startsWith('..') && !isAbsolute(inside))
+  // Every later step uses the physical path, so the check and the writes name the same place.
+  const destination = await physicalPath(resolve(target));
+  if (isWithin(await realpath(fixtures), destination))
     throw new Error('refusing to write inside evals/brain/parser');
   if (existsSync(destination)) {
     const entries = await readdir(destination);

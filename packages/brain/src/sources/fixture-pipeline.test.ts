@@ -3,7 +3,7 @@
 // the reader returned, checked against the fixture manifest.
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, readdir, readFile, rm, symlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import test from 'node:test';
@@ -113,6 +113,14 @@ await test('materializing is repeatable but never clears a directory it did not 
       () => materialize(join(repo, 'evals/brain/parser/out')),
       /inside evals\/brain\/parser/,
     );
+
+    // A symlinked ancestor that points into the fixtures is refused too, and nothing is written.
+    const alias = join(base, 'alias');
+    await symlink(join(repo, 'evals/brain/parser'), alias);
+    const before = await readdir(join(repo, 'evals/brain/parser'));
+    assert.throws(() => materialize(join(alias, 'out')), /inside evals\/brain\/parser/);
+    assert.throws(() => materialize(alias), /inside evals\/brain\/parser/);
+    assert.deepEqual(await readdir(join(repo, 'evals/brain/parser')), before);
   } finally {
     await rm(base, { recursive: true, force: true });
   }
