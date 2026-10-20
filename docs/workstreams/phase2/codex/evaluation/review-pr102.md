@@ -21,3 +21,7 @@ Create `.obsidian/Secret.md` under a temporary root, exclude `.obsidian`, then m
 Existing source/config tests pass 16/16; required CI is green. All reproductions used temporary invented data; no real-vault read, host-service change or author-worktree edit was performed. The builtin interposition affected only the independent review process and was restored in `finally`.
 
 PR #102 also proposes broad root `test:brain` wiring, which can cover #89/#90/#98 after its fixes land. It points its enabled fixture source at `evals/brain/vault`; parser #89 instead stores raw `.md.fixture` snapshots plus a virtual-path manifest in `evals/brain/parser`. Coordinate/materialize a runnable synthetic vault during integration rather than assuming that root exists. Parser and scorer have no filesystem fallback.
+
+## Re-review at ef81bc4
+
+The original three findings are fixed and all 15 reader tests pass. One new P1 remains: recursive `list()` uses multi-component `readdir` paths below the held root descriptor; replacing a listed descendant with an outside symlink before recursion returns outside filenames as a successful complete scan. Deterministically reproduced with temporary invented directories and a readdir interposer, and posted to PR #102. Bind directory enumeration to verified individual directory descriptors and fail raced/root-changed scans. Claude retains the fix.

@@ -28,13 +28,14 @@
     "docs:check": "node scripts/check-docs.ts",
     "lint": "eslint . --max-warnings 0",
     "typecheck": "tsc --noEmit",
-    "test": "node scripts/bench/integrity.test.ts && node scripts/compliance/compliance.test.ts && node scripts/evals/integrity.test.ts && node scripts/domain-evals/integrity.test.ts && pnpm test:templates && pnpm test:shared && pnpm test:llm && pnpm test:inference && pnpm test:api && pnpm test:doctor && pnpm test:db",
+    "test": "node scripts/bench/integrity.test.ts && node scripts/compliance/compliance.test.ts && node scripts/evals/integrity.test.ts && node scripts/domain-evals/integrity.test.ts && pnpm test:templates && pnpm test:shared && pnpm test:llm && pnpm test:inference && pnpm test:api && pnpm test:doctor && pnpm test:db && pnpm test:brain",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "compliance:check": "node scripts/check-compliance.ts",
     "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm evals:check && pnpm evals:domain:check && pnpm docs:check && pnpm compliance:check && pnpm format:check",
     "evals:check": "node scripts/evals/check.ts",
-    "evals:domain:check": "node scripts/domain-evals/check.ts"
+    "evals:domain:check": "node scripts/domain-evals/check.ts",
+    "test:brain": "node --test 'packages/brain/**/*.test.ts'"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

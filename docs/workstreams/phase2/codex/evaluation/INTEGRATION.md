@@ -2,6 +2,8 @@
 
 Branch `feat/98-brain-eval-scoring`; worktree `/tmp/aetherion-workbenches/phase2-codex-98`; base 3304897. Issue [#98](https://github.com/agthumoe/solid-lamp/issues/98) stays `agent:codex`, `status:in-progress`. Publishing this independent scoring slice under the owner’s review-and-merge authorization; the complete pre-vault gate remains pending.
 
+Delivery update: PR #106 merged with passing current-main CI. #107 supplies public exports, exact dependency declarations and broad root brain-test wiring; combined tests pass 61/61. #98 remains in progress for its actual search runner and complete safety gates; fake scores never establish readiness.
+
 ## Implemented
 
 `packages/brain/src/evaluation/index.ts` exports `scoreBrainEvaluation`, `validateEvaluationRun` and their types. Inputs are strict schema-validated runs with frozen identity labels and separated calibration/held-out questions. Metrics use distinct chunk IDs and verified exact source/path/heading matches. Errors/incomplete states never become correct abstentions; duplicate/missing observations cannot silently change denominators. Aggregate output omits private question/citation data. Undefined metrics stay null. Fake/degraded evidence cannot certify semantic recall, and no score establishes Phase 2 acceptance.

@@ -4,11 +4,11 @@ Task [#89](https://github.com/agthumoe/solid-lamp/issues/89), `agent:codex`, `st
 
 ## Now
 
-Claimed after confirming Claude owns #86/#87 and #89 has no other claim. Implemented bounded parsing, scoped/ambiguous resolution and 40 synthetic fixtures under [the contract](spec.md). Direct tests pass 25/25; full pnpm check passes with loopback access. The owner has now authorized publication, review fixes and merging clean PRs. Publishing this isolated implementation for review/integration. See [handoff](INTEGRATION.md). #90 remains independently reviewable in its existing worktree. Reviewed PR #100 at 5bddaef with no findings; later 90ae909 is handoff-only. Reviewed newly completed recovery PR #101 at 8c014f1 and posted P1 instance-identity and P2 backup-collision findings; Claude owns the fixes.
+Implementation PR #104 is merged with passing required CI on an up-to-date head. The owner authorized review fixes, publication and clean merges. Public package/quality-gate integration is tracked in [#107](https://github.com/agthumoe/solid-lamp/issues/107); 61 combined brain tests and full `pnpm check` pass. #89 remains in progress for configured synthetic fixture-source materialization/integration. No real data, model, DB or shared-service changes. Claude retains source, recovery and worker ownership.
 
 ## Next
 
-Publish checks/integration requests in #89; retain the claim until review/integration. Track Claude's fixes on PR #101 without editing their files. Shared package bootstrap/root test wiring remain integration work; do not modify another agent's task files.
+#89 remains in progress for configured synthetic fixture-source materialization/integration. Use #107 public exports and root brain tests after integration delivery. Keep the GitHub claim and coordinate any fixture/GPU/runner work before touching shared resources.
 
 ## Blocked
 
@@ -23,3 +23,5 @@ No real-data, host-service or GPU access needed. Publication and clean-PR merges
 | 2026-10-18 | Codex | Implemented #89 parser/resolver plus forty raw synthetic fixtures; 25 direct tests and full pnpm check pass. Posted #100 clean review and #101 two findings with non-database reproductions. Claude additionally claimed #88; no overlap with that task. Shared bootstrap/root wiring remains integration work. |
 
 | 2026-10-19 | Codex | Owner authorized publishing, addressing reviews and merging clean PRs. Refreshed main and kept this task isolated from Claude. Real-data, proposed ADR and final phase gates are unchanged. |
+
+Integration follow-up: [#107](https://github.com/agthumoe/solid-lamp/issues/107) wires package/public exports and all brain suites into root checks. Combined public-contract verification passes 61/61 tests and full `pnpm check`; no real-vault, model, DB or shared-service changes. PRs: parser #104, chunker #105, scorer #106 (merged). #89 fixture-source materialization, #90 measured embed-token calibration and #98 final safety gate remain pending.
