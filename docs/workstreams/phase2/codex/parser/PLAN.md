@@ -13,4 +13,5 @@ Task [#89](https://github.com/agthumoe/solid-lamp/issues/89).
 Claude's recovery #87 and lint #86 remain theirs; #91/#94 stay blocked on ADR 0006. No real-vault access or shared root edits are part of this task.
 
 - [x] Owner authorized publication, review fixes and merging clean PRs.
-- [ ] Publish and verify the PR against current main; merge when required checks pass.
+- [x] Publish implementation PR and verify review threads.
+- [ ] Merge with required current-main CI.

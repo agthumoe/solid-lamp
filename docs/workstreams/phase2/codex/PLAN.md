@@ -13,4 +13,5 @@ Task: [#90](https://github.com/agthumoe/solid-lamp/issues/90).
 No model, database, worker, parser or source-boundary work is claimed. No phase advancement, real-vault access, commit, push or merge is implied.
 
 - [x] Owner authorized publication, review fixes and merging clean PRs.
-- [ ] Publish and verify the PR against current main; merge when required checks pass.
+- [x] Publish implementation PR and verify review threads.
+- [ ] Merge with required current-main CI.

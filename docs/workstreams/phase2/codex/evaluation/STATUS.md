@@ -23,3 +23,5 @@ End-to-end retrieval/live-model/latency/race/restart/Redis-loss and final-schema
 | 2026-10-18 | Codex | Implemented and verified scoring slice: 14/14 direct tests and full pnpm check pass; private destination is git-ignored. Reviewed newly completed source PR #102: posted root-swap, excluded-alias and silent depth-truncation findings after synthetic reproductions; existing reader/config tests pass 16/16. No Claude files/services/data were changed. |
 
 | 2026-10-19 | Codex | Owner authorized publishing, addressing reviews and merging clean PRs. Refreshed main and kept this task isolated from Claude. Real-data, proposed ADR and final phase gates are unchanged. |
+
+Integration follow-up: [#107](https://github.com/agthumoe/solid-lamp/issues/107) wires package/public exports and all brain suites into root checks. Combined public-contract verification passes 61/61 tests and full `pnpm check`; no real-vault, model, DB or shared-service changes. PRs: parser #104, chunker #105, scorer #106 (merged). #89 fixture-source materialization, #90 measured embed-token calibration and #98 final safety gate remain pending.

@@ -12,4 +12,4 @@ Issue [#98](https://github.com/agthumoe/solid-lamp/issues/98).
 No recall/latency/real-vault acceptance is established by this early helper.
 
 - [x] Owner authorized publication, review fixes and merging clean PRs.
-- [ ] Publish and verify the PR against current main; merge when required checks pass.
+- [x] Publish and merge #106 with required current-main CI; review threads are clear.

@@ -17,3 +17,7 @@ Evidence: dates ending in `.100Z` and `.900Z` within the same second produce ide
 ## Validation and boundaries
 
 The existing recovery unit suite passes 6/6; required CI is green. Reproductions touched temporary synthetic files only. No real Docker call, database mutation, owner credentials, real-vault access or author-worktree edits were used. Integration tests were not rerun against shared services during this review.
+
+## Re-review at 508afe3
+
+Both original findings are fixed: endpoint validation plus pre-write SQL/tool server identity, and exclusive staging/no-replace publication. Independent unit tests pass 6/6; the fixed CI run passes compliance and database integration, including mismatch/collision/concurrency/failure regressions. No new actionable finding in the fix diff. Current-main CI is still required before merge. No local DB restore/service mutation was performed in this re-review.
