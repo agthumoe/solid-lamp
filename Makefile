@@ -77,6 +77,14 @@ dev\:worker:
 test\:worker:
 	pnpm test:worker
 
+.PHONY: dev\:mcp-brain
+dev\:mcp-brain:
+	pnpm dev:mcp-brain
+
+.PHONY: test\:mcp
+test\:mcp:
+	pnpm test:mcp
+
 .PHONY: test\:api
 test\:api:
 	pnpm test:api
