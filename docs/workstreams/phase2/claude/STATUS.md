@@ -24,13 +24,16 @@ All PRs below are open for review; none is merged by the authoring agent. Worktr
 | [#126](https://github.com/agthumoe/solid-lamp/issues/126) | Reference RRF fusion and frozen evidence gates with calibration      | `feat/126-retrieval-core`        | #127 | Review                                                     |
 | [#97](https://github.com/agthumoe/solid-lamp/issues/97)   | Brain MCP server (stdio, read-only tools)                            | `feat/97-brain-mcp`              | #128 | Review; stacked on #125; real-route access tests after #95 |
 | [#129](https://github.com/agthumoe/solid-lamp/issues/129) | ADR 0007 (proposed): EPUB/PDF parser libraries                       | `docs/129-adr-book-parsers`      | #130 | Owner decision                                             |
+| [#96](https://github.com/agthumoe/solid-lamp/issues/96)   | `brain:query` / `brain:stats` CLIs on the shared brain client        | `feat/96-brain-cli`              | #131 | Review; stacked on #128; `brain:ingest` after #91          |
+| [#132](https://github.com/agthumoe/solid-lamp/issues/132) | Duplicate `test:brain` key in package.json; docs:check guard         | `fix/132-duplicate-script-key`   | #133 | Review                                                     |
 
 Merged: #86 (PR #100), #87 (PR #101), #88 (PR #102), #92 (PR #103).
 
 ## Next
 
 - #95 (routes) can now be assembled from #119 (citations), #121 (service scope), #125 (contracts) and #127 (fusion/gates) once #91 lands; then add real-route access tests to #97 (PR #128) and build #96 CLI on the same contract.
-- Retarget PR #128 to main after #125 merges.
+- Retarget PR #128 to main after #125 merges, and #131 after #128.
+- Merge order hints: #121 before #128; a trial merge of all open branches passes `pnpm check` once append-style conflicts (Makefile, package.json scripts, `packages/brain/src/index.ts`, `packages/shared/src/index.ts`, `config/sources.yaml` comment) are resolved by keeping both sides.
 - #93 remainder after #91/#95: end-to-end write → searchable latency; wire watcher plans into the worker's pending-event store.
 - Worker handler bodies (`NOT_WIRED`) after #91.
 - Book parsers after #115 and ADR 0007 (PR #130) are accepted.
@@ -53,3 +56,4 @@ Merged: #86 (PR #100), #87 (PR #101), #88 (PR #102), #92 (PR #103).
 | 2026-10-20 | Claude Code | Fixed the #102 listing race and #103 bounded shutdown after Codex re-reviews; the owner merged #101–#103. Claimed #93: `fs.watch` watcher (events as hints), conservative change planner, `observePaths`/`scanSource`, detection-latency script (p50 705 ms idle, 736 ms burst). Note: the #102 merge commit carries AI co-author trailers; removing them would need an owner-authorized history rewrite.                                                                              |
 | 2026-10-20 | Claude Code | Opened and claimed #110, #112, #114, #116, #118, #120, #122 and #124 one at a time (schema-independent work while #91/#94 wait on ADR 0006). Highlights: canonical percent-encoded citation display form with a seeded fuzz round-trip; service scope rejects before body parsing (zero-work tests, real-socket abort); `createSecretCheck` moved to `@aetherion/shared`; found and fixed leaked reader descriptors in tests. All mutation-checked; `pnpm check` green on each branch. |
 | 2026-10-20 | Claude Code | Later the same day: #126 retrieval core (RRF reference + calibrated, frozen evidence gates; a dead tie-break found and removed), claimed #97 and built the stdio brain MCP server on the #125 contracts (SDK 1.32.1 per ADR 0005), and proposed ADR 0007 for book parser libraries with a scratch spike that reproduced the #114 fixtures.                                                                                                                                             |
+| 2026-10-20 | Claude Code | Claimed #96: `brain:query`/`brain:stats` with terminal-safe output; moved the brain client, query mapping and client config into `@aetherion/shared` so CLI and MCP share them. Trial-merged all 13 open branches: fixed a real export collision (`isSafeRelativePath`, #118 vs #109) and found a duplicate `test:brain` key on main (#132).                                                                                                                                           |
