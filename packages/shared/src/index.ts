@@ -31,6 +31,13 @@ export {
 } from './config/models-config.ts';
 export { isPrivateHost, isPrivateHttpUrl } from './config/private-host.ts';
 export {
+  loadSourcesConfig,
+  parseSourcesConfig,
+  resolveSourceRoot,
+  type SourceConfig,
+  type SourcesConfig,
+} from './config/sources-config.ts';
+export {
   canonicalTag,
   DOMAIN_ROLES,
   loadCatalog,

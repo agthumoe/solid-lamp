@@ -23,6 +23,7 @@
     "test:shared": "node --test 'packages/shared/**/*.test.ts'",
     "test:llm": "node --test 'packages/llm/**/*.test.ts'",
     "test:inference": "node --test 'apps/inference/**/*.test.ts'",
+    "test:brain": "node --test 'packages/brain/**/*.test.ts'",
     "test:api": "node --test 'apps/api/**/*.test.ts'",
     "test:doctor": "node --test scripts/doctor/doctor.test.ts",
     "test:db": "node --test 'packages/db/src/**/*.test.ts' scripts/db/supabase-cli.test.ts scripts/db/recovery-core.test.ts",
