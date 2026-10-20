@@ -30,6 +30,36 @@ export type ProcessableJob = {
   readonly attemptsMade: number;
 };
 
+const CANCELLED = Symbol('cancelled');
+
+// Stops waiting when the job is cancelled (worker shutdown), even if the handler ignores its
+// signal: BullMQ then sees the job finish, so its close completes and releases its timers and
+// connections. A handler that ignores the signal keeps running unobserved; its result is
+// discarded and the job is retried.
+const untilAborted = <T>(work: Promise<T>, signal: AbortSignal): Promise<T | typeof CANCELLED> => {
+  if (signal.aborted) {
+    work.catch(() => undefined);
+    return Promise.resolve(CANCELLED);
+  }
+  return new Promise((resolve, reject) => {
+    const onAbort = () => {
+      work.catch(() => undefined);
+      resolve(CANCELLED);
+    };
+    signal.addEventListener('abort', onAbort, { once: true });
+    work.then(
+      (value) => {
+        signal.removeEventListener('abort', onAbort);
+        resolve(value);
+      },
+      (error: unknown) => {
+        signal.removeEventListener('abort', onAbort);
+        reject(error instanceof Error ? error : new Error(String(error)));
+      },
+    );
+  });
+};
+
 /**
  * Validates and dispatches one job. Throwing an Error asks BullMQ to retry; throwing
  * UnrecoverableError fails the job immediately. Logs carry IDs and codes only.
@@ -52,13 +82,24 @@ export const createProcessor =
       throw new UnrecoverableError('invalid job payload');
     }
     const handler = handlers[job.name] as JobHandler<typeof job.name>;
-    const result = await handler(parsed.data, {
+    const work = handler(parsed.data, {
       jobId: job.id ?? 'unknown',
       attempt: job.attemptsMade + 1,
       signal,
       logger: jobLogger,
     });
+    const result = await untilAborted(work, signal);
     const durationMs = Date.now() - startedAt;
+    if (result === CANCELLED) {
+      jobLogger.warn({
+        event: 'job.cancelled',
+        outcome: 'failed',
+        durationMs,
+        errorCode: 'CANCELLED',
+      });
+      // Retryable: the job runs again after restart.
+      throw new Error('job cancelled by worker shutdown');
+    }
     if (result.ok) {
       jobLogger.info({ event: 'job.complete', outcome: 'complete', durationMs });
       return;

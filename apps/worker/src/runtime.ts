@@ -18,8 +18,27 @@ export type RuntimeOptions = {
   readonly concurrency?: number;
   // Tests isolate themselves with a unique prefix; production uses BullMQ's default.
   readonly prefix?: string;
-  // Worker drains on close; a stuck job is abandoned after this grace period.
+  // Worker drains on close; after this grace period active jobs are cancelled.
   readonly drainTimeoutMs?: number;
+  // After cancellation, a job that still has not stopped is abandoned after this period.
+  readonly cancelGraceMs?: number;
+};
+
+export type CloseOutcome = 'drained' | 'cancelled' | 'abandoned';
+
+// True if `promise` settles (either way) within `ms`; never rejects, never keeps the loop alive.
+const settlesWithin = async (promise: Promise<unknown>, ms: number): Promise<boolean> => {
+  let timer: NodeJS.Timeout | undefined;
+  const timeout = new Promise<false>((resolve) => {
+    timer = setTimeout(() => resolve(false), ms);
+  });
+  const settled = promise.then(
+    () => true,
+    () => true,
+  );
+  const result = await Promise.race([settled, timeout]);
+  clearTimeout(timer);
+  return result;
 };
 
 export type QueueCounts = {
@@ -62,20 +81,37 @@ export const createWorkerRuntime = (options: RuntimeOptions) => {
     };
   };
 
-  const close = async (): Promise<void> => {
+  /**
+   * Bounded shutdown. BullMQ 6.3.10 caches its first close() promise, so a second
+   * close(true) cannot force anything; instead: one graceful close, then cancel active jobs
+   * (aborting the signal each handler received), then abandon and disconnect. A job left
+   * running keeps its lock until it expires; BullMQ's stalled-job check re-runs it later.
+   */
+  const close = async (): Promise<CloseOutcome> => {
     const grace = options.drainTimeoutMs ?? 30_000;
-    let timer: NodeJS.Timeout | undefined;
-    const drained = worker.close().then(() => 'drained' as const);
-    const timeout = new Promise<'timeout'>((resolve) => {
-      timer = setTimeout(() => resolve('timeout'), grace);
-    });
-    const outcome = await Promise.race([drained, timeout]);
-    clearTimeout(timer);
-    if (outcome === 'timeout') {
+    const cancelGrace = options.cancelGraceMs ?? Math.min(2_000, grace);
+    const drained = worker.close();
+    // An abandoned close() may still reject later; nobody awaits it then.
+    drained.catch(() => undefined);
+
+    let outcome: CloseOutcome = 'drained';
+    if (!(await settlesWithin(drained, grace))) {
+      outcome = 'cancelled';
       options.logger.warn({ event: 'worker.drain', outcome: 'failed', errorCode: 'DRAIN_TIMEOUT' });
-      await worker.close(true);
+      worker.cancelAllJobs('worker shutting down');
+      if (!(await settlesWithin(drained, cancelGrace))) {
+        outcome = 'abandoned';
+        options.logger.warn({
+          event: 'worker.drain',
+          outcome: 'failed',
+          errorCode: 'JOB_ABANDONED',
+        });
+        // Drop the worker's own blocking connection so nothing keeps the process alive.
+        await settlesWithin(worker.disconnect(), cancelGrace);
+      }
     }
-    await queue.close();
+    await settlesWithin(queue.close(), cancelGrace);
+    return outcome;
   };
 
   return { queue, worker, enqueue, counts, close };

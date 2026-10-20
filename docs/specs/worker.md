@@ -20,7 +20,11 @@ A background process that runs ingestion jobs reliably: typed, reference-only pa
 - **`jobs/job-id.ts`:** deterministic, colon-free job IDs, from the tested template. A document job's identity is source + path + revision, so a newer revision is a new job and the same revision is deduplicated.
 - **`jobs/processor.ts`:** validates the payload (an invalid one is permanent and never retried) and maps a handler `Result` to BullMQ. `RETRYABLE` throws for a retry with exponential backoff (5 attempts, 1 s base). `PERMANENT` and `NOT_WIRED` throw `UnrecoverableError`. Completed jobs are kept for 1 hour or 1,000 jobs, failed jobs for 7 days.
 - **`dispatch/pending-events.ts`:** `relayPendingEvents(store, enqueue)` claims pending events, enqueues each with its deterministic ID, and marks only the enqueued ones dispatched. A crash between enqueue and mark re-sends the same job ID, which BullMQ deduplicates while the job exists and handlers tolerate (idempotent by revision). An in-memory store implements the port contract for tests; the Postgres store comes with #91.
-- **Drain:** on SIGTERM the health server stops, the worker stops taking jobs and waits for active jobs (bounded by a grace period), then Redis closes.
+- **Drain (bounded):** on SIGTERM the health server stops and `runtime.close()` runs one graceful BullMQ close. BullMQ 6.3.10 caches that promise, so a second `close(true)` can never force anything.
+  - If the drain grace (default 30 s) passes, active jobs are cancelled with `cancelAllJobs`. That aborts the signal each handler received.
+  - The processor stops waiting on cancel, even for a handler that ignores its signal, and fails the job as retryable. BullMQ then finishes its own close, which releases its timers and connections.
+  - If BullMQ still has not finished after the cancel grace (default 2 s, for example when Redis is unresponsive), the worker's blocking connection is disconnected and the run is abandoned.
+  - `close()` reports `drained`, `cancelled` or `abandoned`. A non-cooperative handler's leftover work keeps running unobserved; its result is discarded and the job is retried after restart.
 
 ## Configuration
 
@@ -43,4 +47,6 @@ Shared env keys, plus:
   - a retryable failure retries, then succeeds;
   - a permanent failure is not retried;
   - a duplicate deterministic ID is not processed twice;
-  - `close()` waits for an active job to finish.
+  - `close()` waits for an active job to finish (`drained`);
+  - a never-settling handler that ignores its signal is released within the bound, and the worker's blocking Redis connection is freed (`cancelled`, checked with `CLIENT LIST`);
+  - a cooperative handler sees the abort (`cancelled`).

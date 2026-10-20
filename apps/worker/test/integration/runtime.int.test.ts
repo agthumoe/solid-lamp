@@ -12,6 +12,11 @@ import { INGEST_DOCUMENT, INGEST_RESYNC } from '../../src/jobs/contracts.ts';
 import type { JobHandler, JobHandlers } from '../../src/jobs/processor.ts';
 import { createWorkerRuntime } from '../../src/runtime.ts';
 
+const clientCount = async (admin: Redis) =>
+  String(await admin.call('CLIENT', 'LIST'))
+    .split('\n')
+    .filter((line) => line.trim()).length;
+
 const URL_ = process.env.AETHERION_TEST_REDIS_URL;
 const skip = URL_ ? false : 'AETHERION_TEST_REDIS_URL not set (CI service or local Docker)';
 
@@ -26,7 +31,10 @@ const quiet: Logger = {
 const REV = 'c'.repeat(64);
 const payload = (path = 'notes/a.md', revision = REV) => ({ sourceId: 'vault', path, revision });
 
-const harness = (document: JobHandler<typeof INGEST_DOCUMENT>) => {
+const harness = (
+  document: JobHandler<typeof INGEST_DOCUMENT>,
+  timing: { drainTimeoutMs?: number; cancelGraceMs?: number } = {},
+) => {
   const connection = new Redis(URL_ ?? '', { maxRetriesPerRequest: null });
   const prefix = `aetherion-test-${randomBytes(4).toString('hex')}`;
   const handlers: JobHandlers = {
@@ -38,7 +46,8 @@ const harness = (document: JobHandler<typeof INGEST_DOCUMENT>) => {
     handlers,
     logger: quiet,
     prefix,
-    drainTimeoutMs: 10_000,
+    drainTimeoutMs: timing.drainTimeoutMs ?? 10_000,
+    ...(timing.cancelGraceMs === undefined ? {} : { cancelGraceMs: timing.cancelGraceMs }),
   });
   // QueueEvents needs its own blocking connection; close() does not close one it was given.
   const eventsConnection = connection.duplicate();
@@ -157,10 +166,80 @@ await test('close() waits for the active job to finish before returning', { skip
     await h.runtime.enqueue(INGEST_DOCUMENT, payload());
     await running;
 
-    await h.runtime.close();
+    const outcome = await h.runtime.close();
     order.push('closed');
 
     assert.deepEqual(order, ['job-finished', 'closed']);
+    assert.equal(outcome, 'drained');
+  } finally {
+    await h.cleanup();
+  }
+});
+
+await test(
+  'close() is bounded: a handler that ignores cancellation is released and the worker stops',
+  { skip },
+  async () => {
+    let started: () => void = () => undefined;
+    const running = new Promise<void>((resolve) => (started = resolve));
+    // Never settles and ignores its abort signal: the non-cooperative case from the review.
+    const h = harness(
+      () => {
+        started();
+        return new Promise(() => undefined);
+      },
+      { drainTimeoutMs: 300, cancelGraceMs: 300 },
+    );
+    const admin = new Redis(URL_ ?? '');
+    try {
+      await h.events.waitUntilReady();
+      await h.runtime.enqueue(INGEST_DOCUMENT, payload());
+      await running;
+      const before = await clientCount(admin);
+
+      const startedAt = Date.now();
+      const outcome = await h.runtime.close();
+      const elapsed = Date.now() - startedAt;
+
+      // The processor stops waiting on cancel, so BullMQ itself finishes closing.
+      assert.equal(outcome, 'cancelled');
+      assert.ok(elapsed < 2_000, `close took ${elapsed} ms`);
+      // The worker's own blocking connection is gone.
+      assert.ok((await clientCount(admin)) < before, 'blocking connection was not released');
+    } finally {
+      admin.disconnect();
+      await h.cleanup();
+    }
+  },
+);
+
+await test('close() cancels a cooperative handler through its abort signal', { skip }, async () => {
+  let started: () => void = () => undefined;
+  const running = new Promise<void>((resolve) => (started = resolve));
+  let sawAbort = false;
+  const h = harness(
+    (_data, context) => {
+      started();
+      return new Promise((resolve) => {
+        context.signal.addEventListener('abort', () => {
+          sawAbort = true;
+          resolve(err({ code: 'RETRYABLE', message: 'cancelled by shutdown' }));
+        });
+      });
+    },
+    { drainTimeoutMs: 300, cancelGraceMs: 2_000 },
+  );
+  try {
+    await h.events.waitUntilReady();
+    await h.runtime.enqueue(INGEST_DOCUMENT, payload());
+    await running;
+
+    const startedAt = Date.now();
+    const outcome = await h.runtime.close();
+
+    assert.equal(outcome, 'cancelled');
+    assert.equal(sawAbort, true);
+    assert.ok(Date.now() - startedAt < 2_000);
   } finally {
     await h.cleanup();
   }
