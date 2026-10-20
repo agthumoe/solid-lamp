@@ -69,6 +69,14 @@ test\:db:
 test\:int:
 	pnpm test:int
 
+.PHONY: dev\:worker
+dev\:worker:
+	pnpm dev:worker
+
+.PHONY: test\:worker
+test\:worker:
+	pnpm test:worker
+
 .PHONY: test\:api
 test\:api:
 	pnpm test:api

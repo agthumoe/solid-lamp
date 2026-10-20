@@ -1,0 +1,11 @@
+{
+  "name": "@aetherion/worker",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@aetherion/shared": "workspace:*",
+    "bullmq": "6.3.10",
+    "ioredis": "6.0.0"
+  }
+}
