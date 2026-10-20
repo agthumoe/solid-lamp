@@ -96,6 +96,50 @@ await test('a path that never settles is released after maxSettleMs', async () =
   }
 });
 
+await test('continuous events cannot postpone the maxSettleMs release', async () => {
+  const { fake, watcher, batches } = setup(new Map([['hot.md', { size: 1, mtimeMs: 1 }]]), {
+    quietMs: 30,
+    maxSettleMs: 80,
+  });
+  // An event every 10 ms, well inside quietMs, continuing far past the deadline.
+  const ticker = setInterval(() => fake.emit('hot.md'), 10);
+  try {
+    await wait(250);
+    assert.deepEqual(batches[0], ['hot.md']);
+  } finally {
+    clearInterval(ticker);
+    watcher.close();
+  }
+});
+
+await test('an event during a signature check does not leave a second timer', async () => {
+  let checks = 0;
+  let release: () => void = () => undefined;
+  const { fake, watcher, batches } = setup(new Map(), {
+    signature: () => {
+      checks += 1;
+      // The first check stalls until a newer event has arrived.
+      return checks === 1
+        ? new Promise<FileSignature>(
+            (resolve) => (release = () => resolve({ size: 1, mtimeMs: 1 })),
+          )
+        : Promise.resolve({ size: 1, mtimeMs: 1 } satisfies FileSignature);
+    },
+  });
+  try {
+    fake.emit('race.md');
+    await wait(30); // first check started and is stalled
+    fake.emit('race.md');
+    release();
+    await wait(150);
+    assert.deepEqual(batches, [['race.md']]);
+    // stalled check (ignored) + two checks that agree
+    assert.equal(checks, 3);
+  } finally {
+    watcher.close();
+  }
+});
+
 await test('a disappearing file is still emitted so the reader can confirm the deletion', async () => {
   const { fake, watcher, batches } = setup();
   try {

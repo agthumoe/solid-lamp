@@ -68,7 +68,14 @@ export const createVaultWatcher = (options: VaultWatcherOptions) => {
       }
     });
 
-  type Pending = { timer: NodeJS.Timeout; firstSeen: number; last?: FileSignature };
+  // `generation` changes on every event, so a signature check started before a newer event
+  // cannot schedule a second timer for the same path.
+  type Pending = {
+    timer: NodeJS.Timeout;
+    firstSeen: number;
+    generation: number;
+    last?: FileSignature;
+  };
   const pending = new Map<string, Pending>();
   const ready = new Set<string>();
   let batchTimer: NodeJS.Timeout | undefined;
@@ -108,12 +115,18 @@ export const createVaultWatcher = (options: VaultWatcherOptions) => {
 
   // A write is stable after `quietMs` without events and an unchanged size/mtime between two
   // checks; a path that never settles is released after `maxSettleMs`.
+  // Wait `quietMs`, but never past the settle deadline: continuous events must not postpone
+  // the maxSettleMs release indefinitely.
+  const nextCheck = (entry: Pending) =>
+    Math.min(quietMs, Math.max(0, entry.firstSeen + maxSettleMs - Date.now()));
+
   const settle = (path: string) => {
     const entry = pending.get(path);
     if (!entry || closed) return;
+    const generation = entry.generation;
     void signature(path).then((current) => {
       const now = pending.get(path);
-      if (!now || now !== entry || closed) return;
+      if (!now || now !== entry || now.generation !== generation || closed) return;
       const same =
         now.last !== undefined &&
         (current === 'missing'
@@ -123,7 +136,7 @@ export const createVaultWatcher = (options: VaultWatcherOptions) => {
             now.last.mtimeMs === current.mtimeMs);
       if (same || Date.now() - now.firstSeen >= maxSettleMs) return markReady(path);
       now.last = current;
-      now.timer = setTimeout(() => settle(path), quietMs);
+      now.timer = setTimeout(() => settle(path), nextCheck(now));
     });
   };
 
@@ -139,9 +152,14 @@ export const createVaultWatcher = (options: VaultWatcherOptions) => {
     if (existing) {
       clearTimeout(existing.timer);
       delete existing.last;
-      existing.timer = setTimeout(() => settle(path), quietMs);
+      existing.generation += 1;
+      existing.timer = setTimeout(() => settle(path), nextCheck(existing));
     } else
-      pending.set(path, { timer: setTimeout(() => settle(path), quietMs), firstSeen: Date.now() });
+      pending.set(path, {
+        timer: setTimeout(() => settle(path), quietMs),
+        firstSeen: Date.now(),
+        generation: 0,
+      });
   };
 
   const source = (options.source ?? nodeWatchSource)(options.root);
