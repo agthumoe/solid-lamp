@@ -60,6 +60,9 @@ db\:restore-verify:
 .PHONY: brain\:watch-latency
 brain\:watch-latency:
 	pnpm brain:watch-latency
+.PHONY: brain\:pdf-fixtures
+brain\:pdf-fixtures:
+	pnpm brain:pdf-fixtures
 
 .PHONY: test\:doctor
 test\:doctor:
@@ -136,3 +139,7 @@ evals\:check:
 .PHONY: evals\:domain\:check
 evals\:domain\:check:
 	pnpm evals:domain:check
+
+.PHONY: deps\:audit
+deps\:audit:
+	pnpm deps:audit
