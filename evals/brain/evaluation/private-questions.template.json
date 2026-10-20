@@ -1,0 +1,37 @@
+{
+  "questions": [
+    {
+      "id": "calibration-example",
+      "query": "Replace with an owner-reviewed local question; this is synthetic placeholder text.",
+      "split": "calibration",
+      "answerable": true,
+      "expected": [
+        {
+          "sourceId": "synthetic",
+          "path": "Notes/ReplaceThis.md",
+          "headingPath": ["Overview"]
+        }
+      ]
+    },
+    {
+      "id": "heldout-answerable",
+      "query": "Replace with an owner-reviewed local question; this is synthetic placeholder text.",
+      "split": "held_out",
+      "answerable": true,
+      "expected": [
+        {
+          "sourceId": "synthetic",
+          "path": "Notes/ReplaceThis.md",
+          "headingPath": ["Overview"]
+        }
+      ]
+    },
+    {
+      "id": "heldout-unanswerable",
+      "query": "Replace with an owner-reviewed local question; this is synthetic placeholder text.",
+      "split": "held_out",
+      "answerable": false,
+      "expected": []
+    }
+  ]
+}
