@@ -38,6 +38,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "compliance:check": "node scripts/check-compliance.ts",
+    "deps:audit": "pnpm audit --audit-level high",
     "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm evals:check && pnpm evals:domain:check && pnpm docs:check && pnpm compliance:check && pnpm format:check",
     "evals:check": "node scripts/evals/check.ts",
     "evals:domain:check": "node scripts/domain-evals/check.ts"

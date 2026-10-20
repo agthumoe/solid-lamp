@@ -46,3 +46,4 @@ export {
   type CatalogRecord,
   type ModelCatalog,
 } from './config/catalog-config.ts';
+export { createSecretCheck } from './security/secret-check.ts';

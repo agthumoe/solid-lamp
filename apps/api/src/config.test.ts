@@ -46,3 +46,30 @@ await test('wildcard hosts, public inference URLs and a missing secret are rejec
     assert.equal(loadApiConfig(env).ok, false);
   }
 });
+
+await test('the brain service key is optional, bounded and must differ from the inference secret', () => {
+  const absent = loadApiConfig({
+    AETHERION_INFERENCE_SECRET: SECRET,
+    AETHERION_BRAIN_SERVICE_KEY: '',
+  });
+  assert.ok(absent.ok);
+  assert.equal(absent.value.brainServiceKey, undefined);
+
+  const key = 'b'.repeat(40);
+  const set = loadApiConfig({
+    AETHERION_INFERENCE_SECRET: SECRET,
+    AETHERION_BRAIN_SERVICE_KEY: key,
+  });
+  assert.ok(set.ok);
+  assert.equal(set.value.brainServiceKey, key);
+
+  for (const bad of ['short', SECRET]) {
+    const result = loadApiConfig({
+      AETHERION_INFERENCE_SECRET: SECRET,
+      AETHERION_BRAIN_SERVICE_KEY: bad,
+    });
+    assert.equal(result.ok, false);
+    assert.match(result.ok ? '' : result.error.message, /AETHERION_BRAIN_SERVICE_KEY/);
+    assert.doesNotMatch(result.ok ? '' : result.error.message, /short|aaaa/);
+  }
+});

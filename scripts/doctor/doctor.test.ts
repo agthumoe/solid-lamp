@@ -2,7 +2,9 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 
 import {
+  checkBackups,
   checkBindings,
+  checkSources,
   checkCatalogArtifacts,
   checkConfig,
   checkOllama,
@@ -38,6 +40,12 @@ const INSTALLED = {
   ],
 };
 
+const SOURCES = `
+sources:
+  - { id: fixture-vault, kind: obsidian, root: { repo_path: evals/brain/vault }, enabled: true }
+  - { id: vault, kind: obsidian, root: { env: AETHERION_VAULT_ROOT }, enabled: false }
+`;
+
 const healthyCommands: Record<string, CommandResult> = {
   pnpm: { code: 0, stdout: '11.17.0\n' },
   docker: { code: 0, stdout: '28.1.1\n' },
@@ -55,20 +63,38 @@ const probes = (
   return {
     nodeVersion: 'v24.17.0',
     packageManager: 'pnpm@11.17.0',
-    env: { AETHERION_INFERENCE_SECRET: 'x'.repeat(40) },
+    env: {
+      AETHERION_INFERENCE_SECRET: 'x'.repeat(40),
+      AETHERION_MAINTENANCE_DATABASE_URL: 'postgresql://postgres:pw@127.0.0.1:54322/postgres',
+    },
     readText: (path) =>
       Promise.resolve(
         path === 'config/models.yaml'
           ? MODELS
           : path === 'config/catalog.yaml'
             ? CATALOG
-            : undefined,
+            : path === 'config/sources.yaml'
+              ? SOURCES
+              : undefined,
       ),
     getJson: (url) => Promise.resolve(url.endsWith('/api/tags') ? INSTALLED : { status: 'ok' }),
     postJson: () => Promise.resolve({ model_info: { 'qwen3.embedding_length': 1024 } }),
     command: (cmd, args) =>
       Promise.resolve(commands[`${cmd} ${args[0]}`] ?? commands[cmd] ?? { code: 127, stdout: '' }),
     tcp: () => Promise.resolve(true),
+    fileInfo: (path) =>
+      Promise.resolve(
+        path === 'backups'
+          ? { kind: 'directory' as const, mode: 0o40700, mtimeMs: 0, fsType: 0xef53 }
+          : path.endsWith('evals/brain/vault')
+            ? { kind: 'directory' as const, mode: 0o40755, mtimeMs: 0, fsType: 0xef53 }
+            : undefined,
+      ),
+    listDir: (path) =>
+      Promise.resolve(
+        path === 'backups' ? ['aetherion-20261019t000000z.dump', 'notes.txt'] : undefined,
+      ),
+    now: () => Date.UTC(2026, 9, 20),
     ...overrides,
   };
 };
@@ -306,4 +332,79 @@ await test('configured nondefault app ports are checked for wildcard and LAN bin
   assert.equal(results[0]?.status, 'fail');
   assert.equal(results[0]?.detail, '0.0.0.0:4555, :::4666, 192.168.1.20:4555');
   assert.equal(unconfigured[0]?.status, 'ok');
+});
+
+await test('enabled sources need a present root on a supported filesystem; disabled ones are skipped', async () => {
+  const ok = await checkSources(probes());
+  const ninep = await checkSources(
+    probes({
+      fileInfo: () =>
+        Promise.resolve({ kind: 'directory', mode: 0o40755, mtimeMs: 0, fsType: 0x01021997 }),
+    }),
+  );
+  const missingRoot = await checkSources(probes({ fileInfo: () => Promise.resolve(undefined) }));
+  const realEnabled = await checkSources(
+    probes({ readText: () => Promise.resolve(SOURCES.replace('enabled: false', 'enabled: true')) }),
+  );
+  const invalid = await checkSources(probes({ readText: () => Promise.resolve('sources: [') }));
+
+  assert.deepEqual(statuses(ok), { 'sources.yaml': 'ok', 'source fixture-vault': 'ok' });
+  assert.equal(statuses(ninep)['source fixture-vault'], 'fail');
+  assert.match(ninep.find((entry) => entry.name === 'source fixture-vault')?.hint ?? '', /ext4/);
+  assert.equal(statuses(missingRoot)['source fixture-vault'], 'fail');
+  assert.equal(statuses(realEnabled)['source vault'], 'fail');
+  assert.match(
+    realEnabled.find((entry) => entry.name === 'source vault')?.detail ?? '',
+    /AETHERION_VAULT_ROOT is not set/,
+  );
+  assert.equal(statuses(invalid)['sources.yaml'], 'fail');
+});
+
+await test('backups: private, untracked and recent; missing or stale backups warn', async () => {
+  const day = 86_400_000;
+  const healthy = await checkBackups(probes());
+  const stale = await checkBackups(probes({ now: () => Date.UTC(2026, 9, 19) + 9 * day }));
+  const none = await checkBackups(probes({ fileInfo: () => Promise.resolve(undefined) }));
+  const open = await checkBackups(
+    probes({
+      fileInfo: () =>
+        Promise.resolve({ kind: 'directory', mode: 0o40755, mtimeMs: 0, fsType: 0xef53 }),
+    }),
+  );
+  const tracked = await checkBackups(
+    probes({ commands: { 'git ls-files': { code: 0, stdout: 'backups/aetherion-x.dump\n' } } }),
+  );
+  const noUrl = await checkBackups(probes({ env: { AETHERION_INFERENCE_SECRET: 'x'.repeat(40) } }));
+
+  assert.deepEqual(statuses(healthy), { backups: 'ok' });
+  assert.match(healthy[0]?.detail ?? '', /1 dumps, newest 1\.0 days old/);
+  assert.equal(statuses(stale).backups, 'warn');
+  assert.equal(statuses(none).backups, 'warn');
+  assert.equal(statuses(open)['backups private'], 'fail');
+  assert.equal(statuses(tracked)['backups tracked'], 'fail');
+  assert.equal(statuses(noUrl)['maintenance url'], 'warn');
+});
+
+await test('a stopped worker is a warning and its configured port is binding-checked', async () => {
+  const results = await runDoctor(
+    probes({
+      getJson: (url) =>
+        Promise.resolve(
+          url.endsWith('/api/tags')
+            ? INSTALLED
+            : url.includes(':4400/')
+              ? undefined
+              : { status: 'ok' },
+        ),
+    }),
+  );
+  const exposed = await checkBindings(
+    probes({
+      env: { AETHERION_WORKER_PORT: '4455' },
+      commands: { ss: { code: 0, stdout: 'LISTEN 0 511 0.0.0.0:4455 0.0.0.0:*' } },
+    }),
+  );
+
+  assert.equal(statuses(results)['worker process'], 'warn');
+  assert.equal(exposed[0]?.status, 'fail');
 });
