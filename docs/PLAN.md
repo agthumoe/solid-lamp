@@ -3,9 +3,9 @@
 Source of truth for phase status. Update at the end of every phase (see `AGENTS.md`).
 Full requirements: [`BUILD_PROMPT.md`](BUILD_PROMPT.md).
 
-**Current phase:** 1 — Scaffold (Phase 0 accepted by the owner 2026-10-15, #47)
+**Current phase:** 2 — Brain (Phase 1 accepted 2026-10-18; synthetic implementation authorized; real-vault access remains gated)
 
-Rounds 2 and 3 are merged and integrated (#38, #40): round-2 [domain diagnostics and readiness records](workstreams/round2/README.md); round-3 [Phase 0 decision packets](workstreams/round3/README.md) for the owner. Phase 0 acceptance, #31 downloads/inference and phase advancement remain gated on owner decisions.
+Rounds 2 and 3 are merged and integrated (#38, #40): round-2 [domain diagnostics and readiness records](workstreams/round2/README.md); round-3 [Phase 0 decision packets](workstreams/round3/README.md) for the owner. Phase 0 and Phase 1 are accepted. Specialist acquisition #31 was declined; Phase 2 real-data access and ADR 0006 remain gated as recorded below.
 
 GitHub tasks/milestones: [TRACKING.md](TRACKING.md). Standards: [development handbook](development/README.md). Create/select a task before project edits.
 
@@ -48,6 +48,8 @@ GitHub tasks/milestones: [TRACKING.md](TRACKING.md). Standards: [development han
 
 **Accepted by the owner on 2026-10-18.** Acceptance on the owner's machine: `pnpm run doctor` 23/23 ok, `/api/v1/health/ready` all `ok`, `packages/llm` tests pass. Merged PRs #58–#82.
 
+Independent Codex audit under [#4](https://github.com/agthumoe/solid-lamp/issues/4), 2026-10-18 at `49ec50d`: full `pnpm check` passes; doctor 23/23 ok; migration local = remote; live readiness 200/all dependencies ok; real Supabase Postgres integration tests 9/9 pass with no skips. Phase 2 can proceed. Retain the relative template-literal import lint follow-up before expanding package boundaries; Vitest, runtime domain bindings and backup/restore remain deferred as recorded below.
+
 - [x] Foundations: ARCHITECTURE, structure, AI orchestration, testing, templates, ADR 0005 (proposed) ([#49](https://github.com/agthumoe/solid-lamp/issues/49), pending review)
 - [x] pnpm monorepo (`apps/*`, `packages/*`), strict TS, ESLint, Makefile mirror (import boundaries [#71](https://github.com/agthumoe/solid-lamp/issues/71)/[#78](https://github.com/agthumoe/solid-lamp/issues/78)). Vitest is deferred until a suite needs it (2026-10-18 decision); `node:test` covers everything today.
 - [x] Development handbook/ADR 0003 and issue-first AGENTS adopted; `CLAUDE.md` imports canonical instructions
@@ -77,7 +79,9 @@ GitHub tasks/milestones: [TRACKING.md](TRACKING.md). Standards: [development han
 
 ## Phase 2: Brain
 
-- [ ] Spec `docs/specs/brain.md`
+Delivery: reviewed plan #85 and module PRs #104–#106 merged with required current-main CI. Package/quality-gate integration is tracked in #107 (61 synthetic brain tests locally). #89 fixture-source integration, #90 empirical token calibration and #98 end-to-end safety evidence remain open. Source #102 has a new P1 directory-listing race and worker #103 has a P2 unbounded-drain fallback; recovery #101's prior findings are fixed. ADR 0006 remains proposed; D1/D2 and phase acceptance remain gated.
+
+- [x] Spec `docs/specs/brain.md` (revised design reference for implementation review, [#84](https://github.com/agthumoe/solid-lamp/issues/84), PR #85: [review findings](reviews/phase2-plan-pr85.md), [proposed ADR 0006](adr/0006-brain-version-bound-retrieval.md), version-bound RPC/chunk sets, recovery/path/latency gates, decisions D1–D5 and 13-step breakdown; synthetic tasks authorized; ADR 0006 remains proposed and D1/D2 remain gated)
 - [ ] Spec/task for book extraction and dated official-source ingestion; edition/location/jurisdiction/freshness citations (domain-agent plan)
 - [ ] Obsidian ingestion (chokidar watch + full resync), frontmatter, wikilinks, tags, embeds
 - [ ] Heading-aware chunking, incremental by content hash, renames/deletes
