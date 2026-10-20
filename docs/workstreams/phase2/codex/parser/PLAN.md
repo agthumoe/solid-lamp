@@ -14,4 +14,4 @@ Claude's recovery #87 and lint #86 remain theirs; #91/#94 stay blocked on ADR 00
 
 - [x] Owner authorized publication, review fixes and merging clean PRs.
 - [x] Publish implementation PR and verify review threads.
-- [ ] Merge with required current-main CI.
+- [x] Merge #104 with required current-main CI.
