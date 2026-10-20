@@ -19,6 +19,7 @@
     "db:status": "node --env-file-if-exists=.env scripts/db/supabase-cli.ts status",
     "db:backup": "node --env-file-if-exists=.env scripts/db/backup.ts",
     "db:restore-verify": "node --env-file-if-exists=.env scripts/db/restore-verify.ts",
+    "brain:watch-latency": "node scripts/brain/watch-latency.ts",
     "test:bench": "node scripts/bench/integrity.test.ts",
     "test:templates": "node --test 'docs/development/templates/**/*.test.ts'",
     "test:shared": "node --test 'packages/shared/**/*.test.ts'",
@@ -39,8 +40,7 @@
     "compliance:check": "node scripts/check-compliance.ts",
     "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm evals:check && pnpm evals:domain:check && pnpm docs:check && pnpm compliance:check && pnpm format:check",
     "evals:check": "node scripts/evals/check.ts",
-    "evals:domain:check": "node scripts/domain-evals/check.ts",
-    "test:brain": "node --test 'packages/brain/**/*.test.ts'"
+    "evals:domain:check": "node scripts/domain-evals/check.ts"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
@@ -53,6 +53,7 @@
     "typescript-eslint": "8.71.2"
   },
   "dependencies": {
+    "@aetherion/brain": "workspace:*",
     "@aetherion/db": "workspace:*",
     "@aetherion/shared": "workspace:*",
     "pino": "10.4.0",
