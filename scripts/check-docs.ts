@@ -4,6 +4,7 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, extname, join, resolve, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
+import { duplicateJsonKeys } from './lib/duplicate-keys.ts';
 import { requiredAt } from './lib/required-at.ts';
 import { parse } from 'yaml';
 
@@ -71,15 +72,10 @@ for (const skill of lock.skills) {
 const pkg = z
   .object({ scripts: z.record(z.string(), z.string()) })
   .parse(JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')));
-// JSON.parse keeps the last of duplicate keys silently, so an edit to an earlier copy of a script
-// would be ignored. Scan the scripts block as text instead.
-const scriptsBlock =
-  /"scripts":\s*\{([^}]*)\}/.exec(readFileSync(join(root, 'package.json'), 'utf8'))?.[1] ?? '';
-const scriptNames = [...scriptsBlock.matchAll(/^\s*"([^"]+)"\s*:/gm)].map((match) => match[1]);
-for (const name of new Set(
-  scriptNames.filter((name, index) => scriptNames.indexOf(name) !== index),
-))
-  problems.push(`package.json: duplicate script key ${name ?? ''}`);
+// JSON.parse keeps the last of duplicate keys silently, so an edit to an earlier copy would be
+// ignored; scan the text with a token-aware reader instead.
+for (const key of new Set(duplicateJsonKeys(readFileSync(join(root, 'package.json'), 'utf8'))))
+  problems.push(`package.json: duplicate key ${key}`);
 const makefile = readFileSync(join(root, 'Makefile'), 'utf8');
 for (const script of Object.keys(pkg.scripts)) {
   if (!makefile.includes(`${script.replaceAll(':', '\\:')}:`))
