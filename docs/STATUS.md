@@ -5,12 +5,14 @@
 > refresh _Now_, _Next_, _Blocked on owner_, and append one line to the _Session log_.
 > Long-lived facts go elsewhere: phase checklist → `PLAN.md`, hardware facts → `HARDWARE.md`, decisions → `adr/` + `PLAN.md` decisions log.
 
-**Last updated:** 2026-10-18 (Codex, Phase 2 plan review and proposed revisions under #84)
+**Last updated:** 2026-10-19 (Codex, owner-authorized PR review and delivery under #84/#89/#90/#98)
 **Phase:** 2 — Brain (Phase 1 accepted 2026-10-18; Phase 0 accepted 2026-10-15, #47)
 
 ---
 
 ## Now
+
+- **Delivery in progress:** owner requested review fixes and merging clean PRs. #100 is merged. Codex is publishing the independently tested parser (#89), chunker (#90), and evaluation-scoring slice (#98). Claude retains recovery/source/worker ownership. Publishing the revised plan records the design reference; ADR 0006 stays proposed, D1/D2 and phase acceptance stay gated.
 
 - **Phase 2 plan review, [#84](https://github.com/agthumoe/solid-lamp/issues/84), PR [#85](https://github.com/agthumoe/solid-lamp/pull/85) at `0ed2f69`:** [review](reviews/phase2-plan-pr85.md) records seven design findings and required tests. Revised [brain spec](specs/brain.md) and [proposed ADR 0006](adr/0006-brain-version-bound-retrieval.md) add pinned embedding profiles, immutable revision/chunker sets, transactional promotion and work recovery, safe file-open requirements, absolute relevance evidence, protected API/excerpt contracts and complete latency/recovery/real-data gates. These are local documentation proposals for another reviewer, not owner approval; no implementation issues, code changes, inference runs or real-vault reads. D1–D5 remain open.
 
@@ -212,3 +214,5 @@ Initial baseline is published to `main` under the owner’s explicit authorizati
 | 2026-10-18 | Codex | Selected open #4 for the owner-requested Phase 1 readiness audit at 49ec50d. Full check passes; doctor 23/23, migration status matched, live API ready, and real Postgres integration 9/9 with no skips. Previous template-literal relative-import lint finding remains reproducible and non-blocking for Phase 2 planning; recorded it before further package expansion. Corrected stale Docker/credentials/acceptance blockers. Test databases were removed by the harness; application code/config/data unchanged. |
 | 2026-10-18 | Claude Code | Owner asked for a Phase 2 plan, no code. #84: drafted `docs/specs/brain.md` (scope, worker/BullMQ/inference/MCP topology, ingestion and embedding lifecycle, `search_brain` RRF contract, recovery gate, evals, risks, decisions D1–D5, 13-step breakdown). PR open for review; no implementation issues opened yet. |
 | 2026-10-18 | Codex | Owner requested review and Markdown updates for other reviewers. Selected open #84 and verified PR #85 head 0ed2f69. Added review findings/required tests, revised brain.md and proposed ADR 0006; updated PLAN/STATUS. Documentation changes only; plan/ADR and D1–D5 remain unapproved. No application code, migration, runtime config, real-data access, implementation issues, commit/push/merge or PR comment. |
+
+| 2026-10-19 | Codex | Owner authorized addressing PR reviews and merging clean changes. Refreshed exact heads and rechecked Claude recovery/source fixes; publishing isolated Codex modules. Plan publication does not approve real-vault access or accept ADR 0006. |
