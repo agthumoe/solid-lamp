@@ -14,23 +14,27 @@ Fixing anything: no installs, host config edits, `supabase start`, model pulls, 
 
 ## Checks (in order)
 
-| Check                   | ok                                                                                                     | Problem                                             |
-| ----------------------- | ------------------------------------------------------------------------------------------------------ | --------------------------------------------------- |
-| node                    | major 24                                                                                               | fail: other major                                   |
-| pnpm                    | matches `packageManager`                                                                               | warn: version drift; fail: not found                |
-| env                     | shared `AETHERION_*` values valid                                                                      | fail (key names only)                               |
-| inference secret        | 32+ characters                                                                                         | warn: unset or short (needed by api and inference)  |
-| models.yaml             | parses with the runtime schema                                                                         | fail: missing or invalid                            |
-| ollama                  | `/api/tags` answers                                                                                    | fail (hint: `systemctl status ollama`)              |
-| role `<name>`           | bound model installed                                                                                  | fail (hint: `ollama pull <model>`)                  |
-| embed dimensions        | `/api/show` `*.embedding_length` equals config                                                         | fail (a change needs a versioned rebuild, ADR 0002) |
-| docker                  | engine answers                                                                                         | fail (hint: start Docker Desktop)                   |
-| postgres / redis        | `127.0.0.1:54322` / `6379` accept TCP                                                                  | fail with start hint                                |
-| inference / api process | `/livez` / `/api/v1/health` live                                                                       | warn: dev processes are optional                    |
-| bindings                | no known port (ARCHITECTURE §2 + backing) on a wildcard, LAN or other non-private address (`ss -ltnH`) | fail; warn if `ss` is unavailable                   |
-| .env tracked            | `.env` not in git                                                                                      | fail (hint: untrack and rotate)                     |
+| Check                        | ok                                                                                                     | Problem                                                  |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------ | -------------------------------------------------------- |
+| node                         | major 24                                                                                               | fail: other major                                        |
+| pnpm                         | matches `packageManager`                                                                               | warn: version drift; fail: not found                     |
+| env                          | shared `AETHERION_*` values valid                                                                      | fail (key names only)                                    |
+| inference secret             | 32+ characters                                                                                         | warn: unset or short (needed by api and inference)       |
+| models.yaml                  | parses with the runtime schema                                                                         | fail: missing or invalid                                 |
+| ollama                       | `/api/tags` answers                                                                                    | fail (hint: `systemctl status ollama`)                   |
+| role `<name>`                | bound model installed                                                                                  | fail (hint: `ollama pull <model>`)                       |
+| embed dimensions             | `/api/show` `*.embedding_length` equals config                                                         | fail (a change needs a versioned rebuild, ADR 0002)      |
+| docker                       | engine answers                                                                                         | fail (hint: start Docker Desktop)                        |
+| postgres / redis             | `127.0.0.1:54322` / `6379` accept TCP                                                                  | fail with start hint                                     |
+| inference / api process      | `/livez` / `/api/v1/health` live                                                                       | warn: dev processes are optional                         |
+| sources.yaml                 | parses with the runtime schema                                                                         | fail: missing or invalid                                 |
+| source `<id>` (enabled only) | root resolves, exists, is a directory on a supported filesystem                                        | fail (9p `/mnt/c` is refused, as by the reader)          |
+| backups                      | `backups/` private (0700), untracked, newest dump ≤ 7 days                                             | fail: tracked or readable by others; warn: none or stale |
+| maintenance url              | `AETHERION_MAINTENANCE_DATABASE_URL` set                                                               | warn: backups cannot run                                 |
+| bindings                     | no known port (ARCHITECTURE §2 + backing) on a wildcard, LAN or other non-private address (`ss -ltnH`) | fail; warn if `ss` is unavailable                        |
+| .env tracked                 | `.env` not in git                                                                                      | fail (hint: untrack and rotate)                          |
 
-Checks are pure functions over injected probes (`readText`, `getJson`, `postJson`, `command`, `tcp`), each bounded by a 3 s timeout. `doctor.ts` supplies the real ones. The report prints values such as versions and model tags, never secrets or URLs with credentials. The embed dimension check reads model metadata only.
+Checks are pure functions over injected probes (`readText`, `getJson`, `postJson`, `command`, `tcp`, `fileInfo` (stat + statfs, no content), `listDir`, `now`), each bounded by a 3 s timeout. `doctor.ts` supplies the real ones. The report prints values such as versions and model tags, never secrets or URLs with credentials. The embed dimension check reads model metadata only.
 
 ## Acceptance
 
@@ -48,3 +52,5 @@ Unit tests cover:
 - Report formatting.
 
 A local run on 2026-10-18 (Docker stopped) reported 13 ok, 3 warnings (secret, inference, api) and 3 failures (docker, postgres, redis), with exit code 1. `pnpm check` passes.
+
+Phase 2 additions ([#110](https://github.com/agthumoe/solid-lamp/issues/110)): worker liveness and its port in the binding check, `sources.yaml` and enabled source roots, and backup hygiene. The first real run caught that the enabled `fixture-vault` root (`evals/brain/vault`) did not exist, so it is disabled until it is materialized from the parser fixtures.

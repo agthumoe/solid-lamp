@@ -7,6 +7,8 @@ import {
   loadEnvConfig,
   parseCatalog,
   parseModelsConfig,
+  parseSourcesConfig,
+  resolveSourceRoot,
   validateBindings,
   type ModelCatalog,
   type ModelsConfig,
@@ -32,6 +34,17 @@ export type Probes = {
   readonly postJson: (url: string, body: unknown) => Promise<unknown>;
   readonly command: (cmd: string, args: readonly string[]) => Promise<CommandResult>;
   readonly tcp: (host: string, port: number) => Promise<boolean>;
+  // stat + statfs of a path (no content read); undefined when it does not exist.
+  readonly fileInfo: (path: string) => Promise<FileInfo | undefined>;
+  readonly listDir: (path: string) => Promise<readonly string[] | undefined>;
+  readonly now: () => number;
+};
+
+export type FileInfo = {
+  readonly kind: 'directory' | 'file' | 'other';
+  readonly mode: number;
+  readonly mtimeMs: number;
+  readonly fsType: number;
 };
 
 // Ports from ARCHITECTURE §2 plus backing services; none may listen on a wildcard address.
@@ -268,6 +281,7 @@ export const checkAppProcesses = async (probes: Probes): Promise<CheckResult[]> 
   const apps: [string, string][] = [
     ['inference', `http://127.0.0.1:${probes.env.AETHERION_INFERENCE_PORT || 4100}/livez`],
     ['api', `http://127.0.0.1:${probes.env.AETHERION_API_PORT || 4000}/api/v1/health`],
+    ['worker', `http://127.0.0.1:${probes.env.AETHERION_WORKER_PORT || 4400}/livez`],
   ];
   const results: CheckResult[] = [];
   for (const [name, url] of apps) {
@@ -293,7 +307,11 @@ export const parseListeners = (output: string): { host: string; port: number }[]
 // Built from parts so the source policy's wildcard-binding check does not flag the detector.
 const WILDCARDS = new Set([['0', '0', '0', '0'].join('.'), '::', '*']);
 
-const PORT_KEYS = ['AETHERION_API_PORT', 'AETHERION_INFERENCE_PORT'] as const;
+const PORT_KEYS = [
+  'AETHERION_API_PORT',
+  'AETHERION_INFERENCE_PORT',
+  'AETHERION_WORKER_PORT',
+] as const;
 
 export const configuredPorts = (env: Probes['env']): number[] =>
   PORT_KEYS.flatMap((key) => {
@@ -335,6 +353,108 @@ export const checkRepoHygiene = async (probes: Probes): Promise<CheckResult[]> =
   ];
 };
 
+// Same allowlist as the verified reader (packages/brain/src/sources): ext4, btrfs, xfs,
+// tmpfs, overlayfs. 9p (WSL's /mnt/c) is refused there, so it fails here too.
+const SUPPORTED_FILESYSTEMS = new Set([0xef53, 0x9123683e, 0x58465342, 0x01021994, 0x794c7630]);
+
+export const checkSources = async (probes: Probes): Promise<CheckResult[]> => {
+  const env = loadEnvConfig(probes.env);
+  const dir = env.ok ? env.value.configDir : 'config';
+  const text = await probes.readText(`${dir}/sources.yaml`);
+  if (text === undefined) return [result('sources.yaml', 'fail', `${dir}/sources.yaml not found`)];
+  const parsed = parseSourcesConfig(text);
+  if (!parsed.ok) return [result('sources.yaml', 'fail', parsed.error.message)];
+  const enabled = parsed.value.sources.filter((source) => source.enabled);
+  const results = [
+    result(
+      'sources.yaml',
+      'ok',
+      `${enabled.length} of ${parsed.value.sources.length} sources enabled`,
+    ),
+  ];
+  for (const source of enabled) {
+    const name = `source ${source.id}`;
+    const root = resolveSourceRoot(source, probes.env, '.');
+    if (!root.ok) {
+      results.push(
+        result(name, 'fail', root.error.message, 'set the root in .env (see .env.example)'),
+      );
+      continue;
+    }
+    const info = await probes.fileInfo(root.value);
+    if (!info || info.kind !== 'directory')
+      results.push(result(name, 'fail', 'root is missing or not a directory'));
+    else if (!SUPPORTED_FILESYSTEMS.has(info.fsType))
+      results.push(
+        result(
+          name,
+          'fail',
+          `filesystem 0x${info.fsType.toString(16)} not supported for verified reads`,
+          'move the vault onto the WSL ext4 filesystem (/mnt/c is refused)',
+        ),
+      );
+    else results.push(result(name, 'ok', 'root present on a supported filesystem'));
+  }
+  return results;
+};
+
+const DUMP = /^aetherion-(\d{4})(\d{2})(\d{2})t(\d{2})(\d{2})(\d{2})z\.dump$/;
+const BACKUP_MAX_AGE_DAYS = 7;
+
+export const checkBackups = async (probes: Probes): Promise<CheckResult[]> => {
+  const dir = probes.env.AETHERION_BACKUP_DIR || 'backups';
+  const results: CheckResult[] = [];
+  const tracked = await probes.command('git', ['ls-files', dir]);
+  if (tracked.code === 0 && tracked.stdout.trim())
+    results.push(
+      result('backups tracked', 'fail', `${dir}/ has committed files`, `git rm -r --cached ${dir}`),
+    );
+  if (!probes.env.AETHERION_MAINTENANCE_DATABASE_URL)
+    results.push(
+      result(
+        'maintenance url',
+        'warn',
+        'AETHERION_MAINTENANCE_DATABASE_URL not set; backups cannot run',
+        'set it in .env (see .env.example)',
+      ),
+    );
+  const info = await probes.fileInfo(dir);
+  if (!info) {
+    results.push(result('backups', 'warn', 'no backups yet', 'pnpm run db:backup'));
+    return results;
+  }
+  if (info.kind !== 'directory') {
+    results.push(result('backups', 'fail', `${dir} is not a directory`));
+    return results;
+  }
+  if ((info.mode & 0o077) !== 0)
+    results.push(
+      result('backups private', 'fail', `${dir}/ is readable by others`, `chmod 700 ${dir}`),
+    );
+  const stamps = ((await probes.listDir(dir)) ?? []).flatMap((name) => {
+    const parts = DUMP.exec(name)?.slice(1).map(Number);
+    if (!parts || parts.length !== 6) return [];
+    const [year = 0, month = 1, day = 1, hour = 0, minute = 0, second = 0] = parts;
+    return [Date.UTC(year, month - 1, day, hour, minute, second)];
+  });
+  if (stamps.length === 0) {
+    results.push(result('backups', 'warn', 'no backups yet', 'pnpm run db:backup'));
+    return results;
+  }
+  const ageDays = (probes.now() - Math.max(...stamps)) / 86_400_000;
+  results.push(
+    ageDays > BACKUP_MAX_AGE_DAYS
+      ? result(
+          'backups',
+          'warn',
+          `newest backup is ${Math.floor(ageDays)} days old`,
+          'pnpm run db:backup && pnpm run db:restore-verify',
+        )
+      : result('backups', 'ok', `${stamps.length} dumps, newest ${ageDays.toFixed(1)} days old`),
+  );
+  return results;
+};
+
 export const runDoctor = async (probes: Probes): Promise<CheckResult[]> => {
   const config = await checkConfig(probes);
   const env = loadEnvConfig(probes.env);
@@ -348,6 +468,8 @@ export const runDoctor = async (probes: Probes): Promise<CheckResult[]> => {
     ...(config.models ? await checkOllama(probes, config.models, ollamaUrl, config.catalog) : []),
     ...(await checkBackingServices(probes)),
     ...(await checkAppProcesses(probes)),
+    ...(await checkSources(probes)),
+    ...(await checkBackups(probes)),
     ...(await checkBindings(probes)),
     ...(await checkRepoHygiene(probes)),
   ];
