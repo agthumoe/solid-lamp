@@ -11,6 +11,7 @@ import {
   createSourceReader,
   isSafeRelativePath,
   isWithin,
+  SourceScanError,
   UnsupportedSourceError,
   type SourceReaderOptions,
 } from './source-reader.ts';
@@ -336,5 +337,115 @@ await test('a root replaced between the root check and the open is never read', 
       await r.close();
       await cleanup();
     }
+  }
+});
+
+// Runs `before` once, just before the Nth call to a builtin fs.promises method.
+const interpose = (
+  method: 'open' | 'readdir',
+  nth: number | ((path: string) => boolean),
+  before: () => Promise<void>,
+) => {
+  const real = fsPromises[method] as (...args: unknown[]) => Promise<unknown>;
+  let calls = 0;
+  let fired = false;
+  mock.method(fsPromises, method, async (...args: unknown[]) => {
+    calls++;
+    const hit = typeof nth === 'number' ? calls === nth : nth(String(args[0]));
+    if (!fired && hit) {
+      fired = true;
+      await before();
+    }
+    return real(...args);
+  });
+  syncBuiltinESMExports();
+  return () => {
+    mock.restoreAll();
+    syncBuiltinESMExports();
+  };
+};
+
+await test('listing: a directory swapped for a symlink before it is opened fails the scan', async () => {
+  const { reader, root, base, cleanup } = await fixture();
+  await writeFile(join(base, 'outside', 'OUTSIDE-SECRET.md'), SECRET);
+  const r = await reader();
+  const restore = interpose(
+    'open',
+    (path) => path.endsWith('/notes'),
+    async () => {
+      await rename(join(root, 'notes'), join(base, 'notes-aside'));
+      await symlink(join(base, 'outside'), join(root, 'notes'));
+    },
+  );
+  try {
+    await assert.rejects(r.list(), SourceScanError);
+  } finally {
+    restore();
+    await r.close();
+    await cleanup();
+  }
+});
+
+await test('listing: a directory moved out of the vault after it was opened fails the scan', async () => {
+  const { reader, root, base, cleanup } = await fixture();
+  const r = await reader();
+  // readdir #1 lists the root; #2 is `notes`, already opened: move it outside first.
+  const restore = interpose('readdir', 2, async () => {
+    await rename(join(root, 'notes'), join(base, 'outside', 'notes-moved'));
+  });
+  try {
+    await assert.rejects(r.list(), SourceScanError);
+  } finally {
+    restore();
+    await r.close();
+    await cleanup();
+  }
+});
+
+await test('listing: the review reproduction (notes swapped for an outside symlink before it is read) fails', async () => {
+  const { reader, root, base, cleanup } = await fixture();
+  await writeFile(join(base, 'outside', 'OUTSIDE-SECRET.md'), SECRET);
+  const r = await reader();
+  // readdir #2 reads `notes`: just before it, move the real directory aside and link outside.
+  const restore = interpose('readdir', 2, async () => {
+    await rename(join(root, 'notes'), join(base, 'notes-aside'));
+    await symlink(join(base, 'outside'), join(root, 'notes'));
+  });
+  try {
+    await assert.rejects(r.list(), SourceScanError);
+  } finally {
+    restore();
+    await r.close();
+    await cleanup();
+  }
+});
+
+await test('listing: a root pathname replaced during the scan fails it', async () => {
+  const { reader, root, base, cleanup } = await fixture();
+  const replacement = join(base, 'replacement');
+  await mkdir(replacement, { recursive: true });
+  await writeFile(join(replacement, 'OUTSIDE-SECRET.md'), SECRET);
+  const r = await reader();
+  const restore = interpose('readdir', 1, async () => {
+    await rename(root, join(base, 'vault-aside'));
+    await rename(replacement, root);
+  });
+  try {
+    await assert.rejects(r.list(), SourceScanError);
+  } finally {
+    restore();
+    await r.close();
+    await cleanup();
+  }
+});
+
+await test('listing: an unchanged tree still lists completely after the hardening', async () => {
+  const { reader, cleanup } = await fixture();
+  const r = await reader();
+  try {
+    assert.deepEqual(await r.list(), ['notes/a.md', 'top.md']);
+  } finally {
+    await r.close();
+    await cleanup();
   }
 });

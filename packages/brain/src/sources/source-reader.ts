@@ -51,8 +51,12 @@ export type SourceReaderOptions = {
 const SUPPORTED_FILESYSTEMS = new Set([0xef53, 0x9123683e, 0x58465342, 0x01021994, 0x794c7630]);
 
 const OPEN_FLAGS = constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK;
+const DIRECTORY_FLAGS = OPEN_FLAGS | constants.O_DIRECTORY;
 
 export class UnsupportedSourceError extends Error {}
+
+// A listing that raced a change in the tree. Never treat it as a complete scan.
+export class SourceScanError extends Error {}
 
 /** Root-relative POSIX path with no traversal, absolute, empty or NUL parts. */
 export const isSafeRelativePath = (path: string): boolean =>
@@ -91,8 +95,6 @@ export const createSourceReader = async (options: SourceReaderOptions) => {
     await rootHandle.close();
     throw new UnsupportedSourceError('source root changed during creation');
   }
-  const viaRoot = (relative: string) =>
-    relative ? `/proc/self/fd/${rootHandle.fd}/${relative}` : `/proc/self/fd/${rootHandle.fd}`;
   const excluded = new Set(options.excludeDirs);
   const included = new Set(options.includeExtensions.map((ext) => ext.toLowerCase()));
   const timeoutMs = options.readTimeoutMs ?? 5_000;
@@ -204,25 +206,73 @@ export const createSourceReader = async (options: SourceReaderOptions) => {
    * Deterministic advisory listing; symlinked entries are never followed. A listing that would
    * exceed the entry or depth bound throws: a truncated scan must never look complete.
    */
+  /**
+   * Complete, verified scan or an error, never a partial list that could authorize resync
+   * deletions. Every directory is opened one component at a time from its verified parent
+   * (O_NOFOLLOW | O_DIRECTORY) and read through its own descriptor, so a directory swapped for
+   * a symlink mid-scan fails the scan instead of listing what the link points at. A root
+   * pathname replacement before or during the scan fails it too.
+   */
   const list = async (): Promise<string[]> => {
     const maxEntries = options.maxListEntries ?? 200_000;
     const maxDepth = options.maxDepth ?? 32;
     const found: string[] = [];
     let seen = 0;
-    const walk = async (relativeDir: string, depth: number): Promise<void> => {
+    const raced = (path: string) =>
+      new SourceScanError(`source changed during listing at ${path || '<root>'}`);
+
+    const openChildDirectory = async (parent: FileHandle, name: string, path: string) => {
+      let handle: FileHandle;
+      try {
+        handle = await open(`/proc/self/fd/${parent.fd}/${name}`, DIRECTORY_FLAGS);
+      } catch {
+        // ELOOP (now a symlink), ENOTDIR (now a file), ENOENT (gone): the scan is not
+        // describing one consistent tree.
+        throw raced(path);
+      }
+      try {
+        const info = await handle.stat();
+        const actual = await readlink(`/proc/self/fd/${handle.fd}`);
+        if (!info.isDirectory() || info.dev !== rootStat.dev || actual !== `${rootReal}/${path}`)
+          throw raced(path);
+        return handle;
+      } catch (error) {
+        await handle.close();
+        throw error;
+      }
+    };
+
+    const walk = async (
+      directory: FileHandle,
+      relativeDir: string,
+      depth: number,
+    ): Promise<void> => {
       if (depth > maxDepth) throw new UnsupportedSourceError('source exceeds the depth limit');
-      const entries = await readdir(viaRoot(relativeDir), { withFileTypes: true });
+      // Reads exactly the directory this descriptor refers to, not whatever a path names now.
+      const entries = await readdir(`/proc/self/fd/${directory.fd}`, { withFileTypes: true });
+      // A directory moved out of the vault after it was opened would list outside entries.
+      const expected = relativeDir ? `${rootReal}/${relativeDir}` : rootReal;
+      if ((await readlink(`/proc/self/fd/${directory.fd}`)) !== expected) throw raced(relativeDir);
       entries.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
       for (const entry of entries) {
         if (++seen > maxEntries) throw new UnsupportedSourceError('source exceeds the entry limit');
         const path = relativeDir ? `${relativeDir}/${entry.name}` : entry.name;
         if (entry.isSymbolicLink()) continue;
         if (entry.isDirectory()) {
-          if (!excluded.has(entry.name)) await walk(path, depth + 1);
+          if (excluded.has(entry.name)) continue;
+          const child = await openChildDirectory(directory, entry.name, path);
+          try {
+            await walk(child, path, depth + 1);
+          } finally {
+            await child.close();
+          }
         } else if (entry.isFile() && policy(path) === undefined) found.push(path);
       }
     };
-    await walk('', 0);
+
+    if (!(await rootUnchanged())) throw raced('');
+    await walk(rootHandle, '', 0);
+    if (!(await rootUnchanged())) throw raced('');
     return found;
   };
 

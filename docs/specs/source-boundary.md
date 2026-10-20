@@ -44,7 +44,15 @@ Created from a resolved root, it captures the root's `realpath`, device and inod
 5. **Verify the opened object, not the path:** the root pathname must still be the held root (`root_changed`), and the kernel path of the descriptor (`/proc/self/fd/<fd>`) must equal `rootReal + '/' + relativePath` exactly (`outside_root`), so no component was moved or aliased. `fstat` must be a regular file (`not_regular_file`) with a single link (`hardlink`) and at most `max_file_bytes` (`too_large`, nothing read).
 6. **Read** from that descriptor only, bounded by size and `readTimeoutMs` (`timeout`). Content must be valid UTF-8 (`invalid_encoding`). The descriptor is always closed.
 
-`list()` walks the root deterministically (sorted). It does not follow symlinked entries, skips excluded directories before descending, and keeps only included extensions. It is bounded by entry count and depth; exceeding either bound throws, so a truncated scan can never be mistaken for a complete one (and cannot authorize tombstoning). Listing is advisory: every read still goes through `open`.
+`list()` returns a **complete, verified scan or throws**, never a partial list that could authorize resync deletions or tombstoning. It is sorted and bounded by entry count and depth (both throw).
+
+- Each directory is opened one component at a time from its already-verified parent (`O_NOFOLLOW | O_DIRECTORY`). Its entries are read through its own descriptor (`/proc/self/fd/<fd>`), not by path.
+- Symlinked entries are skipped and excluded directories pruned.
+- The scan fails with `SourceScanError` when:
+  - a directory becomes a symlink, a file or nothing before it is opened;
+  - a directory's kernel path is no longer `root/<path>` after its entries are read (it was moved out of the vault);
+  - the root pathname changes before or during the scan.
+- Listing is still advisory: every read goes through `open`.
 
 Refusals are counted by reason for `brain:stats`. Paths and reasons may be logged; file content never is.
 
@@ -69,4 +77,5 @@ Refusals are counted by reason for `brain:stats`. Paths and reasons may be logge
   - invalid UTF-8;
   - a timeout;
   - `list()` skipping symlinks and excluded paths, and bounded;
-  - a depth-limited `list()` throws instead of returning a partial result.
+  - a depth-limited `list()` throws instead of returning a partial result;
+  - listing races, each failing the scan with `SourceScanError`: a directory swapped for a symlink before it is opened; a directory moved out of the vault after it was opened; the review's exact reproduction (`notes` swapped for an outside symlink just before it is read); a root replaced mid-scan.
