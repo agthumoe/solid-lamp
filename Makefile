@@ -57,6 +57,16 @@ db\:backup:
 db\:restore-verify:
 	pnpm db:restore-verify $(ARGS)
 
+.PHONY: brain\:fixture-vault
+brain\:fixture-vault:
+	pnpm brain:fixture-vault $(ARGS)
+.PHONY: brain\:watch-latency
+brain\:watch-latency:
+	pnpm brain:watch-latency
+.PHONY: brain\:pdf-fixtures
+brain\:pdf-fixtures:
+	pnpm brain:pdf-fixtures
+
 .PHONY: test\:doctor
 test\:doctor:
 	pnpm test:doctor
@@ -132,3 +142,7 @@ evals\:check:
 .PHONY: evals\:domain\:check
 evals\:domain\:check:
 	pnpm evals:domain:check
+
+.PHONY: deps\:audit
+deps\:audit:
+	pnpm deps:audit
