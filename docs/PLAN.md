@@ -3,7 +3,7 @@
 Source of truth for phase status. Update at the end of every phase (see `AGENTS.md`).
 Full requirements: [`BUILD_PROMPT.md`](BUILD_PROMPT.md).
 
-**Current phase:** 1 — Scaffold (Phase 0 accepted by the owner 2026-10-15, #47)
+**Current phase:** 2 — Brain (Phase 1 accepted 2026-10-18; synthetic implementation authorized; real-vault access remains gated)
 
 Rounds 2 and 3 are merged and integrated (#38, #40): round-2 [domain diagnostics and readiness records](workstreams/round2/README.md); round-3 [Phase 0 decision packets](workstreams/round3/README.md) for the owner. Phase 0 acceptance, #31 downloads/inference and phase advancement remain gated on owner decisions.
 
@@ -79,7 +79,7 @@ Independent Codex audit under [#4](https://github.com/agthumoe/solid-lamp/issues
 
 ## Phase 2: Brain
 
-- [ ] Spec `docs/specs/brain.md` (revised draft for owner/peer review, [#84](https://github.com/agthumoe/solid-lamp/issues/84), PR #85: [review findings](reviews/phase2-plan-pr85.md), [proposed ADR 0006](adr/0006-brain-version-bound-retrieval.md), version-bound RPC/chunk sets, recovery/path/latency gates, decisions D1–D5 and 13-step breakdown; no implementation approved)
+- [ ] Spec `docs/specs/brain.md` (revised design reference for implementation review, [#84](https://github.com/agthumoe/solid-lamp/issues/84), PR #85: [review findings](reviews/phase2-plan-pr85.md), [proposed ADR 0006](adr/0006-brain-version-bound-retrieval.md), version-bound RPC/chunk sets, recovery/path/latency gates, decisions D1–D5 and 13-step breakdown; synthetic tasks authorized; ADR 0006 remains proposed and D1/D2 remain gated)
 - [ ] Spec/task for book extraction and dated official-source ingestion; edition/location/jurisdiction/freshness citations (domain-agent plan)
 - [ ] Obsidian ingestion (chokidar watch + full resync), frontmatter, wikilinks, tags, embeds
 - [ ] Heading-aware chunking, incremental by content hash, renames/deletes
