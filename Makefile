@@ -132,3 +132,7 @@ evals\:check:
 .PHONY: evals\:domain\:check
 evals\:domain\:check:
 	pnpm evals:domain:check
+
+.PHONY: deps\:audit
+deps\:audit:
+	pnpm deps:audit
