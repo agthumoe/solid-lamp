@@ -6,7 +6,9 @@ import {
   isSafeRelativePath,
   isWellFormed,
   MAX_HEADING_DEPTH,
+  MAX_DISPLAY_LENGTH,
   MAX_HEADING_LENGTH,
+  MAX_LINE,
   MAX_OCCURRENCE,
   UNSAFE_DISPLAY,
 } from './structured.ts';
@@ -25,7 +27,6 @@ export type DisplayParseResult =
   | { readonly ok: false; readonly reason: string };
 
 const HEADING_SEPARATOR = ' > ';
-const MAX_DISPLAY_LENGTH = 4 * (2048 + MAX_HEADING_DEPTH * (MAX_HEADING_LENGTH + 3)) + 128;
 const SOURCE = /^[A-Za-z0-9_.-]{1,96}$/;
 
 const PATH_RESERVED = new Set(['%', '#', '@']);
@@ -81,6 +82,7 @@ export const formatCitation = (citation: DisplayCitation): string => {
     !Number.isInteger(citation.lineStart) ||
     !Number.isInteger(citation.lineEnd) ||
     citation.lineStart < 1 ||
+    citation.lineEnd > MAX_LINE ||
     citation.lineEnd < citation.lineStart
   )
     throw new Error('invalid line range');

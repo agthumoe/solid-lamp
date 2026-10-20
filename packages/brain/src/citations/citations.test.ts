@@ -13,7 +13,7 @@ import {
   type StructuredCitation,
   structuredCitationSchema,
 } from './index.ts';
-import { UNSAFE_DISPLAY } from './structured.ts';
+import { MAX_DISPLAY_LENGTH, UNSAFE_DISPLAY } from './structured.ts';
 
 const base: DisplayCitation = {
   sourceId: 'vault',
@@ -105,7 +105,7 @@ await test('parsing rejects malformed, traversal, absolute and non-canonical inp
     'vault:a.md# padded@L1-2',
     'bad source:a.md@L1-2',
     'vault:a.md@L1-2 trailing',
-    `vault:a.md#${Array.from({ length: 33 }, () => 'h').join(' > ')}@L1-2`,
+    `vault:a.md#${Array.from({ length: 7 }, () => 'h').join(' > ')}@L1-2`,
     `vault:a.md#${'h'.repeat(501)}@L1-2`,
   ];
   for (const text of rejected) assert.equal(parseDisplayCitation(text).ok, false, text);
@@ -245,7 +245,7 @@ await test('the structured schema is strict and bounded', () => {
     { ...valid, revision: -1 },
     { ...valid, lineStart: 9, lineEnd: 2 },
     { ...valid, headingPath: [], headingOccurrence: 2 },
-    { ...valid, headingPath: Array.from({ length: 33 }, () => 'h') },
+    { ...valid, headingPath: Array.from({ length: 7 }, () => 'h') },
     { ...valid, headingPath: ['\udc00'] },
     { ...valid, chunkId: 'has space' },
     { ...valid, headingOccurrence: 10_001 },
@@ -287,4 +287,21 @@ await test('seeded fuzz: random headings and paths over the delimiter alphabet r
     assert.ok(parsed.ok, text);
     assert.deepEqual(parsed.value, candidate, text);
   }
+});
+
+await test('the worst-case citation formats within MAX_DISPLAY_LENGTH and round-trips', () => {
+  const worst: DisplayCitation = {
+    sourceId: 's'.repeat(96),
+    path: '%'.repeat(2048),
+    headingPath: Array.from({ length: 6 }, () => '\u2028'.repeat(500)),
+    headingOccurrence: 10_000,
+    lineStart: 999_999_999,
+    lineEnd: 999_999_999,
+  };
+  const text = formatCitation(worst);
+  assert.equal(text.length, MAX_DISPLAY_LENGTH);
+  const parsed = parseDisplayCitation(text);
+  assert.ok(parsed.ok);
+  assert.deepEqual(parsed.value, worst);
+  assert.throws(() => formatCitation({ ...worst, lineEnd: 1_000_000_000 }));
 });

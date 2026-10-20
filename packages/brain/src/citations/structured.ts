@@ -3,10 +3,29 @@
 // silently answered from a different revision, chunk set or source.
 import { z } from 'zod';
 
-export const MAX_HEADING_DEPTH = 32;
+// Markdown headings go to h6, so a section's heading path has at most six levels.
+export const MAX_HEADING_DEPTH = 6;
 export const MAX_HEADING_LENGTH = 500;
 export const MAX_PATH_LENGTH = 2048;
 export const MAX_OCCURRENCE = 10_000;
+export const MAX_SOURCE_ID_LENGTH = 96;
+export const MAX_LINE = 999_999_999;
+
+// Worst-case length of the display form (display.ts), so wire contracts can bound it exactly:
+// path characters that need escaping are ASCII (3 chars each; unsafe ones are refused), heading
+// characters can be 3-byte UTF-8 controls (9 chars each), plus separators, `~N` and the range.
+export const MAX_DISPLAY_LENGTH =
+  MAX_SOURCE_ID_LENGTH +
+  1 +
+  3 * MAX_PATH_LENGTH +
+  1 +
+  MAX_HEADING_DEPTH * 9 * MAX_HEADING_LENGTH +
+  (MAX_HEADING_DEPTH - 1) * 3 +
+  1 +
+  String(MAX_OCCURRENCE).length +
+  2 +
+  2 * String(MAX_LINE).length +
+  1;
 
 const identifier = z.string().regex(/^[A-Za-z0-9_.-]{1,96}$/);
 const hash = z.string().regex(/^[a-f0-9]{64}$/);
@@ -43,8 +62,8 @@ export const structuredCitationSchema = z
       .max(MAX_HEADING_DEPTH),
     // 1 for the first section with this heading path in the document, 2 for the next, ...
     headingOccurrence: z.int().min(1).max(MAX_OCCURRENCE),
-    lineStart: z.int().min(1),
-    lineEnd: z.int().min(1),
+    lineStart: z.int().min(1).max(MAX_LINE),
+    lineEnd: z.int().min(1).max(MAX_LINE),
   })
   .refine((citation) => citation.lineStart <= citation.lineEnd, 'line range is reversed')
   .refine(

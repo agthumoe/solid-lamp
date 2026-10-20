@@ -10,6 +10,23 @@ export const BRAIN_QUERY_MAX_CHARS = 1_000;
 export const BRAIN_SNIPPET_MAX_CHARS = 1_200;
 export const BRAIN_EXCERPT_DEFAULT_CHARS = 2_000;
 export const BRAIN_EXCERPT_MAX_CHARS = 8_000;
+export const BRAIN_HEADING_MAX_DEPTH = 6; // Markdown h1-h6
+export const BRAIN_LINE_MAX = 999_999_999;
+// Worst-case length of the citation display form produced by the @aetherion/brain codec
+// (escaped path and headings, separators, occurrence and line range). A test in the brain
+// package formats that worst case and checks it passes this contract.
+export const BRAIN_CITATION_DISPLAY_MAX_CHARS =
+  96 +
+  1 +
+  3 * 2048 +
+  1 +
+  BRAIN_HEADING_MAX_DEPTH * 9 * 500 +
+  (BRAIN_HEADING_MAX_DEPTH - 1) * 3 +
+  1 +
+  5 +
+  2 +
+  2 * 9 +
+  1;
 
 const identifier = z.string().regex(/^[A-Za-z0-9_.-]{1,96}$/);
 const contentHash = z.string().regex(/^[a-f0-9]{64}$/);
@@ -27,7 +44,7 @@ const relativePath = z
       path.split('/').every((part) => part !== '' && part !== '.' && part !== '..'),
     'must be a safe relative path',
   );
-const lineNumber = z.int().min(1);
+const lineNumber = z.int().min(1).max(BRAIN_LINE_MAX);
 const isoTimestamp = z.iso.datetime({ offset: false });
 
 // Querystrings carry one value as a string and repeated keys as an array.
@@ -57,7 +74,7 @@ export const brainSearchQuerySchema = z.strictObject({
 
 export const brainCitationSchema = z
   .strictObject({
-    display: z.string().min(1).max(8_192),
+    display: z.string().min(1).max(BRAIN_CITATION_DISPLAY_MAX_CHARS),
     sourceId: identifier,
     documentId: identifier,
     revision: z.int().min(0),
@@ -65,7 +82,7 @@ export const brainCitationSchema = z
     chunkId: identifier,
     versionId: identifier,
     path: relativePath,
-    headingPath: z.array(z.string().min(1).max(500)).max(32),
+    headingPath: z.array(z.string().min(1).max(500)).max(BRAIN_HEADING_MAX_DEPTH),
     headingOccurrence: z.int().min(1).max(10_000),
     lineStart: lineNumber,
     lineEnd: lineNumber,
@@ -77,7 +94,7 @@ export const brainSearchResultSchema = z
     chunkId: identifier,
     documentPath: relativePath,
     title: z.string().max(500).nullable(),
-    headingPath: z.array(z.string().min(1).max(500)).max(32),
+    headingPath: z.array(z.string().min(1).max(500)).max(BRAIN_HEADING_MAX_DEPTH),
     lineStart: lineNumber,
     lineEnd: lineNumber,
     // Untrusted note text: consumers wrap it in data delimiters and never act on it.
