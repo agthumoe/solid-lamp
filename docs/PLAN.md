@@ -5,7 +5,7 @@ Full requirements: [`BUILD_PROMPT.md`](BUILD_PROMPT.md).
 
 **Current phase:** 2 — Brain (Phase 1 accepted 2026-10-18; synthetic implementation authorized; real-vault access remains gated)
 
-Rounds 2 and 3 are merged and integrated (#38, #40): round-2 [domain diagnostics and readiness records](workstreams/round2/README.md); round-3 [Phase 0 decision packets](workstreams/round3/README.md) for the owner. Phase 0 acceptance, #31 downloads/inference and phase advancement remain gated on owner decisions.
+Rounds 2 and 3 are merged and integrated (#38, #40): round-2 [domain diagnostics and readiness records](workstreams/round2/README.md); round-3 [Phase 0 decision packets](workstreams/round3/README.md) for the owner. Phase 0 and Phase 1 are accepted. Specialist acquisition #31 was declined; Phase 2 real-data access and ADR 0006 remain gated as recorded below.
 
 GitHub tasks/milestones: [TRACKING.md](TRACKING.md). Standards: [development handbook](development/README.md). Create/select a task before project edits.
 
