@@ -57,6 +57,10 @@ db\:backup:
 db\:restore-verify:
 	pnpm db:restore-verify $(ARGS)
 
+.PHONY: brain\:fixture-vault
+brain\:fixture-vault:
+	pnpm brain:fixture-vault $(ARGS)
+
 .PHONY: test\:doctor
 test\:doctor:
 	pnpm test:doctor
