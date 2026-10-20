@@ -19,6 +19,7 @@
     "db:status": "node --env-file-if-exists=.env scripts/db/supabase-cli.ts status",
     "db:backup": "node --env-file-if-exists=.env scripts/db/backup.ts",
     "db:restore-verify": "node --env-file-if-exists=.env scripts/db/restore-verify.ts",
+    "brain:watch-latency": "node scripts/brain/watch-latency.ts",
     "brain:pdf-fixtures": "node scripts/brain/make-pdf-fixtures.ts",
     "test:bench": "node scripts/bench/integrity.test.ts",
     "test:templates": "node --test 'docs/development/templates/**/*.test.ts'",
@@ -54,6 +55,7 @@
     "typescript-eslint": "8.71.2"
   },
   "dependencies": {
+    "@aetherion/brain": "workspace:*",
     "@aetherion/db": "workspace:*",
     "@aetherion/shared": "workspace:*",
     "pino": "10.4.0",

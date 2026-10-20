@@ -57,6 +57,9 @@ db\:backup:
 db\:restore-verify:
 	pnpm db:restore-verify $(ARGS)
 
+.PHONY: brain\:watch-latency
+brain\:watch-latency:
+	pnpm brain:watch-latency
 .PHONY: brain\:pdf-fixtures
 brain\:pdf-fixtures:
 	pnpm brain:pdf-fixtures
