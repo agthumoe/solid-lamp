@@ -1,7 +1,10 @@
 // `@aetherion/shared/contracts`: browser-safe wire contracts (zod schemas and inferred DTOs).
 // Server-only modules (config, logging) stay on the package root entry.
 export {
+  BRAIN_CITATION_DISPLAY_MAX_CHARS,
   BRAIN_EXCERPT_DEFAULT_CHARS,
+  BRAIN_HEADING_MAX_DEPTH,
+  BRAIN_LINE_MAX,
   BRAIN_EXCERPT_MAX_CHARS,
   BRAIN_QUERY_MAX_CHARS,
   BRAIN_SEARCH_DEFAULT_LIMIT,
