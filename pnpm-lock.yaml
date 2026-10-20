@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@aetherion/db':
+        specifier: workspace:*
+        version: link:packages/db
       '@aetherion/shared':
         specifier: workspace:*
         version: link:packages/shared

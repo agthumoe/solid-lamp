@@ -37,3 +37,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm check
       - run: pnpm test:int
+        env:
+          # Recovery-gate tests run pg_dump/pg_restore inside the service container; the job
+          # context is only available at step level.
+          AETHERION_PG_CONTAINER: ${{ job.services.postgres.id }}

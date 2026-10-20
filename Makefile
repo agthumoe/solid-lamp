@@ -49,6 +49,14 @@ db\:migrate:
 db\:status:
 	pnpm db:status
 
+.PHONY: db\:backup
+db\:backup:
+	pnpm db:backup
+
+.PHONY: db\:restore-verify
+db\:restore-verify:
+	pnpm db:restore-verify $(ARGS)
+
 .PHONY: test\:doctor
 test\:doctor:
 	pnpm test:doctor

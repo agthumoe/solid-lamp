@@ -20,3 +20,6 @@ infra/whatsapp-session/
 
 # Agent worktrees and local agent state (separate checkouts)
 .claude/
+
+# Database dumps contain private data (docs/specs/recovery-gate.md)
+backups/
