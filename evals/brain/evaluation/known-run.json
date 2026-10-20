@@ -1,0 +1,83 @@
+{
+  "run": {
+    "evidenceKind": "synthetic_fake",
+    "profileId": "fixture-profile",
+    "chunkerVersion": "fixture-chunker-v1",
+    "thresholdVersion": "fixture-gates-v1",
+    "questions": [
+      {
+        "id": "answer-one",
+        "query": "Synthetic question answer-one",
+        "split": "held_out",
+        "answerable": true,
+        "expected": [
+          {
+            "sourceId": "synthetic",
+            "path": "Notes/One.md",
+            "headingPath": ["Overview"]
+          }
+        ]
+      },
+      {
+        "id": "answer-two",
+        "query": "Synthetic question answer-two",
+        "split": "held_out",
+        "answerable": true,
+        "expected": [
+          {
+            "sourceId": "synthetic",
+            "path": "Notes/Two.md",
+            "headingPath": ["Overview"]
+          }
+        ]
+      },
+      {
+        "id": "unknown",
+        "query": "Synthetic question unknown",
+        "split": "held_out",
+        "answerable": false,
+        "expected": []
+      }
+    ],
+    "observations": [
+      {
+        "questionId": "answer-one",
+        "status": "ok",
+        "hits": [
+          {
+            "chunkId": "one",
+            "citation": {
+              "sourceId": "synthetic",
+              "path": "Notes/One.md",
+              "headingPath": ["Overview"]
+            },
+            "citationVerified": true
+          }
+        ],
+        "latencyMs": 10
+      },
+      {
+        "questionId": "answer-two",
+        "status": "no_match",
+        "hits": [],
+        "latencyMs": 30
+      },
+      {
+        "questionId": "unknown",
+        "status": "no_match",
+        "hits": [],
+        "latencyMs": 20
+      }
+    ]
+  },
+  "expected": {
+    "recallAt5": 0.5,
+    "meanReciprocalRank": 0.5,
+    "citationAccuracy": 1,
+    "abstentionAccuracy": 0.6666666666666666,
+    "unanswerableAbstentionRate": 1,
+    "p50": 20,
+    "p95": 30,
+    "max": 30
+  }
+}

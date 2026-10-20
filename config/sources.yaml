@@ -1,0 +1,15 @@
+# Ingestion sources (docs/specs/source-boundary.md, #88). No private paths here: real roots come
+# from .env, and every real source stays disabled until the owner approves reading it (D1/D2).
+sources:
+  # Synthetic fixture vault inside the repository (created by #89); safe for development and CI.
+  - id: fixture-vault
+    kind: obsidian
+    root: { repo_path: evals/brain/vault }
+    enabled: true
+
+  # The owner's Obsidian vault. Set AETHERION_VAULT_ROOT in .env (an ext4 path inside WSL;
+  # /mnt/c is refused) and flip `enabled` only after explicit approval.
+  - id: vault
+    kind: obsidian
+    root: { env: AETHERION_VAULT_ROOT }
+    enabled: false
