@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@aetherion/brain':
+        specifier: workspace:*
+        version: link:packages/brain
       '@aetherion/db':
         specifier: workspace:*
         version: link:packages/db

@@ -23,3 +23,6 @@ infra/whatsapp-session/
 
 # Database dumps contain private data (docs/specs/recovery-gate.md)
 backups/
+
+# Generated synthetic vault (pnpm run brain:fixture-vault)
+evals/brain/vault/
