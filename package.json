@@ -19,6 +19,7 @@
     "db:status": "node --env-file-if-exists=.env scripts/db/supabase-cli.ts status",
     "db:backup": "node --env-file-if-exists=.env scripts/db/backup.ts",
     "db:restore-verify": "node --env-file-if-exists=.env scripts/db/restore-verify.ts",
+    "brain:fixture-vault": "node scripts/brain/fixture-vault.ts",
     "brain:watch-latency": "node scripts/brain/watch-latency.ts",
     "brain:pdf-fixtures": "node scripts/brain/make-pdf-fixtures.ts",
     "test:bench": "node scripts/bench/integrity.test.ts",
