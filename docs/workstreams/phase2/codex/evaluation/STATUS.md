@@ -4,11 +4,11 @@ Issue [#98](https://github.com/agthumoe/solid-lamp/issues/98), `agent:codex`, `s
 
 ## Now
 
-Implemented strict evaluation-run validation, deterministic aggregate metrics, synthetic fixtures/private-question template and tests under [the contract](spec.md). Direct tests pass 14/14; full pnpm check passes with loopback access. See [integration handoff](INTEGRATION.md). The owner has authorized publication and merging clean PRs; publishing this isolated scoring slice for review. [Completed/pending scope is posted on #98](https://github.com/agthumoe/solid-lamp/issues/98#issuecomment-6258915529). This is an early independent slice; final safety-gate evidence remains pending. No overlap with Claude's #88 or recovery fixes, or Codex's parser/chunker directories.
+Implementation PR #106 is merged with passing required CI on an up-to-date head. The owner authorized review fixes, publication and clean merges. Public package/quality-gate integration is tracked in [#107](https://github.com/agthumoe/solid-lamp/issues/107); 61 combined brain tests and full `pnpm check` pass. #98 remains in progress for its actual search runner and complete safety gates; fake scores never establish readiness. No real data, model, DB or shared-service changes. Claude retains source, recovery and worker ownership.
 
 ## Next
 
-Post explicit completed/pending scope in #98; integrate public exports/dependencies and PR #102 root brain-test wiring after review. Retain the claim for later end-to-end gate work once dependencies land. Shared package/root test wiring remains integration work.
+#98 remains in progress for its actual search runner and complete safety gates; fake scores never establish readiness. Use #107 public exports and root brain tests after integration delivery. Keep the GitHub claim and coordinate any fixture/GPU/runner work before touching shared resources.
 
 ## Blocked
 

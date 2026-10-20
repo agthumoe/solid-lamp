@@ -2,6 +2,8 @@
 
 Branch `feat/89-brain-parsing`, worktree `/tmp/aetherion-workbenches/phase2-codex-89`, base 3304897. Publishing under the owner’s current review-and-merge authorization. Issue [#89](https://github.com/agthumoe/solid-lamp/issues/89) remains `agent:codex`, `status:in-progress` for review/integration.
 
+Delivery update: PR #104 merged with passing current-main CI. #107 supplies public exports, exact dependency declarations and broad root brain-test wiring; combined tests pass 61/61. #89 remains in progress for configured synthetic fixture-source materialization/integration.
+
 ## Public contract to wire
 
 The module entry `packages/brain/src/parsing/index.ts` exports `parseNote`, `resolveNoteLinks` and their types. Integration must expose them through the package root; no consumer should deep-import this directory. The package bootstrap owner must declare exact `yaml@2.8.4` and `zod@4.6.7` dependencies (already installed at the root here), update the lockfile, and reuse PR #102's proposed broad root brain-test/Makefile wiring after #86 and the source-reader fixes land. No shared bootstrap files were changed in this task.

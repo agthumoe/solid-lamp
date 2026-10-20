@@ -79,9 +79,9 @@ Independent Codex audit under [#4](https://github.com/agthumoe/solid-lamp/issues
 
 ## Phase 2: Brain
 
-Delivery: reviewed plan #85, parser #104 and scorer #106 merged; chunker #105 pending current-main CI. Package/quality-gate integration is tracked in #107 (61 synthetic brain tests locally). #89 fixture-source integration, #90 empirical token calibration and #98 end-to-end safety evidence remain open. Source #102 has a new P1 directory-listing race and worker #103 has a P2 unbounded-drain fallback; recovery #101's prior findings are fixed. ADR 0006 remains proposed; D1/D2 and phase acceptance remain gated.
+Delivery: reviewed plan #85 and module PRs #104–#106 merged with required current-main CI. Package/quality-gate integration is tracked in #107 (61 synthetic brain tests locally). #89 fixture-source integration, #90 empirical token calibration and #98 end-to-end safety evidence remain open. Source #102 has a new P1 directory-listing race and worker #103 has a P2 unbounded-drain fallback; recovery #101's prior findings are fixed. ADR 0006 remains proposed; D1/D2 and phase acceptance remain gated.
 
-- [ ] Spec `docs/specs/brain.md` (revised design reference for implementation review, [#84](https://github.com/agthumoe/solid-lamp/issues/84), PR #85: [review findings](reviews/phase2-plan-pr85.md), [proposed ADR 0006](adr/0006-brain-version-bound-retrieval.md), version-bound RPC/chunk sets, recovery/path/latency gates, decisions D1–D5 and 13-step breakdown; synthetic tasks authorized; ADR 0006 remains proposed and D1/D2 remain gated)
+- [x] Spec `docs/specs/brain.md` (revised design reference for implementation review, [#84](https://github.com/agthumoe/solid-lamp/issues/84), PR #85: [review findings](reviews/phase2-plan-pr85.md), [proposed ADR 0006](adr/0006-brain-version-bound-retrieval.md), version-bound RPC/chunk sets, recovery/path/latency gates, decisions D1–D5 and 13-step breakdown; synthetic tasks authorized; ADR 0006 remains proposed and D1/D2 remain gated)
 - [ ] Spec/task for book extraction and dated official-source ingestion; edition/location/jurisdiction/freshness citations (domain-agent plan)
 - [ ] Obsidian ingestion (chokidar watch + full resync), frontmatter, wikilinks, tags, embeds
 - [ ] Heading-aware chunking, incremental by content hash, renames/deletes

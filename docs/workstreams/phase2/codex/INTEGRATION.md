@@ -2,6 +2,8 @@
 
 Task: [#90](https://github.com/agthumoe/solid-lamp/issues/90). Branch `feat/90-heading-aware-chunker`; worktree `/tmp/aetherion-workbenches/phase2-codex-90`; base `3304897` (the reviewed plan branch). Publishing this independently verified implementation under the owner’s review-and-merge authorization. The task stays `agent:codex`, `status:in-progress` for review/integration.
 
+Delivery update: PR #105 merged with passing current-main CI. #107 supplies public exports, exact dependency declarations and broad root brain-test wiring; combined tests pass 61/61. #90 remains in progress for empirical token calibration against measured embedding counts.
+
 ## Owned deliverable
 
 `packages/brain/src/chunking/index.ts` exposes `chunkMarkdown`, `CHUNKER_VERSION`, `estimateTokens`, `utf8Bytes`, `calibrateTokenEstimator` and their types. No dependencies, filesystem, DB or model calls are introduced. See [contract](chunker-spec.md) for inputs, source offset semantics and supported Markdown heading forms.

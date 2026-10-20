@@ -4,11 +4,11 @@ Issue: [#90](https://github.com/agthumoe/solid-lamp/issues/90), claimed `agent:c
 
 ## Now
 
-Pure heading-aware chunker, token estimation/calibration helper and synthetic tests are implemented under [the task contract](chunker-spec.md). Final verification: 21/21 new tests pass (including 80 deterministic mixed-script coverage cases); full `pnpm check` passes in this isolated worktree with loopback access. The owner has authorized publication and merging clean PRs; publishing this implementation for review/integration; #90 stays in progress. [Results and shared-file requests are posted on the issue](https://github.com/agthumoe/solid-lamp/issues/90#issuecomment-6258534531). Claude's #86/#87, all other tasks, shared root files and canonical STATUS/PLAN are untouched. Scope is `packages/brain/src/chunking/**` and `docs/workstreams/phase2/codex/**` only.
+Implementation PR #105 is merged with passing required CI on an up-to-date head. The owner authorized review fixes, publication and clean merges. Public package/quality-gate integration is tracked in [#107](https://github.com/agthumoe/solid-lamp/issues/107); 61 combined brain tests and full `pnpm check` pass. #90 remains in progress for empirical token calibration against measured embedding counts. No real data, model, DB or shared-service changes. Claude retains source, recovery and worker ownership.
 
 ## Next
 
-Review the module and [integration instructions](INTEGRATION.md). Integration owner wires package exports/root test script and merges #86 before new package imports. Publish the implementation, review its exact head and merge only with passing required checks. The task remains reserved to Codex until integration/review completes.
+#90 remains in progress for empirical token calibration against measured embedding counts. Use #107 public exports and root brain tests after integration delivery. Keep the GitHub claim and coordinate any fixture/GPU/runner work before touching shared resources.
 
 ## Blocked
 

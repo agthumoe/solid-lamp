@@ -14,4 +14,4 @@ No model, database, worker, parser or source-boundary work is claimed. No phase 
 
 - [x] Owner authorized publication, review fixes and merging clean PRs.
 - [x] Publish implementation PR and verify review threads.
-- [ ] Merge with required current-main CI.
+- [x] Merge #105 with required current-main CI.
