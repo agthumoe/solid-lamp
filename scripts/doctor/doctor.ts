@@ -2,7 +2,7 @@
 // own built-in (#81). Exit code 1 when any check fails.
 // It never changes host settings, installs anything or loads a model onto the GPU.
 import { execFile } from 'node:child_process';
-import { readFile } from 'node:fs/promises';
+import { readdir, readFile, stat, statfs } from 'node:fs/promises';
 import { connect } from 'node:net';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -67,6 +67,28 @@ const probes: Probes = {
     }),
   command,
   tcp,
+  fileInfo: async (path) => {
+    try {
+      const full = resolve(root, path);
+      const [info, fs] = await Promise.all([stat(full), statfs(full)]);
+      return {
+        kind: info.isDirectory() ? 'directory' : info.isFile() ? 'file' : 'other',
+        mode: info.mode,
+        mtimeMs: info.mtimeMs,
+        fsType: fs.type,
+      };
+    } catch {
+      return undefined;
+    }
+  },
+  listDir: async (path) => {
+    try {
+      return await readdir(resolve(root, path));
+    } catch {
+      return undefined;
+    }
+  },
+  now: () => Date.now(),
 };
 
 const results = await runDoctor(probes);
