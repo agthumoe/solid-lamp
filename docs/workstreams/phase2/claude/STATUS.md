@@ -8,35 +8,32 @@ One agent per issue. Claim by adding `agent:claude` (or `agent:codex`) and switc
 
 ## Now
 
-All PRs below are open for review; none is merged by the authoring agent. Worktrees: `/tmp/aetherion-workbenches/phase2-claude-<issue>`.
+No open Claude PRs. Merged on 2026-10-20 after Codex review (P2 findings fixed first where raised):
 
-| Issue                                                     | Task                                                                 | Branch                           | PR   | State                                                      |
-| --------------------------------------------------------- | -------------------------------------------------------------------- | -------------------------------- | ---- | ---------------------------------------------------------- |
-| [#93](https://github.com/agthumoe/solid-lamp/issues/93)   | P2-7 vault watcher and change planning                               | `feat/93-vault-watcher`          | #109 | `Refs #93`; end-to-end latency and worker wiring remain    |
-| [#110](https://github.com/agthumoe/solid-lamp/issues/110) | doctor Phase 2 checks (worker, sources.yaml, backups)                | `feat/110-doctor-phase2`         | #111 | Review; conflicts with #113 in a `sources.yaml` comment    |
-| [#112](https://github.com/agthumoe/solid-lamp/issues/112) | Materialized fixture vault; reader → parser → chunker test           | `feat/112-fixture-vault`         | #113 | Review                                                     |
-| [#114](https://github.com/agthumoe/solid-lamp/issues/114) | Book (EPUB/PDF) and dated official-source spec and fixtures          | `feat/114-book-official-sources` | #115 | Review                                                     |
-| [#116](https://github.com/agthumoe/solid-lamp/issues/116) | Advisory dependency audit workflow (`deps:audit`)                    | `chore/116-deps-audit`           | #117 | Review                                                     |
-| [#118](https://github.com/agthumoe/solid-lamp/issues/118) | Brain citation codec (display form, parse, staleness)                | `feat/118-citations`             | #119 | Review                                                     |
-| [#120](https://github.com/agthumoe/solid-lamp/issues/120) | api fail-closed service-key scope for brain routes                   | `feat/120-service-scope`         | #121 | Review                                                     |
-| [#122](https://github.com/agthumoe/solid-lamp/issues/122) | source-reader tests leaked reader handles (DEP0137)                  | `fix/122-reader-handle-leak`     | #123 | Review                                                     |
-| [#124](https://github.com/agthumoe/solid-lamp/issues/124) | `@aetherion/shared/contracts` with brain search/note/stats contracts | `feat/124-brain-contracts`       | #125 | Review                                                     |
-| [#126](https://github.com/agthumoe/solid-lamp/issues/126) | Reference RRF fusion and frozen evidence gates with calibration      | `feat/126-retrieval-core`        | #127 | Review                                                     |
-| [#97](https://github.com/agthumoe/solid-lamp/issues/97)   | Brain MCP server (stdio, read-only tools)                            | `feat/97-brain-mcp`              | #128 | Review; stacked on #125; real-route access tests after #95 |
-| [#129](https://github.com/agthumoe/solid-lamp/issues/129) | ADR 0007 (proposed): EPUB/PDF parser libraries                       | `docs/129-adr-book-parsers`      | #130 | Owner decision                                             |
-| [#96](https://github.com/agthumoe/solid-lamp/issues/96)   | `brain:query` / `brain:stats` CLIs on the shared brain client        | `feat/96-brain-cli`              | #131 | Review; stacked on #128; `brain:ingest` after #91          |
-| [#132](https://github.com/agthumoe/solid-lamp/issues/132) | Duplicate `test:brain` key in package.json; docs:check guard         | `fix/132-duplicate-script-key`   | #133 | Review                                                     |
+| PR   | Issue | Delivered                                                                                   |
+| ---- | ----- | ------------------------------------------------------------------------------------------- |
+| #109 | #93   | Vault watcher (maxSettleMs enforced under continuous events), change planner, latency probe |
+| #111 | #110  | doctor Phase 2 checks                                                                       |
+| #113 | #112  | Fixture vault materializer (physical-path guard) and reader → parser → chunker test         |
+| #115 | #114  | Book and dated official-source spec and fixtures                                            |
+| #117 | #116  | Advisory dependency audit                                                                   |
+| #119 | #118  | Citation codec                                                                              |
+| #121 | #120  | api fail-closed service-key scope                                                           |
+| #123 | #122  | Source-reader test handle leak                                                              |
+| #125 | #124  | `@aetherion/shared/contracts` brain contracts (display bound = codec worst case; depth 6)   |
+| #127 | #126  | Reference RRF fusion and frozen evidence gates                                              |
+| #128 | #97   | Brain MCP server (fixed-size refs: note contract carries `pathSha256`)                      |
+| #130 | #129  | ADR 0007 (proposed): EPUB/PDF parser libraries                                              |
+| #131 | #96   | `brain:query` / `brain:stats` on the shared client                                          |
+| #133 | #132  | Duplicate package.json keys rejected by docs:check                                          |
 
-Merged: #86 (PR #100), #87 (PR #101), #88 (PR #102), #92 (PR #103).
+Still open (Claude): #93 end-to-end write → searchable latency and worker wiring; #96 `brain:ingest`; #97 access tests against the real brain routes. All three wait on #91/#95.
 
 ## Next
 
-- #95 (routes) can now be assembled from #119 (citations), #121 (service scope), #125 (contracts) and #127 (fusion/gates) once #91 lands; then add real-route access tests to #97 (PR #128) and build #96 CLI on the same contract.
-- Retarget PR #128 to main after #125 merges, and #131 after #128.
-- Merge order hints: #121 before #128; a trial merge of all open branches passes `pnpm check` once append-style conflicts (Makefile, package.json scripts, `packages/brain/src/index.ts`, `packages/shared/src/index.ts`, `config/sources.yaml` comment) are resolved by keeping both sides.
-- #93 remainder after #91/#95: end-to-end write → searchable latency; wire watcher plans into the worker's pending-event store.
-- Worker handler bodies (`NOT_WIRED`) after #91.
-- Book parsers after #115 and ADR 0007 (PR #130) are accepted.
+1. Owner decision on ADR 0006 → then #91 schema migration → #95 `search_brain` + routes, assembled from the citation codec, service scope, contracts and fusion/gates already on main (the route compares `pathSha256` with the hash of the current path).
+2. Then: #97 real-route access tests, #96 `brain:ingest`, #93 end-to-end latency, worker handler bodies.
+3. Book parsers after ADR 0007 is accepted.
 
 ## Blocked
 
@@ -57,3 +54,4 @@ Merged: #86 (PR #100), #87 (PR #101), #88 (PR #102), #92 (PR #103).
 | 2026-10-20 | Claude Code | Opened and claimed #110, #112, #114, #116, #118, #120, #122 and #124 one at a time (schema-independent work while #91/#94 wait on ADR 0006). Highlights: canonical percent-encoded citation display form with a seeded fuzz round-trip; service scope rejects before body parsing (zero-work tests, real-socket abort); `createSecretCheck` moved to `@aetherion/shared`; found and fixed leaked reader descriptors in tests. All mutation-checked; `pnpm check` green on each branch. |
 | 2026-10-20 | Claude Code | Later the same day: #126 retrieval core (RRF reference + calibrated, frozen evidence gates; a dead tie-break found and removed), claimed #97 and built the stdio brain MCP server on the #125 contracts (SDK 1.32.1 per ADR 0005), and proposed ADR 0007 for book parser libraries with a scratch spike that reproduced the #114 fixtures.                                                                                                                                             |
 | 2026-10-20 | Claude Code | Claimed #96: `brain:query`/`brain:stats` with terminal-safe output; moved the brain client, query mapping and client config into `@aetherion/shared` so CLI and MCP share them. Trial-merged all 13 open branches: fixed a real export collision (`isSafeRelativePath`, #118 vs #109) and found a duplicate `test:brain` key on main (#132).                                                                                                                                           |
+| 2026-10-20 | Claude Code | Owner authorized merging: fixed six Codex P2 findings (watcher deadline, fixture-vault symlink guard, token-aware duplicate-key scan, display bound, fixed-size refs plus header-size limit, DOCTYPE policy) and merged all 14 Claude PRs; rebuilt the stacked CLI branch on main after squash merges.                                                                                                                                                                                 |
