@@ -57,6 +57,16 @@ db\:backup:
 db\:restore-verify:
 	pnpm db:restore-verify $(ARGS)
 
+.PHONY: brain\:fixture-vault
+brain\:fixture-vault:
+	pnpm brain:fixture-vault $(ARGS)
+.PHONY: brain\:watch-latency
+brain\:watch-latency:
+	pnpm brain:watch-latency
+.PHONY: brain\:pdf-fixtures
+brain\:pdf-fixtures:
+	pnpm brain:pdf-fixtures
+
 .PHONY: test\:doctor
 test\:doctor:
 	pnpm test:doctor
@@ -76,6 +86,22 @@ dev\:worker:
 .PHONY: test\:worker
 test\:worker:
 	pnpm test:worker
+
+.PHONY: dev\:mcp-brain
+dev\:mcp-brain:
+	pnpm dev:mcp-brain
+
+.PHONY: brain\:query
+brain\:query:
+	pnpm brain:query $(ARGS)
+
+.PHONY: brain\:stats
+brain\:stats:
+	pnpm brain:stats $(ARGS)
+
+.PHONY: test\:mcp
+test\:mcp:
+	pnpm test:mcp
 
 .PHONY: test\:api
 test\:api:
@@ -132,3 +158,7 @@ evals\:check:
 .PHONY: evals\:domain\:check
 evals\:domain\:check:
 	pnpm evals:domain:check
+
+.PHONY: deps\:audit
+deps\:audit:
+	pnpm deps:audit

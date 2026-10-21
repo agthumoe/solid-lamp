@@ -13,8 +13,15 @@ import {
   isWithin,
   SourceScanError,
   UnsupportedSourceError,
+  type SourceReader,
   type SourceReaderOptions,
 } from './source-reader.ts';
+
+// A reader holds its root descriptor until closed; a GC-closed FileHandle (DEP0137) is a leak
+// and will become an error in a future Node release, so it fails this suite.
+process.on('warning', (warning) => {
+  if ((warning as { code?: string }).code === 'DEP0137') throw warning;
+});
 
 const SECRET = 'OUTSIDE-SECRET';
 
@@ -32,15 +39,24 @@ const fixture = async () => {
   await writeFile(join(root, 'image.png'), 'png');
   await writeFile(join(base, 'outside', 'a.md'), SECRET);
   await writeFile(join(base, 'vault-evil', 'x.md'), SECRET);
-  const reader = (extra: Partial<SourceReaderOptions> = {}) =>
-    createSourceReader({
+  const readers: SourceReader[] = [];
+  const reader = async (extra: Partial<SourceReaderOptions> = {}) => {
+    const created = await createSourceReader({
       root,
       includeExtensions: ['.md'],
       excludeDirs: ['.obsidian', '.trash', 'AI-Inbox'],
       maxFileBytes: 1024,
       ...extra,
     });
-  return { base, root, reader, cleanup: () => rm(base, { recursive: true, force: true }) };
+    readers.push(created);
+    return created;
+  };
+  const cleanup = async () => {
+    // close() is idempotent, so tests that already closed their reader are fine.
+    await Promise.all(readers.map((created) => created.close()));
+    await rm(base, { recursive: true, force: true });
+  };
+  return { base, root, reader, cleanup };
 };
 
 await test('path shape: only safe root-relative POSIX paths', () => {

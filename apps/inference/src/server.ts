@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 
 import { INFERENCE_KEY_HEADER, RPC_PATHS } from '@aetherion/llm';
-import type { Logger } from '@aetherion/shared';
+import { createSecretCheck, type Logger } from '@aetherion/shared';
 import Fastify, { type FastifyInstance } from 'fastify';
 import {
   hasZodFastifySchemaValidationErrors,
@@ -12,7 +12,6 @@ import {
 import type { InferenceService } from './gate/inference-service.ts';
 import { registerHealthRoutes, type ReadinessProbe } from './rpc/health-routes.ts';
 import { registerInferenceRoutes, sendError } from './rpc/inference-routes.ts';
-import { createSecretCheck } from './rpc/shared-secret.ts';
 
 export type ServerDeps = {
   readonly service: InferenceService;
