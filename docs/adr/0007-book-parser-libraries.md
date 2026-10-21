@@ -1,6 +1,6 @@
 # ADR 0007: EPUB and PDF parser libraries for book sources
 
-Date: 2026-10-20. Status: **proposed**, not accepted. Tracking: [#129](https://github.com/agthumoe/solid-lamp/issues/129). Related: book and official-source spec and fixtures ([#114](https://github.com/agthumoe/solid-lamp/issues/114), PR #115), [ADR 0005](0005-phase1-stack-and-topology.md) (pinning and release-age policy).
+Date: 2026-10-20 (DOCTYPE policy revised 2026-10-21 after review). Status: **proposed**, not accepted. Tracking: [#129](https://github.com/agthumoe/solid-lamp/issues/129). Related: book and official-source spec and fixtures ([#114](https://github.com/agthumoe/solid-lamp/issues/114), PR #115), [ADR 0005](0005-phase1-stack-and-topology.md) (pinning and release-age policy).
 
 ## Context
 
@@ -34,7 +34,10 @@ None has install scripts. Usage rules that review can check:
    - The first entry must be an uncompressed `mimetype` of `application/epub+zip`.
 2. **XML:**
    - Parse with `DOMParser` and an `onError` handler; any error or fatal error quarantines that document.
-   - `DOCTYPE` declarations are refused outright. xmldom does not resolve external entities: the spike shows `&e;` for a `SYSTEM "file:///etc/passwd"` entity, plus a reported error.
+   - DOCTYPE policy, applied to the raw text before parsing:
+     - No DOCTYPE, or exactly one of these: the bare HTML5 `<!DOCTYPE html>` (used by every #114 fixture and by EPUB 3), or the W3C XHTML 1.0/1.1 public identifiers common in EPUB 2 (allowlisted exactly).
+     - Rejected, quarantining the document: any internal subset (`[ … ]`, where entity declarations live), any other public or system identifier, and more than one DOCTYPE.
+     - External DTDs are never fetched. xmldom resolves the HTML named entities (`&nbsp;`, `&mdash;`) from its built-in table, and it does not resolve external entities: the spike shows `&e;` for a `SYSTEM "file:///etc/passwd"` entity, plus a reported error. The policy rejects that document before parsing anyway.
    - Use namespace-aware lookups (`getAttributeNS` for `epub:type`).
 3. **PDF:**
    - Load from bytes with `isEvalSupported: false`, `disableFontFace: true`, `useSystemFonts: false` and no `url`, so there is no network access, no font loading and no `eval`.
@@ -58,6 +61,10 @@ The spike ran on 2026-10-20 in a scratch directory outside the repository with `
   - `scanned-notice.pdf`: labels `1, 2`; page index 1 has 0 extracted characters, so it is quarantined.
   - All of it matches `manifest.json`.
 - **XXE.** The external-entity probe returned the literal `&e;` and one parser error. The file was not read.
+- **DOCTYPE policy** (second spike, run after review through the exact policy above):
+  - Accepted: `nav.xhtml`, `ch01.xhtml` and `ch02.xhtml`, each with `<!DOCTYPE html>`, parse with zero errors ("Contents", "Planting Moonlight Apples", "Pruning Under Two Suns").
+  - Accepted: an XHTML 1.1 `PUBLIC` document with `&nbsp;` and `&mdash;`, which resolve to the expected characters with no errors and no fetch.
+  - Rejected before parsing: the XXE `SYSTEM` entity, an HTML DOCTYPE with an internal entity subset, `<!DOCTYPE html SYSTEM "file:///etc/passwd">`, an unlisted `PUBLIC` DTD, and two DOCTYPEs.
 
 ## Alternatives considered
 
