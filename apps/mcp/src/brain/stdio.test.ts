@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import test from 'node:test';
 
-import { startFakeApi, statsBody } from './fake-api.ts';
+import { startFakeApi, statsBody } from '@aetherion/shared/testing';
 
 const entry = new URL('./main.ts', import.meta.url).pathname;
 const KEY = 'k'.repeat(40);

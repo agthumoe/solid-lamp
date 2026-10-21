@@ -1,13 +1,11 @@
 // Brain MCP server over stdio (`pnpm dev:mcp-brain`). stdout carries only MCP protocol frames;
 // logs go to stderr. No network listener: the trusted boundary is the spawning process.
-import { createLogger } from '@aetherion/shared';
+import { createBrainApiClient, createLogger, loadBrainClientConfig } from '@aetherion/shared';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 
-import { loadMcpConfig } from '../config.ts';
-import { createBrainApiClient } from './api-client.ts';
 import { createBrainMcpServer } from './server.ts';
 
-const config = loadMcpConfig(process.env);
+const config = loadBrainClientConfig(process.env);
 if (!config.ok) {
   process.stderr.write(`${config.error.message}\n`);
   process.exit(1);

@@ -5,8 +5,9 @@ import test from 'node:test';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
 
-import { createBrainApiClient, type BrainApiClient } from './api-client.ts';
-import { citation, HASH, searchOk, startFakeApi, statsBody } from './fake-api.ts';
+import { citation, HASH, searchOk, startFakeApi, statsBody } from '@aetherion/shared/testing';
+import { createBrainApiClient, type BrainApiClient } from '@aetherion/shared';
+
 import { createBrainMcpServer } from './server.ts';
 import { encodeRef, REF_MAX_CHARS } from './tools.ts';
 

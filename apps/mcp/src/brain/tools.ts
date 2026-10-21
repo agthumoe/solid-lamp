@@ -5,13 +5,12 @@ import { createHash, randomUUID } from 'node:crypto';
 
 import {
   brainNoteQuerySchema,
-  brainSearchQuerySchema,
   type BrainCitation,
   type BrainSearchResponse,
 } from '@aetherion/shared/contracts';
 import { z } from 'zod';
 
-import type { BrainApiClient, BrainApiErrorCode } from './api-client.ts';
+import { toBrainSearchQuery, type BrainApiClient, type BrainApiErrorCode } from '@aetherion/shared';
 
 export type ToolOutput = { readonly text: string; readonly isError: boolean };
 
@@ -137,15 +136,7 @@ export const createBrainTools = (client: BrainApiClient) => [
     risk: 'low',
     timeoutMs: 20_000,
     run: async (input, signal) => {
-      const query = brainSearchQuerySchema.safeParse({
-        q: input.query,
-        limit: input.limit,
-        source: input.sources,
-        tag: input.tags,
-        tagMode: input.tagMode,
-        pathPrefix: input.pathPrefix,
-        mode: input.lexicalOnly ? 'lexical' : 'hybrid',
-      });
+      const query = toBrainSearchQuery(input);
       if (!query.success) return failure('brain_search', 'VALIDATION_FAILED');
       const result = await client.search(query.data, signal);
       return result.ok

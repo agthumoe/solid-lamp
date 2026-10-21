@@ -47,3 +47,14 @@ export {
   type ModelCatalog,
 } from './config/catalog-config.ts';
 export { createSecretCheck } from './security/secret-check.ts';
+export {
+  createBrainApiClient,
+  SERVICE_KEY_HEADER,
+  toBrainSearchQuery,
+  type BrainApiClient,
+  type BrainApiClientOptions,
+  type BrainApiErrorCode,
+  type BrainApiResult,
+  type BrainSearchInput,
+} from './clients/brain-api-client.ts';
+export { loadBrainClientConfig, type BrainClientConfig } from './clients/brain-client-config.ts';

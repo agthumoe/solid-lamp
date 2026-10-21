@@ -13,6 +13,8 @@
     "dev:api": "node --env-file-if-exists=.env apps/api/src/main.ts",
     "dev:worker": "node --env-file-if-exists=.env apps/worker/src/main.ts",
     "dev:mcp-brain": "node --env-file-if-exists=.env apps/mcp/src/brain/main.ts",
+    "brain:query": "node --env-file-if-exists=.env scripts/brain/query.ts",
+    "brain:stats": "node --env-file-if-exists=.env scripts/brain/stats.ts",
     "doctor": "node --env-file-if-exists=.env scripts/doctor/doctor.ts",
     "db:start": "docker compose --env-file .env -f infra/docker-compose.yml up -d --wait",
     "db:stop": "docker compose --env-file .env -f infra/docker-compose.yml stop",

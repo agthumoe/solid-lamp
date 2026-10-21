@@ -3,6 +3,7 @@
 // loopback api and redirects are never followed, so it cannot be forwarded elsewhere.
 import {
   brainNoteResponseSchema,
+  brainSearchQuerySchema,
   brainSearchResponseSchema,
   brainStatsResponseSchema,
   type BrainNoteQuery,
@@ -10,7 +11,7 @@ import {
   type BrainSearchQuery,
   type BrainSearchResponse,
   type BrainStatsResponse,
-} from '@aetherion/shared/contracts';
+} from '../contracts/index.ts';
 import { z } from 'zod';
 
 export const SERVICE_KEY_HEADER = 'x-aetherion-service-key';
@@ -140,3 +141,26 @@ export const createBrainApiClient = (options: BrainApiClientOptions) => {
 };
 
 export type BrainApiClient = ReturnType<typeof createBrainApiClient>;
+
+// One mapping from caller-friendly options to the wire query, shared by the CLI and MCP tools so
+// their filters and bounds cannot drift. Undefined means "the contract's default".
+export type BrainSearchInput = {
+  readonly query: string;
+  readonly limit?: number | undefined;
+  readonly sources?: readonly string[] | undefined;
+  readonly tags?: readonly string[] | undefined;
+  readonly tagMode?: 'any' | 'all' | undefined;
+  readonly pathPrefix?: string | undefined;
+  readonly lexicalOnly?: boolean | undefined;
+};
+
+export const toBrainSearchQuery = (input: BrainSearchInput) =>
+  brainSearchQuerySchema.safeParse({
+    q: input.query,
+    limit: input.limit,
+    source: input.sources,
+    tag: input.tags,
+    tagMode: input.tagMode,
+    pathPrefix: input.pathPrefix,
+    mode: input.lexicalOnly ? 'lexical' : 'hybrid',
+  });

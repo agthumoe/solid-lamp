@@ -3,13 +3,13 @@ import { createServer } from 'node:http';
 import type { AddressInfo } from 'node:net';
 import test from 'node:test';
 
+import { BRAIN_CITATION_DISPLAY_MAX_CHARS, type BrainSearchQuery } from '../contracts/index.ts';
+import { citation, HASH, searchOk, startFakeApi, statsBody } from '../testing/index.ts';
 import {
-  BRAIN_CITATION_DISPLAY_MAX_CHARS,
-  type BrainSearchQuery,
-} from '@aetherion/shared/contracts';
-
-import { createBrainApiClient, MAX_RESPONSE_BYTES, SERVICE_KEY_HEADER } from './api-client.ts';
-import { citation, HASH, searchOk, startFakeApi, statsBody } from './fake-api.ts';
+  createBrainApiClient,
+  MAX_RESPONSE_BYTES,
+  SERVICE_KEY_HEADER,
+} from './brain-api-client.ts';
 
 const KEY = 'k'.repeat(40);
 const signal = () => AbortSignal.timeout(2_000);
