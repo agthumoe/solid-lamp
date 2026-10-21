@@ -1,12 +1,6 @@
-import {
-  appError,
-  err,
-  loadEnvConfig,
-  ok,
-  type AppError,
-  type EnvConfig,
-  type Result,
-} from '@aetherion/shared';
+import { loadEnvConfig, type EnvConfig } from '../config/env-config.ts';
+import { appError, type AppError } from '../errors.ts';
+import { err, ok, type Result } from '../result.ts';
 import { z } from 'zod';
 
 const emptyAsUndefined = (value: unknown) => (value === '' ? undefined : value);
@@ -25,7 +19,7 @@ const isLoopbackHttpUrl = (value: string): boolean => {
   );
 };
 
-const mcpEnvSchema = z.object({
+const brainClientEnvSchema = z.object({
   AETHERION_API_URL: z.preprocess(
     emptyAsUndefined,
     z
@@ -36,15 +30,19 @@ const mcpEnvSchema = z.object({
   AETHERION_BRAIN_SERVICE_KEY: z.string().min(32).max(256),
 });
 
-export type McpConfig = EnvConfig & { readonly apiUrl: string; readonly serviceKey: string };
+export type BrainClientConfig = EnvConfig & {
+  readonly apiUrl: string;
+  readonly serviceKey: string;
+};
 
 // Errors name keys only: the service key is a credential.
-export const loadMcpConfig = (
+// Shared by the brain CLI and MCP server (#96, #97), so both apply the same rules.
+export const loadBrainClientConfig = (
   env: Readonly<Record<string, string | undefined>>,
-): Result<McpConfig, AppError<'VALIDATION_FAILED'>> => {
+): Result<BrainClientConfig, AppError<'VALIDATION_FAILED'>> => {
   const shared = loadEnvConfig(env);
   if (!shared.ok) return shared;
-  const parsed = mcpEnvSchema.safeParse(env);
+  const parsed = brainClientEnvSchema.safeParse(env);
   if (!parsed.success) {
     const keys = [...new Set(parsed.error.issues.map((issue) => issue.path.join('.')))];
     return err(appError('VALIDATION_FAILED', `invalid environment: ${keys.join(', ')}`));

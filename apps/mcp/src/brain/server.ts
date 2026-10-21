@@ -1,6 +1,6 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 
-import type { BrainApiClient } from './api-client.ts';
+import type { BrainApiClient } from '@aetherion/shared';
 import { createBrainTools } from './tools.ts';
 
 export const BRAIN_SERVER_NAME = 'aetherion-brain';

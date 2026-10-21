@@ -59,6 +59,8 @@ All three are read-only:
 
 ## API client
 
+Shared with the CLI from `@aetherion/shared` (`createBrainApiClient`, `toBrainSearchQuery`, `loadBrainClientConfig`; #96).
+
 - Sends `x-aetherion-service-key` only to the configured loopback URL.
 - **Never follows redirects**, so the key cannot be forwarded.
 - Caps response bodies at 8 MiB, above the largest contract-valid response (about 4 MiB; a test builds it).

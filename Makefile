@@ -91,6 +91,14 @@ test\:worker:
 dev\:mcp-brain:
 	pnpm dev:mcp-brain
 
+.PHONY: brain\:query
+brain\:query:
+	pnpm brain:query $(ARGS)
+
+.PHONY: brain\:stats
+brain\:stats:
+	pnpm brain:stats $(ARGS)
+
 .PHONY: test\:mcp
 test\:mcp:
 	pnpm test:mcp
