@@ -37,7 +37,8 @@ Errors use the standard envelope. Notable mappings:
   - The citation DTO holds the display string plus the structured identity: source, document, revision, content hash, chunk, pinned version, path, heading path and occurrence, and line range.
   - Snippets and excerpts are untrusted note text. Consumers wrap them in data delimiters and never act on them.
 - **Note.**
-  - The request is the citation identity (source, document, chunk, version, revision, content hash, path) plus `maxChars` (default 2,000, maximum 8,000).
+  - The request is the citation identity (source, document, chunk, version, revision, content hash) plus `pathSha256`, the SHA-256 of the cited path, and `maxChars` (default 2,000, maximum 8,000).
+  - The path travels as a hash so the request has a small fixed size: a long Unicode path would percent-encode past Node's 16 KiB header limit. The route compares it with the hash of the chunk's current path and answers `stale` (`path`) on a mismatch.
   - The response is either `ok` with a bounded excerpt and a `truncated` flag, or `stale` with a reason (`deleted`/`revision`/`content`/`path`) and **no text**. A citation is never answered from a different revision.
 - **Stats.**
   - Reports the active version: ID, `embedRole` (always the role `embed`, never a model tag), dimensions, chunker version and promotion time.

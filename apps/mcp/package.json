@@ -1,0 +1,10 @@
+{
+  "name": "@aetherion/mcp",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@aetherion/shared": "workspace:*",
+    "@modelcontextprotocol/sdk": "1.32.1"
+  }
+}

@@ -161,7 +161,7 @@ await test('note: citation identity in, bounded excerpt or stale out', () => {
     versionId: 'v-1',
     revision: '2',
     contentHash: HASH,
-    path: 'Projects/Plan.md',
+    pathSha256: 'd'.repeat(64),
   });
   assert.equal(query.revision, 2);
   assert.equal(query.maxChars, 2_000);
@@ -169,7 +169,8 @@ await test('note: citation identity in, bounded excerpt or stale out', () => {
     { ...query, maxChars: '8001' },
     { ...query, revision: '-1' },
     { ...query, contentHash: 'C'.repeat(64) },
-    { ...query, path: '../x.md' },
+    { ...query, pathSha256: 'not-a-hash' },
+    { ...query, path: 'Projects/Plan.md' }, // the path itself is never sent
     { ...query, lineStart: 1 },
   ])
     assert.equal(brainNoteQuerySchema.safeParse(bad).success, false, JSON.stringify(bad));
