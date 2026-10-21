@@ -2,7 +2,8 @@ import { err, ok, type Result } from '@aetherion/shared';
 
 import { inferenceError, type InferenceError } from '../errors.ts';
 import type { StreamDone, StreamEvent } from '../inference/stream-event.ts';
-import type { EmbedResponse, GenerateResponse } from '../rpc/contract.ts';
+import type { EmbedProfilesResponse, EmbedResponse, GenerateResponse } from '../rpc/contract.ts';
+import type { EmbeddingProfile } from '../roles/embed-profile.ts';
 import type {
   ClientCallOptions,
   EmbedInput,
@@ -16,6 +17,8 @@ export type FakeScript = {
   readonly reply?: (input: GenerateInput) => Result<string, InferenceError>;
   readonly toolCalls?: StreamDone['toolCalls'];
   readonly dimensions?: number;
+  // Approved profiles; the first is the default. Defaults to one fake profile.
+  readonly profiles?: readonly EmbeddingProfile[];
 };
 
 export type FakeInferenceClient = InferenceClient & {
@@ -43,6 +46,17 @@ export const createFakeInferenceClient = (
   const calls: { kind: string; options: ClientCallOptions }[] = [];
   const reply = script.reply ?? (() => ok('ok'));
   const model = (role: string) => ({ role, model: `fake-${role}`, numCtx: 4096 });
+  const profiles: readonly EmbeddingProfile[] = script.profiles ?? [
+    {
+      id: 'ep-000000000000000000000000',
+      model: 'fake-embed',
+      digest: '0'.repeat(64),
+      dimensions: script.dimensions ?? 4,
+      numCtx: 2048,
+      queryPrefix: '',
+      documentPrefix: '',
+    },
+  ];
 
   const refused = (options: ClientCallOptions): InferenceError | undefined => {
     if (options.signal.aborted) return inferenceError('CANCELLED', 'request was cancelled');
@@ -113,17 +127,27 @@ export const createFakeInferenceClient = (
         residency: { coldLoads: 0, contextReloads: 0, evictions: 0, notResidentAfter: 0 },
       } as const);
     },
+    embedProfiles: async (): Promise<Result<EmbedProfilesResponse, InferenceError>> => {
+      await Promise.resolve();
+      return ok({ defaultProfileId: profiles[0]?.id ?? null, profiles: [...profiles] });
+    },
     embed: async (input: EmbedInput, options): Promise<Result<EmbedResponse, InferenceError>> => {
       calls.push({ kind: 'embed', options });
       await Promise.resolve();
       const blocked = refused(options);
       if (blocked) return err(blocked);
-      const dimensions = script.dimensions ?? 4;
+      const profile = input.profileId
+        ? profiles.find((candidate) => candidate.id === input.profileId)
+        : profiles[0];
+      if (!profile)
+        return err(inferenceError('PROFILE_UNAVAILABLE', 'embedding profile is not approved'));
+      const dimensions = profile.dimensions;
       return ok({
+        profile,
         vectors: input.texts.map((text) =>
           Array.from({ length: dimensions }, (_, i) => ((text.length + i) % 7) / 7),
         ),
-        model: { model: 'fake-embed', numCtx: 2048, dimensions },
+        model: { model: profile.model, numCtx: profile.numCtx, dimensions },
         tokensIn: input.texts.length,
         totalMs: 0,
       });

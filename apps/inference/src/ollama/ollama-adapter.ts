@@ -1,6 +1,7 @@
 import type { EmbedSnapshot, GenerationSnapshot } from '@aetherion/llm';
 
 import { generateChat, streamChat, type ChatDeps, type ChatRequest } from './chat.ts';
+import { listInstalled } from './artifacts.ts';
 import { embedTexts, type EmbedKind } from './embed.ts';
 import { createOllamaHttp, type FetchLike } from './ollama-http.ts';
 import { listLoaded } from './residency.ts';
@@ -35,6 +36,7 @@ export const createOllamaAdapter = (options: OllamaAdapterOptions) => {
       signal: AbortSignal,
     ) => embedTexts(deps, snapshot, texts, kind, signal),
     loaded: (signal: AbortSignal) => listLoaded(deps.http, signal),
+    installed: (signal: AbortSignal) => listInstalled(deps.http, signal),
   };
 };
 

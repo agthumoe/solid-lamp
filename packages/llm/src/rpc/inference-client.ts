@@ -6,6 +6,7 @@ import type { CallOptions } from '../gate/schedule.ts';
 import { readNdjson } from '../inference/ndjson.ts';
 import type { StreamEvent } from '../inference/stream-event.ts';
 import {
+  embedProfilesResponseSchema,
   embedResponseSchema,
   generateResponseSchema,
   INFERENCE_KEY_HEADER,
@@ -13,6 +14,7 @@ import {
   RPC_PATHS,
   rpcErrorEnvelopeSchema,
   streamEventSchema,
+  type EmbedProfilesResponse,
   type EmbedRequest,
   type EmbedResponse,
   type GenerateRequest,
@@ -41,6 +43,10 @@ export type InferenceClient = {
   ) => Promise<Result<EmbedResponse, InferenceError>>;
   // The inference process's own readiness (Ollama reachable, gate and residency counters).
   readonly ready: (signal: AbortSignal) => Promise<Result<Readiness, InferenceError>>;
+  // Approved embedding profiles (ADR 0006); the worker mirrors them into embedding_profiles.
+  readonly embedProfiles: (
+    signal: AbortSignal,
+  ) => Promise<Result<EmbedProfilesResponse, InferenceError>>;
 };
 
 export type InferenceClientOptions = {
@@ -200,6 +206,31 @@ export const createInferenceClient = (options: InferenceClientOptions): Inferenc
         const parsed = readinessSchema.safeParse(await response.json());
         if (parsed.success) return ok(parsed.data);
         return err(inferenceError('INFERENCE_UNAVAILABLE', `readiness ${response.status}`));
+      } catch {
+        return err(inferenceError('INFERENCE_UNAVAILABLE', 'inference service unreachable'));
+      }
+    },
+    embedProfiles: async (signal) => {
+      try {
+        const response = await fetch(`${root}${RPC_PATHS.embedProfiles}`, {
+          method: 'GET',
+          headers: { [INFERENCE_KEY_HEADER]: options.secret },
+          signal,
+        });
+        const body: unknown = await response.json();
+        if (!response.ok) {
+          const envelope = rpcErrorEnvelopeSchema.safeParse(body);
+          const code = envelope.success ? envelope.data.error.code : undefined;
+          return err(
+            code && isInferenceErrorCode(code)
+              ? inferenceError(code, envelope.success ? envelope.data.error.message : '')
+              : inferenceError('INFERENCE_UNAVAILABLE', `embed profiles ${response.status}`),
+          );
+        }
+        const parsed = embedProfilesResponseSchema.safeParse(body);
+        return parsed.success
+          ? ok(parsed.data)
+          : err(inferenceError('INVALID_RESPONSE', 'unexpected embed profiles body'));
       } catch {
         return err(inferenceError('INFERENCE_UNAVAILABLE', 'inference service unreachable'));
       }

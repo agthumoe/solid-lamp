@@ -235,12 +235,18 @@ await test('embed validates kind and returns vectors with the embed identity', a
   });
 
   assert.equal(response.statusCode, 200);
-  assert.deepEqual(response.json(), {
+  const { profile, ...rest } = response.json<{ profile: Record<string, unknown> }>();
+  assert.deepEqual(rest, {
     vectors: [[0.1, 0.2, 0.3]],
     model: { model: 'qwen3-embedding:0.6b', numCtx: 8192, dimensions: 3 },
     tokensIn: 1,
     totalMs: 3,
   });
+  assert.match(String(profile.id), /^ep-[0-9a-f]{24}$/);
+  assert.deepEqual(
+    { model: profile.model, dimensions: profile.dimensions, numCtx: profile.numCtx },
+    { model: 'qwen3-embedding:0.6b', dimensions: 3, numCtx: 8192 },
+  );
   assert.equal(fake.embeds[0]?.kind, 'document');
   assert.equal(invalid.statusCode, 400);
 });
@@ -269,4 +275,50 @@ await test('malformed JSON bodies are a 400 envelope', async () => {
 
   assert.equal(response.statusCode, 400);
   assert.equal(response.json<{ error: { code: string } }>().error.code, 'VALIDATION_FAILED');
+});
+
+await test('embed profiles are listed behind the key; a pinned profile is validated', async () => {
+  const { app } = setup();
+  const unauth = await app.inject({ method: 'GET', url: '/v1/embed-profiles' });
+  assert.equal(unauth.statusCode, 401);
+
+  const listing = await app.inject({ method: 'GET', url: '/v1/embed-profiles', headers: auth });
+  assert.equal(listing.statusCode, 200);
+  const body = listing.json<{
+    defaultProfileId: string;
+    profiles: { id: string; model: string }[];
+  }>();
+  assert.equal(body.profiles[0]?.model, 'qwen3-embedding:0.6b');
+  assert.equal(body.defaultProfileId, body.profiles[0]?.id);
+
+  const payload = {
+    texts: ['a'],
+    kind: 'query',
+    priority: 'interactive',
+    deadline: new Date(Date.now() + 10_000).toISOString(),
+  };
+  const pinned = await app.inject({
+    method: 'POST',
+    url: '/v1/embed',
+    headers: auth,
+    payload: { ...payload, profileId: body.defaultProfileId },
+  });
+  assert.equal(pinned.statusCode, 200);
+  assert.equal(pinned.json<{ profile: { id: string } }>().profile.id, body.defaultProfileId);
+
+  const malformed = await app.inject({
+    method: 'POST',
+    url: '/v1/embed',
+    headers: auth,
+    payload: { ...payload, profileId: 'qwen3-embedding:0.6b' }, // a model tag is never accepted
+  });
+  assert.equal(malformed.statusCode, 400);
+  const unknown = await app.inject({
+    method: 'POST',
+    url: '/v1/embed',
+    headers: auth,
+    payload: { ...payload, profileId: 'ep-ffffffffffffffffffffffff' },
+  });
+  assert.equal(unknown.statusCode, 409);
+  assert.equal(unknown.json<{ error: { code: string } }>().error.code, 'PROFILE_UNAVAILABLE');
 });

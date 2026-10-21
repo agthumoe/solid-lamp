@@ -7,10 +7,14 @@ import { INFERENCE_ERROR_CODES, type InferenceErrorCode } from '../errors.ts';
 
 export const INFERENCE_KEY_HEADER = 'x-aetherion-inference-key';
 
+// Opaque embedding-profile IDs (see roles/embed-profile.ts).
+export const EMBEDDING_PROFILE_ID = /^ep-[0-9a-f]{24}$/;
+
 export const RPC_PATHS = {
   generate: '/v1/generate',
   stream: '/v1/stream',
   embed: '/v1/embed',
+  embedProfiles: '/v1/embed-profiles',
   ready: '/readyz',
   live: '/livez',
 } as const;
@@ -59,6 +63,8 @@ export const generateRequestSchema = z.strictObject({
 export const embedRequestSchema = z.strictObject({
   texts: z.array(z.string().max(MAX_CONTENT_CHARS)).max(256),
   kind: z.enum(['query', 'document']),
+  // An approved embedding profile (ADR 0006). Omitted: the embed role's current profile.
+  profileId: z.string().regex(EMBEDDING_PROFILE_ID).optional(),
   ...callFields,
 });
 
@@ -109,8 +115,26 @@ export const generateResponseSchema = z.strictObject({
   done: doneSchema,
 });
 
+export const embeddingProfileSchema = z.strictObject({
+  id: z.string().regex(EMBEDDING_PROFILE_ID),
+  model: z.string().min(1).max(128),
+  digest: z.string().regex(/^[0-9a-f]{64}$/),
+  dimensions: z.int().positive(),
+  numCtx: z.int().positive(),
+  queryPrefix: z.string().max(1000),
+  documentPrefix: z.string().max(1000),
+});
+
+export const embedProfilesResponseSchema = z.strictObject({
+  // The embed role's profile, or null when its model is not installed.
+  defaultProfileId: z.string().regex(EMBEDDING_PROFILE_ID).nullable(),
+  profiles: z.array(embeddingProfileSchema).max(32),
+});
+
 export const embedResponseSchema = z.strictObject({
   vectors: z.array(z.array(z.number())),
+  // The profile actually used, snapshotted at enqueue; callers compare it with their version.
+  profile: embeddingProfileSchema,
   model: z.strictObject({
     model: z.string(),
     numCtx: z.int().positive(),
@@ -143,6 +167,7 @@ export const readinessSchema = z.strictObject({
 export type Readiness = z.infer<typeof readinessSchema>;
 export type GenerateResponse = z.infer<typeof generateResponseSchema>;
 export type EmbedResponse = z.infer<typeof embedResponseSchema>;
+export type EmbedProfilesResponse = z.infer<typeof embedProfilesResponseSchema>;
 
 // Request validation and auth failures are not inference outcomes; they get their own codes.
 export const RPC_ERROR_CODES = [
@@ -165,6 +190,7 @@ const STATUS: Record<RpcErrorCode, number> = {
   INFERENCE_UNAVAILABLE: 503,
   MODEL_NOT_LOADED: 503,
   INVALID_RESPONSE: 502,
+  PROFILE_UNAVAILABLE: 409,
   VALIDATION_FAILED: 400,
   UNAUTHENTICATED: 401,
   NOT_FOUND: 404,

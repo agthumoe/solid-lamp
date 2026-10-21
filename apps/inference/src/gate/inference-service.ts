@@ -1,9 +1,10 @@
 import {
   collectStream,
   inferenceError,
-  resolveEmbedRole,
   scheduleGeneration,
+  snapshotFromProfile,
   type CallOptions,
+  type EmbeddingProfile,
   type GenerationRole,
   type GenerationSnapshot,
   type InferenceError,
@@ -19,6 +20,7 @@ import type { EmbedKind, EmbedResult } from '../ollama/embed.ts';
 import type { OllamaAdapter } from '../ollama/ollama-adapter.ts';
 import { compareResidency, type ResidencyChange } from '../ollama/residency.ts';
 import { createEventChannel } from './event-channel.ts';
+import type { ProfileRegistry } from './profile-registry.ts';
 
 // The narrow slice of the Ollama adapter this service needs (fakes implement only this).
 export type InferenceAdapter = {
@@ -37,6 +39,7 @@ export type InferenceServiceDeps = {
   // Current validated config; a reload swaps what this returns (snapshots stay frozen).
   readonly config: () => ModelsConfig;
   readonly recordResidency: (change: ResidencyChange) => void;
+  readonly profiles: ProfileRegistry;
   readonly logger: Logger;
   readonly now?: () => number;
 };
@@ -46,10 +49,13 @@ export type GenerateCall = ChatRequest & { readonly role: GenerationRole };
 export type EmbedCall = {
   readonly texts: readonly string[];
   readonly kind: EmbedKind;
+  // ADR 0006: an approved profile ID; omitted means the embed role's current profile.
+  readonly profileId?: string | undefined;
 };
 
 export type EmbedOutcome = EmbedResult & {
   readonly model: { readonly model: string; readonly numCtx: number; readonly dimensions: number };
+  readonly profile: EmbeddingProfile;
 };
 
 /**
@@ -156,11 +162,22 @@ export const createInferenceService = (deps: InferenceServiceDeps) => {
   ): Promise<Result<EmbedOutcome, InferenceError>> => {
     const enqueuedAt = now();
     let queueWaitMs: number | undefined;
-    // Snapshot at enqueue: a config reload while queued must not change the vector space.
-    const snapshot = resolveEmbedRole(deps.config());
+    // Snapshot the profile at enqueue: a config reload or re-pull while queued must not change
+    // the vector space. Resolution only reads Ollama's model list, never the GPU.
+    const resolved = await deps.profiles.resolve(call.profileId, options.signal);
+    if (!resolved.ok) {
+      logOutcome('embed', enqueuedAt, undefined, resolved.error);
+      return resolved;
+    }
+    const profile = resolved.value;
+    const snapshot = snapshotFromProfile(profile);
     const result = await deps.gate.run(
-      (signal) => {
+      async (signal) => {
         queueWaitMs = now() - enqueuedAt;
+        // The artifact may have been replaced while queued: fail explicitly instead of embedding
+        // with a different model under the old identity.
+        const current = await deps.profiles.verify(profile, signal);
+        if (!current.ok) return current;
         return observed(snapshot, signal, () =>
           deps.adapter.embed(snapshot, call.texts, call.kind, signal),
         );
@@ -174,10 +191,12 @@ export const createInferenceService = (deps: InferenceServiceDeps) => {
       numCtx: snapshot.numCtx,
       dimensions: snapshot.dimensions,
     };
-    return ok({ ...result.value, model });
+    return ok({ ...result.value, model, profile });
   };
 
-  return { stream, generate, embed };
+  const embedProfiles = (signal: AbortSignal) => deps.profiles.list(signal);
+
+  return { stream, generate, embed, embedProfiles };
 };
 
 export type InferenceService = ReturnType<typeof createInferenceService>;
