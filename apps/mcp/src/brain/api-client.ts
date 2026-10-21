@@ -14,7 +14,9 @@ import {
 import { z } from 'zod';
 
 export const SERVICE_KEY_HEADER = 'x-aetherion-service-key';
-const MAX_RESPONSE_BYTES = 2 * 1024 * 1024;
+// Above the largest contract-valid response (50 results with every field at its bound is about
+// 4 MiB of JSON; a test builds it), so only a broken or hostile api is refused.
+export const MAX_RESPONSE_BYTES = 8 * 1024 * 1024;
 
 export type BrainApiErrorCode =
   | 'VALIDATION_FAILED'

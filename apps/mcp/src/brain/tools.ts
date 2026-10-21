@@ -1,7 +1,7 @@
 // Brain MCP tools (#97, docs/specs/brain.md → MCP and access). All are read-only: they call the
 // protected api with the service key and return data, never instructions. Untrusted note text
 // (snippets, excerpts, titles, paths, headings) is fenced in per-response nonce markers.
-import { randomUUID } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 
 import {
   brainNoteQuerySchema,
@@ -34,6 +34,11 @@ const identifier = z.string().regex(/^[A-Za-z0-9_.-]{1,96}$/);
 // copy seven fields. It is only a lookup key: the api decides whether it exists, is in scope
 // and is current, so a forged or edited ref yields not_found or stale, never other text.
 const refIdentity = brainNoteQuerySchema.omit({ maxChars: true });
+// The identity has fixed-size fields only (the path travels as its SHA-256), so a ref is short
+// however long the path is: four 96-char identifiers, two 64-char hashes, a safe-integer
+// revision and JSON punctuation/key names, base64url-encoded.
+export const REF_MAX_CHARS = Math.ceil(((4 * 96 + 2 * 64 + 16 + 160) * 4) / 3);
+
 export const encodeRef = (citation: BrainCitation): string =>
   Buffer.from(
     JSON.stringify({
@@ -43,7 +48,7 @@ export const encodeRef = (citation: BrainCitation): string =>
       versionId: citation.versionId,
       revision: citation.revision,
       contentHash: citation.contentHash,
-      path: citation.path,
+      pathSha256: createHash('sha256').update(citation.path, 'utf8').digest('hex'),
     }),
   ).toString('base64url');
 const decodeRef = (ref: string) => {
@@ -154,7 +159,7 @@ export const createBrainTools = (client: BrainApiClient) => [
     description:
       'Read a bounded excerpt for a ref returned by brain_search. If the note changed since the search, reports it as stale instead of returning different text.',
     input: z.strictObject({
-      ref: z.string().min(1).max(4_096),
+      ref: z.string().min(1).max(REF_MAX_CHARS),
       maxChars: z.int().min(1).max(8_000).default(2_000),
     }),
     sideEffect: false,

@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import test from 'node:test';
 
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
@@ -7,7 +8,7 @@ import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
 import { createBrainApiClient, type BrainApiClient } from './api-client.ts';
 import { citation, HASH, searchOk, startFakeApi, statsBody } from './fake-api.ts';
 import { createBrainMcpServer } from './server.ts';
-import { encodeRef } from './tools.ts';
+import { encodeRef, REF_MAX_CHARS } from './tools.ts';
 
 const KEY = 'k'.repeat(40);
 
@@ -150,6 +151,38 @@ await test('a search ref fetches the cited excerpt; stale and forged refs never 
       assert.equal(api.requests.length, before, 'malformed refs never reach the api');
     },
   );
+});
+
+await test('a ref for the longest valid Unicode path round-trips into brain_get_note', async () => {
+  // The review case (1,222 characters, 5,067-character ref) and the 2,048-character worst case.
+  const reviewPath = Array.from({ length: 20 }, () => '界'.repeat(60)).join('/') + '.md';
+  const worstPath = `${'界'.repeat(2045)}.md`;
+  for (const path of [reviewPath, worstPath]) {
+    const cited = citation({
+      path,
+      sourceId: 's'.repeat(96),
+      documentId: 'd'.repeat(96),
+      chunkId: 'c'.repeat(96),
+      versionId: 'v'.repeat(96),
+      revision: Number.MAX_SAFE_INTEGER,
+    });
+    const ref = encodeRef(cited);
+    assert.ok(ref.length <= REF_MAX_CHARS, `${ref.length} > ${REF_MAX_CHARS}`);
+    await withApi(
+      () => ({ body: { status: 'ok', citation: cited, excerpt: 'text', truncated: false } }),
+      async (mcp, api) => {
+        const result = await mcp.callTool({ name: 'brain_get_note', arguments: { ref } });
+        assert.equal(result.isError, false, text(result));
+        const request = api.requests[0];
+        assert.equal(request?.query.has('path'), false, 'the path itself is never sent');
+        assert.equal(
+          request?.query.get('pathSha256'),
+          createHash('sha256').update(path, 'utf8').digest('hex'),
+        );
+        assert.ok((request?.query.toString().length ?? Infinity) < 1_024, 'small fixed-size query');
+      },
+    );
+  }
 });
 
 await test('api failures surface as tool errors with a code and fixed message only', async () => {

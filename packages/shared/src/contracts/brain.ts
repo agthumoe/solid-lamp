@@ -145,7 +145,11 @@ export const brainNoteQuerySchema = z.strictObject({
   versionId: identifier,
   revision: z.coerce.number().int().min(0),
   contentHash,
-  path: relativePath,
+  // SHA-256 (hex) of the cited UTF-8 path, not the path itself: the request stays small and
+  // fixed-size however long the path is (a 2,048-character Unicode path percent-encodes past
+  // Node's 16 KiB header limit). The route compares it with the hash of the chunk's current path
+  // and reports `stale` (path) on a mismatch.
+  pathSha256: contentHash,
   maxChars: z.coerce
     .number()
     .int()

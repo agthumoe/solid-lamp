@@ -43,7 +43,7 @@ All three are read-only:
 | `brain_get_note` | `ref` from a search result, `maxChars` (1–8,000, default 2,000)                                         |      5 s | `GET /api/v1/brain/note`   |
 | `brain_stats`    | none                                                                                                    |      5 s | `GET /api/v1/brain/stats`  |
 
-- **`ref`** is base64url JSON of a result's citation identity: source, document, chunk, version, revision, content hash and path. It saves the model copying seven fields.
+- **`ref`** is base64url JSON of a result's citation identity: source, document, chunk, version, revision, content hash and the SHA-256 of the path. It saves the model copying seven fields and has a small fixed maximum length (`REF_MAX_CHARS`) however long the path is.
   - A ref is only a lookup key. The api decides whether it exists, is in scope and is current.
   - A forged ref returns `NOT_FOUND`; an outdated one returns `stale`, with no text. Never different text.
   - A malformed ref is rejected locally (`VALIDATION_FAILED`) without calling the api.
@@ -61,7 +61,7 @@ All three are read-only:
 
 - Sends `x-aetherion-service-key` only to the configured loopback URL.
 - **Never follows redirects**, so the key cannot be forwarded.
-- Caps response bodies at 2 MiB.
+- Caps response bodies at 8 MiB, above the largest contract-valid response (about 4 MiB; a test builds it).
 - Validates every 200 against the shared contract. Maps error envelopes to known codes; anything else is `UNAVAILABLE`.
 
 ## Tests (no GPU, database or real data)

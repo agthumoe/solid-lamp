@@ -3,10 +3,13 @@ import { createServer } from 'node:http';
 import type { AddressInfo } from 'node:net';
 import test from 'node:test';
 
-import type { BrainSearchQuery } from '@aetherion/shared/contracts';
+import {
+  BRAIN_CITATION_DISPLAY_MAX_CHARS,
+  type BrainSearchQuery,
+} from '@aetherion/shared/contracts';
 
-import { createBrainApiClient, SERVICE_KEY_HEADER } from './api-client.ts';
-import { HASH, searchOk, startFakeApi, statsBody } from './fake-api.ts';
+import { createBrainApiClient, MAX_RESPONSE_BYTES, SERVICE_KEY_HEADER } from './api-client.ts';
+import { citation, HASH, searchOk, startFakeApi, statsBody } from './fake-api.ts';
 
 const KEY = 'k'.repeat(40);
 const signal = () => AbortSignal.timeout(2_000);
@@ -116,10 +119,10 @@ await test('a 200 that does not match the contract is BAD_RESPONSE', async () =>
   }
 });
 
-await test('a body over 2 MiB is refused even when it would otherwise be valid', async () => {
+await test('a body over the cap is refused even when it would otherwise be valid', async () => {
   // Valid stats JSON followed by insignificant whitespace: only the size cap rejects it.
   const api = await startFakeApi(() => ({
-    raw: JSON.stringify(statsBody) + ' '.repeat(3 * 1024 * 1024),
+    raw: JSON.stringify(statsBody) + ' '.repeat(MAX_RESPONSE_BYTES + 1),
   }));
   try {
     const result = await createBrainApiClient({ baseUrl: api.url, serviceKey: KEY }).stats(
@@ -178,7 +181,7 @@ await test('note passes the citation identity and bound', async () => {
         versionId: 'v-1',
         revision: 2,
         contentHash: HASH,
-        path: 'Projects/Plan.md',
+        pathSha256: 'd'.repeat(64),
         maxChars: 500,
       },
       signal(),
@@ -186,6 +189,37 @@ await test('note passes the citation identity and bound', async () => {
     assert.deepEqual(result, { ok: true, value: { status: 'stale', reason: 'revision' } });
     assert.equal(api.requests[0]?.query.get('maxChars'), '500');
     assert.equal(api.requests[0]?.query.get('revision'), '2');
+  } finally {
+    await api.close();
+  }
+});
+
+await test('the largest contract-valid search response fits under the cap and is accepted', async () => {
+  const wide = '界';
+  const heading = wide.repeat(500);
+  const result = {
+    ...searchOk().results[0],
+    documentPath: wide.repeat(2048),
+    title: wide.repeat(500),
+    headingPath: Array(6).fill(heading),
+    snippet: wide.repeat(1_200),
+    citation: {
+      ...citation(),
+      display: wide.repeat(BRAIN_CITATION_DISPLAY_MAX_CHARS),
+      path: wide.repeat(2048),
+      headingPath: Array(6).fill(heading),
+    },
+  };
+  const body = { ...searchOk(), results: Array(50).fill(result) };
+  const size = Buffer.byteLength(JSON.stringify(body));
+  assert.ok(size > 2 * 1024 * 1024 && size < MAX_RESPONSE_BYTES, String(size));
+  const api = await startFakeApi(() => ({ body }));
+  try {
+    const response = await createBrainApiClient({ baseUrl: api.url, serviceKey: KEY }).search(
+      query,
+      signal(),
+    );
+    assert.ok(response.ok, response.ok ? '' : response.code);
   } finally {
     await api.close();
   }
