@@ -5,7 +5,11 @@ import test from 'node:test';
 
 import { BRAIN_CITATION_DISPLAY_MAX_CHARS, type BrainSearchQuery } from '../contracts/index.ts';
 import { citation, HASH, searchOk, startFakeApi, statsBody } from '../testing/index.ts';
-import { createBrainApiClient, MAX_RESPONSE_BYTES, SERVICE_KEY_HEADER } from './brain-api-client.ts';
+import {
+  createBrainApiClient,
+  MAX_RESPONSE_BYTES,
+  SERVICE_KEY_HEADER,
+} from './brain-api-client.ts';
 
 const KEY = 'k'.repeat(40);
 const signal = () => AbortSignal.timeout(2_000);
