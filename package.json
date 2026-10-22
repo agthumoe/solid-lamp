@@ -36,7 +36,7 @@
     "test:mcp": "node --test 'apps/mcp/src/**/*.test.ts'",
     "test:doctor": "node --test scripts/doctor/doctor.test.ts",
     "test:db": "node --test 'packages/db/src/**/*.test.ts' scripts/db/supabase-cli.test.ts scripts/db/recovery-core.test.ts",
-    "test:int": "node --test 'packages/db/test/integration/*.int.test.ts' 'scripts/db/*.int.test.ts' 'apps/worker/test/integration/*.int.test.ts' 'apps/api/test/integration/*.int.test.ts'",
+    "test:int": "node --test 'packages/db/test/integration/*.int.test.ts' 'scripts/db/*.int.test.ts' 'apps/worker/test/integration/*.int.test.ts' 'apps/api/test/integration/*.int.test.ts' 'apps/mcp/test/integration/*.int.test.ts'",
     "docs:check": "node scripts/check-docs.ts",
     "lint": "eslint . --max-warnings 0",
     "typecheck": "tsc --noEmit",
