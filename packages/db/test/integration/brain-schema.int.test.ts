@@ -37,24 +37,54 @@ const migrated = (name: string, run: (sql: Sql, url: string) => Promise<void>) =
     });
   });
 
+// Phase 2 (#91): a chunk belongs to a chunk set on a document revision.
+const seedSet = async (sql: Sql, documentId: string, chunker = 'c1') => {
+  const [revision] = await sql<{ id: string }[]>`
+    insert into document_revisions (document_id, revision, kind, uri, content_hash)
+    select id, coalesce((select max(revision) from document_revisions where document_id = ${documentId}), 0) + 1,
+           'content', uri, content_hash
+    from documents where id = ${documentId} returning id`;
+  const [set] = await sql<{ id: string }[]>`
+    insert into chunk_sets (document_revision_id, document_id, chunker_version)
+    values (${revision?.id ?? ''}, ${documentId}, ${chunker}) returning id`;
+  return { revisionId: revision?.id ?? '', chunkSetId: set?.id ?? '' };
+};
+
 const seedChunk = async (sql: Sql) => {
   const [source] = await sql<{ id: string }[]>`
     insert into sources (kind, name) values ('obsidian', 'vault') returning id`;
   const [document] = await sql<{ id: string }[]>`
     insert into documents (source_id, uri, content_hash)
     values (${source?.id ?? ''}, 'notes/a.md', ${hash('doc')}) returning id`;
+  const documentId = document?.id ?? '';
+  const { chunkSetId } = await seedSet(sql, documentId);
   const [chunk] = await sql<{ id: string }[]>`
-    insert into chunks (document_id, ordinal, content, content_hash, token_count, chunker_version)
-    values (${document?.id ?? ''}, 0, 'The quick brown foxes jumped', ${hash('chunk')}, 5, 'c1')
+    insert into chunks (document_id, chunk_set_id, ordinal, content, content_hash, token_count, chunker_version)
+    values (${documentId}, ${chunkSetId}, 0, 'The quick brown foxes jumped', ${hash('chunk')}, 5, 'c1')
     returning id`;
-  return { documentId: document?.id ?? '', chunkId: chunk?.id ?? '' };
+  return { documentId, chunkSetId, chunkId: chunk?.id ?? '' };
 };
 
-const version = async (sql: Sql, dimensions: number, status = 'building'): Promise<string> => {
+// Each version gets its own immutable profile (ADR 0006).
+const profile = async (sql: Sql, dimensions: number) => {
+  const digest = hash(`m${dimensions}${Math.random()}`);
   const [row] = await sql<{ id: string }[]>`
-    insert into embedding_versions (model, model_digest, dimensions, chunker_version, status, promoted_at)
-    values ('m', ${hash(`m${dimensions}${status}${Math.random()}`)}, ${dimensions}, 'c1', ${status},
-            ${status === 'active' ? new Date() : null})
+    insert into embedding_profiles (id, model, model_digest, dimensions, num_ctx)
+    values (${`p-${digest.slice(0, 12)}`}, 'm', ${digest}, ${dimensions}, 2048) returning id`;
+  return { id: row?.id ?? '', digest };
+};
+
+const version = async (
+  sql: Sql,
+  dimensions: number,
+  status = 'building',
+  chunker = 'c1',
+): Promise<string> => {
+  const p = await profile(sql, dimensions);
+  const [row] = await sql<{ id: string }[]>`
+    insert into embedding_versions (model, model_digest, dimensions, chunker_version, status, promoted_at, profile_id)
+    values ('m', ${p.digest}, ${dimensions}, ${chunker}, ${status},
+            ${status === 'active' ? new Date() : null}, ${p.id})
     returning id`;
   return row?.id ?? '';
 };
@@ -71,11 +101,19 @@ await migrated('the full history replays into an empty database', async (sql) =>
     [
       'chunk_embeddings_1024',
       'chunk_embeddings_768',
+      'chunk_sets',
       'chunks',
+      'document_revisions',
       'documents',
+      'embedding_builds',
+      'embedding_profiles',
+      'embedding_version_leases',
+      'embedding_version_selections',
       'embedding_versions',
+      'ingest_events',
       'links',
       'search_config',
+      'source_sync_state',
       'sources',
     ],
   );
@@ -131,8 +169,8 @@ await migrated('vectors must match their version dimension table and be finite',
     /expected 1024 dimensions|duplicate key/,
   );
   const [other] = await sql<{ id: string }[]>`
-    insert into chunks (document_id, ordinal, content, content_hash, token_count, chunker_version)
-    select document_id, 1, 'second', ${hash('c2')}, 1, 'c1' from chunks where id = ${chunkId}
+    insert into chunks (document_id, chunk_set_id, ordinal, content, content_hash, token_count, chunker_version)
+    select document_id, chunk_set_id, 1, 'second', ${hash('c2')}, 1, 'c1' from chunks where id = ${chunkId}
     returning id`;
   await rejects(
     sql`insert into chunk_embeddings_1024 (embedding_version_id, chunk_id, content_hash, embedding)
@@ -150,9 +188,9 @@ await migrated('vectors must match their version dimension table and be finite',
     /duplicate key/,
   );
   await rejects(
-    sql`insert into embedding_versions (model, model_digest, dimensions, chunker_version)
-        values ('m', ${hash('z')}, 512, 'c1')`,
-    /embedding_versions_dimensions_check/,
+    sql`insert into embedding_profiles (id, model, model_digest, dimensions)
+        values ('p-512', 'm', ${hash('z')}, 512)`,
+    /embedding_profiles_dimensions_check/,
   );
 });
 
@@ -162,9 +200,10 @@ await migrated(
     await version(sql, 1024, 'active');
 
     await rejects(version(sql, 768, 'active'), /embedding_versions_one_active_idx/);
+    const p = await profile(sql, 1024);
     await rejects(
-      sql`insert into embedding_versions (model, model_digest, dimensions, chunker_version, status)
-        values ('m', ${hash('p')}, 1024, 'c1', 'active')`,
+      sql`insert into embedding_versions (model, model_digest, dimensions, chunker_version, status, profile_id)
+        values ('m', ${p.digest}, 1024, 'c1', 'active', ${p.id})`,
       /embedding_versions_active_promoted|embedding_versions_one_active_idx/,
     );
   },
@@ -224,8 +263,10 @@ await migrated('the generated tsvector is searchable and deletes cascade', async
       .values({ sourceId: source.id, uri: 'README.md', contentHash: hash('readme') })
       .returning({ id: documents.id });
     assert.ok(document);
+    const { chunkSetId } = await seedSet(sql, String(document.id));
     await client.db.insert(chunks).values({
       documentId: document.id,
+      chunkSetId: Number(chunkSetId),
       ordinal: 0,
       content: 'Running local foxes through the gate',
       contentHash: hash('c'),

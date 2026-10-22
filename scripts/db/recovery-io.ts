@@ -26,6 +26,14 @@ const TABLES = [
   'embedding_versions',
   'chunk_embeddings_1024',
   'chunk_embeddings_768',
+  // Phase 2 (#91). Reader leases are transient and deliberately not compared.
+  'document_revisions',
+  'chunk_sets',
+  'embedding_profiles',
+  'embedding_version_selections',
+  'source_sync_state',
+  'ingest_events',
+  'embedding_builds',
 ] as const;
 
 // Only application schemas. Supabase-owned schemas (auth, storage, extensions, …) belong to

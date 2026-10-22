@@ -11,9 +11,17 @@ const MIGRATIONS = join(import.meta.dirname, '../../../../supabase/migrations');
 export const migrationFiles = async (): Promise<string[]> =>
   (await readdir(MIGRATIONS)).filter((name) => /^\d{14}_[a-z0-9_]+\.sql$/.test(name)).sort();
 
-// Each file runs in its own transaction, as the Supabase CLI applies them.
-export const applyMigrations = async (sql: Sql): Promise<string[]> => {
-  const files = await migrationFiles();
+// Each file runs in its own transaction, as the Supabase CLI applies them. `from`/`through` select
+// a range of the history, so an upgrade test can seed rows under an older schema first.
+export const applyMigrations = async (
+  sql: Sql,
+  range: { readonly from?: string; readonly through?: string } = {},
+): Promise<string[]> => {
+  const files = (await migrationFiles()).filter(
+    (file) =>
+      (range.from === undefined || file >= range.from) &&
+      (range.through === undefined || file <= range.through),
+  );
   for (const file of files) {
     const text = await readFile(join(MIGRATIONS, file), 'utf8');
     await sql.begin((tx) => tx.unsafe(text));
