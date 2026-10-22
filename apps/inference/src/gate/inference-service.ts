@@ -59,6 +59,39 @@ export type EmbedOutcome = EmbedResult & {
 };
 
 /**
+ * Runs pre-gate work (profile resolution reads Ollama's model list) under the call's own
+ * deadline and cancellation, so a stalled request can never outlive the deadline the gate
+ * would otherwise enforce. An already-expired deadline fails without starting the work.
+ */
+const withinDeadline = async <T>(
+  work: (signal: AbortSignal) => Promise<Result<T, InferenceError>>,
+  options: CallOptions,
+  now: () => number,
+): Promise<Result<T, InferenceError>> => {
+  const expired = () =>
+    options.signal.aborted
+      ? err(inferenceError('CANCELLED', 'request was cancelled'))
+      : err(inferenceError('DEADLINE_EXPIRED', 'request deadline expired'));
+  const remaining = options.deadline.getTime() - now();
+  if (remaining <= 0 || options.signal.aborted) return expired();
+  const controller = new AbortController();
+  const stop = () => controller.abort();
+  const timer = setTimeout(stop, remaining);
+  options.signal.addEventListener('abort', stop, { once: true });
+  try {
+    return await Promise.race([
+      work(controller.signal),
+      new Promise<Result<T, InferenceError>>((resolve) =>
+        controller.signal.addEventListener('abort', () => resolve(expired()), { once: true }),
+      ),
+    ]);
+  } finally {
+    clearTimeout(timer);
+    options.signal.removeEventListener('abort', stop);
+  }
+};
+
+/**
  * The one place gate jobs meet Ollama. Each job observes `/api/ps` before and after it runs
  * so residency is measured per job, never assumed (see the adapter spec).
  */
@@ -164,7 +197,11 @@ export const createInferenceService = (deps: InferenceServiceDeps) => {
     let queueWaitMs: number | undefined;
     // Snapshot the profile at enqueue: a config reload or re-pull while queued must not change
     // the vector space. Resolution only reads Ollama's model list, never the GPU.
-    const resolved = await deps.profiles.resolve(call.profileId, options.signal);
+    const resolved = await withinDeadline(
+      (signal) => deps.profiles.resolve(call.profileId, signal),
+      options,
+      now,
+    );
     if (!resolved.ok) {
       logOutcome('embed', enqueuedAt, undefined, resolved.error);
       return resolved;

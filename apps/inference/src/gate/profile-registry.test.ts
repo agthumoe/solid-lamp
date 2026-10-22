@@ -178,3 +178,34 @@ await test('service: an artifact replaced while queued fails explicitly and neve
   assert.equal(unknown.ok ? null : unknown.error.code, 'PROFILE_UNAVAILABLE');
   assert.equal(fake.embeds.length, 0);
 });
+
+await test('service: a stalled profile resolution still honours the call deadline', async () => {
+  let release: () => void = () => undefined;
+  const stalled: InstalledArtifacts = () =>
+    new Promise((resolve) => (release = () => resolve(ok(new Map(Object.entries(ALL))))));
+  const fake = fakeAdapter();
+  const { service } = serviceWith(fake.adapter, { config: () => config(), installed: stalled });
+  const started = Date.now();
+  const result = await service.embed(
+    { texts: ['x'], kind: 'query' },
+    {
+      priority: 'interactive',
+      signal: new AbortController().signal,
+      deadline: new Date(Date.now() + 30),
+    },
+  );
+  release();
+  assert.equal(result.ok ? null : result.error.code, 'DEADLINE_EXPIRED');
+  assert.ok(Date.now() - started < 1_000, 'returned at the deadline, not when Ollama answered');
+  assert.equal(fake.embeds.length, 0);
+
+  const expired = await service.embed(
+    { texts: ['x'], kind: 'query' },
+    {
+      priority: 'interactive',
+      signal: new AbortController().signal,
+      deadline: new Date(Date.now() - 1),
+    },
+  );
+  assert.equal(expired.ok ? null : expired.error.code, 'DEADLINE_EXPIRED');
+});
