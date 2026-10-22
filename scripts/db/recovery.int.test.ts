@@ -50,6 +50,23 @@ const setup = async () => {
     insert into documents (source_id, uri, content_hash) values
       (${src?.id ?? ''}, 'a.md', ${hash('a')}), (${src?.id ?? ''}, 'b.md', ${hash('b')})
     returning id`;
+  // Phase 2 schema (#91): an immutable profile, then per-document revisions and chunk sets
+  // published through the compare-and-set function (which also selects them for the version).
+  await db.sql`insert into embedding_profiles (id, model, model_digest, dimensions, num_ctx)
+               values ('qwen3-embed-test', 'qwen3-embedding:0.6b', ${hash('m')}, 1024, 2048)`;
+  const [version] = await db.sql<{ id: string }[]>`
+    insert into embedding_versions (model, model_digest, dimensions, chunker_version, status, promoted_at, profile_id)
+    values ('qwen3-embedding:0.6b', ${hash('m')}, 1024, 'c1', 'active', now(), 'qwen3-embed-test') returning id`;
+  const sets: { revisionId: string; setId: string }[] = [];
+  for (const doc of docs) {
+    const [revision] = await db.sql<{ id: string }[]>`
+      insert into document_revisions (document_id, revision, kind, uri, content_hash)
+      select id, 1, 'content', uri, content_hash from documents where id = ${doc.id} returning id`;
+    const [set] = await db.sql<{ id: string }[]>`
+      insert into chunk_sets (document_revision_id, document_id, chunker_version)
+      values (${revision?.id ?? ''}, ${doc.id}, 'c1') returning id`;
+    sets.push({ revisionId: revision?.id ?? '', setId: set?.id ?? '' });
+  }
   const chunkIds: string[] = [];
   for (const [index, text] of [
     'alpha gate notes',
@@ -57,15 +74,15 @@ const setup = async () => {
     'gamma vectors',
   ].entries()) {
     const [row] = await db.sql<{ id: string }[]>`
-      insert into chunks (document_id, ordinal, content, content_hash, token_count, chunker_version)
-      values (${docs[index % 2]?.id ?? ''}, ${index}, ${text}, ${hash(text)}, 3, 'c1') returning id`;
+      insert into chunks (document_id, chunk_set_id, ordinal, content, content_hash, token_count, chunker_version, line_start, line_end)
+      values (${docs[index % 2]?.id ?? ''}, ${sets[index % 2]?.setId ?? ''}, ${index}, ${text}, ${hash(text)}, 3, 'c1', ${index + 1}, ${index + 1})
+      returning id`;
     chunkIds.push(row?.id ?? '');
   }
+  for (const [index, doc] of docs.entries())
+    await db.sql`select brain_publish_revision(${doc.id}, null, ${sets[index]?.revisionId ?? ''})`;
   await db.sql`insert into links (from_document_id, to_document_id, to_title, kind)
                values (${docs[0]?.id ?? ''}, ${docs[1]?.id ?? ''}, 'b', 'wikilink')`;
-  const [version] = await db.sql<{ id: string }[]>`
-    insert into embedding_versions (model, model_digest, dimensions, chunker_version, status, promoted_at)
-    values ('qwen3-embedding:0.6b', ${hash('m')}, 1024, 'c1', 'active', now()) returning id`;
   for (const [index, id] of chunkIds.entries())
     await db.sql`insert into chunk_embeddings_1024 (embedding_version_id, chunk_id, content_hash, embedding)
                  select ${version?.id ?? ''}, ${id}, content_hash, ${vec(index + 2)} from chunks where id = ${id}`;
@@ -128,6 +145,13 @@ await test(
         embedding_versions: 1,
         chunk_embeddings_1024: 3,
         chunk_embeddings_768: 0,
+        document_revisions: 2,
+        chunk_sets: 2,
+        embedding_profiles: 1,
+        embedding_version_selections: 2,
+        source_sync_state: 0,
+        ingest_events: 0,
+        embedding_builds: 0,
       });
       assert.equal(manifest.vectorProbe.length, 3);
       assert.doesNotMatch(

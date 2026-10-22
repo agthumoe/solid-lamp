@@ -1,6 +1,6 @@
 # Brain core schema and `packages/db`
 
-Issue: [#73](https://github.com/agthumoe/solid-lamp/issues/73). Status: implemented (Phase 1 schema; Phase 2 behaviour pending). Parent: #3. Decisions: [ADR 0002](../adr/0002-embedding-versions.md); contracts: [embedding storage](embedding-storage.md), [database](../development/database.md), BUILD_PROMPT §7.
+Issue: [#73](https://github.com/agthumoe/solid-lamp/issues/73). Status: implemented (Phase 1 schema). Phase 2 extends it with revisions, chunk sets and selections: [brain revisions schema](brain-revisions.md) (#91). Parent: #3. Decisions: [ADR 0002](../adr/0002-embedding-versions.md); contracts: [embedding storage](embedding-storage.md), [database](../development/database.md), BUILD_PROMPT §7.
 
 ## Goal
 

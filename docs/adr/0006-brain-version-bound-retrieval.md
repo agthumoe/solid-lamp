@@ -1,12 +1,12 @@
 # ADR 0006 — Version-bound embedding profiles and immutable chunk sets
 
-Date: 2026-10-18. Status: **proposed for review**, not accepted. Task: [#84](https://github.com/agthumoe/solid-lamp/issues/84), PR [#85](https://github.com/agthumoe/solid-lamp/pull/85). Related: [brain spec](../specs/brain.md), [review](../reviews/phase2-plan-pr85.md), [ADR 0002](0002-embedding-versions.md).
+Date: 2026-10-18. Status: **accepted** by the owner on 2026-10-21. Schema implementation: [#91](https://github.com/agthumoe/solid-lamp/issues/91) ([revisions schema spec](../specs/brain-revisions.md)); version-bound RPC: [#94](https://github.com/agthumoe/solid-lamp/issues/94). Task: [#84](https://github.com/agthumoe/solid-lamp/issues/84), PR [#85](https://github.com/agthumoe/solid-lamp/pull/85). Related: [brain spec](../specs/brain.md), [review](../reviews/phase2-plan-pr85.md), [ADR 0002](0002-embedding-versions.md).
 
 ## Context
 
 ADR 0002 requires a search to use one embedding version from query embedding to retrieval and to remain usable across a rebuild. The current internal embed RPC resolves only the current `embed` role. Its response reports model/context/dimensions, but not profile/digest/prefix identity. The current chunks table also has unique `(document_id, ordinal)` rows shared by every vector version. These interfaces cannot by themselves support simultaneous old/new profiles and chunker layouts.
 
-## Proposed decision
+## Decision
 
 ### Embedding profile identity
 
@@ -41,4 +41,4 @@ Enforce revision/chunk-set/version relationships with composite uniqueness and f
 
 ## Consequences and acceptance
 
-Extra storage, registry provisioning and reader retention add complexity. The schema/RPC implementation must update the brain and inference specs together and test upgrade/backfill, stale jobs, source deletion, failed rechunk, paused query during promotion, identical dimensions/different profiles, restart with a prior active profile, watermark races and stale rollback rejection. No implementation is authorized by this proposed ADR; accept or amend it with the plan before task execution.
+Extra storage, registry provisioning and reader retention add complexity. The schema/RPC implementation must update the brain and inference specs together and test upgrade/backfill, stale jobs, source deletion, failed rechunk, paused query during promotion, identical dimensions/different profiles, restart with a prior active profile, watermark races and stale rollback rejection. Accepted 2026-10-21; implementation proceeds through #91 (schema) and #94 (RPC).
