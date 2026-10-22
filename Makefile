@@ -95,6 +95,10 @@ dev\:mcp-brain:
 brain\:query:
 	pnpm brain:query $(ARGS)
 
+.PHONY: brain\:ingest
+brain\:ingest:
+	pnpm brain:ingest $(ARGS)
+
 .PHONY: brain\:stats
 brain\:stats:
 	pnpm brain:stats $(ARGS)

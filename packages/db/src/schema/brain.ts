@@ -213,6 +213,7 @@ export const ingestEvents = pgTable('ingest_events', {
   lastErrorCode: text('last_error_code'),
   createdAt: createdAt(),
   processedAt: timestamp('processed_at', { withTimezone: true }),
+  observedHash: text('observed_hash'),
 });
 
 export const embeddingBuilds = pgTable('embedding_builds', {

@@ -107,6 +107,12 @@ importers:
 
   apps/worker:
     dependencies:
+      '@aetherion/brain':
+        specifier: workspace:*
+        version: link:../../packages/brain
+      '@aetherion/llm':
+        specifier: workspace:*
+        version: link:../../packages/llm
       '@aetherion/shared':
         specifier: workspace:*
         version: link:../../packages/shared
@@ -116,6 +122,13 @@ importers:
       ioredis:
         specifier: 6.0.0
         version: 6.0.0
+      postgres:
+        specifier: 3.4.9
+        version: 3.4.9
+    devDependencies:
+      '@aetherion/db':
+        specifier: workspace:*
+        version: link:../../packages/db
 
   packages/brain:
     dependencies:

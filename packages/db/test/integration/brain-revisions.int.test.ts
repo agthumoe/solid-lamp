@@ -573,8 +573,10 @@ await migrated('ingest events, builds and leases enforce their state rules', asy
   const source = await newSource(sql);
   const doc = await newDocument(sql, source, 'a.md');
   const { id: first } = await one(
-    sql<{ id: string }[]>`insert into ingest_events (source_id, document_id, kind, path_hash)
-      values (${source}, ${doc}, 'changed', ${hash('a.md')}) returning id`,
+    sql<
+      { id: string }[]
+    >`insert into ingest_events (source_id, document_id, kind, path_hash, observed_hash)
+      values (${source}, ${doc}, 'changed', ${hash('a.md')}, ${hash('bytes')}) returning id`,
   );
   const { id: second } = await one(
     sql<
@@ -585,7 +587,7 @@ await migrated('ingest events, builds and leases enforce their state rules', asy
 
   await rejects(
     sql`insert into ingest_events (source_id, kind) values (${source}, 'changed')`,
-    /ingest_events_target|ingest_events_path_hash/,
+    /ingest_events_target|ingest_events_path_hash|ingest_events_observed_hash/,
   );
   await rejects(
     sql`insert into ingest_events (source_id, document_id, kind, path_hash) values (${source}, ${doc}, 'resync', null)`,
