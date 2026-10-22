@@ -2,6 +2,7 @@ import { LlmGate } from '@aetherion/llm';
 import type { Logger, ModelsConfig } from '@aetherion/shared';
 
 import { createInferenceService } from './gate/inference-service.ts';
+import { createProfileRegistry } from './gate/profile-registry.ts';
 import { createOllamaAdapter } from './ollama/ollama-adapter.ts';
 import type { FetchLike } from './ollama/ollama-http.ts';
 import { createResidencyMetrics } from './ollama/residency.ts';
@@ -29,6 +30,7 @@ export const composeInference = (input: CompositionInput) => {
     adapter,
     config: () => input.models,
     recordResidency: residency.record,
+    profiles: createProfileRegistry({ config: () => input.models, installed: adapter.installed }),
     logger: input.logger.child({ traceId: 'gate' }),
   });
   const readiness: ReadinessProbe = {

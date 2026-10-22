@@ -1,6 +1,7 @@
 import { Readable } from 'node:stream';
 
 import {
+  embedProfilesResponseSchema,
   embedRequestSchema,
   embedResponseSchema,
   generateRequestSchema,
@@ -91,8 +92,27 @@ export const registerInferenceRoutes = (
       if (typeof options === 'string') return sendError(reply, 'VALIDATION_FAILED', options);
       const result = await service.embed(request.body, options);
       if (!result.ok) return sendInferenceError(reply, result.error);
-      const { vectors, model, tokensIn, totalMs } = result.value;
-      return { vectors: vectors.map((vector) => [...vector]), model, tokensIn, totalMs };
+      const { vectors, model, profile, tokensIn, totalMs } = result.value;
+      return {
+        vectors: vectors.map((vector) => [...vector]),
+        profile: { ...profile },
+        model,
+        tokensIn,
+        totalMs,
+      };
+    },
+  );
+
+  typed.get(
+    RPC_PATHS.embedProfiles,
+    { schema: { response: { 200: embedProfilesResponseSchema } } },
+    async (request, reply) => {
+      const listing = await service.embedProfiles(AbortSignal.timeout(5_000));
+      if (!listing.ok) return sendInferenceError(reply, listing.error);
+      return {
+        defaultProfileId: listing.value.defaultProfileId,
+        profiles: listing.value.profiles.map((profile) => ({ ...profile })),
+      };
     },
   );
 };

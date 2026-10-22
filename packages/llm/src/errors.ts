@@ -5,6 +5,8 @@ export const INFERENCE_ERROR_CODES = [
   'INFERENCE_UNAVAILABLE',
   'MODEL_NOT_LOADED',
   'INVALID_RESPONSE',
+  // A pinned embedding profile is not approved, its model is missing, or its artifact changed.
+  'PROFILE_UNAVAILABLE',
 ] as const;
 
 export type InferenceErrorCode = (typeof INFERENCE_ERROR_CODES)[number];

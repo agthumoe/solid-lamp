@@ -1,4 +1,7 @@
+import { createHash } from 'node:crypto';
+
 import {
+  embeddingProfileCandidates,
   inferenceError,
   LlmGate,
   type EmbedSnapshot,
@@ -16,9 +19,14 @@ import {
 } from '@aetherion/shared';
 
 import { createInferenceService } from '../../src/gate/inference-service.ts';
+import { createProfileRegistry, type InstalledArtifacts } from '../../src/gate/profile-registry.ts';
 import type { AdapterStreamEvent, ChatRequest } from '../../src/ollama/chat.ts';
 import type { EmbedKind, EmbedResult } from '../../src/ollama/embed.ts';
-import type { LoadedModel, ResidencyChange } from '../../src/ollama/residency.ts';
+import {
+  canonicalModel,
+  type LoadedModel,
+  type ResidencyChange,
+} from '../../src/ollama/residency.ts';
 
 export const modelsConfig = (): ModelsConfig => {
   const parsed = parseModelsConfig(`
@@ -117,9 +125,29 @@ export const fakeAdapter = (
   };
 };
 
+export const digestOf = (model: string) => createHash('sha256').update(model).digest('hex');
+
+// Every embedding model the config names at creation, installed with a deterministic digest.
+// Fixed afterwards: a config reload does not change what Ollama has installed.
+export const installedFor = (config: () => ModelsConfig): InstalledArtifacts => {
+  const installed = new Map(
+    embeddingProfileCandidates(config()).map((identity) => [
+      canonicalModel(identity.model),
+      digestOf(identity.model),
+    ]),
+  );
+  return () => Promise.resolve(ok(installed));
+};
+
 export const serviceWith = (
   adapter: ReturnType<typeof fakeAdapter>['adapter'],
-  extra: { gate?: LlmGate; now?: () => number; config?: () => ModelsConfig } = {},
+  extra: {
+    gate?: LlmGate;
+    now?: () => number;
+    config?: () => ModelsConfig;
+    // Installed Ollama artifacts (model -> digest). Default: every configured embed model.
+    installed?: InstalledArtifacts;
+  } = {},
 ) => {
   const residency: ResidencyChange[] = [];
   const { logger, events } = capturingLogger();
@@ -129,6 +157,10 @@ export const serviceWith = (
     adapter,
     config: extra.config ?? modelsConfig,
     recordResidency: (change) => residency.push(change),
+    profiles: createProfileRegistry({
+      config: extra.config ?? modelsConfig,
+      installed: extra.installed ?? installedFor(extra.config ?? modelsConfig),
+    }),
     logger,
     ...(extra.now ? { now: extra.now } : {}),
   });

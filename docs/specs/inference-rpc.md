@@ -1,6 +1,6 @@
 # Inference RPC and `InferenceClient`
 
-Issue: [#60](https://github.com/agthumoe/solid-lamp/issues/60). Status: implemented. Parent: #3. Contracts: [ADR 0005](../adr/0005-phase1-stack-and-topology.md) (separate `inference` process, loopback 4100, shared secret), [LlmGate](llm-gate.md), [Ollama adapter](inference-ollama-adapter.md), [AI orchestration](../development/ai-orchestration.md#llmgate-client-interface-packagesllm).
+Issue: [#60](https://github.com/agthumoe/solid-lamp/issues/60). Status: implemented; version-bound embedding profiles added by [#94](https://github.com/agthumoe/solid-lamp/issues/94) ([ADR 0006](../adr/0006-brain-version-bound-retrieval.md)). Parent: #3. Contracts: [ADR 0005](../adr/0005-phase1-stack-and-topology.md) (separate `inference` process, loopback 4100, shared secret), [LlmGate](llm-gate.md), [Ollama adapter](inference-ollama-adapter.md), [AI orchestration](../development/ai-orchestration.md#llmgate-client-interface-packagesllm).
 
 ## Goal
 
@@ -24,15 +24,16 @@ On SIGTERM it stops intake and drains in-flight requests, bounded at 10 s. Fasti
 
 All routes except `/livez` require `x-aetherion-inference-key`. The key is compared in constant time through SHA-256 digests. Bodies are strict zod objects; callers name a **role**, never a model tag. `deadline` is an absolute ISO time at most 15 minutes ahead; `priority` is `interactive` or `background`.
 
-| Route               | Body                                                   | Success                                                                   |
-| ------------------- | ------------------------------------------------------ | ------------------------------------------------------------------------- |
-| `POST /v1/generate` | role, messages (≤256), tools (≤64), think, call fields | `{ text, model, done }`                                                   |
-| `POST /v1/stream`   | same                                                   | NDJSON `StreamEvent`s: `started`, `token`…, exactly one `done` or `error` |
-| `POST /v1/embed`    | texts (≤256), `query` or `document`, call fields       | `{ vectors, model: { model, numCtx, dimensions }, tokensIn, totalMs }`    |
-| `GET /readyz`       | —                                                      | 200 ready / 503 not ready; Ollama state, gate and residency counters      |
-| `GET /livez`        | —                                                      | `{ status: 'ok' }`                                                        |
+| Route                    | Body                                                                   | Success                                                                                                    |
+| ------------------------ | ---------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `POST /v1/generate`      | role, messages (≤256), tools (≤64), think, call fields                 | `{ text, model, done }`                                                                                    |
+| `POST /v1/stream`        | same                                                                   | NDJSON `StreamEvent`s: `started`, `token`…, exactly one `done` or `error`                                  |
+| `POST /v1/embed`         | texts (≤256), `query` or `document`, optional `profileId`, call fields | `{ vectors, profile, model: { model, numCtx, dimensions }, tokensIn, totalMs }`                            |
+| `GET /v1/embed-profiles` | —                                                                      | `{ defaultProfileId, profiles: [{ id, model, digest, dimensions, numCtx, queryPrefix, documentPrefix }] }` |
+| `GET /readyz`            | —                                                                      | 200 ready / 503 not ready; Ollama state, gate and residency counters                                       |
+| `GET /livez`             | —                                                                      | `{ status: 'ok' }`                                                                                         |
 
-Errors use `{ error: { code, message } }`: `QUEUE_FULL` 429, `DEADLINE_EXPIRED` 504, `CANCELLED` 499, `INFERENCE_UNAVAILABLE`/`MODEL_NOT_LOADED` 503, `INVALID_RESPONSE` 502, `VALIDATION_FAILED` 400 (field paths only), `UNAUTHENTICATED` 401, `NOT_FOUND` 404 and `INTERNAL` 500 (no stack). On `/v1/stream`, failures (including `QUEUE_FULL`) are the terminal `error` event inside a 200 response, matching the in-process streaming contract.
+Errors use `{ error: { code, message } }`: `QUEUE_FULL` 429, `DEADLINE_EXPIRED` 504, `CANCELLED` 499, `INFERENCE_UNAVAILABLE`/`MODEL_NOT_LOADED` 503, `INVALID_RESPONSE` 502, `PROFILE_UNAVAILABLE` 409, `VALIDATION_FAILED` 400 (field paths only), `UNAUTHENTICATED` 401, `NOT_FOUND` 404 and `INTERNAL` 500 (no stack). On `/v1/stream`, failures (including `QUEUE_FULL`) are the terminal `error` event inside a 200 response, matching the in-process streaming contract.
 
 ## Gate wiring (`gate/inference-service.ts`)
 
@@ -41,7 +42,18 @@ Errors use `{ error: { code, message } }`: `QUEUE_FULL` 429, `DEADLINE_EXPIRED` 
 - `partial` is true once any token was sent.
 - Each job observes `/api/ps` before and after it runs and records the residency change.
 - A client disconnect aborts the request's signal. Queued work is removed; active work is aborted and torn down before the slot is released.
-- Embedding snapshots the embed role at enqueue, so a config reload cannot change the vector space of queued work.
+- Embedding snapshots a **profile** at enqueue, so neither a config reload nor a re-pulled model can change the vector space of queued work (see below).
+
+## Embedding profiles (ADR 0006, #94)
+
+- **Registry (`gate/profile-registry.ts`).** Approved profiles come only from operator-controlled `models.yaml` (the `embed` role, then each `fallback_embedding_options` entry) combined with the artifact digests Ollama reports in `/api/tags`. A configured model that is not installed is not approved; an installed model that is not configured never becomes a profile. Callers cannot register profiles or send model tags or prefixes.
+- **Identity.** `profileId = "ep-" + first 24 hex of SHA-256([model, digest, dimensions, num_ctx, query prefix, document prefix])`. The same artifact and settings always give the same ID, and a re-pulled artifact or any setting change gives a new one. The `embed` role's profile is the default.
+- **Pinned embedding.**
+  - `/v1/embed` accepts an optional `profileId`. It is resolved and snapshotted when the call arrives; the config is read before any await.
+  - Inside the gate job, the profile's digest is re-checked against `/api/tags` immediately before embedding. A profile that is unknown, not installed or replaced fails as `PROFILE_UNAVAILABLE` (409) and never embeds.
+  - The response returns the `profile` actually used, so the worker and search can compare it with their stored version (`embedding_profiles`, #91) before storing or comparing vectors, including for same-dimension changes.
+- **Listing.** `GET /v1/embed-profiles` (behind the key) lets the worker mirror approved profiles into `embedding_profiles`. `InferenceClient.embedProfiles(signal)` calls it, and the fake client supports scripted profiles.
+- One GPU gate still serves every embedding. Fallback profiles are explicit version builds, never query-time failover.
 
 ## Client (`packages/llm` `createInferenceClient`)
 

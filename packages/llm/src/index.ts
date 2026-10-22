@@ -34,6 +34,9 @@ export { NdjsonError, readNdjson } from './inference/ndjson.ts';
 export {
   chatMessageSchema,
   chatToolSchema,
+  EMBEDDING_PROFILE_ID,
+  embeddingProfileSchema,
+  embedProfilesResponseSchema,
   embedRequestSchema,
   embedResponseSchema,
   generateRequestSchema,
@@ -49,6 +52,7 @@ export {
   streamEventSchema,
   type ChatMessage,
   type ChatTool,
+  type EmbedProfilesResponse,
   type EmbedRequest,
   type EmbedResponse,
   type GenerateRequest,
@@ -72,6 +76,13 @@ export {
   type ToolCallError,
   type ToolCallErrorCode,
 } from './repair/tool-call.ts';
+export {
+  embeddingProfileCandidates,
+  embeddingProfileId,
+  snapshotFromProfile,
+  type EmbeddingProfile,
+  type EmbeddingProfileIdentity,
+} from './roles/embed-profile.ts';
 export {
   resolveEmbedRole,
   resolveGenerationRole,

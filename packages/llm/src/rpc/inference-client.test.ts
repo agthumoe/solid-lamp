@@ -220,3 +220,48 @@ await test('a caller abort while reading an error body is CANCELLED', async () =
 
   assert.equal(result.ok ? null : result.error.code, 'CANCELLED');
 });
+
+await test('embedProfiles validates the listing and maps failures', async () => {
+  const profile = {
+    id: 'ep-0123456789abcdef01234567',
+    model: 'qwen3-embedding:0.6b',
+    digest: 'a'.repeat(64),
+    dimensions: 1024,
+    numCtx: 8192,
+    queryPrefix: 'q: ',
+    documentPrefix: '',
+  };
+  const seen: { url: string; init: Init }[] = [];
+  const client = createInferenceClient({
+    baseUrl: 'http://127.0.0.1:4100',
+    secret: SECRET,
+    fetch: respond(
+      JSON.stringify({ defaultProfileId: profile.id, profiles: [profile] }),
+      200,
+      seen,
+    ),
+  });
+  const listing = await client.embedProfiles(AbortSignal.timeout(1_000));
+  assert.deepEqual(listing, {
+    ok: true,
+    value: { defaultProfileId: profile.id, profiles: [profile] },
+  });
+  assert.ok(seen[0]?.url.endsWith('/v1/embed-profiles'));
+  assert.equal(seen[0]?.init.headers['x-aetherion-inference-key'], SECRET);
+
+  const broken = createInferenceClient({
+    baseUrl: 'http://127.0.0.1:4100',
+    secret: SECRET,
+    fetch: respond(JSON.stringify({ defaultProfileId: 'qwen3', profiles: [] })),
+  });
+  const invalid = await broken.embedProfiles(AbortSignal.timeout(1_000));
+  assert.equal(invalid.ok ? null : invalid.error.code, 'INVALID_RESPONSE');
+
+  const down = createInferenceClient({
+    baseUrl: 'http://127.0.0.1:4100',
+    secret: SECRET,
+    fetch: respond('{"error":{"code":"INFERENCE_UNAVAILABLE","message":"ollama down"}}', 503),
+  });
+  const failed = await down.embedProfiles(AbortSignal.timeout(1_000));
+  assert.equal(failed.ok ? null : failed.error.code, 'INFERENCE_UNAVAILABLE');
+});
