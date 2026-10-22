@@ -86,4 +86,14 @@ Shared with the CLI from `@aetherion/shared` (`createBrainApiClient`, `toBrainSe
   - the key reaches the api and is not logged;
   - bad configuration exits 1 with empty stdout.
 
-**Pending with #95:** end-to-end access tests against the real brain routes. They cover absent or invalid keys, disallowed origins, and forged or out-of-scope citations returning one 404. Also pending: CLI/MCP parity with #96.
+**Against the real routes** (`apps/mcp/test/integration/real-routes.int.test.ts`, in `pnpm test:int`): the tools call a real `apps/api` process, spawned from its entry point against a migrated and seeded Postgres. The test covers:
+
+- lexical search with citations, and injected note text arriving inside the nonce fence;
+- a ref leading to its excerpt;
+- forged refs (chunk, revision, out-of-scope source, content hash) each getting one `NOT_FOUND`;
+- an edited note making the old ref `stale` with no text;
+- hybrid search failing explicitly as `UNAVAILABLE` when the inference process is down;
+- stats;
+- a wrong service key getting `UNAUTHENTICATED`.
+
+CLI/MCP parity comes from the shared client and query mapping (#96).
