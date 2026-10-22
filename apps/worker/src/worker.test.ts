@@ -89,6 +89,21 @@ await test('job IDs are deterministic, colon-free and change with the revision',
   assert.doesNotMatch(id, /notes|:/);
 });
 
+await test('job identity follows the durable event: a new event for the same bytes is a new job', () => {
+  const base = { sourceId: 'vault', path: 'notes/a.md', revision: REV };
+  // A relay re-send of the same event deduplicates...
+  assert.equal(
+    ingestDocumentJobId({ ...base, eventId: '41' }),
+    ingestDocumentJobId({ ...base, eventId: '41' }),
+  );
+  // ...but a delete after an edit, or an A→B→A edit, is a different event and must run.
+  assert.notEqual(
+    ingestDocumentJobId({ ...base, eventId: '41' }),
+    ingestDocumentJobId({ ...base, eventId: '42' }),
+  );
+  assert.equal(ingestDocumentPayloadSchema.safeParse({ ...base, eventId: 'x' }).success, false);
+});
+
 const handlers = (
   result: () => Promise<{ ok: true; value: void } | { ok: false; error: JobError }>,
 ) => ({ [INGEST_DOCUMENT]: result, [INGEST_RESYNC]: result }) as unknown as JobHandlers;

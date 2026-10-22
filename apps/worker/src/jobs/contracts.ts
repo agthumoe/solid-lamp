@@ -25,6 +25,13 @@ export const ingestDocumentPayloadSchema = z.strictObject({
       }
     }, 'must be a normalized source-relative path'),
   revision: z.string().regex(/^[0-9a-f]{64}$/),
+  // The durable ingest_events row behind the job (#139). Job identity follows the event: a
+  // relay re-send after a Redis loss reuses it (deduplicated), while a new event for the same
+  // bytes (a delete after an edit, or an A→B→A edit) is a new job, never silently dropped.
+  eventId: z
+    .string()
+    .regex(/^\d{1,18}$/)
+    .optional(),
 });
 
 export const ingestResyncPayloadSchema = z.strictObject({
@@ -45,12 +52,13 @@ export type JobPayload<N extends JobName> = z.infer<(typeof JOB_SCHEMAS)[N]>;
 
 export const isJobName = (name: string): name is JobName => Object.hasOwn(JOB_SCHEMAS, name);
 
-// A newer revision of the same path is a new job; the same revision is deduplicated.
+// A newer revision of the same path is a new job; the same revision (and event) is deduplicated.
 export const ingestDocumentJobId = (payload: IngestDocumentPayload): string =>
   deterministicJobId('ingest-document', [
     payload.sourceId,
     normalizeDocumentPath(payload.path),
     payload.revision,
+    ...(payload.eventId === undefined ? [] : [payload.eventId]),
   ]);
 
 export const ingestResyncJobId = (payload: IngestResyncPayload): string =>

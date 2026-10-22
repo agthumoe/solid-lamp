@@ -1,6 +1,6 @@
 # `apps/worker` skeleton
 
-Issue: [#92](https://github.com/agthumoe/solid-lamp/issues/92) (P2-6). Status: implemented (skeleton). Parent: [#4](https://github.com/agthumoe/solid-lamp/issues/4). Contracts: [ARCHITECTURE §2 and §5.3](../ARCHITECTURE.md), [ADR 0005](../adr/0005-phase1-stack-and-topology.md), [operations](../development/operations.md), the [BullMQ job template](../development/templates/bullmq-job.md). Plan: `docs/specs/brain.md` task 6 and review finding F5 ([PR #85](https://github.com/agthumoe/solid-lamp/pull/85)).
+Issue: [#92](https://github.com/agthumoe/solid-lamp/issues/92) (P2-6). Status: implemented; ingestion handlers, the Postgres outbox and watcher wiring arrived with [#139](https://github.com/agthumoe/solid-lamp/issues/139) ([brain ingestion](brain-ingestion.md)). Parent: [#4](https://github.com/agthumoe/solid-lamp/issues/4). Contracts: [ARCHITECTURE §2 and §5.3](../ARCHITECTURE.md), [ADR 0005](../adr/0005-phase1-stack-and-topology.md), [operations](../development/operations.md), the [BullMQ job template](../development/templates/bullmq-job.md). Plan: `docs/specs/brain.md` task 6 and review finding F5 ([PR #85](https://github.com/agthumoe/solid-lamp/pull/85)).
 
 ## Goal
 
