@@ -107,6 +107,7 @@ await migrated('the full history replays into an empty database', async (sql) =>
       'documents',
       'embedding_builds',
       'embedding_profiles',
+      'embedding_version_gates',
       'embedding_version_leases',
       'embedding_version_selections',
       'embedding_versions',
@@ -128,6 +129,7 @@ await migrated('Drizzle columns, types and nullability match the database', asyn
       boolean: 'bool',
       'timestamp with time zone': 'timestamptz',
       'text[]': '_text',
+      'double precision': 'float8',
     })[type] ?? type.replace(/\(\d+\)$/, '');
   for (const table of Object.values(brainTables) as PgTable[]) {
     const config = getTableConfig(table);

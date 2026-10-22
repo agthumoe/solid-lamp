@@ -1,5 +1,5 @@
-// Typed mirror of supabase/migrations (20261018120000_brain_core.sql and
-// 20261021120000_brain_revisions.sql). The SQL files are the only schema history; this file gives adapters typed, parameterized queries. Constraints, the
+// Typed mirror of supabase/migrations (20261018120000_brain_core.sql,
+// 20261021120000_brain_revisions.sql and 20261022120000_brain_search.sql). The SQL files are the only schema history; this file gives adapters typed, parameterized queries. Constraints, the
 // generated tsvector expression, partial/HNSW indexes and RLS live in SQL and are checked by
 // the parity integration test (test/integration/brain-schema.int.test.ts).
 import { sql } from 'drizzle-orm';
@@ -7,6 +7,7 @@ import {
   bigint,
   boolean,
   customType,
+  doublePrecision,
   integer,
   jsonb,
   pgTable,
@@ -154,6 +155,19 @@ export const embeddingVersions = pgTable('embedding_versions', {
   profileId: text('profile_id').notNull(),
 });
 
+export const embeddingVersionGates = pgTable('embedding_version_gates', {
+  embeddingVersionId: ref('embedding_version_id')
+    .primaryKey()
+    .references(() => embeddingVersions.id, { onDelete: 'cascade' }),
+  gateId: text('gate_id').notNull(),
+  minCosine: doublePrecision('min_cosine'),
+  minLexical: doublePrecision('min_lexical'),
+  calibrationQuestions: integer('calibration_questions'),
+  calibrationSha256: text('calibration_sha256'),
+  calibrationTopK: integer('calibration_top_k'),
+  createdAt: createdAt(),
+});
+
 export const embeddingVersionSelections = pgTable(
   'embedding_version_selections',
   {
@@ -263,6 +277,7 @@ export const brainTables = {
   embeddingProfiles,
   embeddingVersions,
   embeddingVersionSelections,
+  embeddingVersionGates,
   chunkEmbeddings1024,
   chunkEmbeddings768,
   searchConfig,

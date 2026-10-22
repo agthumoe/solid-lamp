@@ -645,7 +645,12 @@ await migrated(
     where n.nspname = 'public' and p.proname like 'brain\\_%' order by 1`;
     assert.deepEqual(
       functions.map((f) => f.proname),
-      ['brain_promote_version', 'brain_publish_revision', 'brain_reject_update'],
+      [
+        'brain_promote_version',
+        'brain_publish_revision',
+        'brain_reject_update',
+        'brain_search_candidates',
+      ],
     );
     for (const f of functions) {
       assert.equal(f.prosecdef, false, `${f.proname} must not be security definer`);

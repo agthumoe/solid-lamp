@@ -34,6 +34,7 @@ const TABLES = [
   'source_sync_state',
   'ingest_events',
   'embedding_builds',
+  'embedding_version_gates',
 ] as const;
 
 // Only application schemas. Supabase-owned schemas (auth, storage, extensions, …) belong to
@@ -252,6 +253,15 @@ export const collectManifest = async (sql: Sql, database: string): Promise<Manif
       return rows.map((row) => row.chunk_id);
     });
   }
+  // The final-schema query path end to end: the same function the api calls, fixed inputs.
+  let searchProbe: string[] = [];
+  if (active) {
+    const probe = `[${Array.from({ length: active.dimensions }, (_, i) => ((i % 5) - 2) / 10).join(',')}]`;
+    const rows = await sql<{ chunk_id: string }[]>`
+      select chunk_id::text as chunk_id from brain_search_candidates(
+        ${active.id}, ${probe}, 'recovery gate notes', '{}'::bigint[], '{}'::text[], false, null, 50, 10)`;
+    searchProbe = rows.map((row) => row.chunk_id);
+  }
   return {
     format: 1,
     createdAt: new Date().toISOString(),
@@ -267,5 +277,6 @@ export const collectManifest = async (sql: Sql, database: string): Promise<Manif
       links: prints?.links ?? '',
     },
     vectorProbe,
+    searchProbe,
   };
 };

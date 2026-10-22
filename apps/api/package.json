@@ -4,10 +4,14 @@
   "private": true,
   "type": "module",
   "dependencies": {
+    "@aetherion/brain": "workspace:*",
     "@aetherion/llm": "workspace:*",
     "@aetherion/shared": "workspace:*",
     "fastify": "5.12.7",
     "fastify-type-provider-zod": "7.0.0",
     "postgres": "3.4.9"
+  },
+  "devDependencies": {
+    "@aetherion/db": "workspace:*"
   }
 }

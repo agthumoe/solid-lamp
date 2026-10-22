@@ -136,6 +136,7 @@ await test(
       const manifest = JSON.parse(await readFile(`${result.file}.manifest.json`, 'utf8')) as {
         counts: Record<string, number>;
         vectorProbe: string[];
+        searchProbe: string[];
       };
       assert.deepEqual(manifest.counts, {
         sources: 1,
@@ -152,8 +153,11 @@ await test(
         source_sync_state: 0,
         ingest_events: 0,
         embedding_builds: 0,
+        embedding_version_gates: 0,
       });
       assert.equal(manifest.vectorProbe.length, 3);
+      // 'recovery' and 'gate' match two chunks lexically; all three have vectors.
+      assert.equal(manifest.searchProbe.length, 3);
       assert.doesNotMatch(
         await readFile(`${result.file}.manifest.json`, 'utf8'),
         /alpha|beta|gamma/,

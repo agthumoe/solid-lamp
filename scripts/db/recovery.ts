@@ -129,6 +129,8 @@ const manifestSchema = z.object({
   searchConfigVersionId: z.string().nullable(),
   fingerprints: z.record(z.string(), z.string()),
   vectorProbe: z.array(z.string()),
+  // Absent in manifests written before #95.
+  searchProbe: z.array(z.string()).default([]),
 });
 
 export const newestDump = async (config: RecoveryConfig): Promise<string> => {
