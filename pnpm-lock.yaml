@@ -54,6 +54,9 @@ importers:
 
   apps/api:
     dependencies:
+      '@aetherion/brain':
+        specifier: workspace:*
+        version: link:../../packages/brain
       '@aetherion/llm':
         specifier: workspace:*
         version: link:../../packages/llm
@@ -69,6 +72,10 @@ importers:
       postgres:
         specifier: 3.4.9
         version: 3.4.9
+    devDependencies:
+      '@aetherion/db':
+        specifier: workspace:*
+        version: link:../../packages/db
 
   apps/inference:
     dependencies:
@@ -129,6 +136,10 @@ importers:
       postgres:
         specifier: 3.4.9
         version: 3.4.9
+    devDependencies:
+      '@aetherion/brain':
+        specifier: workspace:*
+        version: link:../brain
 
   packages/llm:
     dependencies:

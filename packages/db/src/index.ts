@@ -17,6 +17,7 @@ export {
   EMBEDDING_VERSION_STATUSES,
   embeddingBuilds,
   embeddingProfiles,
+  embeddingVersionGates,
   embeddingVersionLeases,
   embeddingVersions,
   embeddingVersionSelections,

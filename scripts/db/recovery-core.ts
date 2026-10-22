@@ -99,6 +99,9 @@ export type Manifest = {
   readonly fingerprints: Readonly<Record<string, string>>;
   // Exact (sequential-scan) nearest neighbours of a fixed vector on the active version.
   readonly vectorProbe: readonly string[];
+  // Ordered chunk IDs from brain_search_candidates (hybrid, fixed vector + text) on the active
+  // version: the final-schema end-to-end query (#95). Empty without an active version.
+  readonly searchProbe: readonly string[];
 };
 
 /** Lists every field where the restored database differs from the manifest. */
@@ -124,6 +127,7 @@ export const manifestDifferences = (expected: Manifest, actual: Manifest): strin
     if (expected.fingerprints[key] !== actual.fingerprints[key])
       problems.push(`fingerprint ${key} differs`);
   if (!same(expected.vectorProbe, actual.vectorProbe)) problems.push('vector probe differs');
+  if (!same(expected.searchProbe, actual.searchProbe)) problems.push('search probe differs');
   return problems;
 };
 

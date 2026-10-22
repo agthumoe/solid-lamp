@@ -27,6 +27,7 @@ const manifest = (extra: Partial<Manifest> = {}): Manifest => ({
   searchConfigVersionId: '1',
   fingerprints: { chunks: 'a', tsv: 'b' },
   vectorProbe: ['3', '1', '2'],
+  searchProbe: ['2', '3'],
   ...extra,
 });
 
@@ -89,6 +90,7 @@ await test('manifest comparison names every differing field', () => {
       searchConfigVersionId: '1',
       fingerprints: { chunks: 'a', tsv: 'changed' },
       vectorProbe: ['1', '3', '2'],
+      searchProbe: ['3', '2'],
     }),
   );
 
@@ -100,6 +102,7 @@ await test('manifest comparison names every differing field', () => {
     'search_config does not point at the active version',
     'fingerprint tsv differs',
     'vector probe differs',
+    'search probe differs',
   ]);
 });
 

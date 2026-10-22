@@ -15,7 +15,11 @@ if (!config.ok) {
 }
 const logger = createLogger({ service: 'api' }, undefined, config.value.logLevel);
 const composed = composeApi(config.value);
-const app = buildServer({ readiness: composed.readiness, logger });
+const app = buildServer({
+  readiness: composed.readiness,
+  logger,
+  ...(composed.brain ? { brain: composed.brain } : {}),
+});
 
 const shutdown = () => {
   logger.info({ event: 'process.shutdown', outcome: 'started' });

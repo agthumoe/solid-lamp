@@ -4,14 +4,28 @@ import type { Logger } from '@aetherion/shared';
 import Fastify, { type FastifyInstance } from 'fastify';
 import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
 
+import {
+  registerBrainRoutes,
+  type BrainRouteDeps,
+} from './features/brain/transport/brain-routes.ts';
 import type { ReadinessPorts } from './features/health/application/check-readiness.ts';
 import { healthRoutes } from './features/health/transport/health-routes.ts';
 import { registerErrorEnvelope } from './plugins/error-envelope.ts';
+import { registerServiceScope } from './plugins/service-scope.ts';
 
 export type ServerDeps = {
   readonly readiness: ReadinessPorts;
   readonly logger: Logger;
+  // Brain routes (#95), mounted only when a database is configured. They sit behind the
+  // fail-closed service scope: no key configured means every brain request is refused.
+  readonly brain?: BrainRouteDeps & {
+    readonly serviceKey: string | undefined;
+    readonly boundHost: string;
+  };
 };
+
+// Concurrent brain requests (single-user service; embedding is serialized by the gate anyway).
+const BRAIN_MAX_IN_FLIGHT = 4;
 
 const BODY_LIMIT_BYTES = 1024 * 1024;
 
@@ -41,5 +55,17 @@ export const buildServer = (deps: ServerDeps): FastifyInstance => {
   });
 
   void app.register(healthRoutes, { ports: deps.readiness });
+  const brain = deps.brain;
+  if (brain)
+    registerServiceScope(
+      app,
+      {
+        serviceKey: brain.serviceKey,
+        boundHost: brain.boundHost,
+        maxInFlight: BRAIN_MAX_IN_FLIGHT,
+        logger: deps.logger,
+      },
+      (scope) => registerBrainRoutes(scope, brain),
+    );
   return app;
 };
